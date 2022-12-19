@@ -10,8 +10,9 @@ dependencies:
   - firefox =102
   - flit >=3.7.1,<4
   - geckodriver
-  - hypothesis-jsonschema
+  - hypothesis
   - importnb
+  - ipydatawidgets
   - ipython >=7
   - ipywidgets >=8.0.1,<9
   - isort
@@ -27,7 +28,6 @@ dependencies:
   - pandas
   - pip
   - pkginfo
-  - pydantic >=1
   - pydata-sphinx-theme
   - pyflakes
   - pytest-asyncio

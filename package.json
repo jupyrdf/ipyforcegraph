@@ -28,7 +28,7 @@
     "lint": "jlpm lint:prettier",
     "lint:prettier": "prettier-package-json --write package.json && prettier --cache --cache-location build/.prettiercache --write --list-different \"*.{json,yml,md}\" \"{js,style,lite,src,.github,examples,docs}/**/*.{ts,tsx,js,jsx,css,json,md,yml,yaml}\"",
     "schema": "jlpm schema:build && jlpm schema:prettier",
-    "schema:build": "cd js && ts-json-schema-generator --tsconfig ./tsconfig.json --expose all --path ./schema/forcegraph_schema.ts -o ../src/ipyforcegraph/schema/forcegraph_schema.json",
+    "schema:build": "cd js && ts-json-schema-generator --tsconfig ./tsconfig.json --type GraphData --expose all --path ./schema/forcegraph_schema.ts -o ../src/ipyforcegraph/schema/forcegraph_schema.json",
     "schema:prettier": "prettier --write src/ipyforcegraph/schema/forcegraph_schema.json",
     "watch": "run-p watch:lib watch:ext",
     "watch:ext": "jupyter labextension watch .",
