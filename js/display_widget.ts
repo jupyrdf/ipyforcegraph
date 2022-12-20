@@ -13,8 +13,6 @@ import {
 
 import { NAME, VERSION } from './tokens';
 
-// import {} from "jupyt"
-
 export class SourceModel extends WidgetModel {
   static model_name = 'SourceModel';
   static serializers = {
@@ -25,9 +23,8 @@ export class SourceModel extends WidgetModel {
   };
 
   defaults() {
-    let defaults = {
+    return {
       ...super.defaults(),
-
       _model_name: SourceModel.model_name,
       _model_module_version: VERSION,
       _view_module: NAME,
@@ -35,14 +32,13 @@ export class SourceModel extends WidgetModel {
       links: null,
       metadata: null,
     };
-    return defaults;
   }
 
   dataUpdated = new Signal<SourceModel, void>(this);
 
   initialize(attributes: any, options: any) {
     super.initialize(attributes, options);
-    console.log("initialize Source Model");
+
     this.on('change:nodes', this.onNodesChange, this);
     this.on('change:links', this.onLinksChange, this);
     this.on('change:metadata', this.onMetadataChange, this);
@@ -50,38 +46,36 @@ export class SourceModel extends WidgetModel {
     this.onNodesChange();
     this.onLinksChange();
     this.onMetadataChange();
-    (<any>window).source = this;
   }
 
-  onNodesChange(){
-    let nodes = this.get("nodes");
+  onNodesChange() {
+    let nodes = this.get('nodes');
     if (nodes) {
-        nodes.on("change:array", this.graphUpdate, this)
+      nodes.on('change:array', this.graphUpdate, this);
     }
   }
 
-  onLinksChange(){
-    let links = this.get("links");
+  onLinksChange() {
+    let links = this.get('links');
     if (links) {
-      links.on("change:array", this.graphUpdate, this)
+      links.on('change:array', this.graphUpdate, this);
     }
   }
 
-  onMetadataChange(){
-    let metadata = this.get("metadata");
+  onMetadataChange() {
+    let metadata = this.get('metadata');
     if (metadata) {
-      metadata.on("change:array", this.graphUpdate, this)
+      metadata.on('change:array', this.graphUpdate, this);
     }
   }
 
-  graphUpdate(){
+  graphUpdate() {
     //TODO throttle / debounce emitting events
-    console.log("graphUpdate emit");
+    console.log('graphUpdate emit');
     this.dataUpdated.emit(void 0);
   }
 }
 
-console.log('loading');
 export class ForceGraphModel extends DOMWidgetModel {
   static model_name = 'ForceGraphModel';
   static serializers = {
@@ -90,19 +84,15 @@ export class ForceGraphModel extends DOMWidgetModel {
   };
 
   defaults() {
-    let defaults = {
+    return {
       ...super.defaults(),
-
       _model_name: ForceGraphModel.model_name,
       _model_module_version: VERSION,
       _view_module: NAME,
       _view_name: ForceGraphView.view_name,
       _view_module_version: VERSION,
-      symbols: {},
       source: null,
-      control_overlay: null,
     };
-    return defaults;
   }
 
   initialize(attributes: any, options: any) {
