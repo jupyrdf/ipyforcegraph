@@ -10,6 +10,7 @@
 #   - firefox =102
 #   - flit >=3.7.1,<4
 #   - geckodriver
+#   - git
 #   - hypothesis
 #   - importnb
 #   - ipydatawidgets
@@ -60,6 +61,7 @@
 
 @EXPLICIT
 https://conda.anaconda.org/conda-forge/win-64/ca-certificates-2022.12.7-h5b45459_0.conda#31de4d9887dc8eaed9e6230a5dfbb9d6
+https://conda.anaconda.org/conda-forge/win-64/git-2.39.0-h57928b3_0.conda#40b9d7db4ad079a60271a7a36219f8ba
 https://conda.anaconda.org/conda-forge/win-64/intel-openmp-2023.0.0-h57928b3_25922.conda#8ecf3a448f5a35bd30cb39ddc2a19058
 https://conda.anaconda.org/conda-forge/win-64/msys2-conda-epoch-20160418-1.tar.bz2#b0309b72560df66f71a9d5e34a5efdfa
 https://conda.anaconda.org/conda-forge/win-64/nodejs-18.12.1-h57928b3_0.tar.bz2#89700013434ea5e61b78cbed8687c563
