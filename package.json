@@ -62,7 +62,7 @@
     "prettier-package-json": "^2.7.0",
     "prettier-plugin-sort-json": "^0.0.3",
     "rimraf": "^3.0.2",
-    "snabbdom": "~0.6.6",
+    "source-map-loader": "^4.0.1",
     "ts-json-schema-generator": "^1.1.2",
     "typescript": "~4.9.3",
     "yarn-deduplicate": "^6.0.0"
@@ -75,6 +75,7 @@
   ],
   "jupyterlab": {
     "extension": "lib/plugin",
+    "webpackConfig": "./webpack.config.js",
     "outputDir": "./src/_d/share/jupyter/labextensions/@jupyrdf/jupyter-forcegraph",
     "sharedPackages": {
       "force-graph": {
@@ -88,6 +89,9 @@
       "@jupyter-widgets/controls": {
         "bundled": false,
         "singleton": true
+      },
+      "jupyter-datawidgets": {
+        "bundled": true
       }
     }
   },
