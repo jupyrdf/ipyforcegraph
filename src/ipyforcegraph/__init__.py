@@ -9,4 +9,5 @@ def _jupyter_labextension_paths():
 
 __all__ = [
     "__version__",
+    "_jupyter_labextension_paths",
 ]
