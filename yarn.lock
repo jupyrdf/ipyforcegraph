@@ -361,7 +361,7 @@
     base64-js "^1.2.1"
     sanitize-html "^2.3"
 
-"@jupyter-widgets/base@^6.0.1", "@jupyter-widgets/base@^6.0.2":
+"@jupyter-widgets/base@^1 || ^2 || ^3 || ^4 || ^5 || ^6.0.0", "@jupyter-widgets/base@^6.0.1", "@jupyter-widgets/base@^6.0.2":
   version "6.0.2"
   resolved "https://registry.npmjs.org/@jupyter-widgets/base/-/base-6.0.2.tgz#ee6e614eb70f2593fce61eea8731217d869c5a2a"
   integrity sha512-CIVjSTrqQFzkg9VCdDjrjDqwbba3eZfNigCPFSuKmMVXc+ATAOFczOv9/9uaCPzQ+E+0g6SOLhJ25SpKB0cl9g==
@@ -2826,6 +2826,11 @@ interpret@^2.2.0:
   resolved "https://registry.npmjs.org/interpret/-/interpret-2.2.0.tgz#1a78a0b5965c40a5416d007ad6f50ad27c417df9"
   integrity sha512-Ju0Bz/cEia55xDwUWEa8+olFpCiQoypjnQySseKtmjNrnps3P+xfpUmGr90T7yjlVJmOtybRvPXhKMbHr+fWnw==
 
+iota-array@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.npmjs.org/iota-array/-/iota-array-1.0.0.tgz#81ef57fe5d05814cd58c2483632a99c30a0e8087"
+  integrity sha512-pZ2xT+LOHckCatGQ3DcG/a+QuEqvoxqkiL7tvE8nn3uuu+f6i1TtpB5/FtWFbxUuVr5PZCx8KskuGatbJDXOWA==
+
 is-arguments@^1.0.4:
   version "1.1.1"
   resolved "https://registry.npmjs.org/is-arguments/-/is-arguments-1.1.1.tgz#15b3f88fda01f2a97fec84ca761a560f123efa9b"
@@ -2853,6 +2858,11 @@ is-boolean-object@^1.1.0:
   dependencies:
     call-bind "^1.0.2"
     has-tostringtag "^1.0.0"
+
+is-buffer@^1.0.2:
+  version "1.1.6"
+  resolved "https://registry.npmjs.org/is-buffer/-/is-buffer-1.1.6.tgz#efaa2ea9daa0d7ab2ea13a97b2b8ad51fefbe8be"
+  integrity sha512-NcdALwpXkTm5Zvvbk7owOUSvVvBKDgKP5/ewfXEznmQFfs4ZRmanOeKBTjRVjka3QFoN6XJ+9F3USqfHqTaU5w==
 
 is-callable@^1.1.4, is-callable@^1.2.7:
   version "1.2.7"
@@ -3074,6 +3084,24 @@ jsonpointer@^5.0.0:
   version "5.0.1"
   resolved "https://registry.npmjs.org/jsonpointer/-/jsonpointer-5.0.1.tgz#2110e0af0900fd37467b5907ecd13a7884a1b559"
   integrity sha512-p/nXbhSEcu3pZRdkW1OfJhpsVtW1gd4Wa1fnQc9YLiTfAjn0312eMKimbdIQzuZl9aa9xUGaRlP9T/CJE/ditQ==
+
+jupyter-dataserializers@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.npmjs.org/jupyter-dataserializers/-/jupyter-dataserializers-3.0.1.tgz#933c148db256a657325637b19e0e10a6099bdf8e"
+  integrity sha512-jIXNEOznUhTz7I2rRBpAB6RNpn3IY/eYqc+UB9IxRUeqCiUEtYNH1A0K1zOhOEDLmv21+28qWWaex7iKy8GgCQ==
+  dependencies:
+    "@jupyter-widgets/base" "^1 || ^2 || ^3 || ^4 || ^5 || ^6.0.0"
+    ndarray "^1.0.18"
+    pako "^2.0.4"
+
+jupyter-datawidgets@^5.5.2:
+  version "5.5.2"
+  resolved "https://registry.npmjs.org/jupyter-datawidgets/-/jupyter-datawidgets-5.5.2.tgz#a6ec4f0c72f16a323393066ca5e3fa0b1bf4cd88"
+  integrity sha512-gRNoe9I21veWAr78+4bzjUuhwuI5VmdSphTepUUB5AHNN1etxr9qpql0Gug41CO085HuzqxLUXF4zCMIoXUZpQ==
+  dependencies:
+    "@jupyter-widgets/base" "^1 || ^2 || ^3 || ^4 || ^5 || ^6.0.0"
+    jupyter-dataserializers "^3.0.1"
+    ndarray "^1.0.18"
 
 kapsule@^1.13:
   version "1.13.8"
@@ -3443,6 +3471,14 @@ napi-macros@~2.0.0:
   resolved "https://registry.npmjs.org/napi-macros/-/napi-macros-2.0.0.tgz#2b6bae421e7b96eb687aa6c77a7858640670001b"
   integrity sha512-A0xLykHtARfueITVDernsAWdtIMbOJgKgcluwENp3AlsKN/PloyO10HtmoqnFAQAcxPkgZN7wdfPfEd0zNGxbg==
 
+ndarray@^1.0.18:
+  version "1.0.19"
+  resolved "https://registry.npmjs.org/ndarray/-/ndarray-1.0.19.tgz#6785b5f5dfa58b83e31ae5b2a058cfd1ab3f694e"
+  integrity sha512-B4JHA4vdyZU30ELBw3g7/p9bZupyew5a7tX1Y/gGeF2hafrPaQZhgrGQfsvgfYbgdFZjYwuEcnaobeM/WMW+HQ==
+  dependencies:
+    iota-array "^1.0.0"
+    is-buffer "^1.0.2"
+
 neo-async@^2.6.2:
   version "2.6.2"
   resolved "https://registry.npmjs.org/neo-async/-/neo-async-2.6.2.tgz#b4aafb93e3aeb2d8174ca53cf163ab7d7308305f"
@@ -3619,6 +3655,11 @@ package-json@^6.5.0:
     registry-auth-token "^4.0.0"
     registry-url "^5.0.0"
     semver "^6.2.0"
+
+pako@^2.0.4:
+  version "2.1.0"
+  resolved "https://registry.npmjs.org/pako/-/pako-2.1.0.tgz#266cc37f98c7d883545d11335c00fbd4062c9a86"
+  integrity sha512-w+eufiZ1WuJYgPXbV/PO3NCMEc3xqylkKHzp8bxp1uW4qaSNQUkwmLLEc3kKsfz8lpV1F8Ht3U1Cm+9Srog2ug==
 
 parent-module@^1.0.0:
   version "1.0.1"

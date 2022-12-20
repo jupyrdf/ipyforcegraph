@@ -25,6 +25,7 @@ dependencies:
   - myst-nb
   - networkx
   - nodejs >=18,<19
+  - packaging >=22.0
   - pandas
   - pip
   - pkginfo

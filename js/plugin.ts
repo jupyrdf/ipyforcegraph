@@ -20,9 +20,7 @@ const plugin: IPlugin<Application<Widget>, void> = {
       version: VERSION,
       exports: async () => {
         const widgetExports = {
-          ...(await import(
-            /* webpackChunkName: "forcegraph_display" */ './display_widget'
-          )),
+          ...(await import('./display_widget')),
         };
         FORCEGRAPH_DEBUG && console.warn('widgets loaded');
         return widgetExports;

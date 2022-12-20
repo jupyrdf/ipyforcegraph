@@ -5,7 +5,6 @@ composable
 conda
 doit
 evented
-ipyelk
 js
 jupyrdf
 jupyter

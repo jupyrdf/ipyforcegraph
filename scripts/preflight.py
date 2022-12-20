@@ -3,9 +3,6 @@
     be careful about imports here:
 """
 
-# Copyright (c) 2022 ipyelk contributors.
-# Distributed under the terms of the Modified BSD License.
-
 import json
 import os
 import re
@@ -26,7 +23,7 @@ ARBITRARY_PATH_LENGTH = 32 if P.WIN else 64
 NOT_DEFINED = "!NOT DEFINED!"
 DEFAULT_KERNEL_NAME = "python3"
 
-COPYRIGHT = f"Copyright (c) {datetime.now().year} ipyelk contributors."
+COPYRIGHT = f"Copyright (c) {datetime.now().year} ipyforcegraph contributors."
 LICENSE = "Distributed under the terms of the Modified BSD License."
 
 
