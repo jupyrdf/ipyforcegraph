@@ -51,5 +51,6 @@ dependencies:
   - pip
   - pkginfo
   - python >=3.8,<3.12.0a0
-  - pip:
-    - jupyterlite ==0.1.0b16
+  # this is handled out-of-band
+  # - pip:
+  #   - jupyterlite ==0.1.0b16
