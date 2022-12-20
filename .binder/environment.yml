@@ -10,6 +10,7 @@ dependencies:
   - firefox =102
   - flit >=3.7.1,<4
   - geckodriver
+  - git
   - hypothesis
   - importnb
   - ipydatawidgets
