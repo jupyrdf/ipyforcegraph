@@ -51,28 +51,28 @@ export class SourceModel extends WidgetModel {
   }
 
   get graphData(): GraphData {
-    const n: ndarray.NdArray = this.get('nodes')?.get('array');
-    const l: ndarray.NdArray = this.get('links')?.get('array');
-    const g: GraphData = {
+    const nodes: ndarray.NdArray = this.get('nodes')?.get('array');
+    const links: ndarray.NdArray = this.get('links')?.get('array');
+    const graph: GraphData = {
       nodes: [],
       links: [],
     };
 
-    if (n && n.shape[0]) {
-      for (let i = 0; i < n.shape[0]; ++i) {
-        g.nodes[i] = { id: i };
+    if (nodes && nodes.shape[0]) {
+      for (let i = 0; i < nodes.shape[0]; ++i) {
+        graph.nodes[i] = { id: i };
       }
     }
 
-    if (l && l.shape[0]) {
-      for (let i = 0; i < l.shape[0]; ++i) {
-        g.links.push({ source: l.get(i, 0), target: l.get(i, 1) });
+    if (links && links.shape[0]) {
+      for (let i = 0; i < links.shape[0]; ++i) {
+        graph.links.push({ source: links.get(i, 0), target: links.get(i, 1) });
       }
     }
 
-    DEBUG && console.warn(`${EMOJI} updating...`, g);
+    DEBUG && console.warn(`${EMOJI} updating...`, graph);
 
-    return g;
+    return graph;
   }
 
   onNodesChange(change?: any) {

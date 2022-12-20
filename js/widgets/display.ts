@@ -9,7 +9,15 @@ import {
   unpack_models as deserialize,
 } from '@jupyter-widgets/base';
 
-import { DEBUG, EMOJI, EMPTY_GRAPH_DATA, WIDGET_DEFAULTS } from '../tokens';
+import {
+  DEBUG,
+  EMOJI,
+  EMPTY_GRAPH_DATA,
+  IBehave,
+  IHasGraph,
+  ISource,
+  WIDGET_DEFAULTS,
+} from '../tokens';
 
 export class ForceGraphModel extends DOMWidgetModel {
   static model_name = 'ForceGraphModel';
@@ -36,34 +44,24 @@ export class ForceGraphModel extends DOMWidgetModel {
   }
 }
 
-export class ForceGraphView extends DOMWidgetView {
+export class ForceGraphView extends DOMWidgetView implements IHasGraph {
   static view_name = 'ForceGraphView';
   graph: ForceGraphInstance;
   model: ForceGraphModel;
 
   protected _rendered: PromiseDelegate<void>;
 
+  get source(): ISource {
+    return this.model.get('source');
+  }
+
   initialize(parameters: any) {
     super.initialize(parameters);
     this._rendered = new PromiseDelegate();
     this.model.on('change:source', this.onSourceChange, this);
+    this.model.on('change:behaviors', this.onBehaviorsChange, this);
     this.onSourceChange();
-  }
-
-  onSourceChange(change?: any) {
-    // TODO disconnect old model...
-    let source = this.model.get('source');
-    if (source) {
-      source.dataUpdated.connect(this.update, this);
-      this.update();
-    }
-  }
-
-  async update(): Promise<void> {
-    await this._rendered.promise;
-    let { graphData } = this.model;
-    DEBUG && console.warn(`${EMOJI} updating...`, graphData);
-    this.graph.graphData(graphData);
+    this.onBehaviorsChange();
   }
 
   async render(): Promise<void> {
@@ -73,5 +71,36 @@ export class ForceGraphView extends DOMWidgetView {
     this.graph = ForceGraph()(containerDiv);
     this._rendered.resolve(void 0);
     await this.update();
+  }
+
+  async update(): Promise<void> {
+    await this._rendered.promise;
+    let { graphData } = this.model;
+    DEBUG && console.warn(`${EMOJI} updating...`, graphData);
+    this.graph.graphData(graphData);
+    await this.postUpdate();
+  }
+
+  async postUpdate(): Promise<void> {
+    const behaviors: IBehave[] = this.model.get('behaviors') || [];
+    for (const behavior of behaviors) {
+      behavior.onUpdate(this);
+    }
+  }
+
+  onBehaviorsChange() {
+    const behaviors: IBehave[] = this.model.get('behaviors') || [];
+    for (const behavior of behaviors) {
+      behavior.updateRequested.connect(this.postUpdate, this);
+    }
+  }
+
+  onSourceChange(change?: any) {
+    // TODO disconnect old model...
+    let source = this.model.get('source');
+    if (source) {
+      source.dataUpdated.connect(this.update, this);
+      this.update();
+    }
   }
 }

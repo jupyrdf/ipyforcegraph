@@ -1,4 +1,6 @@
-import type { GraphData } from 'force-graph';
+import type { ForceGraphInstance, GraphData } from 'force-graph';
+
+import type { ISignal } from '@lumino/signaling';
 
 import PKG from '../package.json';
 
@@ -18,3 +20,17 @@ export const WIDGET_DEFAULTS = {
   _view_module: NAME,
   _view_module_version: VERSION,
 };
+
+export interface IBehave {
+  onUpdate(graph: IHasGraph): any;
+  updateRequested: ISignal<IBehave, void>;
+}
+
+export interface IHasGraph {
+  graph: ForceGraphInstance;
+  source: ISource;
+}
+
+export interface ISource {
+  graphData: GraphData;
+}
