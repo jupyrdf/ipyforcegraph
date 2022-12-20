@@ -3,18 +3,11 @@ import numpy as np
 import traitlets as T
 from ipydatawidgets import NDArrayWidget
 
-from .constants import EXTENSION_NAME, EXTENSION_SPEC_VERSION
-
-
-class BaseWidget(W.Widget):
-    _model_module = T.Unicode(EXTENSION_NAME).tag(sync=True)
-    _model_module_version = T.Unicode(EXTENSION_SPEC_VERSION).tag(sync=True)
-    _view_module = T.Unicode(EXTENSION_NAME).tag(sync=True)
-    _view_module_version = T.Unicode(EXTENSION_SPEC_VERSION).tag(sync=True)
+from ._base import Behavior, ForceBase
 
 
 @W.register
-class Source(BaseWidget):
+class Source(ForceBase):
     _model_name = T.Unicode("SourceModel").tag(sync=True)
 
     nodes: NDArrayWidget = T.Instance(NDArrayWidget).tag(
@@ -41,15 +34,13 @@ class Source(BaseWidget):
 
 
 @W.register
-class ForceGraph(W.DOMWidget, BaseWidget):
-    """Forcegraph widget.
+class ForceGraph(W.DOMWidget, ForceBase):
+    """Base force-directed graph widget."""
 
-    Attributes
-    ----------
-    source: TODO
-    """
-
-    _model_name = T.Unicode("ForceGraphModel").tag(sync=True)
-    _view_name = T.Unicode("ForceGraphView").tag(sync=True)
+    _model_name: str = T.Unicode("ForceGraphModel").tag(sync=True)
+    _view_name: str = T.Unicode("ForceGraphView").tag(sync=True)
 
     source: Source = T.Instance(Source, kw={}).tag(sync=True, **W.widget_serialization)
+    behaviors: list[Behavior] = W.TypedTuple(T.Instance(Behavior), kw={}).tag(
+        sync=True, **W.widget_serialization
+    )

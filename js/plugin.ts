@@ -6,8 +6,8 @@ import { IJupyterWidgetRegistry } from '@jupyter-widgets/base';
 
 import '../style/index.css';
 
-import type * as WidgetExports from './display_widget';
 import { DEBUG, EMOJI, NAME, VERSION } from './tokens';
+import type * as WidgetExports from './widgets';
 
 const EXTENSION_ID = `${NAME}:plugin`;
 
@@ -36,7 +36,7 @@ const plugin: IPlugin<Application<Widget>, void> = {
 
         DEBUG && console.warn(`${EMOJI} loading widgets`);
         widgetExports = {
-          ...(await import('./display_widget')),
+          ...(await import('./widgets')),
         };
         loadingWidgets.resolve(void 0);
         DEBUG && console.warn(`${EMOJI} widgets loaded`, widgetExports);
