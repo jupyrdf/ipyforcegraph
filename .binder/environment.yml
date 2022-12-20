@@ -27,8 +27,6 @@ dependencies:
   - nodejs >=18,<19
   - packaging >=22.0
   - pandas
-  - pip
-  - pkginfo
   - pydata-sphinx-theme
   - pyflakes
   - pytest-asyncio
@@ -36,7 +34,6 @@ dependencies:
   - pytest-cov
   - pytest-html
   - pytest-xdist
-  - python >=3.7,<3.12.0a0
   - python-libarchive-c
   - requests-cache
   - robotframework-pabot
@@ -50,5 +47,9 @@ dependencies:
   - tomli
   - twine
   - wheel
+  # lite
+  - pip
+  - pkginfo
+  - python >=3.8,<3.12.0a0
   - pip:
-    - jupyterlite ==0.1.0b15
+    - jupyterlite ==0.1.0b16
