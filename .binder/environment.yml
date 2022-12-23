@@ -15,7 +15,7 @@ dependencies:
   - importnb
   - ipydatawidgets
   - ipython >=7
-  - ipywidgets >=8.0.1,<9
+  - ipywidgets >=8.0.4,<9
   - isort
   - jupyterlab >=3,<4
   - jupyterlab-deck
