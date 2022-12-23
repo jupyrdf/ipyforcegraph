@@ -107,7 +107,7 @@ ATEST_ARGS="--exclude NOTsome:tag" doit test:atest
 ## Building Documentation
 
 To build (and check the spelling and link health) of what _would_ go to
-`ipyforcegraph.readthedocs.org`, we:
+`ipyforcegraph.rtfd.io`, we:
 
 - build with `sphinx` and `myst-nb`
 - check spelling with `hunspell`

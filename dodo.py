@@ -809,7 +809,8 @@ def task_checkdocs():
                         *["-p", "no:importnb"],
                         "--check-links-cache",
                         *["--check-links-cache-name", P.DOCS_LINKS],
-                        *["-k", "not edit"],
+                        # TODO: relax these once published
+                        *["-k", "not (edit or rtfd or pypi)"],
                         "--links-ext=html",
                         *file_dep,
                     ],

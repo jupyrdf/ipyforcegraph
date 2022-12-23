@@ -58,7 +58,7 @@ pip uninstall ipyforcegraph
 This work is licensed under the [BSD-3-Clause License][license].
 
 [license]: https://github.com/jupyrdf/ipyforcegraph/tree/main/LICENSE.txt
-[docs]: https://ipyforcegraph.readthedocs.org
+[docs]: https://ipyforcegraph.rtfd.io
 [docs-badge]: https://readthedocs.org/projects/ipyforcegraph/badge/?version=latest
 [examples]: https://github.com/jupyrdf/ipyforcegraph/tree/main/examples/_index.ipynb
 [contributing]: https://github.com/jupyrdf/ipyforcegraph/tree/main/CONTRIBUTING.md

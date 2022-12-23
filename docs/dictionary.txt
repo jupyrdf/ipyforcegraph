@@ -4,13 +4,16 @@ ci
 composable
 conda
 doit
+env
 evented
+ipyforcegraph
 js
 jupyrdf
 jupyter
 Jupyter
 JupyterLab
 labextension
+lockfiles
 maintenance
 Mambaforge
 networkx
@@ -22,5 +25,5 @@ pypi
 PyPI
 ReadTheDocs
 TBD
+TODO
 TypeScript
-WebWorker
