@@ -1,5 +1,8 @@
 """ documentation for ipyforcegraph
 """
+# Copyright (c) 2022 ipyforcegraph contributors.
+# Distributed under the terms of the Modified BSD License.
+
 
 from datetime import datetime
 from pathlib import Path
@@ -50,7 +53,7 @@ html_theme_options = {
 html_context = {
     "github_user": "jupyrdf",
     "github_repo": "ipyforcegraph",
-    "github_version": "master",
+    "github_version": "main",
     "doc_path": "docs",
 }
 html_static_path = ["_static", "../build/lite"]

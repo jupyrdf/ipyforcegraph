@@ -2,6 +2,9 @@
 
 # Copyright (c) 2020 ipyradiant contributors.
 # Distributed under the terms of the Modified BSD License.
+# Copyright (c) 2022 ipyforcegraph contributors.
+# Distributed under the terms of the Modified BSD License.
+
 import re
 
 RE_TIMESTAMP = r"\d{4}-\d{2}-\d{2} \d{2}:\d{2} -\d*"

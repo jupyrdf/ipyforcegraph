@@ -689,6 +689,12 @@ def task_lite():
     """build the jupyterlite site"""
 
     yield dict(
+        name="pip:install",
+        file_dep=[P.OK_PIP_INSTALL],
+        actions=[[*P.IN_ENV, *P.PIP, "install", "--no-deps", *P.LITE_SPEC]],
+    )
+
+    yield dict(
         name="build",
         file_dep=[
             *P.EXAMPLE_IPYNB,
@@ -698,6 +704,7 @@ def task_lite():
             P.OK_PIP_INSTALL,
             P.WHEEL,
         ],
+        task_dep=["lite:pip:install"],
         targets=[P.LITE_SHA256SUMS],
         actions=[
             CmdAction(
@@ -802,7 +809,8 @@ def task_checkdocs():
                         *["-p", "no:importnb"],
                         "--check-links-cache",
                         *["--check-links-cache-name", P.DOCS_LINKS],
-                        *["-k", "not edit"],
+                        # TODO: relax these once published
+                        *["-k", "not (edit or rtfd or pypi)"],
                         "--links-ext=html",
                         *file_dep,
                     ],

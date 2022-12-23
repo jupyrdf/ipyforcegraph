@@ -3,6 +3,9 @@
     this should not import anything not in py36+ stdlib, or any local paths
 """
 
+# Copyright (c) 2022 ipyforcegraph contributors.
+# Distributed under the terms of the Modified BSD License.
+
 import itertools
 import json
 import os

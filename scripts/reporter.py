@@ -1,6 +1,8 @@
 # from https://github.com/robots-from-jupyter/robotframework-jupyterlibrary
-#
+
 # Copyright (c) 2020 Robots from Jupyter
+# Distributed under the terms of the Modified BSD License.
+# Copyright (c) 2022 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.
 
 
