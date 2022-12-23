@@ -152,6 +152,10 @@ jobs:
         shell: bash -l {0}
         run: doit -n4 checkdocs
 
+      - name: Rename uncached conda packages
+        shell: bash
+        run: mv "${CONDA_PKGS_DIR}" "${CONDA_PKGS_DIR}_do_not_cache"
+
   test:
     runs-on: ${{ matrix.os }}-latest
     needs: [build]
@@ -225,3 +229,7 @@ jobs:
             ./build/htmcov
             ./build/pytest.html
         if: always()
+
+      - name: Rename uncached conda packages
+        shell: bash
+        run: mv "${CONDA_PKGS_DIR}" "${CONDA_PKGS_DIR}_do_not_cache"
