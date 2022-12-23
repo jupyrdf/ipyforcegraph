@@ -129,9 +129,9 @@ doit watch_docs
 
 ## Releasing
 
-- After merging to `master`, download the ipyforcegraph dist artifacts
+- After merging to `main`, download the ipyforcegraph dist artifacts
 - Inspect the files in `./dist`.
-- Check out master
+- Check out `main`
 - Tag appropriately
 
 ```bash
