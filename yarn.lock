@@ -2,6 +2,17 @@
 # yarn lockfile v1
 
 
+"3d-force-graph@~1.70.17":
+  version "1.70.17"
+  resolved "https://registry.npmjs.org/3d-force-graph/-/3d-force-graph-1.70.17.tgz#210a12bac94f79c768da56a297d81b6fa53cd88f"
+  integrity sha512-6wCaRi3uAVDnvl3c+hz1hwXHoNqLRJcwzh0Y/YPCxPAQ76TCOah/qAtJdGk/Cnup37v5Q2hgmxSbxN65PTBJ+A==
+  dependencies:
+    accessor-fn "1"
+    kapsule "^1.13"
+    three ">=0.118 <1"
+    three-forcegraph "^1.39"
+    three-render-objects "^1.27"
+
 "@ampproject/remapping@^2.1.0":
   version "2.2.0"
   resolved "https://registry.npmjs.org/@ampproject/remapping/-/remapping-2.2.0.tgz#56c133824780de3174aed5ab6834f3026790154d"
@@ -169,10 +180,10 @@
   resolved "https://registry.npmjs.org/@babel/parser/-/parser-7.20.5.tgz#7f3c7335fe417665d929f34ae5dceae4c04015e8"
   integrity sha512-r27t/cy/m9uKLXQNWWebeCUHgnAZq0CpG1OwKRxzJMP1vpSU4bSIK2hq+/cp0bQxetkXx38n09rNu8jVkcK/zA==
 
-"@babel/runtime@^7.1.2":
-  version "7.20.6"
-  resolved "https://registry.npmjs.org/@babel/runtime/-/runtime-7.20.6.tgz#facf4879bfed9b5326326273a64220f099b0fce3"
-  integrity sha512-Q+8MqP7TiHMWzSfwiJwXCjyf4GYA4Dgw3emg/7xmwsdLJOZUp+nMqcOwOzzYheuM1rhDu8FSj2l0aoMygEuXuA==
+"@babel/runtime@^7.1.2", "@babel/runtime@^7.17.8":
+  version "7.20.7"
+  resolved "https://registry.npmjs.org/@babel/runtime/-/runtime-7.20.7.tgz#fcb41a5a70550e04a7b708037c7c32f7f356d8fd"
+  integrity sha512-UF0tvkUtxwAgZ5W/KrkHf0Rn0fdnLDU9ScxBrEVNUprE/MzirjK4MJUX1/BVDv00Sv8cljtukVK1aky++X1SjQ==
   dependencies:
     regenerator-runtime "^0.13.11"
 
@@ -2070,6 +2081,13 @@ d3-octree@^0.2.0:
     d3-selection "2 - 3"
     d3-transition "2 - 3"
 
+data-joint@^1.2:
+  version "1.2.6"
+  resolved "https://registry.npmjs.org/data-joint/-/data-joint-1.2.6.tgz#9c1e8844473894fbf04aea5e052a9027c2df9c8b"
+  integrity sha512-xuKyhQcD7vlO451VwKoK0RS8owh+iAZoQM2Up0ooTxrpLXh6XMUNPQW9vEOqv1+BT3c185FCLyWjUcCsEXC0/Q==
+  dependencies:
+    index-array-by "^1.3.3"
+
 debounce@^1.2.1:
   version "1.2.1"
   resolved "https://registry.npmjs.org/debounce/-/debounce-1.2.1.tgz#38881d8f4166a5c5848020c11827b834bcb3e0a5"
@@ -2451,7 +2469,7 @@ find-up@^4.0.0:
     locate-path "^5.0.0"
     path-exists "^4.0.0"
 
-force-graph@1.42.16:
+force-graph@~1.42.16:
   version "1.42.16"
   resolved "https://registry.npmjs.org/force-graph/-/force-graph-1.42.16.tgz#d35479174bd4d4b0ad23b521195c75d5eee06b4a"
   integrity sha512-ypgtQHOZCPDTB1nVB5k1CpEdaqjCzuLpNKd9msuoLwisBQtXE1V11PDLIza7Y06C3mPAHc+dl49GyQi8V1SR5w==
@@ -2777,7 +2795,7 @@ indent-string@^4.0.0:
   resolved "https://registry.npmjs.org/indent-string/-/indent-string-4.0.0.tgz#624f8f4497d619b2d9768531d58f4122854d7251"
   integrity sha512-EdDDZu4A2OyIK7Lr/2zG+w5jmbuk1DVBnEwREQvBzspBJkCEbRa8GxU1lghYcaGJCnRWibjDXlq779X1/y5xwg==
 
-index-array-by@1:
+index-array-by@1, index-array-by@^1.3.3:
   version "1.3.3"
   resolved "https://registry.npmjs.org/index-array-by/-/index-array-by-1.3.3.tgz#6881ae680a44af2c344db5e18eac6c5dc1ccea47"
   integrity sha512-dpqV1sX+hx4s0RqAT97ypk9xzcAXJ0XK27p3bTgPy8bjbJAX6Kf7RU3pPXgmg9hhO7f5/WxO354v2f/A0/fz3Q==
@@ -3501,6 +3519,37 @@ neo-async@^2.6.2:
   resolved "https://registry.npmjs.org/neo-async/-/neo-async-2.6.2.tgz#b4aafb93e3aeb2d8174ca53cf163ab7d7308305f"
   integrity sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==
 
+ngraph.events@^1.0.0, ngraph.events@^1.2.1:
+  version "1.2.2"
+  resolved "https://registry.npmjs.org/ngraph.events/-/ngraph.events-1.2.2.tgz#3ceb92d676a04a4e7ce60a09fa8e17a4f0346d7f"
+  integrity sha512-JsUbEOzANskax+WSYiAPETemLWYXmixuPAlmZmhIbIj6FH/WDgEGCGnRwUQBK0GjOnVm8Ui+e5IJ+5VZ4e32eQ==
+
+ngraph.forcelayout@^3.3:
+  version "3.3.1"
+  resolved "https://registry.npmjs.org/ngraph.forcelayout/-/ngraph.forcelayout-3.3.1.tgz#981e1baee5e0593c490bc27219169f9cedfa4f8b"
+  integrity sha512-MKBuEh1wujyQHFTW57y5vd/uuEOK0XfXYxm3lC7kktjJLRdt/KEKEknyOlc6tjXflqBKEuYBBcu7Ax5VY+S6aw==
+  dependencies:
+    ngraph.events "^1.0.0"
+    ngraph.merge "^1.0.0"
+    ngraph.random "^1.0.0"
+
+ngraph.graph@^20.0:
+  version "20.0.1"
+  resolved "https://registry.npmjs.org/ngraph.graph/-/ngraph.graph-20.0.1.tgz#579470d1d805583239704dc913e2095540aaf371"
+  integrity sha512-VFsQ+EMkT+7lcJO1QP8Ik3w64WbHJl27Q53EO9hiFU9CRyxJ8HfcXtfWz/U8okuoYKDctbciL6pX3vG5dt1rYA==
+  dependencies:
+    ngraph.events "^1.2.1"
+
+ngraph.merge@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.npmjs.org/ngraph.merge/-/ngraph.merge-1.0.0.tgz#d763cdfa48b1bbd4270ea246f06c9c8ff5d3477c"
+  integrity sha512-5J8YjGITUJeapsomtTALYsw7rFveYkM+lBj3QiYZ79EymQcuri65Nw3knQtFxQBU1r5iOaVRXrSwMENUPK62Vg==
+
+ngraph.random@^1.0.0:
+  version "1.1.0"
+  resolved "https://registry.npmjs.org/ngraph.random/-/ngraph.random-1.1.0.tgz#5345c4bb63865c85d98ee6f13eab1395d8545a90"
+  integrity sha512-h25UdUN/g8U7y29TzQtRm/GvGr70lK37yQPvPKXXuVfs7gCm82WipYFZcksQfeKumtOemAzBIcT7lzzyK/edLw==
+
 nice-try@^1.0.4:
   version "1.0.5"
   resolved "https://registry.npmjs.org/nice-try/-/nice-try-1.0.5.tgz#a3378a7696ce7d223e88fc9b764bd7ef1089e366"
@@ -3783,6 +3832,13 @@ pkg-dir@^4.1.0, pkg-dir@^4.2.0:
   integrity sha512-HRDzbaKjC+AOWVXxAU/x54COGeIv9eb+6CkDSQoNTt4XyWoIJvuPsXizxu/Fr23EiekbtZwmh1IcIG/l/a10GQ==
   dependencies:
     find-up "^4.0.0"
+
+polished@4:
+  version "4.2.2"
+  resolved "https://registry.npmjs.org/polished/-/polished-4.2.2.tgz#2529bb7c3198945373c52e34618c8fe7b1aa84d1"
+  integrity sha512-Sz2Lkdxz6F2Pgnpi9U5Ng/WdWAUZxmHrNPoVlm3aAemxoy2Qy7LGjQg4uf8qKelDAUW94F4np3iH2YPf2qefcQ==
+  dependencies:
+    "@babel/runtime" "^7.17.8"
 
 popper.js@^1.14.4, popper.js@^1.16.1:
   version "1.16.1"
@@ -4533,12 +4589,43 @@ terser@^5.14.1, terser@^5.3.4:
     commander "^2.20.0"
     source-map-support "~0.5.20"
 
+three-forcegraph@^1.39:
+  version "1.39.8"
+  resolved "https://registry.npmjs.org/three-forcegraph/-/three-forcegraph-1.39.8.tgz#f6ab52cf2c12cc82a3bc50bf5d17fb8fcbaf488a"
+  integrity sha512-lmOirKeM+qo12mju1MVFMNk5nrbS2+V0CUIyrJeTXz9hym4sjoIbUBM5FI7IQiu140nfSgxjLnetk1fi78qWuw==
+  dependencies:
+    accessor-fn "1"
+    d3-array "1 - 3"
+    d3-force-3d "2 - 3"
+    d3-scale "1 - 4"
+    d3-scale-chromatic "1 - 3"
+    data-joint "^1.2"
+    kapsule "^1.13"
+    ngraph.forcelayout "^3.3"
+    ngraph.graph "^20.0"
+    tinycolor2 "^1.4"
+
+three-render-objects@^1.27:
+  version "1.27.6"
+  resolved "https://registry.npmjs.org/three-render-objects/-/three-render-objects-1.27.6.tgz#15fecad746a558d240d1b772f8b20d44e4834cc0"
+  integrity sha512-mvNHk3oujVuajW0U+/UxQ7RBNmCLXgOIqdtThPXJCPimInwdPCw6lWVETgp6WAA1TebZLdpvKPfXpG5hgOJRvQ==
+  dependencies:
+    "@tweenjs/tween.js" "18"
+    accessor-fn "1"
+    kapsule "^1.13"
+    polished "4"
+
+"three@>=0.118 <1":
+  version "0.148.0"
+  resolved "https://registry.npmjs.org/three/-/three-0.148.0.tgz#b6f62f9c84227f8d51c151bf17b67984ded8e4d7"
+  integrity sha512-8uzVV+qhTPi0bOFs/3te3RW6hb3urL8jYEl6irjCWo/l6sr8MPNMcClFev/MMYeIxr0gmDcoXTy/8LXh/LXkfw==
+
 through@^2.3.6:
   version "2.3.8"
   resolved "https://registry.npmjs.org/through/-/through-2.3.8.tgz#0dd4c9ffaabc357960b1b724115d7e0e86a2e1f5"
   integrity sha512-w89qg7PI8wAdvX60bMDP+bFoD5Dvhm9oLheFp5O4a2QF0cSBGsBX4qZmadPMvVqlLJBBci+WqGGOAPvcDeNSVg==
 
-tinycolor2@^1.4.2:
+tinycolor2@^1.4, tinycolor2@^1.4.2:
   version "1.4.2"
   resolved "https://registry.npmjs.org/tinycolor2/-/tinycolor2-1.4.2.tgz#3f6a4d1071ad07676d7fa472e1fac40a719d8803"
   integrity sha512-vJhccZPs965sV/L2sU4oRQVAos0pQXwsvTLkWYdqJ+a8Q5kPFzJTuOFwy7UniPli44NKQGAglksjvOcpo95aZA==
