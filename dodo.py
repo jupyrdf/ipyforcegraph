@@ -704,6 +704,7 @@ def task_lite():
             P.OK_PIP_INSTALL,
             P.WHEEL,
         ],
+        task_dep=["lite:pip:install"],
         targets=[P.LITE_SHA256SUMS],
         actions=[
             CmdAction(
