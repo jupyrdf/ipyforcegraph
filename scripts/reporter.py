@@ -21,7 +21,7 @@ class GithubActionsReporter(ConsoleReporter):
         start = datetime.now()
         title = task.title()
         self._gh_timings[title] = [start]
-        self.outstream.write(f"""{start.strftime(TIMEFMT)} 🕸️ {title}\n""")
+        self.outstream.write(f"""{start.strftime(TIMEFMT)} 🕸️   {title}\n""")
 
     def gh_outtro(self, task, emoji):
         title = task.title()
