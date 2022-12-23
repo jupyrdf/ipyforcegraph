@@ -4,7 +4,7 @@
 </a>
 
 <iframe
-    src="./_static/lab/index.html?path=00_Introduction.ipynb"
+    src="./_static/lab/index.html?path=_index.ipynb"
     style="width: 99%; border: solid 1px #999; height: 500px"
 ></iframe>
 
