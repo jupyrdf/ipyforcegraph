@@ -689,6 +689,12 @@ def task_lite():
     """build the jupyterlite site"""
 
     yield dict(
+        name="pip:install",
+        file_dep=[P.OK_PIP_INSTALL],
+        actions=[[*P.IN_ENV, *P.PIP, "install", "--no-deps", *P.LITE_SPEC]],
+    )
+
+    yield dict(
         name="build",
         file_dep=[
             *P.EXAMPLE_IPYNB,
