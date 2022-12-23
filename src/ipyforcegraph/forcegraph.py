@@ -49,3 +49,13 @@ class ForceGraph(W.DOMWidget, ForceBase):
     behaviors: list[Behavior] = W.TypedTuple(T.Instance(Behavior), kw={}).tag(
         sync=True, **W.widget_serialization
     )
+
+
+@W.register
+class ForceGraph3D(W.DOMWidget, ForceBase):
+    """3D force-directed graph widget."""
+
+    _model_name: str = T.Unicode("ForceGraph3DModel").tag(sync=True)
+    _view_name: str = T.Unicode("ForceGraph3DView").tag(sync=True)
+
+    source: Source = T.Instance(Source, kw={}).tag(sync=True, **W.widget_serialization)
