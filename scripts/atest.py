@@ -1,5 +1,9 @@
 """ Run acceptance tests with robot framework
 """
+
+# Copyright (c) 2022 ipyforcegraph contributors.
+# Distributed under the terms of the Modified BSD License.
+
 # pylint: disable=broad-except
 import os
 import shutil

@@ -1,3 +1,7 @@
+"""Base widget identification for ipyforcegraph."""
+# Copyright (c) 2022 ipyforcegraph contributors.
+# Distributed under the terms of the Modified BSD License.
+
 import ipywidgets as W
 import traitlets as T
 

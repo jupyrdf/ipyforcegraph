@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2022 ipyforcegraph contributors.
+ * Distributed under the terms of the Modified BSD License.
+ */
 import { GraphData } from 'force-graph';
 import type ndarray from 'ndarray';
 

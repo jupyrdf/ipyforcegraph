@@ -1,6 +1,9 @@
 """ linter and formatter of notebooks
 """
 
+# Copyright (c) 2022 ipyforcegraph contributors.
+# Distributed under the terms of the Modified BSD License.
+
 import shutil
 import subprocess
 import sys

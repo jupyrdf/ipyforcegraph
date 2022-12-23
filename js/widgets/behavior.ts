@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2022 ipyforcegraph contributors.
+ * Distributed under the terms of the Modified BSD License.
+ */
 import ndarray from 'ndarray';
 
 import { ISignal, Signal } from '@lumino/signaling';

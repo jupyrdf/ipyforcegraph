@@ -1,3 +1,8 @@
+"""Constants for ipyforcegraph."""
+
+# Copyright (c) 2022 ipyforcegraph contributors.
+# Distributed under the terms of the Modified BSD License.
+
 try:
     from importlib.metadata import version
 except:
