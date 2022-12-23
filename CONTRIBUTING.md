@@ -56,7 +56,7 @@ messages if there's actually a problem.
 
 For more verbose output, add `FORCEGRAPH_DEBUG` anywhere in a new browser URL, e.g.
 
-```http
+```
 http://localhost:8888/lab#FORCEGRAPH_DEBUG
 ```
 
@@ -75,7 +75,8 @@ _Log Console_, opened with the _Show Log Console_ command.
 doit lint
 ```
 
-- Ensure the [examples](./examples) work. These will be tested in CI with:
+- Ensure the [examples](https://github.com/jupyrdf/ipyforcegraph/tree/main/examples)
+  work. These will be tested in CI with:
   - `nbconvert --execute`
   - in JupyterLab by Robot Framework with _Restart Kernel and Run All Cells_
 - If you add new features:
@@ -154,15 +155,18 @@ twine upload where-you-expanded-the-archive/ipyforcegraph-*
 
 ### Python Dependencies
 
-- Edit the `dependencies` section of [environment specs](./.github/env_specs/) or the
-  [binder environment](./.binder/environment.yml).
+- Edit the `dependencies` section of
+  [environment specs](https://github.com/jupyrdf/ipyforcegraph/tree/main/.github/env_specs/)
+  or the
+  [binder environment](https://github.com/jupyrdf/ipyforcegraph/tree/main/.binder/environment.yml).
 - Run:
 
 ```bash
 doit lock
 ```
 
-- Commit the changes to the env specs and the [lock files](./.github/locks).
+- Commit the changes to the env specs and the
+  [lock files](https://github.com/jupyrdf/ipyforcegraph/tree/main/.github/locks).
 
 > if you delete _all_ the lockfiles, you'll need to `conda-lock` on path with e.g.
 >
@@ -172,7 +176,8 @@ doit lock
 
 ### Browser Dependencies
 
-- Edit the appropriate section of the [package file](./package.json).
+- Edit the appropriate section of the
+  [package file](https://github.com/jupyrdf/ipyforcegraph/tree/main/package.json).
 - Run:
 
 ```bash
@@ -180,4 +185,5 @@ doit setup:js || doit setup:js || doit setup:js
 doit lint
 ```
 
-- Commit the changes to the package file and the [yarn lock file](./yarn.lock).
+- Commit the changes to the package file and the
+  [yarn lock file](https://github.com/jupyrdf/ipyforcegraph/tree/main/yarn.lock).
