@@ -67,7 +67,7 @@ export class DataFrameSourceModel extends WidgetModel {
     const nodeCount = (nodes[nodeColumns[0]] || emptyArray).length;
     const linkCount = (links[sourceColumn] || emptyArray).length;
 
-    const indeces = nodes[nodeColumns[nodeIdColumn]] || [...Array(nodeCount).keys()]
+    const indeces = nodes[nodeColumns[nodeIdColumn]] || [...Array(nodeCount).keys()];
 
     for (let id = 0; id < nodeCount; id++) {
       let node = { id: indeces[id] };
