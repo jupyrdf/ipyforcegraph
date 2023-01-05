@@ -37,6 +37,8 @@ const plugin: IPlugin<Application<Widget>, void> = {
         }
 
         loadingWidgets = new PromiseDelegate();
+        const { initializeZstd } = await import('./widgets/serializers');
+        await initializeZstd();
 
         DEBUG && console.warn(`${EMOJI} loading widgets`);
         widgetExports = {

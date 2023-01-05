@@ -13,7 +13,6 @@ dependencies:
   - git
   - hypothesis
   - importnb
-  - ipydatawidgets
   - ipython >=7
   - ipywidgets >=8.0.4,<9
   - isort
@@ -26,6 +25,8 @@ dependencies:
   - myst-nb
   - networkx
   - nodejs >=18,<19
+  - numcodecs
+  - orjson
   - packaging >=22.0
   - pandas
   - pydata-sphinx-theme
@@ -46,6 +47,7 @@ dependencies:
   - sphinx-autobuild
   - sphinx-autodoc-typehints
   - tomli
+  - traittypes
   - twine
   - wheel
   # lite
@@ -54,4 +56,4 @@ dependencies:
   - python >=3.8,<3.12.0a0
   # this is handled out-of-band
   # - pip:
-  #   - jupyterlite ==0.1.0b16
+  #   - jupyterlite ==0.1.0b17

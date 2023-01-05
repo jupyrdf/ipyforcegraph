@@ -2,7 +2,7 @@
  * Copyright (c) 2023 ipyforcegraph contributors.
  * Distributed under the terms of the Modified BSD License.
  */
-import type { ForceGraphInstance, GraphData } from 'force-graph';
+import type { GraphData } from 'force-graph';
 
 import type { ISignal } from '@lumino/signaling';
 
@@ -30,8 +30,8 @@ export interface IBehave {
   updateRequested: ISignal<IBehave, void>;
 }
 
-export interface IHasGraph {
-  graph: ForceGraphInstance;
+export interface IHasGraph<T = any> {
+  graph: T;
   source: ISource;
 }
 

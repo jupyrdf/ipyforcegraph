@@ -2,37 +2,12 @@
  * Copyright (c) 2023 ipyforcegraph contributors.
  * Distributed under the terms of the Modified BSD License.
  */
-import ndarray from 'ndarray';
-
-import { ISignal, Signal } from '@lumino/signaling';
-
 import { WidgetModel, unpack_models as deserialize } from '@jupyter-widgets/base';
 
-import { IBehave, IHasGraph, WIDGET_DEFAULTS } from '../tokens';
+import { IHasGraph, WIDGET_DEFAULTS } from '../../tokens';
 
-const SELECTED_COLOR = '#B3A369';
-const NOT_SELECTED_COLOR = '#003057';
+import { BehaviorModel } from './base';
 
-export class BehaviorModel extends WidgetModel implements IBehave {
-  protected _updateRequested: Signal<IBehave, void>;
-
-  initialize(attributes: any, options: any) {
-    super.initialize(attributes, options);
-    this._updateRequested = new Signal(this);
-  }
-
-  get updateRequested(): ISignal<IBehave, void> {
-    return this._updateRequested;
-  }
-
-  onUpdate(hasGraph: IHasGraph) {
-    throw new Error('unimplemented');
-  }
-}
-
-/**
- * A model which wraps an `ndarray.NdArray` of indices in `force-graph.GraphData.nodes`.
- */
 export class NodeSelectionModel extends BehaviorModel {
   static model_name = 'NodeSelectionModel';
   static serializers = {
@@ -47,39 +22,36 @@ export class NodeSelectionModel extends BehaviorModel {
       ...super.defaults(),
       ...WIDGET_DEFAULTS,
       _model_name: NodeSelectionModel.model_name,
-      value: null,
+      selected: [],
       multiple: true,
     };
   }
 
   initialize(attributes: any, options: any) {
     super.initialize(attributes, options);
-    this.on('change:value', this.onValueChange, this);
+    this.on('change:selected', this.onValueChange, this);
     this.onValueChange();
   }
 
   onValueChange(change?: any) {
-    let value = this.get('value');
-    if (value) {
-      value.on('change:array', this.onKernelData, this);
-      this.onKernelData();
-    }
-  }
-
-  onKernelData() {
     this._updateRequested.emit(void 0);
   }
 
   get selected(): Set<number> {
-    let value = this.get('value');
-    return new Set<number>([...(value.get('array')?.data || [])]);
+    return new Set<number>([...(this.get('selected') || [])]);
   }
 
   set selected(selected: Set<number>) {
-    let value = this.get('value');
-    const newArray = ndarray(new Int32Array([...selected]), [selected.size]);
-    value.set({ array: newArray });
-    value.save_changes();
+    this.set({ selected: [...selected] });
+    this.save_changes();
+  }
+
+  get selectedColor(): string {
+    return this.get('selected_color');
+  }
+
+  get notSelectedColor(): string {
+    return this.get('not_selected_color');
   }
 
   registerGraph(hasGraph: IHasGraph): void {
@@ -103,10 +75,10 @@ export class NodeSelectionModel extends BehaviorModel {
       this.registerGraph(hasGraph);
     }
 
-    const { selected } = this;
+    const { selected, selectedColor, notSelectedColor } = this;
 
     hasGraph.graph.nodeColor((node) => {
-      return selected.has(node.id as number) ? SELECTED_COLOR : NOT_SELECTED_COLOR;
+      return selected.has(node.id as number) ? selectedColor : notSelectedColor;
     });
   }
 }

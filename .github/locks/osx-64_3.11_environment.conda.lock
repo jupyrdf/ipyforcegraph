@@ -13,7 +13,6 @@
 #   - git
 #   - hypothesis
 #   - importnb
-#   - ipydatawidgets
 #   - ipython >=7
 #   - ipywidgets >=8.0.4,<9
 #   - isort
@@ -26,6 +25,8 @@
 #   - myst-nb
 #   - networkx
 #   - nodejs >=18,<19
+#   - numcodecs
+#   - orjson
 #   - packaging >=22.0
 #   - pandas
 #   - pydata-sphinx-theme
@@ -46,6 +47,7 @@
 #   - sphinx-autobuild
 #   - sphinx-autodoc-typehints
 #   - tomli
+#   - traittypes
 #   - twine
 #   - wheel
 #   # lite
@@ -54,7 +56,7 @@
 #   - python >=3.8,<3.12.0a0
 #   # this is handled out-of-band
 #   # - pip:
-#   #   - jupyterlite ==0.1.0b16
+#   #   - jupyterlite ==0.1.0b17
 # dependencies:
 #   - python >=3.11,<3.12
 # dependencies: []
@@ -143,10 +145,12 @@ https://conda.anaconda.org/conda-forge/osx-64/markupsafe-2.1.1-py311h5547dcb_2.t
 https://conda.anaconda.org/conda-forge/noarch/mdurl-0.1.0-pyhd8ed1ab_0.tar.bz2#f8dab71fdc13b1bf29a01248b156d268
 https://conda.anaconda.org/conda-forge/noarch/mistune-2.0.4-pyhd8ed1ab_0.tar.bz2#78e0a90393b79b378b8ff6d32893d58a
 https://conda.anaconda.org/conda-forge/noarch/more-itertools-9.0.0-pyhd8ed1ab_0.tar.bz2#9b6ad26944f19f599800b068e0582227
+https://conda.anaconda.org/conda-forge/osx-64/msgpack-python-1.0.4-py311hd2070f0_1.tar.bz2#e91973b43c03d74de80de087ff46e393
 https://conda.anaconda.org/conda-forge/osx-64/mypy_extensions-0.4.3-py311h6eed73b_6.tar.bz2#0310303443cb3d296e426a1fa3586c1d
 https://conda.anaconda.org/conda-forge/noarch/natsort-8.2.0-pyhd8ed1ab_0.tar.bz2#a8b2456513ed910ef418021afc5150bb
 https://conda.anaconda.org/conda-forge/noarch/nest-asyncio-1.5.6-pyhd8ed1ab_0.tar.bz2#7b868f21adde0d9b8b38f9c16836589b
 https://conda.anaconda.org/conda-forge/noarch/networkx-2.8.8-pyhd8ed1ab_0.tar.bz2#bb45ff9deddb045331fd039949f39650
+https://conda.anaconda.org/conda-forge/osx-64/orjson-3.8.3-py311h8b8394e_0.conda#eb2a49e63887c86ef1a49ff70ab3c831
 https://conda.anaconda.org/conda-forge/noarch/packaging-22.0-pyhd8ed1ab_0.conda#0e8e1bd93998978fc3125522266d12db
 https://conda.anaconda.org/conda-forge/noarch/pandocfilters-1.5.0-pyhd8ed1ab_0.tar.bz2#457c2c8c08e54905d6954e79cb5b5db9
 https://conda.anaconda.org/conda-forge/noarch/parso-0.8.3-pyhd8ed1ab_0.tar.bz2#17a565a0c3899244e938cdf417e7b094
@@ -208,7 +212,7 @@ https://conda.anaconda.org/conda-forge/noarch/cattrs-22.2.0-pyhd8ed1ab_0.tar.bz2
 https://conda.anaconda.org/conda-forge/osx-64/cffi-1.15.1-py311ha86e640_3.conda#5967be4da33261eada7cc79593f71088
 https://conda.anaconda.org/conda-forge/noarch/comm-0.1.2-pyhd8ed1ab_0.conda#3c78af4752bb1600ebe5e83ef4588eaa
 https://conda.anaconda.org/conda-forge/noarch/commonmark-0.9.1-py_0.tar.bz2#6aa0173c14befcd577ded130cf6f22f5
-https://conda.anaconda.org/conda-forge/osx-64/coverage-7.0.2-py311h5547dcb_0.conda#55b361b44503719c6a70577964aba327
+https://conda.anaconda.org/conda-forge/osx-64/coverage-7.0.3-py311h5547dcb_0.conda#54d168637e920d2d5dc516195511f51c
 https://conda.anaconda.org/conda-forge/osx-64/curl-7.87.0-h6df9250_0.conda#af1db2937ff4a1af6440630102dd18bc
 https://conda.anaconda.org/conda-forge/noarch/h11-0.14.0-pyhd8ed1ab_0.tar.bz2#b21ed0883505ba1910994f1df031a428
 https://conda.anaconda.org/conda-forge/noarch/html5lib-1.1-pyh9f0ad1d_0.tar.bz2#b2355343d6315c892543200231d7154a
@@ -234,7 +238,7 @@ https://conda.anaconda.org/conda-forge/osx-64/python-libarchive-c-4.0-py311h6eed
 https://conda.anaconda.org/conda-forge/noarch/robotframework-pythonlibcore-4.0.0-pyhd8ed1ab_0.tar.bz2#e3dd7ba929a82a21c6e568c00d5b538c
 https://conda.anaconda.org/conda-forge/noarch/robotframework-robocop-1.12.0-pyhd8ed1ab_0.tar.bz2#37e6dad59a24e6d7ff64a533c4135f57
 https://conda.anaconda.org/conda-forge/noarch/robotframework-stacktrace-0.4.1-pyhd8ed1ab_0.tar.bz2#3dc788e294fd159537c931dbb964511e
-https://conda.anaconda.org/conda-forge/osx-64/sqlalchemy-1.4.45-py311h5547dcb_0.conda#ef802be4ed86c316992dd5d2ab712bd0
+https://conda.anaconda.org/conda-forge/osx-64/sqlalchemy-1.4.46-py311h5547dcb_0.conda#032553a3ed76ef61210c7afc43f6f738
 https://conda.anaconda.org/conda-forge/noarch/terminado-0.17.1-pyhd1c38e8_0.conda#046120b71d8896cb7faef78bfdbfee1e
 https://conda.anaconda.org/conda-forge/noarch/tinycss2-1.2.1-pyhd8ed1ab_0.tar.bz2#7234c9eefff659501cd2fe0d2ede4d48
 https://conda.anaconda.org/conda-forge/noarch/traittypes-0.2.1-pyh9f0ad1d_2.tar.bz2#7d32ccb5334a6822c28af3e864550618
@@ -279,6 +283,7 @@ https://conda.anaconda.org/conda-forge/noarch/trio-websocket-0.9.2-pyhd8ed1ab_0.
 https://conda.anaconda.org/conda-forge/noarch/ipython-8.8.0-pyhd1c38e8_0.conda#92012d3aee304230e25f564e7746e8dd
 https://conda.anaconda.org/conda-forge/noarch/jupyter_client-7.4.8-pyhd8ed1ab_0.conda#bd4951aa5fbf3336a249e25c90f50333
 https://conda.anaconda.org/conda-forge/noarch/nbformat-5.7.1-pyhd8ed1ab_0.conda#facb42913140f1a399a5ebb65b30915e
+https://conda.anaconda.org/conda-forge/osx-64/numcodecs-0.11.0-py311h814d153_1.conda#21f2ae35161c19b8c4ad0791d12ef2a3
 https://conda.anaconda.org/conda-forge/osx-64/pandas-1.5.2-py311hd84f3f5_0.conda#c061bfc7a65e7b7a1757d2476056acc3
 https://conda.anaconda.org/conda-forge/noarch/robotframework-tidy-3.3.2-pyhd8ed1ab_0.tar.bz2#354a5c374999c2688332c073e2450951
 https://conda.anaconda.org/conda-forge/noarch/urllib3-1.26.13-pyhd8ed1ab_0.conda#3078ef2359efd6ecadbc7e085c5e0592
@@ -296,7 +301,6 @@ https://conda.anaconda.org/conda-forge/noarch/requests-toolbelt-0.10.1-pyhd8ed1a
 https://conda.anaconda.org/conda-forge/noarch/robotframework-seleniumlibrary-6.0.0-pyhd8ed1ab_0.tar.bz2#2acaef9c04081dc3644501ac575953bf
 https://conda.anaconda.org/conda-forge/noarch/sphinx-5.3.0-pyhd8ed1ab_0.tar.bz2#f9e1fcfe235d655900bfeb6aee426472
 https://conda.anaconda.org/conda-forge/noarch/bqplot-0.12.36-pyhd8ed1ab_0.tar.bz2#bff49231f6b67c01a7a89d56ca0693ab
-https://conda.anaconda.org/conda-forge/noarch/ipydatawidgets-4.3.2-pyhc268e32_0.tar.bz2#aff80a4f5dca225740523d330c25c57e
 https://conda.anaconda.org/conda-forge/noarch/jupyter_server-1.23.4-pyhd8ed1ab_0.conda#35b7e9267926e864cc70ce137e6588ca
 https://conda.anaconda.org/conda-forge/noarch/myst-parser-0.18.1-pyhd8ed1ab_0.tar.bz2#bcfdf5c7d8bf5c6f6be7b4c66fff2eca
 https://conda.anaconda.org/conda-forge/noarch/nbconvert-pandoc-7.2.7-pyhd8ed1ab_0.conda#7d48776bb3fdfa6447267c413a480ccd

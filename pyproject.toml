@@ -28,9 +28,11 @@ classifiers = [
 ]
 requires-python = ">=3.8"
 dependencies = [
-    "ipydatawidgets",
     "ipywidgets >=8.0.4,<9",
     "networkx",
+    "numcodecs",
+    "traittypes",
+    "pandas",
 ]
 
 [project.urls]
