@@ -12,23 +12,31 @@ from ..serializers import dataframe_serialization
 
 @W.register
 class DataFrameSource(ForceBase):
+    """A Graph Source that stores the nodes and links as a pandas DataFrame."""
+
     _model_name: str = T.Unicode("DataFrameSourceModel").tag(sync=True)
-    nodes = TT.PandasType(klass=P.DataFrame, help="the DataFrame of node metadata").tag(
+
+    nodes: P.DataFrame = TT.PandasType(klass=P.DataFrame, help="the DataFrame of node metadata").tag(
         sync=True, **dataframe_serialization
     )
 
-    links = TT.PandasType(klass=P.DataFrame, help="the DataFrame of edge metadata").tag(
+    links: P.DataFrame = TT.PandasType(klass=P.DataFrame, help="the DataFrame of link metadata").tag(
         sync=True, **dataframe_serialization
     )
 
-    link_source_column = T.Unicode(
-        "source", help="the name of the column for an edge's source"
+    node_id_column: str = T.Unicode(
+        "index",
+        help="the name of the column for a node's identifier, 'index' uses the row number"
     ).tag(sync=True)
 
-    link_target_column = T.Unicode(
-        "target", help="the name of the column for an edge's target"
+    link_source_column: str = T.Unicode(
+        "source", help="the name of the column for a link's source"
+    ).tag(sync=True)
+
+    link_target_column: str = T.Unicode(
+        "target", help="the name of the column for a link's target"
     ).tag(sync=True)
 
     def __repr__(self):
         """A dumb repr to avoid string nasty pandas comparison stuff."""
-        return f"<{self.__class__.__name__}>"
+        return f"{self.__class__.__name__}({len(self.nodes)} nodes, {len(self.links)} links)"

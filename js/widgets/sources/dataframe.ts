@@ -30,8 +30,9 @@ export class DataFrameSourceModel extends WidgetModel {
       _model_name: DataFrameSourceModel.model_name,
       nodes: null,
       links: null,
-      link_source: 'source',
-      link_target: 'target',
+      node_id_column: null,
+      link_source_column: 'source',
+      link_target_column: 'target',
     };
   }
 
@@ -57,6 +58,7 @@ export class DataFrameSourceModel extends WidgetModel {
 
     const nodes = this.get('nodes');
     const links = this.get('links');
+    const nodeIdColumn = this.get('node_id_column');
     const sourceColumn = this.get('link_source_column');
     const targetColumn = this.get('link_target_column');
 
@@ -65,8 +67,10 @@ export class DataFrameSourceModel extends WidgetModel {
     const nodeCount = (nodes[nodeColumns[0]] || emptyArray).length;
     const linkCount = (links[sourceColumn] || emptyArray).length;
 
+    const indeces = nodes[nodeColumns[nodeIdColumn]] || [...Array(nodeCount).keys()]
+
     for (let id = 0; id < nodeCount; id++) {
-      let node = { id };
+      let node = { id: indeces[id] };
       for (const col of nodeColumns) {
         node[col] = nodes[col][id];
       }
