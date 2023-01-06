@@ -54,13 +54,14 @@ export class NodeLabelModel extends BehaviorModel {
     this._updateRequested.emit(void 0);
   }
 
-  registerGraph(hasGraph: IHasGraph): void {
+  async registerGraph(hasGraph: IHasGraph): Promise<void> {
     this._graph = hasGraph;
+    await hasGraph.rendered;
   }
 
-  onUpdate(hasGraph: IHasGraph) {
+  async onUpdate(hasGraph: IHasGraph): Promise<void> {
     if (hasGraph !== this._graph) {
-      this.registerGraph(hasGraph);
+      await this.registerGraph(hasGraph);
     }
 
     const { columnName, defaultLabel } = this;

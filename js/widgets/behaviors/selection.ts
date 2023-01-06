@@ -60,8 +60,9 @@ export class NodeSelectionModel extends BehaviorModel {
     return this.get('not_selected_color') || DEFAULT_COLORS.notSelected;
   }
 
-  registerGraph(hasGraph: IHasGraph): void {
+  async registerGraph(hasGraph: IHasGraph): Promise<void> {
     this._graph = hasGraph;
+    await hasGraph.rendered;
     hasGraph.graph.onNodeClick(this.onNodeClick);
   }
 
@@ -78,9 +79,9 @@ export class NodeSelectionModel extends BehaviorModel {
     this.selected = selected;
   };
 
-  onUpdate(hasGraph: IHasGraph) {
+  async onUpdate(hasGraph: IHasGraph): Promise<void> {
     if (hasGraph !== this._graph) {
-      this.registerGraph(hasGraph);
+      await this.registerGraph(hasGraph);
     }
 
     const { selected, selectedColor, notSelectedColor } = this;

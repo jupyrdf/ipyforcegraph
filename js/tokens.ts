@@ -44,6 +44,7 @@ export interface IBehave {
 export interface IHasGraph<T = any> {
   graph: T;
   source: ISource;
+  rendered: Promise<void>;
 }
 
 export interface ISource {

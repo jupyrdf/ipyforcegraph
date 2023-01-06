@@ -62,6 +62,10 @@ export class ForceGraphView<T = ForceGraphInstance>
     return this.model.get('source');
   }
 
+  get rendered(): Promise<void> {
+    return this._rendered.promise;
+  }
+
   initialize(parameters: any) {
     super.initialize(parameters);
     this._rendered = new PromiseDelegate();
@@ -74,6 +78,7 @@ export class ForceGraphView<T = ForceGraphInstance>
   async render(): Promise<void> {
     const root = this.el as HTMLDivElement;
     const containerDiv = document.createElement('div');
+    containerDiv.setAttribute('data-jp-suppress-context-menu', 'true');
     root.appendChild(containerDiv);
     this.graph = this.createGraph(containerDiv);
     this._rendered.resolve(void 0);
@@ -94,18 +99,22 @@ export class ForceGraphView<T = ForceGraphInstance>
 
   async postUpdate(): Promise<void> {
     const behaviors: IBehave[] = this.model.get('behaviors') || [];
+    const promises: Promise<any>[] = [];
     for (const behavior of behaviors) {
-      behavior.onUpdate(this);
+      promises.push(behavior.onUpdate(this));
     }
+    await Promise.all(promises);
   }
 
-  onBehaviorsChange() {
+  async onBehaviorsChange(): Promise<void> {
     // TODO: disconnect old model...
     const behaviors: IBehave[] = this.model.get('behaviors') || [];
+    const promises: Promise<any>[] = [];
     for (const behavior of behaviors) {
       behavior.updateRequested.connect(this.postUpdate, this);
-      behavior.onUpdate(this);
+      promises.push(behavior.onUpdate(this));
     }
+    await Promise.all(promises);
   }
 
   onSourceChange(change?: any) {
