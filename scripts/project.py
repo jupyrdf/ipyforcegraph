@@ -178,7 +178,9 @@ ALL_TSCONFIG = [
 # tests
 EXAMPLES = ROOT / "examples"
 EXAMPLE_IPYNB = [
-    p for p in EXAMPLES.rglob("*.ipynb") if ".ipynb_checkpoints" not in str(p)
+    p
+    for p in EXAMPLES.rglob("*.ipynb")
+    if ".ipynb_checkpoints" not in str(p) and "untitled" not in str(p).lower()
 ]
 EXAMPLE_JSON = [
     p for p in EXAMPLES.rglob("*.json") if ".ipynb_checkpoints" not in str(p)
