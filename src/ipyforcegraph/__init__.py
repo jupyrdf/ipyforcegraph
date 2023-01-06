@@ -1,5 +1,5 @@
 """Main entrypoint for ipyforcegraph."""
-# Copyright (c) 2022 ipyforcegraph contributors.
+# Copyright (c) 2023 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.
 
 from .constants import EXTENSION_NAME, __version__

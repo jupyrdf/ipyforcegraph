@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 ipyforcegraph contributors.
+ * Copyright (c) 2023 ipyforcegraph contributors.
  * Distributed under the terms of the Modified BSD License.
  */
 import { Application, IPlugin } from '@lumino/application';
@@ -37,6 +37,8 @@ const plugin: IPlugin<Application<Widget>, void> = {
         }
 
         loadingWidgets = new PromiseDelegate();
+        const { initializeZstd } = await import('./widgets/serializers');
+        await initializeZstd();
 
         DEBUG && console.warn(`${EMOJI} loading widgets`);
         widgetExports = {

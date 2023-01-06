@@ -41,13 +41,16 @@
   "resolutions": {
     "verdaccio": "file:./scripts/not-a-package",
     "typescript": "~4.9.3",
+    "json5": "^2.1.1",
     "prettier": "^2.8.0"
   },
   "dependencies": {
+    "@bokuweb/zstd-wasm": "^0.0.17",
     "@jupyter-widgets/base": "^6.0.1",
     "@jupyter-widgets/controls": "^5.0.1",
     "@jupyter-widgets/jupyterlab-manager": "^5.0.0",
     "3d-force-graph": "~1.70.17",
+    "buffer": "^6.0.3",
     "force-graph": "~1.42.16",
     "jupyter-datawidgets": "^5.5.2"
   },
@@ -58,7 +61,6 @@
     "@jupyterlab/theme-light-extension": "3",
     "@trivago/prettier-plugin-sort-imports": "^4.0.0",
     "@types/lodash": "^4.14.162",
-    "@types/ndarray": "^1.0.11",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.8.0",
     "prettier-package-json": "^2.7.0",
@@ -93,6 +95,9 @@
         "singleton": true
       },
       "jupyter-datawidgets": {
+        "bundled": true
+      },
+      "@bokuweb/zstd-wasm": {
         "bundled": true
       }
     }

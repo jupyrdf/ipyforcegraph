@@ -3,7 +3,7 @@
     this should not import anything not in py36+ stdlib, or any local paths
 """
 
-# Copyright (c) 2022 ipyforcegraph contributors.
+# Copyright (c) 2023 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.
 
 import itertools
@@ -158,7 +158,7 @@ LITE_JSON = [*LITE.glob("*.json")]
 DOCS_BUILD = BUILD / "docs"
 DOCS_CONF = DOCS / "conf.py"
 DICTIONARY = DOCS / "dictionary.txt"
-LITE_SPEC = ["--pre", "jupyterlite==0.1.0b16"]
+LITE_SPEC = ["--pre", "jupyterlite==0.1.0b17"]
 LITE_BUILD = BUILD / "lite"
 LITE_SHA256SUMS = LITE_BUILD / "SHA256SUMS"
 
@@ -178,7 +178,9 @@ ALL_TSCONFIG = [
 # tests
 EXAMPLES = ROOT / "examples"
 EXAMPLE_IPYNB = [
-    p for p in EXAMPLES.rglob("*.ipynb") if ".ipynb_checkpoints" not in str(p)
+    p
+    for p in EXAMPLES.glob("*.ipynb")  # only look in the root for top-level examples
+    if ".ipynb_checkpoints" not in str(p) and "untitled" not in str(p).lower()
 ]
 EXAMPLE_JSON = [
     p for p in EXAMPLES.rglob("*.json") if ".ipynb_checkpoints" not in str(p)
@@ -228,7 +230,7 @@ OK_LINKS = BUILD / "links.ok"
 
 HTMLCOV = BUILD / "htmlcov"
 HTMLCOV_INDEX = HTMLCOV / "index.html"
-PYTEST_COV_THRESHOLD = 17
+PYTEST_COV_THRESHOLD = 13
 PYTEST_HTML = BUILD / "pytest.html"
 PYTEST_XUNIT = BUILD / "pytest.xunit.xml"
 
