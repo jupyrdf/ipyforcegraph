@@ -18,6 +18,17 @@ export const EMPTY_GRAPH_DATA: GraphData = Object.freeze({
   nodes: [],
 });
 
+export const DEFAULT_COLUMNS = {
+  id: 'id',
+  source: 'source',
+  target: 'target',
+};
+
+export const DEFAULT_COLORS = {
+  selected: '#B3A369',
+  notSelected: '#003057',
+};
+
 export const WIDGET_DEFAULTS = {
   _model_module: NAME,
   _model_module_version: VERSION,

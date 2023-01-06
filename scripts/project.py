@@ -179,7 +179,7 @@ ALL_TSCONFIG = [
 EXAMPLES = ROOT / "examples"
 EXAMPLE_IPYNB = [
     p
-    for p in EXAMPLES.rglob("*.ipynb")
+    for p in EXAMPLES.glob("*.ipynb")  # only look in the root for top-level examples
     if ".ipynb_checkpoints" not in str(p) and "untitled" not in str(p).lower()
 ]
 EXAMPLE_JSON = [

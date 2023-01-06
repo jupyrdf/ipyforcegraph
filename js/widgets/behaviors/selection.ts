@@ -2,11 +2,15 @@
  * Copyright (c) 2023 ipyforcegraph contributors.
  * Distributed under the terms of the Modified BSD License.
  */
+import type { NodeObject } from 'force-graph';
+
 import { WidgetModel, unpack_models as deserialize } from '@jupyter-widgets/base';
 
-import { IHasGraph, WIDGET_DEFAULTS } from '../../tokens';
+import { DEFAULT_COLORS, IHasGraph, WIDGET_DEFAULTS } from '../../tokens';
 
 import { BehaviorModel } from './base';
+
+export type TSelectedSet = Set<string | number>;
 
 export class NodeSelectionModel extends BehaviorModel {
   static model_name = 'NodeSelectionModel';
@@ -23,6 +27,8 @@ export class NodeSelectionModel extends BehaviorModel {
       ...WIDGET_DEFAULTS,
       _model_name: NodeSelectionModel.model_name,
       selected: [],
+      selected_color: DEFAULT_COLORS.selected,
+      not_selected_color: DEFAULT_COLORS.notSelected,
       multiple: true,
     };
   }
@@ -37,38 +43,40 @@ export class NodeSelectionModel extends BehaviorModel {
     this._updateRequested.emit(void 0);
   }
 
-  get selected(): Set<number> {
-    return new Set<number>([...(this.get('selected') || [])]);
+  get selected(): TSelectedSet {
+    return new Set([...(this.get('selected') || [])]);
   }
 
-  set selected(selected: Set<number>) {
+  set selected(selected: TSelectedSet) {
     this.set({ selected: [...selected] });
     this.save_changes();
   }
 
   get selectedColor(): string {
-    return this.get('selected_color');
+    return this.get('selected_color') || DEFAULT_COLORS.selected;
   }
 
   get notSelectedColor(): string {
-    return this.get('not_selected_color');
+    return this.get('not_selected_color') || DEFAULT_COLORS.notSelected;
   }
 
   registerGraph(hasGraph: IHasGraph): void {
     this._graph = hasGraph;
-    hasGraph.graph.onNodeClick((node, event) => {
-      let { selected } = this;
-      const id = node.id as number;
-      if (this.get('multiple') && (event.ctrlKey || event.shiftKey || event.altKey)) {
-        selected.has(id) ? selected.delete(id) : selected.add(id);
-      } else {
-        selected.clear();
-        selected.add(id);
-      }
-
-      this.selected = selected;
-    });
+    hasGraph.graph.onNodeClick(this.onNodeClick);
   }
+
+  onNodeClick = (node: NodeObject, event: MouseEvent): void => {
+    let { selected } = this;
+    const id = node.id;
+    if (this.get('multiple') && (event.ctrlKey || event.shiftKey || event.altKey)) {
+      selected.has(id) ? selected.delete(id) : selected.add(id);
+    } else {
+      selected.clear();
+      selected.add(id);
+    }
+
+    this.selected = selected;
+  };
 
   onUpdate(hasGraph: IHasGraph) {
     if (hasGraph !== this._graph) {
@@ -77,8 +85,8 @@ export class NodeSelectionModel extends BehaviorModel {
 
     const { selected, selectedColor, notSelectedColor } = this;
 
-    hasGraph.graph.nodeColor((node) => {
-      return selected.has(node.id as number) ? selectedColor : notSelectedColor;
+    hasGraph.graph.nodeColor((node: NodeObject) => {
+      return selected.has(node.id) ? selectedColor : notSelectedColor;
     });
   }
 }

@@ -8,7 +8,7 @@ import { ISignal, Signal } from '@lumino/signaling';
 
 import { WidgetModel } from '@jupyter-widgets/base';
 
-import { WIDGET_DEFAULTS } from '../../tokens';
+import { DEFAULT_COLUMNS, WIDGET_DEFAULTS } from '../../tokens';
 import { jsonToDataFrame } from '../serializers';
 
 const emptyArray = Object.freeze([]);
@@ -30,9 +30,9 @@ export class DataFrameSourceModel extends WidgetModel {
       _model_name: DataFrameSourceModel.model_name,
       nodes: null,
       links: null,
-      node_id_column: 'index',
-      link_source_column: 'source',
-      link_target_column: 'target',
+      node_id_column: DEFAULT_COLUMNS.id,
+      link_source_column: DEFAULT_COLUMNS.source,
+      link_target_column: DEFAULT_COLUMNS.target,
     };
   }
 
@@ -50,37 +50,53 @@ export class DataFrameSourceModel extends WidgetModel {
     return this._dataUpdated;
   }
 
+  get nodeIdColumn() {
+    return this.get('node_id_column') || DEFAULT_COLUMNS.id;
+  }
+
+  get linkSourceColumn() {
+    return this.get('link_source_column') || DEFAULT_COLUMNS.source;
+  }
+
+  get linkTargetColumn() {
+    return this.get('link_target_column') || DEFAULT_COLUMNS.target;
+  }
+
+  get nodes() {
+    return this.get('nodes') || emptyArray;
+  }
+
+  get links() {
+    return this.get('links') || emptyArray;
+  }
+
   get graphData(): GraphData {
     const graph: GraphData = {
       nodes: [],
       links: [],
     };
 
-    const nodes = this.get('nodes');
-    const links = this.get('links');
-    const nodeIdColumn = this.get('node_id_column');
-    const sourceColumn = this.get('link_source_column');
-    const targetColumn = this.get('link_target_column');
+    const { nodes, links, nodeIdColumn, linkSourceColumn, linkTargetColumn } = this;
 
     const nodeColumns = Object.keys(nodes);
 
-    const nodeCount = (nodes[nodeColumns[0]] || emptyArray).length;
-    const linkCount = (links[sourceColumn] || emptyArray).length;
+    const nodeCount = (nodes[nodeIdColumn] || emptyArray).length;
+    const linkCount = (links[linkSourceColumn] || emptyArray).length;
 
-    const indeces = nodes[nodeColumns[nodeIdColumn]] || [...Array(nodeCount).keys()];
+    const hasIdColumn = nodes[nodeIdColumn] != null;
 
-    for (let id = 0; id < nodeCount; id++) {
-      let node = { id: indeces[id] };
+    for (let idx = 0; idx < nodeCount; idx++) {
+      let node = { id: hasIdColumn ? nodes[nodeIdColumn][idx] : idx };
       for (const col of nodeColumns) {
-        node[col] = nodes[col][id];
+        node[col] = nodes[col][idx];
       }
       graph.nodes.push(node);
     }
 
-    for (let id = 0; id < linkCount; id++) {
+    for (let idx = 0; idx < linkCount; idx++) {
       graph.links.push({
-        source: links[sourceColumn][id],
-        target: links[targetColumn][id],
+        source: links[linkSourceColumn][idx],
+        target: links[linkTargetColumn][idx],
       });
     }
 

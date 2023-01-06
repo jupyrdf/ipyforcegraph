@@ -96,9 +96,11 @@ export class ForceGraphView
   }
 
   onBehaviorsChange() {
+    // TODO: disconnect old model...
     const behaviors: IBehave[] = this.model.get('behaviors') || [];
     for (const behavior of behaviors) {
       behavior.updateRequested.connect(this.postUpdate, this);
+      behavior.onUpdate(this);
     }
   }
 
