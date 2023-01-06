@@ -16,17 +16,17 @@ class DataFrameSource(ForceBase):
 
     _model_name: str = T.Unicode("DataFrameSourceModel").tag(sync=True)
 
-    nodes: P.DataFrame = TT.PandasType(klass=P.DataFrame, help="the DataFrame of node metadata").tag(
-        sync=True, **dataframe_serialization
-    )
+    nodes: P.DataFrame = TT.PandasType(
+        klass=P.DataFrame, help="the DataFrame of node metadata"
+    ).tag(sync=True, **dataframe_serialization)
 
-    links: P.DataFrame = TT.PandasType(klass=P.DataFrame, help="the DataFrame of link metadata").tag(
-        sync=True, **dataframe_serialization
-    )
+    links: P.DataFrame = TT.PandasType(
+        klass=P.DataFrame, help="the DataFrame of link metadata"
+    ).tag(sync=True, **dataframe_serialization)
 
     node_id_column: str = T.Unicode(
         "index",
-        help="the name of the column for a node's identifier, 'index' uses the row number"
+        help="the name of the column for a node's identifier, 'index' uses the row number",
     ).tag(sync=True)
 
     link_source_column: str = T.Unicode(
