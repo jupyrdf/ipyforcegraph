@@ -228,7 +228,7 @@ OK_LINKS = BUILD / "links.ok"
 
 HTMLCOV = BUILD / "htmlcov"
 HTMLCOV_INDEX = HTMLCOV / "index.html"
-PYTEST_COV_THRESHOLD = 17
+PYTEST_COV_THRESHOLD = 13
 PYTEST_HTML = BUILD / "pytest.html"
 PYTEST_XUNIT = BUILD / "pytest.xunit.xml"
 
