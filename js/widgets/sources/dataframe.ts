@@ -30,7 +30,7 @@ export class DataFrameSourceModel extends WidgetModel {
       _model_name: DataFrameSourceModel.model_name,
       nodes: null,
       links: null,
-      node_id_column: null,
+      node_id_column: 'index',
       link_source_column: 'source',
       link_target_column: 'target',
     };
