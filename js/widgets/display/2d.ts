@@ -48,12 +48,12 @@ export class ForceGraphModel extends DOMWidgetModel {
   }
 }
 
-export class ForceGraphView
+export class ForceGraphView<T = ForceGraphInstance>
   extends DOMWidgetView
-  implements IHasGraph<ForceGraphInstance>
+  implements IHasGraph<T>
 {
   static view_name = 'ForceGraphView';
-  graph: ForceGraphInstance;
+  graph: T;
   model: ForceGraphModel;
 
   protected _rendered: PromiseDelegate<void>;
@@ -75,16 +75,20 @@ export class ForceGraphView
     const root = this.el as HTMLDivElement;
     const containerDiv = document.createElement('div');
     root.appendChild(containerDiv);
-    this.graph = ForceGraph()(containerDiv);
+    this.graph = this.createGraph(containerDiv);
     this._rendered.resolve(void 0);
     await this.update();
+  }
+
+  protected createGraph(containerDiv: HTMLDivElement): T {
+    return ForceGraph()(containerDiv) as any;
   }
 
   async update(): Promise<void> {
     await this._rendered.promise;
     let { graphData } = this.model;
     DEBUG && console.warn(`${EMOJI} updating...`, graphData);
-    this.graph.graphData(graphData);
+    (this.graph as any).graphData(graphData);
     await this.postUpdate();
   }
 

@@ -26,15 +26,8 @@ class ForceGraph(W.DOMWidget, ForceBase):
 
 
 @W.register
-class ForceGraph3D(W.DOMWidget, ForceBase):
+class ForceGraph3D(ForceGraph):
     """3D force-directed graph widget."""
 
     _model_name: str = T.Unicode("ForceGraph3DModel").tag(sync=True)
     _view_name: str = T.Unicode("ForceGraph3DView").tag(sync=True)
-
-    source: DataFrameSource = T.Instance(DataFrameSource, kw={}).tag(
-        sync=True, **W.widget_serialization
-    )
-    behaviors: tuple[Behavior] = W.TypedTuple(T.Instance(Behavior), kw={}).tag(
-        sync=True, **W.widget_serialization
-    )
