@@ -20,7 +20,7 @@ class ForceGraph(W.DOMWidget, ForceBase):
     source: DataFrameSource = T.Instance(DataFrameSource, kw={}).tag(
         sync=True, **W.widget_serialization
     )
-    behaviors: list[Behavior] = W.TypedTuple(T.Instance(Behavior), kw={}).tag(
+    behaviors: tuple[Behavior] = W.TypedTuple(T.Instance(Behavior), kw={}).tag(
         sync=True, **W.widget_serialization
     )
 
@@ -35,6 +35,6 @@ class ForceGraph3D(W.DOMWidget, ForceBase):
     source: DataFrameSource = T.Instance(DataFrameSource, kw={}).tag(
         sync=True, **W.widget_serialization
     )
-    behaviors: list[Behavior] = W.TypedTuple(T.Instance(Behavior), kw={}).tag(
+    behaviors: tuple[Behavior] = W.TypedTuple(T.Instance(Behavior), kw={}).tag(
         sync=True, **W.widget_serialization
     )
