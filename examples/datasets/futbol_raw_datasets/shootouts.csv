@@ -42,8 +42,8 @@ date,home_team,away_team,winner
 1980-12-31,Hong Kong,China PR,China PR
 1981-02-13,Mali,Guinea,Guinea
 1981-05-10,Rwanda,Ethiopia,Ethiopia
-1982-02-21,Ivory Coast,Togo,Togo
-1982-02-22,Ivory Coast,Burkina Faso,Burkina Faso
+1982-02-21,Côte d’Ivoire,Togo,Togo
+1982-02-22,Côte d’Ivoire,Burkina Faso,Burkina Faso
 1982-03-19,Libya,Ghana,Ghana
 1982-05-15,Thailand,Singapore,Thailand
 1982-05-17,Thailand,South Korea,Thailand
@@ -58,7 +58,7 @@ date,home_team,away_team,winner
 1983-07-18,Hong Kong,Thailand,Thailand
 1983-08-28,Morocco,Nigeria,Nigeria
 1983-10-20,Brazil,Paraguay,Brazil
-1983-12-15,Ivory Coast,Mali,Ivory Coast
+1983-12-15,Côte d’Ivoire,Mali,Côte d’Ivoire
 1983-12-18,Mali,Nigeria,Mali
 1984-02-16,Sierra Leone,Mali,Sierra Leone
 1984-02-19,Sierra Leone,Senegal,Senegal
@@ -118,7 +118,7 @@ date,home_team,away_team,winner
 1989-12-11,Chad,Cameroon,Cameroon
 1989-12-16,Malawi,Uganda,Uganda
 1990-01-28,Nigeria,Senegal,Nigeria
-1990-02-04,United States,Colombia,Colombia
+1990-02-04,United States of America,Colombia,Colombia
 1990-02-20,Colombia,Russia,Colombia
 1990-05-18,Zimbabwe,Eswatini,Zimbabwe
 1990-06-25,Republic of Ireland,Romania,Republic of Ireland
@@ -129,17 +129,17 @@ date,home_team,away_team,winner
 1990-12-17,Tanzania,Uganda,Uganda
 1990-12-17,Central African Republic,Equatorial Guinea,Central African Republic
 1991-01-21,Cameroon,Algeria,Cameroon
-1991-01-21,Senegal,Ivory Coast,Ivory Coast
+1991-01-21,Senegal,Côte d’Ivoire,Côte d’Ivoire
 1991-01-22,Senegal,Algeria,Senegal
-1991-01-23,Ivory Coast,Cameroon,Ivory Coast
+1991-01-23,Côte d’Ivoire,Cameroon,Côte d’Ivoire
 1991-06-14,South Korea,Australia,South Korea
 1991-06-16,Italy,Russia,Italy
-1991-07-07,United States,Honduras,United States
+1991-07-07,United States of America,Honduras,United States of America
 1991-08-08,Czechoslovakia,Yugoslavia,Czechoslovakia
 1991-09-20,Fiji,Solomon Islands,Fiji
 1991-09-28,Egypt,Mali,Egypt
-1992-01-23,Cameroon,Ivory Coast,Ivory Coast
-1992-01-26,Ghana,Ivory Coast,Ivory Coast
+1992-01-23,Cameroon,Côte d’Ivoire,Côte d’Ivoire
+1992-01-26,Ghana,Côte d’Ivoire,Côte d’Ivoire
 1992-06-22,Netherlands,Denmark,Denmark
 1992-06-27,Cuba,Martinique,Martinique
 1992-08-29,Japan,South Korea,Japan
@@ -158,7 +158,7 @@ date,home_team,away_team,winner
 1993-08-15,Australia,Canada,Australia
 1993-10-24,Burundi,Guinea,Guinea
 1994-01-29,Burkina Faso,Guinea,Burkina Faso
-1994-04-06,Nigeria,Ivory Coast,Nigeria
+1994-04-06,Nigeria,Côte d’Ivoire,Nigeria
 1994-07-05,Mexico,Bulgaria,Bulgaria
 1994-07-10,Romania,Sweden,Sweden
 1994-07-17,Brazil,Italy,Brazil
@@ -170,13 +170,13 @@ date,home_team,away_team,winner
 1995-05-21,Antigua and Barbuda,Saint Kitts and Nevis,Antigua and Barbuda
 1995-06-09,Paraguay,Bolivia,Paraguay
 1995-07-16,Paraguay,Colombia,Colombia
-1995-07-17,United States,Mexico,United States
+1995-07-17,United States of America,Mexico,United States of America
 1995-07-17,Brazil,Argentina,Brazil
 1995-07-23,Uruguay,Brazil,Uruguay
 1995-08-24,Fiji,Solomon Islands,Solomon Islands
 1995-11-28,Mauritania,Sierra Leone,Sierra Leone
 1995-12-02,Gabon,Cameroon,Cameroon
-1995-12-02,Algeria,Ivory Coast,Ivory Coast
+1995-12-02,Algeria,Côte d’Ivoire,Côte d’Ivoire
 1995-12-06,Ethiopia,Zanzibar,Zanzibar
 1995-12-07,Honduras,Costa Rica,Honduras
 1996-01-28,Gabon,Tunisia,Tunisia
@@ -206,7 +206,7 @@ date,home_team,away_team,winner
 1998-01-31,Egypt,South Korea,South Korea
 1998-01-31,Iran,Chile,Iran
 1998-02-21,Burkina Faso,Tunisia,Burkina Faso
-1998-02-21,Ivory Coast,Egypt,Egypt
+1998-02-21,Côte d’Ivoire,Egypt,Egypt
 1998-02-27,Burkina Faso,DR Congo,DR Congo
 1998-04-22,Hungary,North Macedonia,Hungary
 1998-05-29,Belgium,England,Belgium
@@ -234,7 +234,7 @@ date,home_team,away_team,winner
 2000-02-04,Romania,Georgia,Romania
 2000-02-12,South Africa,Tunisia,South Africa
 2000-02-13,Nigeria,Cameroon,Cameroon
-2000-02-19,United States,Colombia,Colombia
+2000-02-19,United States of America,Colombia,Colombia
 2000-03-19,Suriname,Saint Lucia,Suriname
 2000-04-29,British Virgin Islands,Sint Maarten,British Virgin Islands
 2000-04-30,British Virgin Islands,Antigua and Barbuda,Antigua and Barbuda
@@ -268,7 +268,7 @@ date,home_team,away_team,winner
 2002-01-06,Martinique,Haiti,Martinique
 2002-01-26,Canada,Martinique,Canada
 2002-01-27,Mexico,South Korea,South Korea
-2002-01-30,United States,Canada,United States
+2002-01-30,United States of America,Canada,United States of America
 2002-02-10,Senegal,Cameroon,Cameroon
 2002-02-12,Cyprus,Switzerland,Cyprus
 2002-02-15,China PR,Slovenia,Slovenia
@@ -331,7 +331,7 @@ date,home_team,away_team,winner
 2005-04-16,Namibia,Botswana,Botswana
 2005-06-26,Mexico,Argentina,Argentina
 2005-07-21,Colombia,Panama,Panama
-2005-07-24,United States,Panama,United States
+2005-07-24,United States of America,Panama,United States of America
 2005-07-28,Kuwait,United Arab Emirates,United Arab Emirates
 2005-07-30,Egypt,United Arab Emirates,Egypt
 2005-08-13,South Africa,Zambia,Zambia
@@ -340,8 +340,8 @@ date,home_team,away_team,winner
 2005-12-10,Syria,Iraq,Iraq
 2005-12-10,Zanzibar,Uganda,Zanzibar
 2006-02-04,Nigeria,Tunisia,Nigeria
-2006-02-04,Cameroon,Ivory Coast,Ivory Coast
-2006-02-10,Egypt,Ivory Coast,Egypt
+2006-02-04,Cameroon,Côte d’Ivoire,Côte d’Ivoire
+2006-02-10,Egypt,Côte d’Ivoire,Egypt
 2006-02-28,Finland,Kazakhstan,Kazakhstan
 2006-03-01,Finland,Belarus,Finland
 2006-04-29,Lesotho,Mozambique,Lesotho
@@ -385,7 +385,7 @@ date,home_team,away_team,winner
 2011-07-17,Brazil,Paraguay,Paraguay
 2011-07-20,Paraguay,Venezuela,Paraguay
 2012-02-05,Gabon,Mali,Mali
-2012-02-12,Zambia,Ivory Coast,Zambia
+2012-02-12,Zambia,Côte d’Ivoire,Zambia
 2012-06-03,Finland,Latvia,Latvia
 2012-06-24,England,Italy,Italy
 2012-06-27,Portugal,Spain,Spain
@@ -400,11 +400,11 @@ date,home_team,away_team,winner
 2013-07-17,Zambia,South Africa,Zambia
 2014-05-29,Latvia,Estonia,Latvia
 2014-06-04,Abkhazia,South Ossetia,South Ossetia
-2014-06-04,Ellan Vannin,Iraqi Kurdistan,Ellan Vannin
+2014-06-04,Isle of Man,Iraqi Kurdistan,Isle of Man
 2014-06-05,Padania,Abkhazia,Padania
 2014-06-05,Occitania,Iraqi Kurdistan,Iraqi Kurdistan
 2014-06-07,Padania,Iraqi Kurdistan,Padania
-2014-06-08,County of Nice,Ellan Vannin,County of Nice
+2014-06-08,County of Nice,Isle of Man,County of Nice
 2014-06-28,Brazil,Chile,Brazil
 2014-06-29,Costa Rica,Greece,Costa Rica
 2014-07-05,Netherlands,Costa Rica,Netherlands
@@ -413,19 +413,19 @@ date,home_team,away_team,winner
 2015-01-23,Japan,United Arab Emirates,United Arab Emirates
 2015-01-30,Curaçao,Aruba,Aruba
 2015-02-07,Equatorial Guinea,DR Congo,DR Congo
-2015-02-08,Ivory Coast,Ghana,Ivory Coast
+2015-02-08,Côte d’Ivoire,Ghana,Côte d’Ivoire
 2015-05-24,Zambia,Namibia,Namibia
 2015-05-24,South Africa,Botswana,Botswana
 2015-05-25,Mozambique,Malawi,Mozambique
 2015-05-27,South Africa,Malawi,Malawi
-2015-06-21,Ellan Vannin,Felvidék,Ellan Vannin
+2015-06-21,Isle of Man,Felvidék,Isle of Man
 2015-06-26,Argentina,Colombia,Argentina
 2015-06-27,Brazil,Paraguay,Paraguay
 2015-07-02,Gibraltar,Åland Islands,Åland Islands
 2015-07-04,Chile,Argentina,Chile
 2015-07-04,Zambia,Namibia,Zambia
 2015-07-19,Trinidad and Tobago,Panama,Panama
-2015-07-25,United States,Panama,Panama
+2015-07-25,United States of America,Panama,Panama
 2015-10-13,El Salvador,Guatemala,Guatemala
 2016-02-03,DR Congo,Guinea,DR Congo
 2016-05-27,Corsica,Basque Country,Basque Country
@@ -451,7 +451,7 @@ date,home_team,away_team,winner
 2017-01-11,Chile,Croatia,Chile
 2017-01-14,China PR,Croatia,China PR
 2017-02-01,Burkina Faso,Egypt,Egypt
-2017-06-09,Kárpátalja,Ellan Vannin,Kárpátalja
+2017-06-09,Kárpátalja,Isle of Man,Kárpátalja
 2017-06-09,Padania,Abkhazia,Padania
 2017-06-10,Northern Cyprus,Padania,Padania
 2017-06-28,Portugal,Chile,Chile
@@ -499,7 +499,7 @@ date,home_team,away_team,winner
 2019-07-05,Morocco,Benin,Benin
 2019-07-07,Madagascar,DR Congo,Madagascar
 2019-07-08,Ghana,Tunisia,Tunisia
-2019-07-11,Ivory Coast,Algeria,Algeria
+2019-07-11,Côte d’Ivoire,Algeria,Algeria
 2019-09-08,Tanzania,Burundi,Tanzania
 2019-10-13,Chad,Liberia,Chad
 2019-10-13,Gambia,Djibouti,Gambia
@@ -525,7 +525,7 @@ date,home_team,away_team,winner
 2021-12-11,Morocco,Algeria,Algeria
 2021-12-18,Qatar,Egypt,Qatar
 2022-01-23,Burkina Faso,Gabon,Burkina Faso
-2022-01-26,Ivory Coast,Egypt,Egypt
+2022-01-26,Côte d’Ivoire,Egypt,Egypt
 2022-01-26,Mali,Equatorial Guinea,Equatorial Guinea
 2022-02-03,Cameroon,Egypt,Egypt
 2022-02-05,Cameroon,Burkina Faso,Cameroon
