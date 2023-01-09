@@ -76,10 +76,21 @@ export class ForceGraphView<T = ForceGraphInstance>
     this.model.on('change:behaviors', this.onBehaviorsChange, this);
     this.onSourceChange();
     this.onBehaviorsChange();
-    this.luminoWidget.disposed.connect(() => {
-      this._iframe = null;
+    this.luminoWidget.disposed.connect(this.onDisposed, this);
+  }
+
+  onDisposed() {
+    if (this.graph) {
+      (this.graph as any)._destructor();
+      delete this.graph;
       this.graph = null;
-    });
+    }
+    if (this._iframe) {
+      this._iframe.onload = null;
+      delete this._iframe;
+      this._iframe = null;
+    }
+    this.luminoWidget.disposed.disconnect(this.onDisposed);
   }
 
   async render(): Promise<void> {
@@ -87,7 +98,8 @@ export class ForceGraphView<T = ForceGraphInstance>
     const iframe = document.createElement('iframe');
     const iframeSrc = await this.getIframeSource();
     iframe.setAttribute('srcdoc', iframeSrc);
-    iframe.onload = async () => {
+    iframe.onload = async (event: Event) => {
+      const iframe = event.currentTarget as HTMLIFrameElement;
       const { contentWindow } = iframe;
       this.graph = (contentWindow as any).init();
       this._rendered.resolve(void 0);
@@ -98,7 +110,7 @@ export class ForceGraphView<T = ForceGraphInstance>
   }
 
   protected async getJsUrl() {
-    return (await import('!!file-loader!force-graph/dist/force-graph.min.js')).default;
+    return (await import('!!file-loader!force-graph/dist/force-graph.js')).default;
   }
 
   protected get graphJsClass(): string {

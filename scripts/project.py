@@ -149,7 +149,6 @@ JUPYTERLAB_EXE = [*IN_ENV, "jupyter-lab", "--no-browser", "--debug"]
 
 # python stuff
 PY_SRC = ROOT / "src" / PY_PKG
-PY_SCHEMA = PY_SRC / "schema/forcegraph_schema.json"
 PY_EXT = ROOT / "src/_d/share/jupyter/labextensions/@jupyrdf/jupyter-forcegraph/"
 PY_PACKAGE_JSON = PY_EXT / "package.json"
 
@@ -167,7 +166,6 @@ LITE_SHA256SUMS = LITE_BUILD / "SHA256SUMS"
 JS_LIB = ROOT / "lib"
 TSBUILDINFO = BUILD / ".src.tsbuildinfo"
 TS_SRC = ROOT / "js"
-TS_SCHEMA = TS_SRC / "schema" / "forcegraph_schema.ts"
 STYLE = ROOT / "style"
 ALL_TSCONFIG = [
     ROOT / "tsconfigbase.json",
@@ -201,7 +199,7 @@ ALL_PY = [
     POSTBUILD,
 ]
 ALL_YML = [*ROOT.glob("*.yml"), *GH.rglob("*.yml"), *DOCS.glob("*.yml")]
-ALL_JSON = [*ROOT.glob("*.json"), *EXAMPLE_JSON, PY_SCHEMA, *LITE_JSON]
+ALL_JSON = [*ROOT.glob("*.json"), *EXAMPLE_JSON, *LITE_JSON]
 ALL_DOCS_MD = [*DOCS.rglob("*.md")]
 ALL_MD = [*ROOT.glob("*.md"), *ALL_DOCS_MD]
 ALL_TS = [*TS_SRC.rglob("*.ts")]

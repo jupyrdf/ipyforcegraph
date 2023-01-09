@@ -6,6 +6,8 @@ import type { GraphData } from 'force-graph';
 
 import type { ISignal } from '@lumino/signaling';
 
+import type { DOMWidgetView } from '@jupyter-widgets/base';
+
 import PKG from '../package.json';
 
 export const NAME = PKG.name;
@@ -45,7 +47,7 @@ export interface IBehave {
   updateRequested: ISignal<IBehave, void>;
 }
 
-export interface IHasGraph<T = any> {
+export interface IHasGraph<T = any> extends DOMWidgetView {
   graph: T;
   source: ISource;
   rendered: Promise<void>;

@@ -278,7 +278,6 @@ def task_setup():
 
     if not P.TESTING_IN_CI:
         file_dep += [
-            P.PY_SCHEMA,
             P.PY_PROJ,
         ]
 
@@ -347,19 +346,11 @@ def task_build():
     if P.TESTING_IN_CI:
         return
 
-    yield dict(
-        name="schema",
-        file_dep=[P.YARN_INTEGRITY, P.TS_SCHEMA, P.HISTORY],
-        actions=[[*P.IN_ENV, *P.JLPM, "schema"]],
-        targets=[P.PY_SCHEMA],
-    )
-
     ts_dep = [
         *P.ALL_TS,
         *P.ALL_TSCONFIG,
         P.HISTORY,
         P.PACKAGE_JSON,
-        P.PY_SCHEMA,
         P.YARN_INTEGRITY,
     ]
 
@@ -369,7 +360,6 @@ def task_build():
         P.LICENSE,
         P.PY_PACKAGE_JSON,
         P.PY_PROJ,
-        P.PY_SCHEMA,
     ]
 
     if P.USE_LOCK_ENV:
@@ -490,11 +480,6 @@ def task_test():
             P.OK_PREFLIGHT_KERNEL,
             *([] if P.TESTING_IN_CI else [P.OK_NBLINT[nb.name]]),
         ]
-
-        if not P.TESTING_IN_CI:
-            file_dep += [
-                P.PY_SCHEMA,
-            ]
 
         return dict(
             name=f"nb:{nb.name}".replace(" ", "_").replace(".ipynb", ""),

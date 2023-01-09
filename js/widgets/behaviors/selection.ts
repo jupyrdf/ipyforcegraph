@@ -19,7 +19,7 @@ export class NodeSelectionModel extends BehaviorModel {
     value: { deserialize },
   };
 
-  protected _graph: IHasGraph | null = null;
+  protected _viewId: string | null = null;
 
   defaults() {
     return {
@@ -61,7 +61,7 @@ export class NodeSelectionModel extends BehaviorModel {
   }
 
   async registerGraph(hasGraph: IHasGraph): Promise<void> {
-    this._graph = hasGraph;
+    this._viewId = hasGraph.cid;
     await hasGraph.rendered;
     hasGraph.graph.onNodeClick(this.onNodeClick);
   }
@@ -80,7 +80,7 @@ export class NodeSelectionModel extends BehaviorModel {
   };
 
   async onUpdate(hasGraph: IHasGraph): Promise<void> {
-    if (hasGraph !== this._graph) {
+    if (hasGraph.cid !== this._viewId) {
       await this.registerGraph(hasGraph);
     }
 

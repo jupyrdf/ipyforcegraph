@@ -31,7 +31,7 @@ export class ForceGraph3DView extends ForceGraphView<ForceGraph3DInstance> {
   }
 
   protected async getJsUrl() {
-    return (await import('!!file-loader!3d-force-graph/dist/3d-force-graph.min.js'))
+    return (await import('!!file-loader!3d-force-graph/dist/3d-force-graph.js'))
       .default;
   }
 }

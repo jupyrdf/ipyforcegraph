@@ -19,17 +19,14 @@
     "{lib,style}/**/*.{.ts,eot,gif,html,jpg,js,js.map,json,png,svg,woff2,ttf,css}"
   ],
   "scripts": {
-    "bootstrap": "jlpm --prefer-offline --ignore-optional --ignore-scripts && jlpm clean && jlpm schema && jlpm lint && jlpm build",
+    "bootstrap": "jlpm --prefer-offline --ignore-optional --ignore-scripts && jlpm clean && jlpm lint && jlpm build",
     "build": "jlpm build:ts && jlpm build:ext",
     "build:ext": "jupyter labextension build .",
     "build:ts": "tsc -b js",
-    "clean": "rimraf ./lib ./src/ipyforcegraph/schema/schema.json ./src/ipyforcegraph/_d",
+    "clean": "rimraf ./lib ./src/ipyforcegraph/_d",
     "deduplicate": "yarn-deduplicate -s fewer --fail",
     "lint": "jlpm lint:prettier",
     "lint:prettier": "prettier-package-json --write package.json && prettier --cache --cache-location build/.prettiercache --write --list-different \"*.{json,yml,md}\" \"{js,style,lite,src,.github,examples,docs}/**/*.{ts,tsx,js,jsx,css,json,md,yml,yaml}\"",
-    "schema": "jlpm schema:build && jlpm schema:prettier",
-    "schema:build": "cd js && ts-json-schema-generator --tsconfig ./tsconfig.json --type GraphData --expose all --path ./schema/forcegraph_schema.ts -o ../src/ipyforcegraph/schema/forcegraph_schema.json",
-    "schema:prettier": "prettier --write src/ipyforcegraph/schema/forcegraph_schema.json",
     "watch": "run-p watch:lib watch:ext",
     "watch:ext": "jupyter labextension watch .",
     "watch:lib": "jlpm build:ts --watch --preserveWatchOutput"
@@ -67,7 +64,6 @@
     "prettier-plugin-sort-json": "^0.0.3",
     "rimraf": "^3.0.2",
     "source-map-loader": "^4.0.1",
-    "ts-json-schema-generator": "^1.1.2",
     "typescript": "~4.9.3",
     "yarn-deduplicate": "^6.0.0"
   },
