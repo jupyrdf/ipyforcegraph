@@ -17,7 +17,7 @@ export class NodeLabelModel extends BehaviorModel {
     value: { deserialize },
   };
 
-  protected _graph: IHasGraph | null = null;
+  protected _viewId: string | null = null;
 
   defaults() {
     return {
@@ -29,11 +29,11 @@ export class NodeLabelModel extends BehaviorModel {
     };
   }
 
-  get columnName(): string | null {
+  columnName(hasGraph: IHasGraph): string | null {
     let columnName = this.get('column_name');
-    if (columnName == null && this._graph) {
+    if (columnName == null) {
       try {
-        columnName = (this._graph.source as any).get('node_id_column');
+        columnName = (hasGraph.source as any).get('node_id_column');
       } catch (err) {
         console.error('failed to fetch id column', err);
       }
@@ -55,23 +55,26 @@ export class NodeLabelModel extends BehaviorModel {
   }
 
   async registerGraph(hasGraph: IHasGraph): Promise<void> {
-    this._graph = hasGraph;
+    this._viewId = hasGraph.cid;
     await hasGraph.rendered;
   }
 
   async onUpdate(hasGraph: IHasGraph): Promise<void> {
-    if (hasGraph !== this._graph) {
+    if (hasGraph.cid !== this._viewId) {
       await this.registerGraph(hasGraph);
     }
 
-    const { columnName, defaultLabel } = this;
+    const { defaultLabel } = this;
+    const columnName = this.columnName(hasGraph);
 
-    hasGraph.graph.nodeLabel((node: NodeObject) => {
+    const nodeLabel = (node: NodeObject) => {
       let label = null;
       if (columnName != null) {
         label = node[columnName];
       }
       return label == null ? defaultLabel : label;
-    });
+    };
+
+    hasGraph.graph.nodeLabel(hasGraph.wrapFunction(nodeLabel));
   }
 }

@@ -2,27 +2,6 @@ channels:
   - conda-forge
   - nodefaults
 dependencies:
-  - black-jupyter
-  - firefox =102
-  - geckodriver
-  - git
-  - hypothesis
-  - importnb
-  - isort
-  - keyring
-  - mypy
-  - pyflakes
-  - pytest-asyncio
-  - pytest-check-links
-  - pytest-cov
-  - pytest-html
-  - pytest-xdist
-  - requests-cache
-  - robotframework-pabot
-  - robotframework-robocop
-  - robotframework-seleniumlibrary
-  - robotframework-tidy
-  - rope
   ### docs/environment.yml ###
   - ansi2html
   - bqplot >=0.12.20

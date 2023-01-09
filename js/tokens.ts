@@ -6,12 +6,18 @@ import type { GraphData } from 'force-graph';
 
 import type { ISignal } from '@lumino/signaling';
 
+import type { DOMWidgetView } from '@jupyter-widgets/base';
+
 import PKG from '../package.json';
 
 export const NAME = PKG.name;
 export const VERSION = PKG.version;
 export const EMOJI = '🕸️';
 export const DEBUG = window.location.href.includes('FORCEGRAPH_DEBUG');
+
+export const CSS = {
+  widget: 'jp-ForceGraph',
+};
 
 export const EMPTY_GRAPH_DATA: GraphData = Object.freeze({
   links: [],
@@ -41,10 +47,11 @@ export interface IBehave {
   updateRequested: ISignal<IBehave, void>;
 }
 
-export interface IHasGraph<T = any> {
+export interface IHasGraph<T = any> extends DOMWidgetView {
   graph: T;
   source: ISource;
   rendered: Promise<void>;
+  wrapFunction: (fn: Function) => Function;
 }
 
 export interface ISource {

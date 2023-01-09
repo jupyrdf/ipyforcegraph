@@ -2,3 +2,14 @@
  * Copyright (c) 2023 ipyforcegraph contributors.
  * Distributed under the terms of the Modified BSD License.
 */
+.jp-ForceGraph {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.jp-ForceGraph iframe {
+  flex: 1;
+  border: 0;
+  overflow: hidden;
+}
