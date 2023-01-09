@@ -49,10 +49,9 @@
     "@jupyter-widgets/base": "^6.0.1",
     "@jupyter-widgets/controls": "^5.0.1",
     "@jupyter-widgets/jupyterlab-manager": "^5.0.0",
-    "3d-force-graph": "~1.70.17",
+    "3d-force-graph": "~1.70.19",
     "buffer": "^6.0.3",
-    "force-graph": "~1.42.16",
-    "jupyter-datawidgets": "^5.5.2"
+    "force-graph": "~1.42.18"
   },
   "devDependencies": {
     "@jupyterlab/application": "3",
@@ -61,6 +60,7 @@
     "@jupyterlab/theme-light-extension": "3",
     "@trivago/prettier-plugin-sort-imports": "^4.0.0",
     "@types/lodash": "^4.14.162",
+    "file-loader": "^6.2.0",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.8.0",
     "prettier-package-json": "^2.7.0",
@@ -82,10 +82,6 @@
     "webpackConfig": "./webpack.config.js",
     "outputDir": "./src/_d/share/jupyter/labextensions/@jupyrdf/jupyter-forcegraph",
     "sharedPackages": {
-      "force-graph": {
-        "bundled": true,
-        "singleton": true
-      },
       "@jupyter-widgets/base": {
         "bundled": false,
         "singleton": true
@@ -94,10 +90,10 @@
         "bundled": false,
         "singleton": true
       },
-      "jupyter-datawidgets": {
+      "@bokuweb/zstd-wasm": {
         "bundled": true
       },
-      "@bokuweb/zstd-wasm": {
+      "buffer": {
         "bundled": true
       }
     }

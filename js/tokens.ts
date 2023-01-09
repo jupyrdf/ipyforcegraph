@@ -13,6 +13,10 @@ export const VERSION = PKG.version;
 export const EMOJI = '🕸️';
 export const DEBUG = window.location.href.includes('FORCEGRAPH_DEBUG');
 
+export const CSS = {
+  widget: 'jp-ForceGraph',
+};
+
 export const EMPTY_GRAPH_DATA: GraphData = Object.freeze({
   links: [],
   nodes: [],

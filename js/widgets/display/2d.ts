@@ -2,8 +2,7 @@
  * Copyright (c) 2023 ipyforcegraph contributors.
  * Distributed under the terms of the Modified BSD License.
  */
-import ForceGraph from 'force-graph';
-import { ForceGraphInstance, GraphData } from 'force-graph';
+import type { ForceGraphInstance, GraphData } from 'force-graph';
 
 import { PromiseDelegate } from '@lumino/coreutils';
 
@@ -14,6 +13,7 @@ import {
 } from '@jupyter-widgets/base';
 
 import {
+  CSS,
   DEBUG,
   EMOJI,
   EMPTY_GRAPH_DATA,
@@ -57,6 +57,7 @@ export class ForceGraphView<T = ForceGraphInstance>
   model: ForceGraphModel;
 
   protected _rendered: PromiseDelegate<void>;
+  protected _iframe: HTMLIFrameElement | null;
 
   get source(): ISource {
     return this.model.get('source');
@@ -68,25 +69,72 @@ export class ForceGraphView<T = ForceGraphInstance>
 
   initialize(parameters: any) {
     super.initialize(parameters);
+    this.luminoWidget.addClass(CSS.widget);
+    this.luminoWidget.addClass(`${CSS.widget}-${this.graphJsClass}`);
     this._rendered = new PromiseDelegate();
     this.model.on('change:source', this.onSourceChange, this);
     this.model.on('change:behaviors', this.onBehaviorsChange, this);
     this.onSourceChange();
     this.onBehaviorsChange();
+    this.luminoWidget.disposed.connect(() => {
+      this._iframe = null;
+      this.graph = null;
+    });
   }
 
   async render(): Promise<void> {
     const root = this.el as HTMLDivElement;
-    const containerDiv = document.createElement('div');
-    containerDiv.setAttribute('data-jp-suppress-context-menu', 'true');
-    root.appendChild(containerDiv);
-    this.graph = this.createGraph(containerDiv);
-    this._rendered.resolve(void 0);
-    await this.update();
+    const iframe = document.createElement('iframe');
+    const iframeSrc = await this.getIframeSource();
+    iframe.setAttribute('srcdoc', iframeSrc);
+    iframe.onload = async () => {
+      const { contentWindow } = iframe;
+      this.graph = (contentWindow as any).init();
+      this._rendered.resolve(void 0);
+      await this.update();
+    };
+    root.appendChild(iframe);
+    this._iframe = iframe;
   }
 
-  protected createGraph(containerDiv: HTMLDivElement): T {
-    return ForceGraph()(containerDiv) as any;
+  protected async getJsUrl() {
+    return (await import('!!file-loader!force-graph/dist/force-graph.min.js')).default;
+  }
+
+  protected get graphJsClass(): string {
+    return 'ForceGraph';
+  }
+
+  protected async getIframeSource(): Promise<string> {
+    let url = await this.getJsUrl();
+
+    let src = `
+      <head>
+        <script src="${url}"></script>
+        <style>
+          body, #main {
+            overflow: hidden;
+            position: absolute;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            margin: 0;
+            padding: 0;
+          }
+        </style>
+      </head>
+      <body>
+        <script>
+          window.init = () => {
+            const div = document.createElement('div');
+            document.body.appendChild(div);
+            return ${this.graphJsClass}()(div);
+          }
+        </script>
+      </body>
+    `;
+    return src;
   }
 
   async update(): Promise<void> {
