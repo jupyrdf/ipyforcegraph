@@ -86,8 +86,10 @@ export class NodeSelectionModel extends BehaviorModel {
 
     const { selected, selectedColor, notSelectedColor } = this;
 
-    hasGraph.graph.nodeColor((node: NodeObject) => {
+    const nodeColor = (node: NodeObject) => {
       return selected.has(node.id) ? selectedColor : notSelectedColor;
-    });
+    };
+
+    hasGraph.graph.nodeColor(hasGraph.wrapFunction(nodeColor));
   }
 }

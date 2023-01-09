@@ -51,6 +51,7 @@ export interface IHasGraph<T = any> extends DOMWidgetView {
   graph: T;
   source: ISource;
   rendered: Promise<void>;
+  wrapFunction: (fn: Function) => Function;
 }
 
 export interface ISource {

@@ -67,12 +67,14 @@ export class NodeLabelModel extends BehaviorModel {
     const { defaultLabel } = this;
     const columnName = this.columnName(hasGraph);
 
-    hasGraph.graph.nodeLabel((node: NodeObject) => {
+    const nodeLabel = (node: NodeObject) => {
       let label = null;
       if (columnName != null) {
         label = node[columnName];
       }
       return label == null ? defaultLabel : label;
-    });
+    };
+
+    hasGraph.graph.nodeLabel(hasGraph.wrapFunction(nodeLabel));
   }
 }

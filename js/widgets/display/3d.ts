@@ -2,7 +2,7 @@
  * Copyright (c) 2023 ipyforcegraph contributors.
  * Distributed under the terms of the Modified BSD License.
  */
-import type { ForceGraph3DInstance } from '3d-force-graph';
+import type { ForceGraph3DGenericInstance, ForceGraph3DInstance } from '3d-force-graph';
 
 import { ForceGraphModel, ForceGraphView } from './2d';
 
@@ -21,7 +21,9 @@ export class ForceGraph3DModel extends ForceGraphModel {
   }
 }
 
-export class ForceGraph3DView extends ForceGraphView<ForceGraph3DInstance> {
+export class ForceGraph3DView extends ForceGraphView<
+  ForceGraph3DGenericInstance<ForceGraph3DInstance>
+> {
   static view_name = 'ForceGraph3DView';
 
   model: ForceGraph3DModel;

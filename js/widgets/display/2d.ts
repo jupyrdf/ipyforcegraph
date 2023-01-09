@@ -2,7 +2,11 @@
  * Copyright (c) 2023 ipyforcegraph contributors.
  * Distributed under the terms of the Modified BSD License.
  */
-import type { ForceGraphInstance, GraphData } from 'force-graph';
+import type {
+  ForceGraphGenericInstance,
+  ForceGraphInstance,
+  GraphData,
+} from 'force-graph';
 
 import { PromiseDelegate } from '@lumino/coreutils';
 
@@ -48,7 +52,7 @@ export class ForceGraphModel extends DOMWidgetModel {
   }
 }
 
-export class ForceGraphView<T = ForceGraphInstance>
+export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
   extends DOMWidgetView
   implements IHasGraph<T>
 {
@@ -143,6 +147,9 @@ export class ForceGraphView<T = ForceGraphInstance>
             document.body.appendChild(div);
             return ${this.graphJsClass}()(div);
           }
+          window.wrapFunction = (fn) => {
+            return (...args) => fn(...args);
+          }
         </script>
       </body>
     `;
@@ -175,6 +182,10 @@ export class ForceGraphView<T = ForceGraphInstance>
       promises.push(behavior.onUpdate(this));
     }
     await Promise.all(promises);
+  }
+
+  wrapFunction(fn: Function) {
+    return (this._iframe.contentWindow as any).wrapFunction(fn);
   }
 
   onSourceChange(change?: any) {
