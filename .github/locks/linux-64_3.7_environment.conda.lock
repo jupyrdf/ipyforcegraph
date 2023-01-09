@@ -2,47 +2,51 @@
 #   - conda-forge
 #   - nodefaults
 # dependencies:
-#   - ansi2html
 #   - black-jupyter
-#   - bqplot >=0.12.20
-#   - docutils >=0.19
-#   - doit
 #   - firefox =102
-#   - flit >=3.7.1,<4
 #   - geckodriver
 #   - git
 #   - hypothesis
 #   - importnb
-#   - ipython >=7
-#   - ipywidgets >=8.0.4,<9
 #   - isort
-#   - jupyterlab >=3,<4
-#   - jupyterlab-deck
-#   - jupyterlab-myst
-#   - jupyterlab-webrtc-docprovider
 #   - keyring
 #   - mypy
-#   - myst-nb
-#   - networkx
-#   - nodejs >=18,<19
-#   - numcodecs
-#   - orjson
-#   - packaging >=22.0
-#   - pandas
-#   - pydata-sphinx-theme
 #   - pyflakes
 #   - pytest-asyncio
 #   - pytest-check-links
 #   - pytest-cov
 #   - pytest-html
 #   - pytest-xdist
-#   - python-libarchive-c
 #   - requests-cache
 #   - robotframework-pabot
 #   - robotframework-robocop
 #   - robotframework-seleniumlibrary
 #   - robotframework-tidy
 #   - rope
+#   ### docs/environment.yml ###
+#   - ansi2html
+#   - bqplot >=0.12.20
+#   - docutils >=0.19
+#   - doit
+#   - flit >=3.7.1,<4
+#   - ipython >=7
+#   - ipywidgets >=8.0.4,<9
+#   - jupyterlab >=3,<4
+#   - jupyterlab-deck
+#   - jupyterlab-myst
+#   - jupyterlab-webrtc-docprovider
+#   - myst-nb
+#   - networkx
+#   - nodejs >=18,<19
+#   - nomkl
+#   - numcodecs
+#   - orjson
+#   - packaging >=22.0
+#   - pandas
+#   - pip
+#   - pkginfo
+#   - pydata-sphinx-theme
+#   - python >=3.8,<3.12.0a0
 #   - sphinx
 #   - sphinx-autobuild
 #   - sphinx-autodoc-typehints
@@ -50,13 +54,8 @@
 #   - traittypes
 #   - twine
 #   - wheel
-#   # lite
-#   - pip
-#   - pkginfo
-#   - python >=3.8,<3.12.0a0
-#   # this is handled out-of-band
-#   # - pip:
-#   #   - jupyterlite ==0.1.0b17
+#   - python-libarchive-c
+#   ### docs/environment.yml ###
 # dependencies:
 #   - python >=3.7,<3.8
 # dependencies:
@@ -74,6 +73,7 @@ https://conda.anaconda.org/conda-forge/linux-64/ca-certificates-2022.12.7-ha8785
 https://conda.anaconda.org/conda-forge/linux-64/ld_impl_linux-64-2.39-hcc3a1bd_1.conda#737be0d34c22d24432049ab7a3214de4
 https://conda.anaconda.org/conda-forge/linux-64/libgfortran5-12.2.0-h337968e_19.tar.bz2#164b4b1acaedc47ee7e658ae6b308ca3
 https://conda.anaconda.org/conda-forge/linux-64/libstdcxx-ng-12.2.0-h46fd767_19.tar.bz2#1030b1f38c129f2634eae026f704fe60
+https://conda.anaconda.org/conda-forge/noarch/nomkl-1.0-h5ca1d4c_0.tar.bz2#9a66894dfd07c4510beb6b3f9672ccc0
 https://conda.anaconda.org/conda-forge/linux-64/python_abi-3.7-3_cp37m.conda#46277e9cf1ecd46926a31cea47079009
 https://conda.anaconda.org/conda-forge/noarch/tzdata-2022g-h191b570_0.conda#51fc4fcfb19f5d95ffc8c339db5068e8
 https://conda.anaconda.org/conda-forge/linux-64/libgfortran-ng-12.2.0-h69a702a_19.tar.bz2#cd7a806282c16e1f2d39a7e80d3a3e0d

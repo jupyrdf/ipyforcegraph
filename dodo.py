@@ -218,6 +218,18 @@ def task_binder():
 
 def task_env():
     """prepare project envs"""
+    yield dict(
+        name="sync:docs:binder",
+        file_dep=[P.DOCS_ENV_YAML],
+        targets=[P.BINDER_ENV_YAML],
+        actions=[
+            (
+                U.replace_between_patterns,
+                [P.DOCS_ENV_YAML, P.BINDER_ENV_YAML, "### docs/environment.yml ###"],
+            )
+        ],
+    )
+
     if not P.USE_LOCK_ENV:
         return
 

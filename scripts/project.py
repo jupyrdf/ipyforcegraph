@@ -99,6 +99,7 @@ DOCS = ROOT / "docs"
 BINDER = ROOT / ".binder"
 POSTBUILD = BINDER / "postBuild"
 BINDER_ENV_YAML = BINDER / "environment.yml"
+DOCS_ENV_YAML = DOCS / "environment.yml"
 LITE = ROOT / "lite"
 LITE_CONFIG = LITE / "jupyter_lite_config.json"
 
