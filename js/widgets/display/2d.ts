@@ -89,11 +89,14 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
       delete this.graph;
       this.graph = null;
     }
+
     if (this._iframe) {
+      this._iframe.removeEventListener('resize', this.onWindowResize);
       this._iframe.onload = null;
       delete this._iframe;
       this._iframe = null;
     }
+
     this.luminoWidget.disposed.disconnect(this.onDisposed);
   }
 
@@ -106,12 +109,20 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
       const iframe = event.currentTarget as HTMLIFrameElement;
       const { contentWindow } = iframe;
       this.graph = (contentWindow as any).init();
+      contentWindow.addEventListener('resize', this.onWindowResize);
       this._rendered.resolve(void 0);
       await this.update();
     };
     root.appendChild(iframe);
     this._iframe = iframe;
   }
+
+  protected onWindowResize = () => {
+    const { contentWindow } = this._iframe;
+    const graph: ForceGraphInstance = this.graph as any;
+    graph.width(contentWindow.innerWidth);
+    graph.height(contentWindow.innerHeight);
+  };
 
   protected async getJsUrl() {
     return (await import('!!file-loader!force-graph/dist/force-graph.js')).default;
