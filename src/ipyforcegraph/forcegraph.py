@@ -24,6 +24,9 @@ class ForceGraph(W.DOMWidget, ForceBase):
         sync=True, **W.widget_serialization
     )
 
+    default_node_color: str = T.Unicode("#1f78b3").tag(sync=True)
+    default_edge_color: str = T.Unicode("#666666").tag(sync=True)
+
 
 @W.register
 class ForceGraph3D(ForceGraph):

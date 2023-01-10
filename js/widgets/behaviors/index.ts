@@ -4,4 +4,5 @@
  */
 export * from './base';
 export * from './selection';
-export * from './labels';
+export * from './node-label';
+export * from './node-color';
