@@ -6,6 +6,7 @@ import type {
   ForceGraphGenericInstance,
   ForceGraphInstance,
   GraphData,
+  LinkObject,
   NodeObject,
 } from 'force-graph';
 
@@ -25,9 +26,11 @@ import {
   EMPTY_GRAPH_DATA,
   IBehave,
   IHasGraph,
+  ILinkBehaveOptions,
   INodeBehaveOptions,
   INodeEventBehaveOptions,
   ISource,
+  TLinkBehaveMethod,
   TNodeBehaveMethod,
   WIDGET_DEFAULTS,
 } from '../../tokens';
@@ -49,7 +52,7 @@ export class ForceGraphModel extends DOMWidgetModel {
       source: null,
       behaviors: [],
       default_node_color: DEFAULT_COLORS.node,
-      default_edge_color: DEFAULT_COLORS.edge,
+      default_edge_color: DEFAULT_COLORS.link,
     };
   }
 
@@ -63,7 +66,11 @@ export class ForceGraphModel extends DOMWidgetModel {
   }
 
   get defaultNodeColor(): string {
-    return this.get('default_ndoe_color') || DEFAULT_COLORS.node;
+    return this.get('default_node_color') || DEFAULT_COLORS.node;
+  }
+
+  get defaultLinkColor(): string {
+    return this.get('default_link_color') || DEFAULT_COLORS.link;
   }
 }
 
@@ -212,6 +219,7 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
     const graph = this.graph as ForceGraphInstance;
     if (graph) {
       graph.nodeColor(this.wrapFunction(this.getNodeColor));
+      graph.linkColor(this.wrapFunction(this.getLinkColor));
       graph.nodeLabel(this.wrapFunction(this.getNodeLabel));
       graph.onNodeClick(this.wrapFunction(this.onNodeClick));
     } else {
@@ -254,6 +262,10 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
     return this.getComposedNodeAttr(node, 'getNodeColor', this.model.defaultNodeColor);
   };
 
+  protected getLinkColor = (link: LinkObject): string => {
+    return this.getComposedLinkAttr(link, 'getLinkColor', this.model.defaultLinkColor);
+  };
+
   protected getNodeLabel = (node: NodeObject): string => {
     return this.getComposedNodeAttr(node, 'getNodeLabel', '');
   };
@@ -270,6 +282,34 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
       view: this,
       graphData,
       node,
+    };
+
+    for (const behavior of behaviors) {
+      let method = behavior[methodName];
+      if (!method) {
+        continue;
+      }
+      value = method.call(behavior, options);
+      if (value != null) {
+        break;
+      }
+    }
+
+    return value != null ? value : defaultValue;
+  }
+
+  getComposedLinkAttr(
+    link: LinkObject,
+    methodName: TLinkBehaveMethod,
+    defaultValue: string
+  ) {
+    const { behaviors } = this.model;
+    let value: string | null;
+    const graphData = (this.graph as ForceGraphInstance).graphData();
+    const options: ILinkBehaveOptions = {
+      view: this,
+      graphData,
+      link,
     };
 
     for (const behavior of behaviors) {

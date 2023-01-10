@@ -4,9 +4,9 @@
  */
 import { IBehave, IHasGraph, INodeBehaveOptions } from '../../tokens';
 
-import { NodeColumnOrTemplate } from './base';
+import { NodeColumnOrTemplateModel } from './base';
 
-export class NodeLabelModel extends NodeColumnOrTemplate implements IBehave {
+export class NodeLabelModel extends NodeColumnOrTemplateModel implements IBehave {
   static model_name = 'NodeLabelModel';
 
   defaults() {

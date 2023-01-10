@@ -33,7 +33,7 @@ export const DEFAULT_COLUMNS = {
 export const DEFAULT_COLORS = {
   selected: '#b3a369',
   node: '#1f78b3',
-  edge: '#666666',
+  link: 'rgba(66,66,66,0.5)',
 };
 
 export const WIDGET_DEFAULTS = {
@@ -45,10 +45,10 @@ export const WIDGET_DEFAULTS = {
 
 export interface IBehave {
   updateRequested: ISignal<IBehave, void>;
-  getNodeColor?(options: INodeBehaveOptions): string | null;
-  getNodeLabel?(options: INodeBehaveOptions): string | null;
   getLinkColor?(options: ILinkBehaveOptions): string | null;
   getLinkLabel?(options: ILinkBehaveOptions): string | null;
+  getNodeColor?(options: INodeBehaveOptions): string | null;
+  getNodeLabel?(options: INodeBehaveOptions): string | null;
   // evented
   onNodeClick?(options: INodeEventBehaveOptions): boolean;
 }

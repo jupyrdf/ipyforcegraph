@@ -68,3 +68,20 @@ class NodeColors(Behavior):
         allow_none=True,
         help="a nunjucks template to use to calculate colors",
     ).tag(sync=True)
+
+
+@W.register
+class LinkColors(Behavior):
+    _model_name: str = T.Unicode("LinkColorModel").tag(sync=True)
+
+    column_name: str = T.Unicode(
+        None,
+        allow_none=True,
+        help="name of the source column to use for link colors.",
+    ).tag(sync=True)
+
+    template: Optional[str] = T.Unicode(
+        None,
+        allow_none=True,
+        help="a nunjucks template to use to calculate link colors",
+    ).tag(sync=True)

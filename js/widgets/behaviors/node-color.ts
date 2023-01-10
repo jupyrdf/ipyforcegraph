@@ -4,9 +4,9 @@
  */
 import { IBehave, INodeBehaveOptions } from '../../tokens';
 
-import { NodeColumnOrTemplate } from './base';
+import { NodeColumnOrTemplateModel } from './base';
 
-export class NodeColorModel extends NodeColumnOrTemplate implements IBehave {
+export class NodeColorModel extends NodeColumnOrTemplateModel implements IBehave {
   static model_name = 'NodeColorModel';
 
   defaults() {

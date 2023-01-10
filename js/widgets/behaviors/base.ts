@@ -12,6 +12,7 @@ import {
   EMOJI,
   IBehave,
   IHasGraph,
+  ILinkBehaveOptions,
   INodeBehaveOptions,
   WIDGET_DEFAULTS,
 } from '../../tokens';
@@ -33,7 +34,7 @@ export class BehaviorModel extends WidgetModel implements IBehave {
   }
 }
 
-export class NodeColumnOrTemplate extends BehaviorModel implements IBehave {
+export class ColumnOrTemplateModel extends BehaviorModel implements IBehave {
   protected _nunjucksTemplate: Template | null;
 
   defaults() {
@@ -79,7 +80,7 @@ export class NodeColumnOrTemplate extends BehaviorModel implements IBehave {
     this._updateRequested.emit(void 0);
   }
 
-  protected getNodeAttr(options: INodeBehaveOptions): string | null {
+  renderTemplate(options: any): string | null {
     const { _nunjucksTemplate } = this;
 
     if (_nunjucksTemplate != null) {
@@ -89,15 +90,51 @@ export class NodeColumnOrTemplate extends BehaviorModel implements IBehave {
         console.warn(EMOJI, err);
       }
     }
+  }
+}
+
+export class NodeColumnOrTemplateModel
+  extends ColumnOrTemplateModel
+  implements IBehave
+{
+  protected _nunjucksTemplate: Template | null;
+
+  protected getNodeAttr(options: INodeBehaveOptions): string | null {
+    let value = this.renderTemplate(options);
+
+    if (value != null) {
+      return value;
+    }
 
     const columnName = this.getColumnName(options.view);
 
-    let color = null;
-
     if (columnName != null) {
-      color = options.node[columnName];
+      value = options.node[columnName];
     }
 
-    return color || null;
+    return value || null;
+  }
+}
+
+export class LinkColumnOrTemplateModel
+  extends ColumnOrTemplateModel
+  implements IBehave
+{
+  protected _nunjucksTemplate: Template | null;
+
+  protected getLinkAttr(options: ILinkBehaveOptions): string | null {
+    let value = this.renderTemplate(options);
+
+    if (value != null) {
+      return value;
+    }
+
+    const columnName = this.getColumnName(options.view);
+
+    if (columnName != null) {
+      value = options.link[columnName];
+    }
+
+    return value || null;
   }
 }
