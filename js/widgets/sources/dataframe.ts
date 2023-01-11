@@ -21,8 +21,9 @@ export class DataFrameSourceModel extends WidgetModel {
     links: { deserialize: jsonToDataFrame },
   };
 
-  protected _dataUpdated: Signal<DataFrameSourceModel, void>;
-  protected _graphData: GraphData = EMPTY_GRAPH_DATA;
+  protected _dataUpdated: Signal<DataFrameSourceModel, void> = new Signal(this);
+  protected _graphData: GraphData | null = null;
+  protected _graphDataRequested = false;
 
   defaults() {
     return {
@@ -39,12 +40,9 @@ export class DataFrameSourceModel extends WidgetModel {
 
   initialize(attributes: any, options: any) {
     super.initialize(attributes, options);
-    this._dataUpdated = new Signal(this);
 
     this.on('change:nodes', this.graphUpdate, this);
     this.on('change:links', this.graphUpdate, this);
-
-    this.graphUpdate();
   }
 
   get dataUpdated(): ISignal<DataFrameSourceModel, void> {
@@ -72,14 +70,20 @@ export class DataFrameSourceModel extends WidgetModel {
   }
 
   get graphData(): GraphData {
-    return this._graphData;
+    if (!this._graphDataRequested) {
+      this.graphUpdate();
+      this._graphDataRequested = true;
+    }
+    return this._graphData || EMPTY_GRAPH_DATA;
   }
 
-  graphUpdate(change?: any) {
-    const graphData: GraphData = {
-      nodes: [],
-      links: [],
-    };
+  set graphData(graphData: GraphData) {
+    this._graphData = graphData;
+    this._dataUpdated.emit(void 0);
+  }
+
+  protected graphUpdate() {
+    const graphData: GraphData = { nodes: [], links: [] };
 
     const { nodes, links, nodeIdColumn, linkSourceColumn, linkTargetColumn } = this;
 
@@ -110,7 +114,6 @@ export class DataFrameSourceModel extends WidgetModel {
       graphData.links.push(link);
     }
 
-    this._graphData = graphData;
-    this._dataUpdated.emit(void 0);
+    this.graphData = graphData;
   }
 }
