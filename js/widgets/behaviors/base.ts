@@ -6,7 +6,7 @@ import type { Template } from 'nunjucks';
 
 import { ISignal, Signal } from '@lumino/signaling';
 
-import { WidgetModel } from '@jupyter-widgets/base';
+import { IBackboneModelOptions, WidgetModel } from '@jupyter-widgets/base';
 
 import {
   EMOJI,
@@ -18,7 +18,12 @@ import {
 } from '../../tokens';
 
 export class BehaviorModel extends WidgetModel implements IBehave {
-  protected _updateRequested: Signal<IBehave, void> = new Signal(this);
+  protected _updateRequested: Signal<IBehave, void>;
+
+  initialize(attributes: Backbone.ObjectHash, options: IBackboneModelOptions) {
+    super.initialize(attributes, options);
+    this._updateRequested = new Signal(this);
+  }
 
   get updateRequested(): ISignal<IBehave, void> {
     return this._updateRequested;

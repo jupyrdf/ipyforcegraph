@@ -85,3 +85,20 @@ class LinkColors(Behavior):
         allow_none=True,
         help="a nunjucks template to use to calculate link colors",
     ).tag(sync=True)
+
+
+@W.register
+class LinkLabels(Behavior):
+    _model_name: str = T.Unicode("LinkLabelModel").tag(sync=True)
+
+    column_name: str = T.Unicode(
+        None,
+        allow_none=True,
+        help="name of the source column to use for link labels.",
+    ).tag(sync=True)
+
+    template: Optional[str] = T.Unicode(
+        None,
+        allow_none=True,
+        help="a nunjucks template to use to calculate link labels",
+    ).tag(sync=True)

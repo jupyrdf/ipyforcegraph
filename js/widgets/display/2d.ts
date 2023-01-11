@@ -218,8 +218,10 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
     await this.rendered;
     const graph = this.graph as ForceGraphInstance;
     if (graph) {
-      graph.nodeColor(this.wrapFunction(this.getNodeColor));
       graph.linkColor(this.wrapFunction(this.getLinkColor));
+      graph.linkLabel(this.wrapFunction(this.getLinkLabel));
+
+      graph.nodeColor(this.wrapFunction(this.getNodeColor));
       graph.nodeLabel(this.wrapFunction(this.getNodeLabel));
       graph.onNodeClick(this.wrapFunction(this.onNodeClick));
     } else {
@@ -237,33 +239,46 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
     await this.update();
   }
 
-  protected onNodeClick = (node: NodeObject, event: MouseEvent) => {
-    const { behaviors } = this.model;
-    const graphData = (this.graph as ForceGraphInstance).graphData();
-    let shouldContinue = true;
-    const options: INodeEventBehaveOptions = {
-      view: this,
-      graphData,
-      event,
-      node,
-    };
-    for (const behavior of behaviors) {
-      if (!behavior.onNodeClick) {
-        continue;
-      }
-      shouldContinue = behavior.onNodeClick(options);
-      if (!shouldContinue) {
-        return;
-      }
-    }
-  };
-
-  protected getNodeColor = (node: NodeObject): string => {
-    return this.getComposedNodeAttr(node, 'getNodeColor', this.model.defaultNodeColor);
-  };
-
+  // link behaviors
   protected getLinkColor = (link: LinkObject): string => {
     return this.getComposedLinkAttr(link, 'getLinkColor', this.model.defaultLinkColor);
+  };
+
+  protected getLinkLabel = (link: LinkObject): string => {
+    return this.getComposedLinkAttr(link, 'getLinkLabel', '');
+  };
+
+  getComposedLinkAttr(
+    link: LinkObject,
+    methodName: TLinkBehaveMethod,
+    defaultValue: string
+  ) {
+    const { behaviors } = this.model;
+    let value: string | null;
+    const graphData = (this.graph as ForceGraphInstance).graphData();
+    const options: ILinkBehaveOptions = {
+      view: this,
+      graphData,
+      link,
+    };
+
+    for (const behavior of behaviors) {
+      let method = behavior[methodName];
+      if (!method) {
+        continue;
+      }
+      value = method.call(behavior, options);
+      if (value != null) {
+        break;
+      }
+    }
+
+    return value != null ? value : defaultValue;
+  }
+
+  // node behaviors
+  protected getNodeColor = (node: NodeObject): string => {
+    return this.getComposedNodeAttr(node, 'getNodeColor', this.model.defaultNodeColor);
   };
 
   protected getNodeLabel = (node: NodeObject): string => {
@@ -298,31 +313,24 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
     return value != null ? value : defaultValue;
   }
 
-  getComposedLinkAttr(
-    link: LinkObject,
-    methodName: TLinkBehaveMethod,
-    defaultValue: string
-  ) {
+  protected onNodeClick = (node: NodeObject, event: MouseEvent) => {
     const { behaviors } = this.model;
-    let value: string | null;
     const graphData = (this.graph as ForceGraphInstance).graphData();
-    const options: ILinkBehaveOptions = {
+    let shouldContinue = true;
+    const options: INodeEventBehaveOptions = {
       view: this,
       graphData,
-      link,
+      event,
+      node,
     };
-
     for (const behavior of behaviors) {
-      let method = behavior[methodName];
-      if (!method) {
+      if (!behavior.onNodeClick) {
         continue;
       }
-      value = method.call(behavior, options);
-      if (value != null) {
-        break;
+      shouldContinue = behavior.onNodeClick(options);
+      if (!shouldContinue) {
+        return;
       }
     }
-
-    return value != null ? value : defaultValue;
-  }
+  };
 }
