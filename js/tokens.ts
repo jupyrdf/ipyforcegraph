@@ -64,6 +64,7 @@ export interface IBehaveOptions {
 export interface INodeBehaveOptions extends IBehaveOptions {
   node: NodeObject;
 }
+
 export interface INodeEventBehaveOptions extends INodeBehaveOptions {
   event: MouseEvent;
 }
