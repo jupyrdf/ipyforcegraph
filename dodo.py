@@ -52,6 +52,14 @@ DOIT_CONFIG = dict(
 Paths = typing.List[Path]
 
 
+def _echo_ok(msg):
+    def _echo():
+        print(msg, flush=True)
+        return True
+
+    return _echo
+
+
 def task_all():
     """do everything except start lab"""
 
@@ -141,6 +149,20 @@ def task_lock():
             file_dep=file_dep,
             targets=[lockfile],
         )
+
+
+def _ok(task, ok):
+    task.setdefault("targets", []).append(ok)
+    task["actions"] = [
+        lambda: [ok.exists() and ok.unlink(), True][-1],
+        *task["actions"],
+        lambda: [
+            ok.parent.mkdir(exist_ok=True),
+            ok.write_text("ok", encoding="utf-8"),
+            True,
+        ][-1],
+    ]
+    return task
 
 
 def task_preflight():
@@ -531,11 +553,22 @@ def task_lint():
     if P.TESTING_IN_CI:
         return
 
+    def _ssort():
+        rc = subprocess.call(list(map(str, [*P.IN_ENV, "ssort", *P.ALL_PY])))
+        if rc != 0:
+            print(">>> Don't worry about failing `ssort`")
+
+    if "py_3.7" in str(P.ENV):
+        ssort = lambda: None
+    else:
+        ssort = [*P.IN_ENV, "ssort", *P.ALL_PY]
+
     yield _ok(
         dict(
             name="black",
             file_dep=[*P.ALL_PY, P.HISTORY],
             actions=[
+                ssort,
                 [*P.IN_ENV, "isort", "--quiet", "--ac", *P.ALL_PY],
                 [*P.IN_ENV, "black", "--quiet", *P.ALL_PY],
             ],
@@ -821,25 +854,3 @@ def task_checkdocs():
 
     for dep in file_dep:
         yield _make_spellcheck(dep, html)
-
-
-def _echo_ok(msg):
-    def _echo():
-        print(msg, flush=True)
-        return True
-
-    return _echo
-
-
-def _ok(task, ok):
-    task.setdefault("targets", []).append(ok)
-    task["actions"] = [
-        lambda: [ok.exists() and ok.unlink(), True][-1],
-        *task["actions"],
-        lambda: [
-            ok.parent.mkdir(exist_ok=True),
-            ok.write_text("ok", encoding="utf-8"),
-            True,
-        ][-1],
-    ]
-    return task
