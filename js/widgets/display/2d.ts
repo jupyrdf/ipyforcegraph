@@ -6,6 +6,8 @@ import type {
   ForceGraphGenericInstance,
   ForceGraphInstance,
   GraphData,
+  LinkObject,
+  NodeObject,
 } from 'force-graph';
 
 import { PromiseDelegate } from '@lumino/coreutils';
@@ -19,11 +21,17 @@ import {
 import {
   CSS,
   DEBUG,
+  DEFAULT_COLORS,
   EMOJI,
   EMPTY_GRAPH_DATA,
   IBehave,
   IHasGraph,
+  ILinkBehaveOptions,
+  INodeBehaveOptions,
+  INodeEventBehaveOptions,
   ISource,
+  TLinkBehaveMethod,
+  TNodeBehaveMethod,
   WIDGET_DEFAULTS,
 } from '../../tokens';
 
@@ -43,12 +51,26 @@ export class ForceGraphModel extends DOMWidgetModel {
       _view_name: ForceGraphView.view_name,
       source: null,
       behaviors: [],
+      default_node_color: DEFAULT_COLORS.node,
+      default_edge_color: DEFAULT_COLORS.link,
     };
   }
 
   get graphData(): GraphData {
     const source = this.get('source');
     return source ? source.graphData : EMPTY_GRAPH_DATA;
+  }
+
+  get behaviors(): IBehave[] {
+    return this.get('behaviors') || [];
+  }
+
+  get defaultNodeColor(): string {
+    return this.get('default_node_color') || DEFAULT_COLORS.node;
+  }
+
+  get defaultLinkColor(): string {
+    return this.get('default_link_color') || DEFAULT_COLORS.link;
   }
 }
 
@@ -105,17 +127,21 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
     const iframe = document.createElement('iframe');
     const iframeSrc = await this.getIframeSource();
     iframe.setAttribute('srcdoc', iframeSrc);
-    iframe.onload = async (event: Event) => {
-      const iframe = event.currentTarget as HTMLIFrameElement;
-      const { contentWindow } = iframe;
-      this.graph = (contentWindow as any).init();
-      contentWindow.addEventListener('resize', this.onWindowResize);
-      this._rendered.resolve(void 0);
-      await this.update();
-    };
+    iframe.onload = this.onFrameLoaded;
     root.appendChild(iframe);
     this._iframe = iframe;
   }
+
+  protected onFrameLoaded = async (event: Event) => {
+    const iframe = event.currentTarget as HTMLIFrameElement;
+    const { contentWindow } = iframe;
+
+    const graph: ForceGraphInstance = (contentWindow as any).init();
+    this.graph = graph as any;
+    contentWindow.addEventListener('resize', this.onWindowResize);
+    this._rendered.resolve(void 0);
+    await this.update();
+  };
 
   protected onWindowResize = () => {
     const { contentWindow } = this._iframe;
@@ -175,26 +201,6 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
     await this.postUpdate();
   }
 
-  async postUpdate(): Promise<void> {
-    const behaviors: IBehave[] = this.model.get('behaviors') || [];
-    const promises: Promise<any>[] = [];
-    for (const behavior of behaviors) {
-      promises.push(behavior.onUpdate(this));
-    }
-    await Promise.all(promises);
-  }
-
-  async onBehaviorsChange(): Promise<void> {
-    // TODO: disconnect old model...
-    const behaviors: IBehave[] = this.model.get('behaviors') || [];
-    const promises: Promise<any>[] = [];
-    for (const behavior of behaviors) {
-      behavior.updateRequested.connect(this.postUpdate, this);
-      promises.push(behavior.onUpdate(this));
-    }
-    await Promise.all(promises);
-  }
-
   wrapFunction(fn: Function) {
     return (this._iframe.contentWindow as any).wrapFunction(fn);
   }
@@ -207,4 +213,124 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
       this.update();
     }
   }
+
+  protected async postUpdate(): Promise<void> {
+    await this.rendered;
+    const graph = this.graph as ForceGraphInstance;
+    if (graph) {
+      graph.linkColor(this.wrapFunction(this.getLinkColor));
+      graph.linkLabel(this.wrapFunction(this.getLinkLabel));
+
+      graph.nodeColor(this.wrapFunction(this.getNodeColor));
+      graph.nodeLabel(this.wrapFunction(this.getNodeLabel));
+      graph.onNodeClick(this.wrapFunction(this.onNodeClick));
+    } else {
+      console.warn(`${EMOJI} no graph to postUpdate`);
+    }
+  }
+
+  // composable behaviors
+  async onBehaviorsChange(): Promise<void> {
+    // TODO: disconnect old model...
+    const behaviors: IBehave[] = this.model.behaviors;
+    for (const behavior of behaviors) {
+      behavior.updateRequested.connect(this.postUpdate, this);
+    }
+    await this.update();
+  }
+
+  // link behaviors
+  protected getLinkColor = (link: LinkObject): string => {
+    return this.getComposedLinkAttr(link, 'getLinkColor', this.model.defaultLinkColor);
+  };
+
+  protected getLinkLabel = (link: LinkObject): string => {
+    return this.getComposedLinkAttr(link, 'getLinkLabel', '');
+  };
+
+  getComposedLinkAttr(
+    link: LinkObject,
+    methodName: TLinkBehaveMethod,
+    defaultValue: string
+  ) {
+    const { behaviors } = this.model;
+    let value: string | null;
+    const graphData = (this.graph as ForceGraphInstance).graphData();
+    const options: ILinkBehaveOptions = {
+      view: this,
+      graphData,
+      link,
+    };
+
+    for (const behavior of behaviors) {
+      let method = behavior[methodName];
+      if (!method) {
+        continue;
+      }
+      value = method.call(behavior, options);
+      if (value != null) {
+        break;
+      }
+    }
+
+    return value != null ? value : defaultValue;
+  }
+
+  // node behaviors
+  protected getNodeColor = (node: NodeObject): string => {
+    return this.getComposedNodeAttr(node, 'getNodeColor', this.model.defaultNodeColor);
+  };
+
+  protected getNodeLabel = (node: NodeObject): string => {
+    return this.getComposedNodeAttr(node, 'getNodeLabel', '');
+  };
+
+  getComposedNodeAttr(
+    node: NodeObject,
+    methodName: TNodeBehaveMethod,
+    defaultValue: string
+  ) {
+    const { behaviors } = this.model;
+    let value: string | null;
+    const graphData = (this.graph as ForceGraphInstance).graphData();
+    const options: INodeBehaveOptions = {
+      view: this,
+      graphData,
+      node,
+    };
+
+    for (const behavior of behaviors) {
+      let method = behavior[methodName];
+      if (!method) {
+        continue;
+      }
+      value = method.call(behavior, options);
+      if (value != null) {
+        break;
+      }
+    }
+
+    return value != null ? value : defaultValue;
+  }
+
+  protected onNodeClick = (node: NodeObject, event: MouseEvent) => {
+    const { behaviors } = this.model;
+    const graphData = (this.graph as ForceGraphInstance).graphData();
+    let shouldContinue = true;
+    const options: INodeEventBehaveOptions = {
+      view: this,
+      graphData,
+      event,
+      node,
+    };
+    for (const behavior of behaviors) {
+      if (!behavior.onNodeClick) {
+        continue;
+      }
+      shouldContinue = behavior.onNodeClick(options);
+      if (!shouldContinue) {
+        return;
+      }
+    }
+  };
 }

@@ -17,6 +17,11 @@ SKIP = "        "
 class GithubActionsReporter(ConsoleReporter):
     _gh_timings = {}
 
+    def skip_uptodate(self, task):
+        self.outstream.write(f"{SKIP} ⏩  {task.title()}\n")
+
+    skip_ignore = skip_uptodate
+
     def execute_task(self, task):
         start = datetime.now()
         title = task.title()
@@ -43,8 +48,3 @@ class GithubActionsReporter(ConsoleReporter):
     def add_success(self, task):
         super().add_success(task)
         self.gh_outtro(task, "🏁 ")
-
-    def skip_uptodate(self, task):
-        self.outstream.write(f"{SKIP} ⏩  {task.title()}\n")
-
-    skip_ignore = skip_uptodate

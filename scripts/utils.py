@@ -36,9 +36,6 @@ def replace_between_patterns(src: Path, dest: Path, pattern: str):
     print(src, dest)
     src_chunks = src.read_text(encoding="utf-8").split(pattern)
     dest_chunks = dest.read_text(encoding="utf-8").split(pattern)
-    __import__("pprint").pprint(dest_chunks[0])
-    __import__("pprint").pprint(dest_chunks[1])
-    __import__("pprint").pprint(dest_chunks[2])
     dest.write_text(
         "".join([dest_chunks[0], pattern, src_chunks[1], pattern, dest_chunks[2]]),
         encoding="utf-8",

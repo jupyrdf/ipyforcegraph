@@ -4,6 +4,7 @@
 # Distributed under the terms of the Modified BSD License.
 
 import typing
+from typing import Optional
 
 import ipywidgets as W
 import traitlets as T
@@ -29,10 +30,6 @@ class NodeSelection(Behavior):
         sync=True
     )
 
-    not_selected_color: str = T.Unicode(
-        "#003057", help="the color of unselected nodes"
-    ).tag(sync=True)
-
 
 @W.register
 class NodeLabels(Behavior):
@@ -49,7 +46,59 @@ class NodeLabels(Behavior):
         ),
     ).tag(sync=True)
 
-    default_label: str = T.Unicode(
+    template: Optional[str] = T.Unicode(
+        None,
         allow_none=True,
-        help=("a fallback label if ``column_name`` doesn't exist or is empty"),
+        help="a nunjucks template to use to calculate node labels",
+    ).tag(sync=True)
+
+
+@W.register
+class NodeColors(Behavior):
+    _model_name: str = T.Unicode("NodeColorModel").tag(sync=True)
+
+    column_name: str = T.Unicode(
+        None,
+        allow_none=True,
+        help="name of the source column to use for node colors.",
+    ).tag(sync=True)
+
+    template: Optional[str] = T.Unicode(
+        None,
+        allow_none=True,
+        help="a nunjucks template to use to calculate colors",
+    ).tag(sync=True)
+
+
+@W.register
+class LinkColors(Behavior):
+    _model_name: str = T.Unicode("LinkColorModel").tag(sync=True)
+
+    column_name: str = T.Unicode(
+        None,
+        allow_none=True,
+        help="name of the source column to use for link colors.",
+    ).tag(sync=True)
+
+    template: Optional[str] = T.Unicode(
+        None,
+        allow_none=True,
+        help="a nunjucks template to use to calculate link colors",
+    ).tag(sync=True)
+
+
+@W.register
+class LinkLabels(Behavior):
+    _model_name: str = T.Unicode("LinkLabelModel").tag(sync=True)
+
+    column_name: str = T.Unicode(
+        None,
+        allow_none=True,
+        help="name of the source column to use for link labels.",
+    ).tag(sync=True)
+
+    template: Optional[str] = T.Unicode(
+        None,
+        allow_none=True,
+        help="a nunjucks template to use to calculate link labels",
     ).tag(sync=True)

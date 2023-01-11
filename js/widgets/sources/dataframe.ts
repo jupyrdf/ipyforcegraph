@@ -8,7 +8,7 @@ import { ISignal, Signal } from '@lumino/signaling';
 
 import { WidgetModel } from '@jupyter-widgets/base';
 
-import { DEFAULT_COLUMNS, WIDGET_DEFAULTS } from '../../tokens';
+import { DEFAULT_COLUMNS, EMPTY_GRAPH_DATA, WIDGET_DEFAULTS } from '../../tokens';
 import { jsonToDataFrame } from '../serializers';
 
 const emptyArray = Object.freeze([]);
@@ -21,7 +21,9 @@ export class DataFrameSourceModel extends WidgetModel {
     links: { deserialize: jsonToDataFrame },
   };
 
-  protected _dataUpdated: Signal<DataFrameSourceModel, void>;
+  protected _dataUpdated: Signal<DataFrameSourceModel, void> = new Signal(this);
+  protected _graphData: GraphData | null = null;
+  protected _graphDataRequested = false;
 
   defaults() {
     return {
@@ -38,12 +40,9 @@ export class DataFrameSourceModel extends WidgetModel {
 
   initialize(attributes: any, options: any) {
     super.initialize(attributes, options);
-    this._dataUpdated = new Signal(this);
 
     this.on('change:nodes', this.graphUpdate, this);
     this.on('change:links', this.graphUpdate, this);
-
-    this.graphUpdate();
   }
 
   get dataUpdated(): ISignal<DataFrameSourceModel, void> {
@@ -71,14 +70,25 @@ export class DataFrameSourceModel extends WidgetModel {
   }
 
   get graphData(): GraphData {
-    const graph: GraphData = {
-      nodes: [],
-      links: [],
-    };
+    if (!this._graphDataRequested) {
+      this.graphUpdate();
+      this._graphDataRequested = true;
+    }
+    return this._graphData || EMPTY_GRAPH_DATA;
+  }
+
+  set graphData(graphData: GraphData) {
+    this._graphData = graphData;
+    this._dataUpdated.emit(void 0);
+  }
+
+  protected graphUpdate() {
+    const graphData: GraphData = { nodes: [], links: [] };
 
     const { nodes, links, nodeIdColumn, linkSourceColumn, linkTargetColumn } = this;
 
     const nodeColumns = Object.keys(nodes);
+    const linkColumns = Object.keys(links);
 
     const nodeCount = (nodes[nodeIdColumn] || emptyArray).length;
     const linkCount = (links[linkSourceColumn] || emptyArray).length;
@@ -90,21 +100,20 @@ export class DataFrameSourceModel extends WidgetModel {
       for (const col of nodeColumns) {
         node[col] = nodes[col][idx];
       }
-      graph.nodes.push(node);
+      graphData.nodes.push(node);
     }
 
     for (let idx = 0; idx < linkCount; idx++) {
-      graph.links.push({
+      let link = {
         source: links[linkSourceColumn][idx],
         target: links[linkTargetColumn][idx],
-      });
+      };
+      for (const col of linkColumns) {
+        link[col] = links[col][idx];
+      }
+      graphData.links.push(link);
     }
 
-    return graph;
-  }
-
-  graphUpdate(change?: any) {
-    //TODO throttle / debounce emitting events
-    this._dataUpdated.emit(void 0);
+    this.graphData = graphData;
   }
 }

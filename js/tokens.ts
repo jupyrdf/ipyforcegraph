@@ -2,7 +2,7 @@
  * Copyright (c) 2023 ipyforcegraph contributors.
  * Distributed under the terms of the Modified BSD License.
  */
-import type { GraphData } from 'force-graph';
+import type { GraphData, LinkObject, NodeObject } from 'force-graph';
 
 import type { ISignal } from '@lumino/signaling';
 
@@ -31,8 +31,9 @@ export const DEFAULT_COLUMNS = {
 };
 
 export const DEFAULT_COLORS = {
-  selected: '#B3A369',
-  notSelected: '#003057',
+  selected: '#b3a369',
+  node: '#1f78b3',
+  link: 'rgba(66,66,66,0.5)',
 };
 
 export const WIDGET_DEFAULTS = {
@@ -43,8 +44,33 @@ export const WIDGET_DEFAULTS = {
 };
 
 export interface IBehave {
-  onUpdate(graph: IHasGraph): any;
   updateRequested: ISignal<IBehave, void>;
+  getLinkColor?(options: ILinkBehaveOptions): string | null;
+  getLinkLabel?(options: ILinkBehaveOptions): string | null;
+  getNodeColor?(options: INodeBehaveOptions): string | null;
+  getNodeLabel?(options: INodeBehaveOptions): string | null;
+  // evented
+  onNodeClick?(options: INodeEventBehaveOptions): boolean;
+}
+
+export type TNodeBehaveMethod = 'getNodeLabel' | 'getNodeColor';
+export type TLinkBehaveMethod = 'getLinkLabel' | 'getLinkColor';
+
+export interface IBehaveOptions {
+  view: IHasGraph;
+  graphData: GraphData;
+}
+
+export interface INodeBehaveOptions extends IBehaveOptions {
+  node: NodeObject;
+}
+
+export interface INodeEventBehaveOptions extends INodeBehaveOptions {
+  event: MouseEvent;
+}
+
+export interface ILinkBehaveOptions extends IBehaveOptions {
+  link: LinkObject;
 }
 
 export interface IHasGraph<T = any> extends DOMWidgetView {
