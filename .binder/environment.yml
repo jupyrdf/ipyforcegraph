@@ -23,6 +23,7 @@ dependencies:
   - robotframework-seleniumlibrary
   - robotframework-tidy
   - rope
+  - stringcase
   ### docs/environment.yml ###
   - ansi2html
   - bqplot >=0.12.20

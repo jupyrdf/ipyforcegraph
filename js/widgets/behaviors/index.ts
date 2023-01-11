@@ -2,8 +2,16 @@
  * Copyright (c) 2023 ipyforcegraph contributors.
  * Distributed under the terms of the Modified BSD License.
  */
+
 export * from './base';
 export * from './link-color';
+export * from './link-directional-arrow-color';
+export * from './link-directional-arrow-length';
+export * from './link-directional-arrow-rel-pos';
+export * from './link-directional-particle-color';
+export * from './link-directional-particle-speed';
+export * from './link-directional-particle-width';
+export * from './link-directional-particles';
 export * from './link-label';
 export * from './node-color';
 export * from './node-label';

@@ -23,6 +23,7 @@
 #   - robotframework-seleniumlibrary
 #   - robotframework-tidy
 #   - rope
+#   - stringcase
 #   ### docs/environment.yml ###
 #   - ansi2html
 #   - bqplot >=0.12.20
@@ -119,7 +120,7 @@ https://conda.anaconda.org/conda-forge/linux-64/libpng-1.6.39-h753d276_0.conda#e
 https://conda.anaconda.org/conda-forge/linux-64/libsqlite-3.40.0-h753d276_0.tar.bz2#2e5f9a37d487e1019fd4d8113adb2f9f
 https://conda.anaconda.org/conda-forge/linux-64/libssh2-1.10.0-hf14f497_3.tar.bz2#d85acad4b47dff4e3def14a769a97906
 https://conda.anaconda.org/conda-forge/linux-64/libxcb-1.13-h7f98852_1004.tar.bz2#b3653fdc58d03face9724f602218a904
-https://conda.anaconda.org/conda-forge/linux-64/libxml2-2.10.3-h7463322_0.tar.bz2#3b933ea47ef8f330c4c068af25fcd6a8
+https://conda.anaconda.org/conda-forge/linux-64/libxml2-2.10.3-hca2bb57_1.conda#e67867487d8f19c9ac2b4ee7871e69de
 https://conda.anaconda.org/conda-forge/linux-64/pandoc-2.19.2-h32600fe_1.tar.bz2#35a82883468c85ac8bf41f083c1933cf
 https://conda.anaconda.org/conda-forge/linux-64/pcre2-10.40-hc3806b6_0.tar.bz2#69e2c796349cd9b273890bee0febfe1b
 https://conda.anaconda.org/conda-forge/linux-64/perl-5.32.1-2_h7f98852_perl5.tar.bz2#09ba115862623f00962e9809ea248f1a
@@ -228,13 +229,14 @@ https://conda.anaconda.org/conda-forge/noarch/sphinxcontrib-htmlhelp-2.0.0-pyhd8
 https://conda.anaconda.org/conda-forge/noarch/sphinxcontrib-jsmath-1.0.1-py_0.tar.bz2#67cd9d9c0382d37479b4d306c369a2d4
 https://conda.anaconda.org/conda-forge/noarch/sphinxcontrib-qthelp-1.0.3-py_0.tar.bz2#d01180388e6d1838c3e1ad029590aa7a
 https://conda.anaconda.org/conda-forge/noarch/sphinxcontrib-serializinghtml-1.1.5-pyhd8ed1ab_2.tar.bz2#9ff55a0901cf952f05c654394de76bf7
+https://conda.anaconda.org/conda-forge/noarch/stringcase-1.2.0-py_0.tar.bz2#26a9caf3173939377bac7152379daac0
 https://conda.anaconda.org/conda-forge/noarch/tabulate-0.9.0-pyhd8ed1ab_1.tar.bz2#4759805cce2d914c38472f70bf4d8bcb
 https://conda.anaconda.org/conda-forge/noarch/tokenize-rt-5.0.0-pyhd8ed1ab_0.tar.bz2#c8bea20ee7803c4df5821fae0ee388d6
 https://conda.anaconda.org/conda-forge/noarch/toml-0.10.2-pyhd8ed1ab_0.tar.bz2#f832c45a477c78bebd107098db465095
 https://conda.anaconda.org/conda-forge/noarch/tomli-2.0.1-pyhd8ed1ab_0.tar.bz2#5844808ffab9ebdb694585b50ba02a96
 https://conda.anaconda.org/conda-forge/noarch/tomli-w-1.0.0-pyhd8ed1ab_0.tar.bz2#73506d1ab4202481841c68c169b7ef6c
 https://conda.anaconda.org/conda-forge/linux-64/tornado-6.2-py37h540881e_0.tar.bz2#2f0863ba6b29d1d2872b064dd697a492
-https://conda.anaconda.org/conda-forge/noarch/traitlets-5.8.0-pyhd8ed1ab_0.conda#75fa7ac3992a41e6a06102594bbf67d0
+https://conda.anaconda.org/conda-forge/noarch/traitlets-5.8.1-pyhd8ed1ab_0.conda#ef5179bcc6a9acc23b12ac92936e05ab
 https://conda.anaconda.org/conda-forge/linux-64/typed-ast-1.5.4-py37h540881e_0.tar.bz2#f9d104fbe4d74756013127a6d18a888a
 https://conda.anaconda.org/conda-forge/noarch/typing_extensions-4.4.0-pyha770c72_0.tar.bz2#2d93b130d148d7fc77e583677792fc6a
 https://conda.anaconda.org/conda-forge/linux-64/ujson-5.5.0-py37hd23a5d3_0.tar.bz2#14c44e39a57e09715ac974522aa70d53
@@ -325,7 +327,7 @@ https://conda.anaconda.org/conda-forge/noarch/nbclient-0.5.13-pyhd8ed1ab_0.tar.b
 https://conda.anaconda.org/conda-forge/noarch/networkx-2.7-pyhd8ed1ab_0.tar.bz2#9d430f94458637bbb2f5e78526324412
 https://conda.anaconda.org/conda-forge/linux-64/pytest-7.2.0-py37h89c1867_0.tar.bz2#c623307fdde70b00731a06dc62341a6c
 https://conda.anaconda.org/conda-forge/noarch/robotframework-tidy-3.3.2-pyhd8ed1ab_0.tar.bz2#354a5c374999c2688332c073e2450951
-https://conda.anaconda.org/conda-forge/noarch/urllib3-1.26.13-pyhd8ed1ab_0.conda#3078ef2359efd6ecadbc7e085c5e0592
+https://conda.anaconda.org/conda-forge/noarch/urllib3-1.26.14-pyhd8ed1ab_0.conda#01f33ad2e0aaf6b5ba4add50dad5ad29
 https://conda.anaconda.org/conda-forge/noarch/black-jupyter-22.10.0-hd8ed1ab_2.tar.bz2#80112c21a14035fe1d786f082ce27978
 https://conda.anaconda.org/conda-forge/noarch/ipykernel-6.16.2-pyh210e3f2_0.tar.bz2#6b0f40821b784cac8a33d0c5eb7602c0
 https://conda.anaconda.org/conda-forge/noarch/jupyter-cache-0.5.0-pyhd8ed1ab_0.tar.bz2#293ede7de6b604f3586efbfa615ee2e1
