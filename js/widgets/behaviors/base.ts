@@ -18,19 +18,10 @@ import {
 } from '../../tokens';
 
 export class BehaviorModel extends WidgetModel implements IBehave {
-  protected _updateRequested: Signal<IBehave, void>;
-
-  initialize(attributes: any, options: any) {
-    super.initialize(attributes, options);
-    this._updateRequested = new Signal(this);
-  }
+  protected _updateRequested: Signal<IBehave, void> = new Signal(this);
 
   get updateRequested(): ISignal<IBehave, void> {
     return this._updateRequested;
-  }
-
-  onUpdate(hasGraph: IHasGraph) {
-    throw new Error('unimplemented');
   }
 }
 
