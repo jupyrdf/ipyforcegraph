@@ -52,6 +52,14 @@ DOIT_CONFIG = dict(
 Paths = typing.List[Path]
 
 
+def _echo_ok(msg):
+    def _echo():
+        print(msg, flush=True)
+        return True
+
+    return _echo
+
+
 def task_all():
     """do everything except start lab"""
 
@@ -143,6 +151,20 @@ def task_lock():
         )
 
 
+def _ok(task, ok):
+    task.setdefault("targets", []).append(ok)
+    task["actions"] = [
+        lambda: [ok.exists() and ok.unlink(), True][-1],
+        *task["actions"],
+        lambda: [
+            ok.parent.mkdir(exist_ok=True),
+            ok.write_text("ok", encoding="utf-8"),
+            True,
+        ][-1],
+    ]
+    return task
+
+
 def task_preflight():
     """ensure a sane development environment"""
     file_dep = [P.SCRIPTS / "preflight.py"]
@@ -218,6 +240,18 @@ def task_binder():
 
 def task_env():
     """prepare project envs"""
+    yield dict(
+        name="sync:docs:binder",
+        file_dep=[P.DOCS_ENV_YAML],
+        targets=[P.BINDER_ENV_YAML],
+        actions=[
+            (
+                U.replace_between_patterns,
+                [P.DOCS_ENV_YAML, P.BINDER_ENV_YAML, "### docs/environment.yml ###"],
+            )
+        ],
+    )
+
     if not P.USE_LOCK_ENV:
         return
 
@@ -278,7 +312,6 @@ def task_setup():
 
     if not P.TESTING_IN_CI:
         file_dep += [
-            P.PY_SCHEMA,
             P.PY_PROJ,
         ]
 
@@ -347,19 +380,11 @@ def task_build():
     if P.TESTING_IN_CI:
         return
 
-    yield dict(
-        name="schema",
-        file_dep=[P.YARN_INTEGRITY, P.TS_SCHEMA, P.HISTORY],
-        actions=[[*P.IN_ENV, *P.JLPM, "schema"]],
-        targets=[P.PY_SCHEMA],
-    )
-
     ts_dep = [
         *P.ALL_TS,
         *P.ALL_TSCONFIG,
         P.HISTORY,
         P.PACKAGE_JSON,
-        P.PY_SCHEMA,
         P.YARN_INTEGRITY,
     ]
 
@@ -369,7 +394,6 @@ def task_build():
         P.LICENSE,
         P.PY_PACKAGE_JSON,
         P.PY_PROJ,
-        P.PY_SCHEMA,
     ]
 
     if P.USE_LOCK_ENV:
@@ -491,11 +515,6 @@ def task_test():
             *([] if P.TESTING_IN_CI else [P.OK_NBLINT[nb.name]]),
         ]
 
-        if not P.TESTING_IN_CI:
-            file_dep += [
-                P.PY_SCHEMA,
-            ]
-
         return dict(
             name=f"nb:{nb.name}".replace(" ", "_").replace(".ipynb", ""),
             file_dep=file_dep,
@@ -534,11 +553,22 @@ def task_lint():
     if P.TESTING_IN_CI:
         return
 
+    def _ssort():
+        rc = subprocess.call(list(map(str, [*P.IN_ENV, "ssort", *P.ALL_PY])))
+        if rc != 0:
+            print(">>> Don't worry about failing `ssort`")
+
+    if "py_3.7" in str(P.ENV):
+        ssort = lambda: None
+    else:
+        ssort = [*P.IN_ENV, "ssort", *P.ALL_PY]
+
     yield _ok(
         dict(
             name="black",
             file_dep=[*P.ALL_PY, P.HISTORY],
             actions=[
+                ssort,
                 [*P.IN_ENV, "isort", "--quiet", "--ac", *P.ALL_PY],
                 [*P.IN_ENV, "black", "--quiet", *P.ALL_PY],
             ],
@@ -824,25 +854,3 @@ def task_checkdocs():
 
     for dep in file_dep:
         yield _make_spellcheck(dep, html)
-
-
-def _echo_ok(msg):
-    def _echo():
-        print(msg, flush=True)
-        return True
-
-    return _echo
-
-
-def _ok(task, ok):
-    task.setdefault("targets", []).append(ok)
-    task["actions"] = [
-        lambda: [ok.exists() and ok.unlink(), True][-1],
-        *task["actions"],
-        lambda: [
-            ok.parent.mkdir(exist_ok=True),
-            ok.write_text("ok", encoding="utf-8"),
-            True,
-        ][-1],
-    ]
-    return task

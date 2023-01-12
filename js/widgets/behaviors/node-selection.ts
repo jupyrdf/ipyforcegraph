@@ -2,24 +2,28 @@
  * Copyright (c) 2023 ipyforcegraph contributors.
  * Distributed under the terms of the Modified BSD License.
  */
-import type { NodeObject } from 'force-graph';
-
 import { WidgetModel, unpack_models as deserialize } from '@jupyter-widgets/base';
 
-import { DEFAULT_COLORS, IHasGraph, WIDGET_DEFAULTS } from '../../tokens';
+import {
+  DEFAULT_COLORS,
+  IBehave,
+  INodeBehaveOptions,
+  INodeEventBehaveOptions,
+  WIDGET_DEFAULTS,
+} from '../../tokens';
 
 import { BehaviorModel } from './base';
 
 export type TSelectedSet = Set<string | number>;
 
-export class NodeSelectionModel extends BehaviorModel {
+export class NodeSelectionModel extends BehaviorModel implements IBehave {
   static model_name = 'NodeSelectionModel';
   static serializers = {
     ...WidgetModel.serializers,
     value: { deserialize },
   };
 
-  protected _graph: IHasGraph | null = null;
+  protected _viewId: string | null = null;
 
   defaults() {
     return {
@@ -28,7 +32,6 @@ export class NodeSelectionModel extends BehaviorModel {
       _model_name: NodeSelectionModel.model_name,
       selected: [],
       selected_color: DEFAULT_COLORS.selected,
-      not_selected_color: DEFAULT_COLORS.notSelected,
       multiple: true,
     };
   }
@@ -56,17 +59,12 @@ export class NodeSelectionModel extends BehaviorModel {
     return this.get('selected_color') || DEFAULT_COLORS.selected;
   }
 
-  get notSelectedColor(): string {
-    return this.get('not_selected_color') || DEFAULT_COLORS.notSelected;
+  getNodeColor({ node }: INodeBehaveOptions): string | null {
+    const color = this.selected.has(node.id) ? this.selectedColor : null;
+    return color;
   }
 
-  async registerGraph(hasGraph: IHasGraph): Promise<void> {
-    this._graph = hasGraph;
-    await hasGraph.rendered;
-    hasGraph.graph.onNodeClick(this.onNodeClick);
-  }
-
-  onNodeClick = (node: NodeObject, event: MouseEvent): void => {
+  onNodeClick = ({ node, event }: INodeEventBehaveOptions): boolean => {
     let { selected } = this;
     const id = node.id;
     if (this.get('multiple') && (event.ctrlKey || event.shiftKey || event.altKey)) {
@@ -77,17 +75,7 @@ export class NodeSelectionModel extends BehaviorModel {
     }
 
     this.selected = selected;
+
+    return true;
   };
-
-  async onUpdate(hasGraph: IHasGraph): Promise<void> {
-    if (hasGraph !== this._graph) {
-      await this.registerGraph(hasGraph);
-    }
-
-    const { selected, selectedColor, notSelectedColor } = this;
-
-    hasGraph.graph.nodeColor((node: NodeObject) => {
-      return selected.has(node.id) ? selectedColor : notSelectedColor;
-    });
-  }
 }
