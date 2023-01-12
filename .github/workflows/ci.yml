@@ -200,6 +200,24 @@ jobs:
           name: ipyforcegraph-${{ github.run_number }}-dist
           path: ./dist
 
+      - name: setup (linux)
+        if: ${{ contains(matrix.os, 'ubuntu') }}
+        shell: bash -l {0}
+        run: doit -n4 setup:labext || doit setup:labext || exit 1
+
+      - name: setup (macos)
+        if: ${{ contains(matrix.os, 'macos') }}
+        shell: bash -l {0}
+        run: doit -n4 setup:labext || doit setup:labext || exit 1
+
+      - name: setup (windows)
+        if: ${{ contains(matrix.os, 'windows') }}
+        shell: cmd /C CALL {0}
+        env:
+          ATEST_PROCESSES: 1
+          WIN_CI: 1
+        run: doit -n4 setup:labext || doit setup:labext || exit 1
+
       - name: test (linux)
         if: ${{ contains(matrix.os, 'ubuntu') }}
         shell: bash -l {0}
