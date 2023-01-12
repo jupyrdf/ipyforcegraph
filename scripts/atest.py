@@ -79,7 +79,6 @@ def atest(attempt, extra_args):
             *["--processes", PROCESSES],
             "--artifactsinsubfolders",
             *["--artifacts", "png,log,svg"],
-            "--testlevelsplit",
             *args,
         ]
 
