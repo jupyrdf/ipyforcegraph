@@ -279,11 +279,15 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
   };
 
   protected getLinkDirectionalArrowLength = (link: LinkObject): string => {
-    return this.getComposedLinkAttr(link, 'getLinkDirectionalArrowLength', '');
+    return this.castToNumber(
+      this.getComposedLinkAttr(link, 'getLinkDirectionalArrowLength', '')
+    );
   };
 
   protected getLinkDirectionalArrowRelPos = (link: LinkObject): string => {
-    return this.getComposedLinkAttr(link, 'getLinkDirectionalArrowRelPos', '');
+    return this.castToNumber(
+      this.getComposedLinkAttr(link, 'getLinkDirectionalArrowRelPos', '')
+    );
   };
 
   protected getLinkDirectionalParticleColor = (link: LinkObject): string => {
@@ -291,63 +295,31 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
   };
 
   protected getLinkDirectionalParticleSpeed = (link: LinkObject): string => {
-    let value: any = this.getComposedLinkAttr(
-      link,
-      'getLinkDirectionalParticleSpeed',
-      ''
+    return this.castToNumber(
+      this.getComposedLinkAttr(link, 'getLinkDirectionalParticleSpeed', '')
     );
-
-    switch (typeof value) {
-      case 'string':
-        value = parseFloat(value) as any;
-        break;
-      case 'number':
-        break;
-      default:
-        value = 0;
-        break;
-    }
-
-    return value;
   };
 
   protected getLinkDirectionalParticleWidth = (link: LinkObject): string => {
-    let value: any = this.getComposedLinkAttr(
-      link,
-      'getLinkDirectionalParticleWidth',
-      ''
+    return this.castToNumber(
+      this.getComposedLinkAttr(link, 'getLinkDirectionalParticleWidth', '')
     );
-
-    switch (typeof value) {
-      case 'string':
-        value = parseFloat(value) as any;
-        break;
-      case 'number':
-        break;
-      default:
-        value = 0;
-        break;
-    }
-
-    return value;
   };
 
   protected getLinkDirectionalParticles = (link: LinkObject): string => {
-    let value: any = this.getComposedLinkAttr(link, 'getLinkDirectionalParticles', '');
-
-    switch (typeof value) {
-      case 'string':
-        value = parseInt(value) as any;
-        break;
-      case 'number':
-        break;
-      default:
-        value = 0;
-        break;
-    }
-
-    return value;
+    return this.castToNumber(
+      this.getComposedLinkAttr(link, 'getLinkDirectionalParticles', '')
+    );
   };
+
+  protected castToNumber(value: string | number | null): any {
+    if (value == null) {
+      return value as any;
+    } else if (typeof value == 'string') {
+      return parseFloat(value);
+    }
+    return value;
+  }
 
   getComposedLinkAttr(
     link: LinkObject,
