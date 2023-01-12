@@ -102,3 +102,122 @@ class LinkLabels(Behavior):
         allow_none=True,
         help="a nunjucks template to use to calculate link labels",
     ).tag(sync=True)
+
+
+@W.register
+class LinkDirectionalArrowColor(Behavior):
+    _model_name: str = T.Unicode("LinkDirectionalArrowColorModel").tag(sync=True)
+
+    column_name: str = T.Unicode(
+        None,
+        allow_none=True,
+        help="name of the source column to use for link directional arrow color.",
+    ).tag(sync=True)
+
+    template: Optional[str] = T.Unicode(
+        None,
+        allow_none=True,
+        help="a nunjucks template to use to calculate link directional arrow color",
+    ).tag(sync=True)
+
+
+@W.register
+class LinkDirectionalArrowLength(Behavior):
+    _model_name: str = T.Unicode("LinkDirectionalArrowLengthModel").tag(sync=True)
+
+    column_name: str = T.Unicode(
+        None,
+        allow_none=True,
+        help="name of the source column to use for link directional arrow length.",
+    ).tag(sync=True)
+
+    template: Optional[str] = T.Unicode(
+        None,
+        allow_none=True,
+        help="a nunjucks template to use to calculate link directional arrow length",
+    ).tag(sync=True)
+
+
+@W.register
+class LinkDirectionalArrowRelPos(Behavior):
+    _model_name: str = T.Unicode("LinkDirectionalArrowRelPosModel").tag(sync=True)
+
+    column_name: str = T.Unicode(
+        None,
+        allow_none=True,
+        help="name of the source column to use for link directional arrow relative position.",
+    ).tag(sync=True)
+
+    template: Optional[str] = T.Unicode(
+        None,
+        allow_none=True,
+        help="a nunjucks template to use to calculate link directional arrow relative position",
+    ).tag(sync=True)
+
+
+@W.register
+class LinkDirectionalParticleColor(Behavior):
+    _model_name: str = T.Unicode("LinkDirectionalParticleColorModel").tag(sync=True)
+
+    column_name: str = T.Unicode(
+        None,
+        allow_none=True,
+        help="name of the source column to use for link directional particle color.",
+    ).tag(sync=True)
+
+    template: Optional[str] = T.Unicode(
+        None,
+        allow_none=True,
+        help="a nunjucks template to use to calculate link directional particle color",
+    ).tag(sync=True)
+
+
+@W.register
+class LinkDirectionalParticleSpeed(Behavior):
+    _model_name: str = T.Unicode("LinkDirectionalParticleSpeedModel").tag(sync=True)
+
+    column_name: str = T.Unicode(
+        None,
+        allow_none=True,
+        help="name of the source column to use for link directional particle speed.",
+    ).tag(sync=True)
+
+    template: Optional[str] = T.Unicode(
+        None,
+        allow_none=True,
+        help="a nunjucks template to use to calculate link directional particle speed",
+    ).tag(sync=True)
+
+
+@W.register
+class LinkDirectionalParticleWidth(Behavior):
+    _model_name: str = T.Unicode("LinkDirectionalParticleWidthModel").tag(sync=True)
+
+    column_name: str = T.Unicode(
+        None,
+        allow_none=True,
+        help="name of the source column to use for link directional particle width.",
+    ).tag(sync=True)
+
+    template: Optional[str] = T.Unicode(
+        None,
+        allow_none=True,
+        help="a nunjucks template to use to calculate link directional particle width",
+    ).tag(sync=True)
+
+
+@W.register
+class LinkDirectionalParticles(Behavior):
+    _model_name: str = T.Unicode("LinkDirectionalParticlesModel").tag(sync=True)
+
+    column_name: str = T.Unicode(
+        None,
+        allow_none=True,
+        help="name of the source column to use for link directional particles.",
+    ).tag(sync=True)
+
+    template: Optional[str] = T.Unicode(
+        None,
+        allow_none=True,
+        help="a nunjucks template to use to calculate link directional particles",
+    ).tag(sync=True)

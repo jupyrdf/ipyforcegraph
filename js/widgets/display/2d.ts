@@ -218,11 +218,37 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
     await this.rendered;
     const graph = this.graph as ForceGraphInstance;
     if (graph) {
+      // link
       graph.linkColor(this.wrapFunction(this.getLinkColor));
       graph.linkLabel(this.wrapFunction(this.getLinkLabel));
 
+      graph.linkDirectionalArrowColor(
+        this.wrapFunction(this.getLinkDirectionalArrowColor)
+      );
+      graph.linkDirectionalArrowLength(
+        this.wrapFunction(this.getLinkDirectionalArrowLength)
+      );
+      graph.linkDirectionalArrowRelPos(
+        this.wrapFunction(this.getLinkDirectionalArrowRelPos)
+      );
+      graph.linkDirectionalParticleColor(
+        this.wrapFunction(this.getLinkDirectionalParticleColor)
+      );
+      graph.linkDirectionalParticleSpeed(
+        this.wrapFunction(this.getLinkDirectionalParticleSpeed)
+      );
+      graph.linkDirectionalParticleWidth(
+        this.wrapFunction(this.getLinkDirectionalParticleWidth)
+      );
+      graph.linkDirectionalParticles(
+        this.wrapFunction(this.getLinkDirectionalParticles)
+      );
+
+      // node
       graph.nodeColor(this.wrapFunction(this.getNodeColor));
       graph.nodeLabel(this.wrapFunction(this.getNodeLabel));
+
+      // evented
       graph.onNodeClick(this.wrapFunction(this.onNodeClick));
     } else {
       console.warn(`${EMOJI} no graph to postUpdate`);
@@ -247,6 +273,53 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
   protected getLinkLabel = (link: LinkObject): string => {
     return this.getComposedLinkAttr(link, 'getLinkLabel', '');
   };
+
+  protected getLinkDirectionalArrowColor = (link: LinkObject): string => {
+    return this.getComposedLinkAttr(link, 'getLinkDirectionalArrowColor', '');
+  };
+
+  protected getLinkDirectionalArrowLength = (link: LinkObject): string => {
+    return this.castToNumber(
+      this.getComposedLinkAttr(link, 'getLinkDirectionalArrowLength', '')
+    );
+  };
+
+  protected getLinkDirectionalArrowRelPos = (link: LinkObject): string => {
+    return this.castToNumber(
+      this.getComposedLinkAttr(link, 'getLinkDirectionalArrowRelPos', '')
+    );
+  };
+
+  protected getLinkDirectionalParticleColor = (link: LinkObject): string => {
+    return this.getComposedLinkAttr(link, 'getLinkDirectionalParticleColor', '');
+  };
+
+  protected getLinkDirectionalParticleSpeed = (link: LinkObject): string => {
+    return this.castToNumber(
+      this.getComposedLinkAttr(link, 'getLinkDirectionalParticleSpeed', '')
+    );
+  };
+
+  protected getLinkDirectionalParticleWidth = (link: LinkObject): string => {
+    return this.castToNumber(
+      this.getComposedLinkAttr(link, 'getLinkDirectionalParticleWidth', '')
+    );
+  };
+
+  protected getLinkDirectionalParticles = (link: LinkObject): string => {
+    return this.castToNumber(
+      this.getComposedLinkAttr(link, 'getLinkDirectionalParticles', '')
+    );
+  };
+
+  protected castToNumber(value: string | number | null): any {
+    if (value == null) {
+      return value as any;
+    } else if (typeof value == 'string') {
+      return parseFloat(value);
+    }
+    return value;
+  }
 
   getComposedLinkAttr(
     link: LinkObject,

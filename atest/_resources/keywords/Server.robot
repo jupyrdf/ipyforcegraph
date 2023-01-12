@@ -56,6 +56,7 @@ Create Notebok Server Config
     [Documentation]    Copies in notebook server config file to disables npm/build checks
     [Arguments]    ${home}
     Copy File    ${FIXTURES}${/}${NBSERVER CONF}    ${home}${/}${NBSERVER CONF}
+    Set Environment Variable    JUPYTER_CONFIG_DIR    ${home}
 
 Initialize User Settings
     [Documentation]    Configure the settings directory, and modify settings that make tests less reproducible
