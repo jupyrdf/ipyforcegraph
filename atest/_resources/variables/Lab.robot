@@ -1,5 +1,6 @@
 *** Variables ***
 ${SPLASH}                       id:jupyterlab-splash
+${CMD PALETTE ICON}             svg[data-icon\="ui-components:palette"]
 ${CMD PALETTE INPUT}            css:#command-palette .p-CommandPalette-input
 ${CMD PALETTE ITEM ACTIVE}      css:#command-palette .p-CommandPalette-item.p-mod-active
 ${JLAB XP TOP}                  //div[@id='jp-top-panel']

@@ -7,7 +7,7 @@ import { IBehave, ILinkBehaveOptions } from '../../tokens';
 import { LinkColumnOrTemplateModel } from './base';
 
 export class LinkColorModel extends LinkColumnOrTemplateModel implements IBehave {
-  static model_name = 'NodeColorModel';
+  static model_name = 'LinkColorModel';
 
   defaults() {
     return { ...super.defaults(), _model_name: LinkColorModel.model_name };

@@ -176,7 +176,8 @@ Close JupyterLab
     Close All Browsers
 
 Open Command Palette
-    Press Keys    id:main    ${ACCEL}+SHIFT+c
+    ${open} =    Get WebElements    css:.lm-mod-current ${CMD PALETTE ICON}
+    IF    not ${open.__len__()}    Click Element    css:${CMD PALETTE ICON}
     Wait Until Element is Visible    ${CMD PALETTE INPUT}
     Wait Until Keyword Succeeds    3x    1s    Click Element    ${CMD PALETTE INPUT}
 
@@ -235,7 +236,7 @@ Ensure All Kernels Are Shut Down
     IF    ${els.__len__()}    Wait Until Page Contains Element    ${accept}
     IF    ${els.__len__()}    Click Element    ${accept}
 
-Page Should Not Contain Contain Standard Errors
+Page Should Not Contain Standard Errors
     [Arguments]    ${prefix}=${EMPTY}    ${exceptions}=${None}
     ${errors} =    Get WebElements    ${JLAB XP STDERR}
     FOR    ${idx}    ${error}    IN ENUMERATE    @{errors}

@@ -3,9 +3,9 @@
 # Copyright (c) 2023 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.
 
-try:
+try:  # pragma: no cover
     from importlib.metadata import version
-except:
+except:  # pragma: no cover
     from importlib_metadata import version
 
 NAME = "ipyforcegraph"
