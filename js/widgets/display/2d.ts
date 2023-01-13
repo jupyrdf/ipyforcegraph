@@ -29,6 +29,7 @@ import {
   ILinkBehaveOptions,
   INodeBehaveOptions,
   INodeEventBehaveOptions,
+  IRenderOptions,
   ISource,
   TLinkBehaveMethod,
   TNodeBehaveMethod,
@@ -250,9 +251,17 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
 
       // evented
       graph.onNodeClick(this.wrapFunction(this.onNodeClick));
+
+      // (3d-)force-graph-specific
+      this.getOnRenderPostUpdate();
     } else {
       console.warn(`${EMOJI} no graph to postUpdate`);
     }
+  }
+
+  protected getOnRenderPostUpdate() {
+    const graph = this.graph as ForceGraphInstance;
+    graph.onRenderFramePost(this.wrapFunction(this.onRender));
   }
 
   // composable behaviors
@@ -404,6 +413,23 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
       if (!shouldContinue) {
         return;
       }
+    }
+  };
+
+  protected onRender = (ctx: RenderingContext, globalScale: any) => {
+    const { behaviors } = this.model;
+    const graphData = (this.graph as ForceGraphInstance).graphData();
+    const options: IRenderOptions = {
+      view: this,
+      graphData,
+      ctx,
+      globalScale,
+    };
+    for (const behavior of behaviors) {
+      if (!behavior.onRender) {
+        continue;
+      }
+      behavior.onRender(options);
     }
   };
 }

@@ -23,8 +23,6 @@ export class NodeSelectionModel extends BehaviorModel implements IBehave {
     value: { deserialize },
   };
 
-  protected _viewId: string | null = null;
-
   defaults() {
     return {
       ...super.defaults(),

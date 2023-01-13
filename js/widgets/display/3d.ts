@@ -4,6 +4,8 @@
  */
 import type { ForceGraph3DGenericInstance, ForceGraph3DInstance } from '3d-force-graph';
 
+import { EMOJI } from '../../tokens';
+
 import { ForceGraphModel, ForceGraphView } from './2d';
 
 export class ForceGraph3DModel extends ForceGraphModel {
@@ -35,5 +37,11 @@ export class ForceGraph3DView extends ForceGraphView<
   protected async getJsUrl() {
     return (await import('!!file-loader!3d-force-graph/dist/3d-force-graph.js'))
       .default;
+  }
+
+  protected getOnRenderPostUpdate() {
+    const graph = this.graph as ForceGraph3DInstance;
+    console.error(`${EMOJI} getOnRenderPostUpdate not implemented for`, graph);
+    // graph.onRenderFramePost(this.wrapFunction(this.onRender));
   }
 }

@@ -60,6 +60,7 @@ export interface IBehave {
   getNodeLabel?(options: INodeBehaveOptions): string | null;
   // evented
   onNodeClick?(options: INodeEventBehaveOptions): boolean;
+  onRender?(options: IRenderOptions): void;
 }
 
 export type TNodeBehaveMethod = 'getNodeLabel' | 'getNodeColor';
@@ -89,6 +90,11 @@ export interface INodeEventBehaveOptions extends INodeBehaveOptions {
 
 export interface ILinkBehaveOptions extends IBehaveOptions {
   link: LinkObject;
+}
+
+export interface IRenderOptions extends IBehaveOptions {
+  ctx: RenderingContext;
+  globalScale: number;
 }
 
 export interface IHasGraph<T = any> extends DOMWidgetView {
