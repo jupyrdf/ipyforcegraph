@@ -137,7 +137,8 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
     const iframe = event.currentTarget as HTMLIFrameElement;
     const { contentWindow } = iframe;
 
-    const graph: ForceGraphInstance = (contentWindow as any).init();
+    const graphInitArgs = this.getGraphInitArgs();
+    const graph: ForceGraphInstance = (contentWindow as any).init(graphInitArgs);
     this.graph = graph as any;
     contentWindow.addEventListener('resize', this.onWindowResize);
     this._rendered.resolve(void 0);
@@ -157,6 +158,10 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
 
   protected get graphJsClass(): string {
     return 'ForceGraph';
+  }
+
+  protected getGraphInitArgs(): Record<string, any> {
+    return {};
   }
 
   protected async getIframeSource(): Promise<string> {
@@ -180,10 +185,10 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
       </head>
       <body>
         <script>
-          window.init = () => {
+          window.init = (args) => {
             const div = document.createElement('div');
             document.body.appendChild(div);
-            return ${this.graphJsClass}()(div);
+            return ${this.graphJsClass}(args || {})(div);
           }
           window.wrapFunction = (fn) => {
             return (...args) => fn(...args);
@@ -416,15 +421,20 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
     }
   };
 
-  protected onRender = (ctx: RenderingContext, globalScale: any) => {
+  protected updateRenderOptions(options: IRenderOptions): IRenderOptions {
+    return options;
+  }
+
+  protected onRender = (ctx: CanvasRenderingContext2D, globalScale: any) => {
     const { behaviors } = this.model;
     const graphData = (this.graph as ForceGraphInstance).graphData();
-    const options: IRenderOptions = {
+    let options: IRenderOptions = {
       view: this,
       graphData,
-      ctx,
+      context2d: ctx,
       globalScale,
     };
+    options = this.updateRenderOptions(options);
     for (const behavior of behaviors) {
       if (!behavior.onRender) {
         continue;

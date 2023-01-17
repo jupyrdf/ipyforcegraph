@@ -3,6 +3,7 @@
  * Distributed under the terms of the Modified BSD License.
  */
 import type { GraphData, LinkObject, NodeObject } from 'force-graph';
+import type { WebGLRenderer } from 'three';
 
 import type { ISignal } from '@lumino/signaling';
 
@@ -93,8 +94,10 @@ export interface ILinkBehaveOptions extends IBehaveOptions {
 }
 
 export interface IRenderOptions extends IBehaveOptions {
-  ctx: RenderingContext;
-  globalScale: number;
+  context2d?: CanvasRenderingContext2D;
+  renderer3d?: WebGLRenderer;
+  globalScale?: number;
+  time?: number;
 }
 
 export interface IHasGraph<T = any> extends DOMWidgetView {

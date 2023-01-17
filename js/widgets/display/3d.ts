@@ -3,8 +3,9 @@
  * Distributed under the terms of the Modified BSD License.
  */
 import type { ForceGraph3DGenericInstance, ForceGraph3DInstance } from '3d-force-graph';
+import type { WebGLRenderer } from 'three';
 
-import { EMOJI } from '../../tokens';
+import { IRenderOptions } from '../../tokens';
 
 import { ForceGraphModel, ForceGraphView } from './2d';
 
@@ -39,9 +40,40 @@ export class ForceGraph3DView extends ForceGraphView<
       .default;
   }
 
-  protected getOnRenderPostUpdate() {
+  protected getGraphInitArgs(): Record<string, any> {
+    const args = super.getGraphInitArgs();
+    // args.extraRenderers = [...(args.extraRenderers || []), new ForceGraph3DView.Renderer(this)];
+    return args;
+  }
+
+  protected get threeRenderer(): WebGLRenderer {
     const graph = this.graph as ForceGraph3DInstance;
-    console.error(`${EMOJI} getOnRenderPostUpdate not implemented for`, graph);
+    return graph.renderer() as WebGLRenderer;
+  }
+
+  protected getOnRenderPostUpdate() {
+    this.threeRenderer.setAnimationLoop(this.wrapFunction(this.onRender));
+    // graph.renderer.
+    // console.error(`${EMOJI} getOnRenderPostUpdate not implemented for`, graph);
     // graph.onRenderFramePost(this.wrapFunction(this.onRender));
+  }
+
+  protected updateRenderOptions(options: IRenderOptions): IRenderOptions {
+    delete options.context2d;
+    delete options.globalScale;
+    options.renderer3d = this.threeRenderer;
+    return options;
+  }
+}
+
+export namespace ForceGraph3DView {
+  export class Renderer {
+    protected _view: ForceGraph3DView;
+    constructor(view: ForceGraph3DView) {
+      this._view = view;
+    }
+    render = (scene: any, camera: any) => {
+      console.warn('RENDER', scene, camera);
+    };
   }
 }

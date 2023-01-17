@@ -5,7 +5,7 @@
 import { WidgetModel, unpack_models as deserialize } from '@jupyter-widgets/base';
 import { ImageModel } from '@jupyter-widgets/controls';
 
-import { IBehave, IRenderOptions, WIDGET_DEFAULTS } from '../../tokens';
+import { EMOJI, IBehave, IRenderOptions, WIDGET_DEFAULTS } from '../../tokens';
 
 import { BehaviorModel } from './base';
 
@@ -64,8 +64,21 @@ export class GraphImageModel extends BehaviorModel implements IBehave {
 
     this._framesToCapture -= 1;
 
-    const ctx = options.ctx as CanvasRenderingContext2D;
-    const canvas = ctx.canvas;
+    const { context2d, renderer3d } = options;
+
+    let canvas: HTMLCanvasElement | null = null;
+
+    if (context2d) {
+      canvas = context2d.canvas;
+    } else if (renderer3d) {
+      canvas = renderer3d.domElement;
+    }
+
+    if (canvas == null) {
+      console.warn(`${EMOJI} couldn't handle post render of`, options);
+      return;
+    }
+
     canvas.toBlob(this.onBlob.bind(this, index, this._framesToCapture === 0));
   }
 
