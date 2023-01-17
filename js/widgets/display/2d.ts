@@ -66,6 +66,10 @@ export class ForceGraphModel extends DOMWidgetModel {
     return this.get('behaviors') || [];
   }
 
+  get previousBehaviors(): IBehave[] {
+    return (this.previous && this.previous('behaviors')) || [];
+  }
+
   get defaultNodeColor(): string {
     return this.get('default_node_color') || DEFAULT_COLORS.node;
   }
@@ -90,6 +94,10 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
     return this.model.get('source');
   }
 
+  get previousSource(): ISource | null {
+    return (this.model.previous && this.model.previous('source')) || null;
+  }
+
   get rendered(): Promise<void> {
     return this._rendered.promise;
   }
@@ -101,9 +109,9 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
     this._rendered = new PromiseDelegate();
     this.model.on('change:source', this.onSourceChange, this);
     this.model.on('change:behaviors', this.onBehaviorsChange, this);
+    this.luminoWidget.disposed.connect(this.onDisposed, this);
     this.onSourceChange();
     this.onBehaviorsChange();
-    this.luminoWidget.disposed.connect(this.onDisposed, this);
   }
 
   onDisposed() {
@@ -212,8 +220,12 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
   }
 
   onSourceChange(change?: any) {
-    // TODO disconnect old model...
-    let source = this.model.get('source');
+    const { source, previousSource } = this;
+
+    if (previousSource) {
+      previousSource.dataUpdated.disconnect(this.update, this);
+    }
+
     if (source) {
       source.dataUpdated.connect(this.update, this);
       this.update();
@@ -271,11 +283,20 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
 
   // composable behaviors
   async onBehaviorsChange(): Promise<void> {
-    // TODO: disconnect old model...
-    const behaviors: IBehave[] = this.model.behaviors;
-    for (const behavior of behaviors) {
-      behavior.updateRequested.connect(this.postUpdate, this);
+    const { behaviors, previousBehaviors } = this.model;
+
+    for (const previous of previousBehaviors) {
+      if (!behaviors.includes(previous)) {
+        previous.updateRequested.disconnect(this.postUpdate, this);
+      }
     }
+
+    for (const behavior of behaviors) {
+      if (!previousBehaviors.includes(behavior)) {
+        behavior.updateRequested.connect(this.postUpdate, this);
+      }
+    }
+
     await this.update();
   }
 

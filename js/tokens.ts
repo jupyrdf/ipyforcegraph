@@ -109,4 +109,5 @@ export interface IHasGraph<T = any> extends DOMWidgetView {
 
 export interface ISource {
   graphData: GraphData;
+  dataUpdated: ISignal<ISource, void>;
 }
