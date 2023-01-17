@@ -42,7 +42,6 @@ export class ForceGraph3DView extends ForceGraphView<
 
   protected getGraphInitArgs(): Record<string, any> {
     const args = super.getGraphInitArgs();
-    // args.extraRenderers = [...(args.extraRenderers || []), new ForceGraph3DView.Renderer(this)];
     return args;
   }
 
@@ -53,9 +52,6 @@ export class ForceGraph3DView extends ForceGraphView<
 
   protected getOnRenderPostUpdate() {
     this.threeRenderer.setAnimationLoop(this.wrapFunction(this.onRender));
-    // graph.renderer.
-    // console.error(`${EMOJI} getOnRenderPostUpdate not implemented for`, graph);
-    // graph.onRenderFramePost(this.wrapFunction(this.onRender));
   }
 
   protected updateRenderOptions(options: IRenderOptions): IRenderOptions {
@@ -63,17 +59,5 @@ export class ForceGraph3DView extends ForceGraphView<
     delete options.globalScale;
     options.renderer3d = this.threeRenderer;
     return options;
-  }
-}
-
-export namespace ForceGraph3DView {
-  export class Renderer {
-    protected _view: ForceGraph3DView;
-    constructor(view: ForceGraph3DView) {
-      this._view = view;
-    }
-    render = (scene: any, camera: any) => {
-      console.warn('RENDER', scene, camera);
-    };
   }
 }
