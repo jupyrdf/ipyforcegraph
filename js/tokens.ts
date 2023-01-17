@@ -75,10 +75,11 @@ export const ALL_LINK_METHODS = [
   'getLinkDirectionalParticleWidth',
   'getLinkDirectionalParticles',
 ];
-export const ALL_NODE_METHODS = ['getNodelLabel', 'getNodeColor'];
-
-export type TNodeBehaveMethod = typeof ALL_NODE_METHODS[number];
 export type TLinkBehaveMethod = typeof ALL_LINK_METHODS[number];
+
+export const ALL_NODE_METHODS = ['getNodeLabel', 'getNodeColor'];
+export type TNodeBehaveMethod = typeof ALL_NODE_METHODS[number];
+
 export type TNodeMethodMap = Map<TNodeBehaveMethod, IBehave[]>;
 export type TLinkMethodMap = Map<TLinkBehaveMethod, IBehave[]>;
 
