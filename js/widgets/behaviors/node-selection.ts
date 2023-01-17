@@ -2,7 +2,11 @@
  * Copyright (c) 2023 ipyforcegraph contributors.
  * Distributed under the terms of the Modified BSD License.
  */
-import { WidgetModel, unpack_models as deserialize } from '@jupyter-widgets/base';
+import {
+  IBackboneModelOptions,
+  WidgetModel,
+  unpack_models as deserialize,
+} from '@jupyter-widgets/base';
 
 import {
   DEFAULT_COLORS,
@@ -34,7 +38,7 @@ export class NodeSelectionModel extends BehaviorModel implements IBehave {
     };
   }
 
-  initialize(attributes: any, options: any) {
+  initialize(attributes: Backbone.ObjectHash, options: IBackboneModelOptions) {
     super.initialize(attributes, options);
     this.on('change:selected', this.onValueChange, this);
     this.onValueChange();

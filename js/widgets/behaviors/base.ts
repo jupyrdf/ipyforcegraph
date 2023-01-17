@@ -50,7 +50,7 @@ export class ColumnOrTemplateModel extends BehaviorModel implements IBehave {
     return this.get('template') || null;
   }
 
-  initialize(attributes: any, options: any) {
+  initialize(attributes: Backbone.ObjectHash, options: IBackboneModelOptions) {
     super.initialize(attributes, options);
     this.on('change:column_name', this.onColumnNameChange, this);
     this.on('change:template', this.onTemplateChange, this);

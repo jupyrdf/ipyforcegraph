@@ -2,7 +2,11 @@
  * Copyright (c) 2023 ipyforcegraph contributors.
  * Distributed under the terms of the Modified BSD License.
  */
-import { WidgetModel, unpack_models as deserialize } from '@jupyter-widgets/base';
+import {
+  IBackboneModelOptions,
+  WidgetModel,
+  unpack_models as deserialize,
+} from '@jupyter-widgets/base';
 import { ImageModel } from '@jupyter-widgets/controls';
 
 import { EMOJI, IBehave, IRenderOptions, WIDGET_DEFAULTS } from '../../tokens';
@@ -41,7 +45,7 @@ export class GraphImageModel extends BehaviorModel implements IBehave {
     return this.get('frames');
   }
 
-  initialize(attributes: any, options: any) {
+  initialize(attributes: Backbone.ObjectHash, options: IBackboneModelOptions) {
     super.initialize(attributes, options);
     this.on('change:capturing', this.onCapturingChanged, this);
     this.onCapturingChanged();

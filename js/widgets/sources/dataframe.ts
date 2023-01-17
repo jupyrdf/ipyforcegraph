@@ -6,12 +6,15 @@ import { GraphData } from 'force-graph';
 
 import { ISignal, Signal } from '@lumino/signaling';
 
-import { WidgetModel } from '@jupyter-widgets/base';
+import { IBackboneModelOptions, WidgetModel } from '@jupyter-widgets/base';
 
-import { DEFAULT_COLUMNS, EMPTY_GRAPH_DATA, WIDGET_DEFAULTS } from '../../tokens';
+import {
+  DEFAULT_COLUMNS,
+  EMPTY_GRAPH_DATA,
+  WIDGET_DEFAULTS,
+  emptyArray,
+} from '../../tokens';
 import { jsonToDataFrame } from '../serializers';
-
-const emptyArray = Object.freeze([]);
 
 export class DataFrameSourceModel extends WidgetModel {
   static model_name = 'DataFrameSourceModel';
@@ -38,7 +41,7 @@ export class DataFrameSourceModel extends WidgetModel {
     };
   }
 
-  initialize(attributes: any, options: any) {
+  initialize(attributes: Backbone.ObjectHash, options: IBackboneModelOptions) {
     super.initialize(attributes, options);
 
     this.on('change:nodes', this.graphUpdate, this);
