@@ -40,11 +40,6 @@ export class ForceGraph3DView extends ForceGraphView<
       .default;
   }
 
-  protected getGraphInitArgs(): Record<string, any> {
-    const args = super.getGraphInitArgs();
-    return args;
-  }
-
   protected get threeRenderer(): WebGLRenderer {
     const graph = this.graph as ForceGraph3DInstance;
     return graph.renderer() as WebGLRenderer;

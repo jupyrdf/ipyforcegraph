@@ -208,8 +208,7 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
     const iframe = event.currentTarget as HTMLIFrameElement;
     const { contentWindow } = iframe;
 
-    const graphInitArgs = this.getGraphInitArgs();
-    const graph: ForceGraphInstance = (contentWindow as any).init(graphInitArgs);
+    const graph: ForceGraphInstance = (contentWindow as any).init();
     this.graph = graph as any;
     contentWindow.addEventListener('resize', this.onWindowResize);
     this._rendered.resolve(void 0);
@@ -229,10 +228,6 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
 
   protected get graphJsClass(): string {
     return 'ForceGraph';
-  }
-
-  protected getGraphInitArgs(): Record<string, any> {
-    return {};
   }
 
   protected async getIframeSource(): Promise<string> {
