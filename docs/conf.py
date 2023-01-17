@@ -56,4 +56,10 @@ html_context = {
     "github_version": "main",
     "doc_path": "docs",
 }
-html_static_path = ["_static", "../build/lite"]
+html_static_path = [
+    "_static",
+    "../build/lite",
+]
+html_css_files = [
+    "theme.css",
+]
