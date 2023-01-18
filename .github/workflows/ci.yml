@@ -9,12 +9,12 @@ on:
 env:
   PYTHONIOENCODING: utf-8
   PYTHONUNBUFFERED: '1'
-  PIP_DISABLE_PIP_VERSION_CHECK: '1'
+  PIP_DISABLE_PIP_VERSION_CHECK: 'True'
   # until have mamabforge...
   CONDA_EXE: mamba
   # our stuff
   SKIP_CONDA_PREFLIGHT: 1
-  CACHE_EPOCH: 0
+  CACHE_EPOCH: 1
 
 jobs:
   build:
@@ -207,7 +207,10 @@ jobs:
             libwebpdemux2 \
             libwoff1 \
             libxslt1.1 \
-            libxt6
+            libxt6 \
+            xvfb
+          export DISPLAY=':99.0'
+          Xvfb :99 -screen 0 1920x1080x24 > /dev/null 2>&1 &
 
       - name: env (conda)
         uses: conda-incubator/setup-miniconda@v2
@@ -242,6 +245,8 @@ jobs:
       - name: test (linux)
         if: ${{ contains(matrix.os, 'ubuntu') }}
         shell: bash -l {0}
+        env:
+          DISPLAY: ':99.0'
         run: |
           doit -n4 test || doit test || exit 1
 
