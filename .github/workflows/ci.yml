@@ -192,7 +192,8 @@ jobs:
         if: ${{ contains(matrix.os, 'ubuntu') }}
         run: |
           set -eux
-          sudo apt-get install -y \
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
             libdbus-glib-1-2 \
             libegl1 \
             libgdk-pixbuf2.0-0 \
