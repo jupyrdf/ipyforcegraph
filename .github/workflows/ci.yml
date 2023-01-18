@@ -157,7 +157,7 @@ jobs:
         run: mv "${CONDA_PKGS_DIR}" "${CONDA_PKGS_DIR}_do_not_cache"
 
   test:
-    runs-on: ${{ matrix.os }}-latest
+    runs-on: ${{ matrix.vm }}
     needs: [build]
     strategy:
       fail-fast: false
@@ -167,10 +167,13 @@ jobs:
         include:
           - os: ubuntu
             subdir: linux-64
+            vm: ubuntu-18.04
           - os: macos
             subdir: osx-64
+            vm: macos-latest
           - os: windows
             subdir: win-64
+            vm: windows-latest
           - py: '3.7'
             artifact: sdist
           - py: '3.11'
