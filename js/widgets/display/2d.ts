@@ -66,7 +66,7 @@ export class ForceGraphModel extends DOMWidgetModel {
       source: null,
       behaviors: [],
       default_node_color: DEFAULT_COLORS.node,
-      default_edge_color: DEFAULT_COLORS.link,
+      default_link_color: DEFAULT_COLORS.link,
     };
   }
 

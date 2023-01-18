@@ -1,4 +1,4 @@
-"""Behaviors for ipyforcegraph."""
+"""Behaviors for ``ipyforcegraph``."""
 
 # Copyright (c) 2023 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.
@@ -23,7 +23,7 @@ class GraphImage(Behavior):
 
     frames: Tuple[W.Image] = W.TypedTuple(
         T.Instance(W.Image),
-        help="A tuple of ``ipywidgets.Image``s to be populated with the graph.",
+        help="A tuple of ``ipywidgets.Image``s to be populated with frames of the graph.",
     ).tag(sync=True, **W.widget_serialization)
 
     def _get_frames(self):

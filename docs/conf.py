@@ -63,3 +63,8 @@ html_static_path = [
 html_css_files = [
     "theme.css",
 ]
+
+intersphinx_mapping = {
+    "python": ("https://docs.python.org/3", (None, "python-inv.txt")),
+    "pandas": ("http://pandas.pydata.org/pandas-docs/dev", None),
+}
