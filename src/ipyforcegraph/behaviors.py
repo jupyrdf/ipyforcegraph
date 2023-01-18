@@ -23,7 +23,7 @@ class GraphImage(Behavior):
 
     frames: Tuple[W.Image] = W.TypedTuple(
         T.Instance(W.Image),
-        help="A tuple of ``ipywidgets.Image``s to be populated with frames of the graph.",
+        help="A tuple of `ipywidgets.Image`s to be populated with frames of the graph.",
     ).tag(sync=True, **W.widget_serialization)
 
     def _get_frames(self):
@@ -74,8 +74,8 @@ class NodeLabels(Behavior):
         None,
         allow_none=True,
         help=(
-            "name of the source column to use for node labels. If ``None``, use "
-            "the source's ``node_id_column``."
+            "name of the source column to use for node labels. If `None`, use "
+            "the source's `node_id_column`."
         ),
     ).tag(sync=True)
 
