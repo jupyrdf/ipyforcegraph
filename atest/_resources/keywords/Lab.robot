@@ -1,32 +1,12 @@
 *** Settings ***
 Library     OperatingSystem
-Library     SeleniumLibrary
+Library     JupyterLibrary
 Resource    Browser.robot
 Resource    ../variables/Lab.robot
 Resource    ../variables/Browser.robot
 
 
 *** Keywords ***
-Open JupyterLab
-    Set Environment Variable    MOZ_HEADLESS    ${HEADLESS}
-    ${firefox} =    Which    firefox
-    ${geckodriver} =    Which    geckodriver
-    ${service args} =    Create List    --log    info
-    Set Global Variable    ${NEXT BROWSER}    ${NEXT BROWSER.__add__(1)}
-    Wait Until Keyword Succeeds    5x    5s    Create WebDriver    Firefox
-    ...    executable_path=${geckodriver}
-    ...    firefox_binary=${firefox}
-    ...    service_log_path=${OUTPUT DIR}${/}geckodriver-${NEXT BROWSER}.log
-    ...    service_args=${service args}
-    Wait Until Keyword Succeeds    3x    5s    Wait For Splash
-
-Wait For Splash
-    Go To    ${URL}lab?reset&token=${TOKEN}
-    Set Window Size    1920    1080
-    Wait Until Page Contains Element    ${SPLASH}    timeout=30s
-    Wait Until Page Does Not Contain Element    ${SPLASH}    timeout=10s
-    Execute Javascript    window.onbeforeunload \= function (){}
-
 Try to Close All Tabs
     Wait Until Keyword Succeeds    5x    50ms    Close All Tabs
 
@@ -77,10 +57,13 @@ Ensure Sidebar Is Closed
         Wait Until Keyword Succeeds    3x    0.5s    Click Element    css:.jp-mod-${side} .p-TabBar-tab.p-mod-current
     END
 
-Open Context Menu for File
-    [Arguments]    ${file}
+Refresh File List
     Ensure File Browser is Open
     Click Element    css:button[data-command="filebrowser:refresh"]
+
+Open Context Menu for File
+    [Arguments]    ${file}
+    Refresh File List
     ${selector} =    Set Variable    xpath://span[@class='jp-DirListing-itemText']//span\[text() = '${file}']
     Wait Until Page Contains Element    ${selector}
     Open Context Menu    ${selector}
@@ -110,9 +93,10 @@ Open ${file} in ${editor}
 
 Clean Up After Working With Files
     [Arguments]    @{files}
+    ${nb_dir} =    Get Jupyter Directory
     FOR    ${file}    IN    @{files}
         ${src}    ${name} =    Split Path    ${file}
-        Remove File    ${OUTPUT DIR}${/}home${/}${name}
+        Remove File    ${nb_dir}${/}${name}
     END
     Maybe Reset Application State
 
@@ -151,7 +135,8 @@ Open Context Menu Over
 Open File
     [Arguments]    ${file}    ${editor}=${MENU EDITOR}
     ${parent}    ${name} =    Split Path    ${file}
-    Copy File    ${file}    ${OUTPUT DIR}${/}home${/}${name}
+    ${nb_dir} =    Get Jupyter Directory
+    Copy File    ${file}    ${nb_dir}${/}${name}
     Open ${name} in ${editor}
     Capture Page Screenshot    00-opened.png
 
@@ -221,7 +206,7 @@ Reset Application State
     Accept Default Dialog Option
     Ensure All Kernels Are Shut Down
     Lab Command    Reset Application State
-    Wait Until Keyword Succeeds    3x    5s    Wait For Splash
+    Wait Until Keyword Succeeds    3x    5s    Wait For JupyterLab Splash Screen
 
 Accept Default Dialog Option
     [Documentation]    Accept a dialog, if it exists

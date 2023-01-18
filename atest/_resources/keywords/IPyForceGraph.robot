@@ -47,9 +47,10 @@ Open IPyForceGraph Notebook
 
 Copy Support Files
     [Arguments]    ${paths}    ${target}=${/}
+    ${nb_dir} =    Get Jupyter Directory
     FOR    ${path}    IN    @{paths}
         ${parent}    ${name} =    Split Path    ${path}
-        Copy File    ${path}    ${OUTPUT DIR}${/}home${target}${name}
+        Copy File    ${path}    ${nb_dir}${target}${name}
     END
 
 Example Should Restart-and-Run-All

@@ -17,6 +17,7 @@ from . import project as P
 
 PROCESSES = int(os.environ.get("ATEST_PROCESSES", "4"))
 RETRIES = int(os.environ.get("ATEST_RETRIES", "0"))
+ATTEMPT = int(os.environ.get("ATEST_ATTEMPT", "0"))
 
 
 def get_stem(attempt, extra_args):
@@ -52,13 +53,12 @@ def atest(attempt, extra_args):
         *["--xunit", out_dir / "xunit.xml"],
         *["--variable", f"OS:{P.PLATFORM}"],
         *["--variable", f"IPYFORCEGRAPH_EXAMPLES:{P.EXAMPLES}"],
+        *["--variable", f"IPYFORCEGRAPH_FIXTURES:{P.ATEST_FIXTURES}"],
         *["--variable", f"""JUPYTERLAB_EXE:{" ".join(map(str, P.JUPYTERLAB_EXE))}"""],
         *["--randomize", "all"],
         *(extra_args or []),
         *(os.environ.get("ATEST_ARGS", "").split()),
     ]
-
-    os.chdir(P.ATEST)
 
     if out_dir.exists():
         print("trying to clean out {}".format(out_dir))
@@ -66,6 +66,10 @@ def atest(attempt, extra_args):
             shutil.rmtree(out_dir)
         except Exception as err:
             print("Error deleting {}, hopefully harmless: {}".format(out_dir, err))
+
+    out_dir.mkdir(parents=True)
+
+    os.chdir(out_dir)
 
     if "--dryrun" in extra_args or PROCESSES == 1:
         run_robot = robot.run_cli
@@ -82,7 +86,7 @@ def atest(attempt, extra_args):
             *args,
         ]
 
-    args += ["."]
+    args += [P.ATEST]
 
     print(f"[{fake_cmd} test root]\n", P.ATEST)
     print(f"[{fake_cmd} arguments]\n", " ".join(list(map(str, args))))
@@ -97,7 +101,7 @@ def atest(attempt, extra_args):
 
 def attempt_atest_with_retries(*extra_args):
     """retry the robot tests a number of times"""
-    attempt = 0
+    attempt = ATTEMPT
     error_count = -1
 
     is_real = "--dryrun" not in extra_args

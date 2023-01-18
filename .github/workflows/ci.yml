@@ -243,7 +243,7 @@ jobs:
           name: |-
             ipyforcegraph-${{ github.run_number }}-${{ job.status }}-reports-${{ matrix.os }}-${{ matrix.py }}
           path: |
-            ./atest/output
+            ./build/robot
             ./build/htmcov
             ./build/pytest.html
         if: always()
