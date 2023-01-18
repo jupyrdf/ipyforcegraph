@@ -1,6 +1,6 @@
-from ipyforcegraph.forcegraph import ForceGraph
+from ipyforcegraph.forcegraph import WIDGET_CLASS
 from ipyforcegraph import behaviors as B
 import pandas as pd
-fg = ForceGraph(behaviors=[B.NodeLabels(column_name="id")])
+fg = WIDGET_CLASS(behaviors=[B.NodeLabels(column_name="id")])
 fg.source.nodes = pd.DataFrame([{"id": "hello world"}])
 fg

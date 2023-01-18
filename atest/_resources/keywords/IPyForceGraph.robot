@@ -56,14 +56,20 @@ Copy Support Files
 Example Should Restart-and-Run-All
     [Arguments]    ${example}
     Set Screenshot Directory    ${SCREENS}${/}${example.lower()}
+    Execute JupyterLab Command    Show Log Console
     Open IPyForceGraph Notebook    ${example}
     # nothing should be on the page, yet
     Restart and Run All
-    Wait Until Page Contains Element    ${IPYFORCEGRAPH GRAPH}    timeout=60s
+    Wait Until Force Graph Is Visible
     Sleep    5s
     Capture All Code Cells
     Page Should Not Contain Standard Errors
     Capture Page Screenshot    10-ran-all-without-stderr.png
+
+Wait Until Force Graph Is Visible
+    [Arguments]    ${timeout}=60s
+    Wait Until Page Contains Element    css:${IPYFORCEGRAPH FRAME}    timeout=${timeout}
+    Sleep    1s
 
 Clean up after IPyForceGraph Example
     Capture Page Screenshot    99-fin.png

@@ -16,6 +16,7 @@ Setup Server and Browser
     ...    stdout=${nb_dir}${/}jupyter-lab.log
     ...    stderr=STDOUT
     Open JupyterLab
+    Set Window Size    1920    1080
 
 Initialize Jupyter Directory
     [Documentation]    Configure the settings directory, and modify settings that make tests less reproducible

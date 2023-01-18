@@ -13,5 +13,5 @@ ${SCREENS}      ${SCREENS ROOT}${/}3d
 
 *** Test Cases ***
 3D
-    [Tags]    data:miserables    lib:3d-force-graph
+    [Tags]    data:miserables    widget:forcegraph3d
     Example Should Restart-and-Run-All    ${THREEDEE}
