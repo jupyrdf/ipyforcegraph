@@ -19,13 +19,13 @@ Node Select
     [Tags]    lib:force-graph
     [Setup]    Set Up API Example    node_selection
     Wait Until JupyterLab Kernel Is Idle
-    Log  TODO: test selection
+    Log    TODO: test selection
     Capture Page Screenshot    99-fin.png
 
 Node Labels
     [Tags]    lib:force-graph
     [Setup]    Set Up API Example    node_labels
-    Log  TODO: test label on hover
+    Log    TODO: test label on hover
     Capture Page Screenshot    99-fin.png
 
 
@@ -39,7 +39,6 @@ Set Up API Example
     Set CodeMirror Value    .jp-CodeCell .CodeMirror    ${text}
     Execute JupyterLab Command    Run All Cells
     Wait Until JupyterLab Kernel Is Idle
-
 
 Clean Up API Example
     ${nb_dir} =    Get Jupyter Directory
