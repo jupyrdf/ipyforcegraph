@@ -9,6 +9,8 @@ Library             OperatingSystem
 
 Test Teardown       Clean Up Behavior Example
 
+Force Tags          suite:behaviors
+
 
 *** Variables ***
 ${SCREENS}      ${SCREENS ROOT}${/}api
@@ -17,19 +19,25 @@ ${SCREENS}      ${SCREENS ROOT}${/}api
 *** Test Cases ***
 2D Node Select
     [Setup]    Set Up Behavior Example    NodeSelection    ForceGraph
-    Log    TODO: test selection
+    Click IPyForceGraph Canvas
+    Wait Until Tag Widget Exists    hello world
+    Remove Widget Tag
+    Wait Until No Tag Widgets Exist
 
 2D Node Labels
     [Setup]    Set Up Behavior Example    NodeLabels    ForceGraph
-    Log    TODO: test label on hover
+    Click IPyForceGraph Canvas    text=hello world
 
 3D Node Select
     [Setup]    Set Up Behavior Example    NodeSelection    ForceGraph3D
-    Log    TODO: test selection
+    Click IPyForceGraph Canvas
+    Wait Until Tag Widget Exists    hello world
+    Remove Widget Tag
+    Wait Until No Tag Widgets Exist
 
 3D Node Labels
     [Setup]    Set Up Behavior Example    NodeLabels    ForceGraph3D
-    Log    TODO: test label on hover
+    Click IPyForceGraph Canvas    text=hello world
 
 
 *** Keywords ***

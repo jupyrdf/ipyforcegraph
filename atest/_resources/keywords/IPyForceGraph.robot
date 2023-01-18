@@ -77,3 +77,30 @@ Clean up after IPyForceGraph Example
     ${data} =    Get All IPyForceGraph Example Data Names
     Clean up after Working With Files    @{files}
     Clean up after Working With Files    @{data}
+
+Click IPyForceGraph Canvas
+    [Arguments]    ${x}=0    ${y}=0    ${text}=${EMPTY}
+    Select Frame    css:${IPYFORCEGRAPH FRAME}
+    Wait Until Page Contains Element    css:canvas
+    Click Element At Coordinates    css:canvas    ${x}    ${y}
+    IF    '''${text}'''
+        Wait Until Element Is Visible    css:${IPYFORCEGRAPH TOOLTIP}
+        Element Should Contain    css:${IPYFORCEGRAPH TOOLTIP}    ${text}
+    END
+    [Teardown]    Unselect Frame
+
+Wait Until Tag Widget Exists
+    [Arguments]    ${text}    ${screenshot}=01-tagged.png
+    Wait Until Element Is Visible    css:${CSS WIDGET TAG}
+    Wait Until Element Contains    css:${CSS WIDGET TAG}    ${text}
+    Capture Page Screenshot    ${screenshot}
+
+Remove Widget Tag
+    ${sel} =    Set Variable    css:${CSS WIDGET TAG} ${CSS WIDGET TAG CLOSE}
+    Wait Until Page Contains Element    ${sel}
+    Click Element    ${sel}
+
+Wait Until No Tag Widgets Exist
+    [Arguments]    ${screenshot}=02-not-tagged.png
+    Wait Until Element Is Not Visible    css:${CSS WIDGET TAG}
+    Capture Page Screenshot    ${screenshot}

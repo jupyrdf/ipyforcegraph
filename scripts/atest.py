@@ -38,6 +38,8 @@ def atest(attempt, extra_args):
         previous = P.ATEST_OUT / f"{get_stem(attempt - 1, extra_args)}" / "output.xml"
         print(f"Attempt {attempt} will try to re-run tests from {previous}")
 
+        extra_args += ["--loglevel", "TRACE"]
+
         if previous.exists():
             extra_args += ["--rerunfailed", previous]
         else:
