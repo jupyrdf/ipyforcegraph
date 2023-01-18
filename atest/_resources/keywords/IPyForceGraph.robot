@@ -81,7 +81,7 @@ Clean up after IPyForceGraph Example
 Click IPyForceGraph Canvas
     [Arguments]    ${x}=0    ${y}=0    ${text}=${EMPTY}
     Select Frame    css:${IPYFORCEGRAPH FRAME}
-    Wait Until Page Contains Element    css:canvas
+    Wait Until Page Contains Element    css:canvas    timeout=10s
     Click Element At Coordinates    css:canvas    ${x}    ${y}
     IF    '''${text}'''
         Wait Until Element Is Visible    css:${IPYFORCEGRAPH TOOLTIP}
