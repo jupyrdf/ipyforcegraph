@@ -195,8 +195,6 @@ jobs:
           sudo apt-get install -y \
             libdbus-glib-1-2 \
             libegl1 \
-            libenchant1c2a \
-            libevent-2.1-6 \
             libgdk-pixbuf2.0-0 \
             libgl1 \
             libgles2 \
@@ -205,8 +203,6 @@ jobs:
             libnotify4 \
             libopus0 \
             libsecret-1-0 \
-            libvpx5 \
-            libwebp6 \
             libwebpdemux2 \
             libwoff1 \
             libxslt1.1 \
