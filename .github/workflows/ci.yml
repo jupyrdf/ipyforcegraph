@@ -157,7 +157,7 @@ jobs:
         run: mv "${CONDA_PKGS_DIR}" "${CONDA_PKGS_DIR}_do_not_cache"
 
   test:
-    runs-on: ${{ matrix.vm }}
+    runs-on: ${{ matrix.os }}-latest
     needs: [build]
     strategy:
       fail-fast: false
@@ -167,13 +167,10 @@ jobs:
         include:
           - os: ubuntu
             subdir: linux-64
-            vm: ubuntu-18.04
           - os: macos
             subdir: osx-64
-            vm: macos-latest
           - os: windows
             subdir: win-64
-            vm: windows-latest
           - py: '3.7'
             artifact: sdist
           - py: '3.11'
@@ -190,6 +187,30 @@ jobs:
 
       - name: git checkout
         uses: actions/checkout@v3
+
+      - name: Install xmllint
+        if: ${{ contains(matrix.os, 'ubuntu') }}
+        run: |
+          set -eux
+          sudo apt-get install -y \
+            libdbus-glib-1-2 \
+            libegl1 \
+            libenchant1c2a \
+            libevent-2.1-6 \
+            libgdk-pixbuf2.0-0 \
+            libgl1 \
+            libgles2 \
+            libgudev-1.0-0 \
+            libhyphen0 \
+            libnotify4 \
+            libopus0 \
+            libsecret-1-0 \
+            libvpx5 \
+            libwebp6 \
+            libwebpdemux2 \
+            libwoff1 \
+            libxslt1.1 \
+            libxt6
 
       - name: env (conda)
         uses: conda-incubator/setup-miniconda@v2
