@@ -1,5 +1,6 @@
 0a1
 2FA
+3d
 ci
 composable
 conda
@@ -20,8 +21,10 @@ jupyrdf
 jupyter
 Jupyter
 JupyterLab
+JupyterLite
 kwargs
 labextension
+LinkColor
 LinkColors
 LinkDirectionalArrowColor
 LinkDirectionalArrowLength
@@ -49,4 +52,5 @@ ReadTheDocs
 repr
 TBD
 TODO
+traitlets
 TypeScript
