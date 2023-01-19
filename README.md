@@ -80,7 +80,7 @@ This work is licensed under the [BSD-3-Clause License][license].
 [networkx]: https://networkx.github.io
 [widgets]: https://jupyter.org/widgets
 [npm-badge]: https://img.shields.io/npm/v/@jupyrdf/jupyter-forcegraph
-[npm]: https://www.npmjs.com/package/@jupyrdf/jupyter-ipyforcegraph
+[npm]: https://www.npmjs.com/package/@jupyrdf/jupyter-forcegraph
 [pypi]: https://pypi.org/project/ipyforcegraph
 [pypi-badge]: https://img.shields.io/pypi/v/ipyforcegraph
 [conda-badge]: https://img.shields.io/conda/vn/conda-forge/ipyforcegraph
