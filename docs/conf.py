@@ -42,6 +42,13 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", ".ipynb_checkpoints"]
 
 # content plugins
 autosummary_generate = True
+autoclass_content = "both"
+autodoc_typehints = "none"
+autodoc_default_options = {
+    "members": True,
+    "show-inheritance": True,
+}
+inheritance_alias = {}
 
 # theme
 html_theme = "pydata_sphinx_theme"

@@ -1,6 +1,7 @@
 0a1
 2FA
 3d
+bool
 ci
 composable
 conda
@@ -10,6 +11,7 @@ DataFrameSource
 doit
 env
 evented
+ForceBase
 forcegraph
 ForceGraph
 ForceGraph3D
@@ -43,6 +45,7 @@ NodeColors
 NodeLabels
 NodeSelection
 npm
+numpy
 nunjucks
 PRs
 PyData
@@ -50,6 +53,7 @@ pypi
 PyPI
 ReadTheDocs
 repr
+str
 TBD
 TODO
 traitlets
