@@ -5,9 +5,9 @@ build-backend = "flit_core.buildapi"
 [project]
 name = "ipyforcegraph"
 version = "0.1.0"
-description = "force-graph widget for Jupyter"
+description = "2D and 3D force-directed graph widgets for Jupyter"
 authors = [
-    {name = "Dane Freeman", email = "dane.freeman@gtri.gatech.edu"},
+    {name = "ipyforcegraph contributors", email = "jupyrdf@users.noreply.github.com"},
 ]
 readme = "README.md"
 classifiers = [

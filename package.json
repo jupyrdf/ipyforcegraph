@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "force-graph widget for Jupyter",
   "license": "BSD-3-Clause",
-  "author": "Dane Freeman",
+  "author": "ipyforcegraph contributors",
   "homepage": "https://github.com/jupyrdf/ipyforcegraph",
   "repository": {
     "type": "git",
