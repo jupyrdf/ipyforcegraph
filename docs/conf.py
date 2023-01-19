@@ -22,10 +22,13 @@ PROJ = PY_PROJ["project"]
 # extensions
 extensions = [
     "myst_nb",
-    # "autodoc_traits",  # TODO investigate if can help streamline documentation writing
     "sphinx.ext.autosummary",
+    "sphinx.ext.autosectionlabel",
+    "sphinx.ext.extlinks",
     "sphinx.ext.autodoc",
     "sphinx_autodoc_typehints",
+    "sphinx.ext.viewcode",
+    "sphinx.ext.intersphinx",
 ]
 
 # meta
@@ -42,8 +45,8 @@ autosummary_generate = True
 
 # theme
 html_theme = "pydata_sphinx_theme"
-html_logo = "_static/ipyforcegraph.svg"
-html_favicon = "_static/favicon.ico"
+# html_logo = "_static/ipyforcegraph.svg"
+# html_favicon = "_static/favicon.ico"
 
 html_theme_options = {
     "github_url": PROJ["urls"]["Source"],
@@ -65,6 +68,6 @@ html_css_files = [
 ]
 
 intersphinx_mapping = {
-    "python": ("https://docs.python.org/3", (None, "python-inv.txt")),
-    "pandas": ("http://pandas.pydata.org/pandas-docs/dev", None),
+    "python": ("https://docs.python.org/3", None),
+    "pandas": ("https://pandas.pydata.org/docs", None),
 }
