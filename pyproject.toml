@@ -4,7 +4,7 @@ build-backend = "flit_core.buildapi"
 
 [project]
 name = "ipyforcegraph"
-version = "0.1.0"
+version = "0.2.0"
 description = "2D and 3D force-directed graph widgets for Jupyter"
 authors = [
     {name = "ipyforcegraph contributors", email = "jupyrdf@users.noreply.github.com"},
