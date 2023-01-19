@@ -33,7 +33,7 @@
 mamba install -c conda-forge ipyforcegraph jupyterlab
 ```
 
-(or `conda`, if you _must_)
+> ... or `conda`, if you _must_
 
 ### `ipyforcegraph` with `pip`
 
@@ -54,6 +54,12 @@ See [CONTRIBUTING] for a development install.
 - Visualize and interact with the graph in JupyterLab (or JupyterLite)
 
 ## Uninstall
+
+```bash
+mamba uninstall ipyforcegraph
+```
+
+> ... or `conda`, if you _must_
 
 ```bash
 pip uninstall ipyforcegraph
