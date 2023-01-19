@@ -5,6 +5,7 @@
 ### `ipyforcegraph 0.2.0`
 
 - raise minimum python from 3.7 to 3.8
+- improve types and add `py.typed` file
 
 ### `@jupyrdf/jupyter-forcegraph 0.2.0`
 
