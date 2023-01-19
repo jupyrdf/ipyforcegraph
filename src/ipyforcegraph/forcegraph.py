@@ -6,6 +6,8 @@
 import ipywidgets as W
 import traitlets as T
 
+from typing import Tuple
+
 from ._base import Behavior, ForceBase
 from .sources.dataframe import DataFrameSource
 
@@ -20,7 +22,7 @@ class ForceGraph(W.DOMWidget, ForceBase):
     source: DataFrameSource = T.Instance(
         DataFrameSource, kw={}, help="the source of `nodes` and `link` data"
     ).tag(sync=True, **W.widget_serialization)
-    behaviors: tuple[Behavior] = W.TypedTuple(
+    behaviors: Tuple[Behavior] = W.TypedTuple(
         T.Instance(Behavior),
         kw={},
         help="the behaviors that modify the appearance of nodes, links and the graph itself",
