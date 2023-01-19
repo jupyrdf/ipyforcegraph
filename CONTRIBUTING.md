@@ -46,7 +46,10 @@ doit watch
 ```
 
 - Open a tab with the provided URL in a standards-compliant browser of choice
+  - e.g., Firefox
 - After making changes, wait for `webpack` terminal output, then reload the browser
+  - output should read something like:
+    `webpack 5.75.0 compiled with 7 warnings in 1528 ms`, it's not necessary to
 - If you add a new file, probably will have to restart the whole thing
 
 ### Logging
@@ -130,7 +133,9 @@ doit watch_docs
 ## Releasing
 
 - After merging to `main`, download the ipyforcegraph dist artifacts
-- Inspect the files in `./dist`.
+- Make sure that the `[CHANGELOG](./CHANGELOG.md)` contains the relevant changes for the
+  version to be released
+- Inspect the files in `./dist`
 - Check out `main`
 - Tag appropriately
 

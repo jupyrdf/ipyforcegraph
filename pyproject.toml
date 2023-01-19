@@ -7,7 +7,7 @@ name = "ipyforcegraph"
 version = "0.1.0"
 description = "force-graph widget for Jupyter"
 authors = [
-    {name = "Dane Freeman", email = "dane.freeman@gtri.gatech.edu"},
+    {name = "Nicholas Bollweg", email = "nick.bollweg@gmail.com"},
 ]
 readme = "README.md"
 classifiers = [
