@@ -18,9 +18,9 @@ dependencies:
   - pytest-html
   - pytest-xdist
   - requests-cache
+  - robotframework-jupyterlibrary
   - robotframework-pabot
   - robotframework-robocop
-  - robotframework-seleniumlibrary
   - robotframework-tidy
   - rope
   - stringcase

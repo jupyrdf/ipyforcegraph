@@ -1,6 +1,6 @@
 *** Settings ***
 Resource    CLI.robot
-Library     SeleniumLibrary
+Library     JupyterLibrary
 Library     Collections
 Resource    ../variables/Browser.robot
 

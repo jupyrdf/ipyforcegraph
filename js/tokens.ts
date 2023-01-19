@@ -3,6 +3,7 @@
  * Distributed under the terms of the Modified BSD License.
  */
 import type { GraphData, LinkObject, NodeObject } from 'force-graph';
+import type { WebGLRenderer } from 'three';
 
 import type { ISignal } from '@lumino/signaling';
 
@@ -60,19 +61,27 @@ export interface IBehave {
   getNodeLabel?(options: INodeBehaveOptions): string | null;
   // evented
   onNodeClick?(options: INodeEventBehaveOptions): boolean;
+  onRender?(options: IRenderOptions): void;
 }
 
-export type TNodeBehaveMethod = 'getNodeLabel' | 'getNodeColor';
-export type TLinkBehaveMethod =
-  | 'getLinkLabel'
-  | 'getLinkColor'
-  | 'getLinkDirectionalArrowColor'
-  | 'getLinkDirectionalArrowLength'
-  | 'getLinkDirectionalArrowRelPos'
-  | 'getLinkDirectionalParticleColor'
-  | 'getLinkDirectionalParticleSpeed'
-  | 'getLinkDirectionalParticleWidth'
-  | 'getLinkDirectionalParticles';
+export const ALL_LINK_METHODS = [
+  'getLinkLabel',
+  'getLinkColor',
+  'getLinkDirectionalArrowColor',
+  'getLinkDirectionalArrowLength',
+  'getLinkDirectionalArrowRelPos',
+  'getLinkDirectionalParticleColor',
+  'getLinkDirectionalParticleSpeed',
+  'getLinkDirectionalParticleWidth',
+  'getLinkDirectionalParticles',
+];
+export type TLinkBehaveMethod = typeof ALL_LINK_METHODS[number];
+
+export const ALL_NODE_METHODS = ['getNodeLabel', 'getNodeColor'];
+export type TNodeBehaveMethod = typeof ALL_NODE_METHODS[number];
+
+export type TNodeMethodMap = Map<TNodeBehaveMethod, IBehave[]>;
+export type TLinkMethodMap = Map<TLinkBehaveMethod, IBehave[]>;
 
 export interface IBehaveOptions {
   view: IHasGraph;
@@ -91,6 +100,13 @@ export interface ILinkBehaveOptions extends IBehaveOptions {
   link: LinkObject;
 }
 
+export interface IRenderOptions extends IBehaveOptions {
+  context2d?: CanvasRenderingContext2D;
+  renderer3d?: WebGLRenderer;
+  globalScale?: number;
+  time?: number;
+}
+
 export interface IHasGraph<T = any> extends DOMWidgetView {
   graph: T;
   source: ISource;
@@ -100,4 +116,7 @@ export interface IHasGraph<T = any> extends DOMWidgetView {
 
 export interface ISource {
   graphData: GraphData;
+  dataUpdated: ISignal<ISource, void>;
 }
+
+export const emptyArray = Object.freeze([]);

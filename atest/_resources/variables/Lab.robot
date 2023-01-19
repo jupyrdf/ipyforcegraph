@@ -39,3 +39,8 @@ ${CM CURSORS}                   css:.CodeMirror-cursors:not([style='visibility: 
 # settings
 ${CSS USER SETTINGS}            .jp-SettingsRawEditor-user
 ${JLAB XP CLOSE SETTINGS}       ${JLAB XP DOCK TAB}\[contains(., 'Settings')]/*[@data-icon='ui-components:close']
+
+# widgets
+${CSS WIDGET TAGSINPUT}         .jupyter-widget-tagsinput
+${CSS WIDGET TAG}               div.jupyter-widget-tag
+${CSS WIDGET TAG CLOSE}         .jupyter-widget-tag-close

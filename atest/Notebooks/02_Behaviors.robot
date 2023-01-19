@@ -13,5 +13,5 @@ ${SCREENS}      ${SCREENS ROOT}${/}behaviors
 
 *** Test Cases ***
 Behaviors
-    [Tags]    data:miserables    lib:force-graph
+    [Tags]    data:miserables    widget:forcegraph
     Example Should Restart-and-Run-All    ${BEHAVIORS}

@@ -13,5 +13,5 @@ ${SCREENS}      ${SCREENS ROOT}${/}index
 
 *** Test Cases ***
 Index
-    [Tags]    data:miserables    lib:force-graph
+    [Tags]    data:miserables    widget:forcegraph
     Example Should Restart-and-Run-All    ${INDEX}

@@ -164,6 +164,5 @@ _d/
 # task stuff
 *.doit.db*
 .pabotsuitenames
-atest/output
 *.tsbuildinfo*
 *.isorted

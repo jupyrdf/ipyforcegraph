@@ -1,7 +1,7 @@
 # `ipyforcegraph`
 
-[Jupyter Widgets][widgets] for interactive graphs powered by the
-[force-graph][forcegraph] library.
+[Jupyter Widgets][widgets] for interactive 2D and 3D graphs powered by the
+[force-graph][force-graph] and [3d-force-graph][3d-force-graph] libraries.
 
 |                                       Install                                       |           Demo            |       Build       |                                     Docs                                     |
 | :---------------------------------------------------------------------------------: | :-----------------------: | :---------------: | :--------------------------------------------------------------------------: |
@@ -68,7 +68,8 @@ This work is licensed under the [BSD-3-Clause License][license].
 [binder-badge]: https://mybinder.org/badge_logo.svg
 [binder]:
   https://mybinder.org/v2/gh/jupyrdf/ipyforcegraph/main?urlpath=lab%2Ftree%2Fexamples%2F_index.ipynb
-[forcegraph]: https://github.com/vasturiano/force-graph
+[force-graph]: https://github.com/vasturiano/force-graph
+[3d-force-graph]: https://github.com/vasturiano/3d-force-graph
 [jupyterlab]: https://github.com/jupyterlab/jupyterlab
 [networkx]: https://networkx.github.io
 [widgets]: https://jupyter.org/widgets

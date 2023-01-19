@@ -22,7 +22,7 @@ class DataFrameSource(ForceBase):
 
     node_id_column: str = T.Unicode(
         "id",
-        help="the name of the column for a node's identifier, or 0-based position in the column if None",
+        help="the name of the column for a node's identifier, or 0-based position in the column if `None`",
     ).tag(sync=True)
 
     links: P.DataFrame = TT.PandasType(
@@ -31,25 +31,13 @@ class DataFrameSource(ForceBase):
 
     link_source_column: str = T.Unicode(
         "source",
-        help="the name of the column for a link's source, defaulting to ``source``",
+        help="the name of the column for a link's source, defaulting to `source`",
     ).tag(sync=True)
 
     link_target_column: str = T.Unicode(
         "target",
-        help="the name of the column for a link's target, defaulting to ``target``",
+        help="the name of the column for a link's target, defaulting to `target`",
     ).tag(sync=True)
-
-    # TODO: these go on a subclass of PandasType
-    # sync_node_columns: tuple[str] = W.TypedTuple(
-    #     klass=T.Unicode(),
-    #     allow_none=True,
-    #     help="The columns to provide to the frontend for nodes: send all if ``None``"
-    # ).tag(sync=True)
-    # sync_link_columns: tuple[str] = W.TypedTuple(
-    #     klass=T.Unicode(),
-    #     allow_none=True,
-    #     help="The columns to provide to the frontend for links: send all if ``None``"
-    # ).tag(sync=True)
 
     def __repr__(self):
         """A dumb repr to avoid string nasty pandas comparison stuff."""

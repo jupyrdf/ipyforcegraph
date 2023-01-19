@@ -229,7 +229,7 @@ OK_LINKS = BUILD / "links.ok"
 
 HTMLCOV = BUILD / "htmlcov"
 HTMLCOV_INDEX = HTMLCOV / "index.html"
-PYTEST_COV_THRESHOLD = 87
+PYTEST_COV_THRESHOLD = 85
 PYTEST_HTML = BUILD / "pytest.html"
 PYTEST_XUNIT = BUILD / "pytest.xunit.xml"
 
@@ -248,8 +248,9 @@ SHA256SUMS = DIST / "SHA256SUMS"
 
 # robot testing
 ATEST = ROOT / "atest"
-ALL_ROBOT = [*ATEST.rglob("*.robot")]
-ATEST_OUT = ATEST / "output"
+ATEST_FIXTURES = ATEST / "_resources/fixtures"
+ALL_ROBOT = [*ATEST.rglob("*.robot"), *ATEST.rglob("*.resource")]
+ATEST_OUT = BUILD / "robot"
 ATEST_CANARY = BUILD / f"robot.{PLATFORM.lower()}_success.ok"
 
 # docs

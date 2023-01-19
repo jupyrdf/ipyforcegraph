@@ -9,12 +9,12 @@ on:
 env:
   PYTHONIOENCODING: utf-8
   PYTHONUNBUFFERED: '1'
-  PIP_DISABLE_PIP_VERSION_CHECK: '1'
+  PIP_DISABLE_PIP_VERSION_CHECK: 'True'
   # until have mamabforge...
   CONDA_EXE: mamba
   # our stuff
   SKIP_CONDA_PREFLIGHT: 1
-  CACHE_EPOCH: 0
+  CACHE_EPOCH: 1
 
 jobs:
   build:
@@ -181,13 +181,34 @@ jobs:
       ATEST_RETRIES: '2'
       IPYFORCEGRAPH_PY: ${{ matrix.py }}
     steps:
+      - name: install apt dependencies (linux)
+        if: ${{ contains(matrix.os, 'ubuntu') }}
+        run: |
+          set -eux
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            libdbus-glib-1-2 \
+            libegl1 \
+            libgdk-pixbuf2.0-0 \
+            libgl1 \
+            libgles2 \
+            libgudev-1.0-0 \
+            libhyphen0 \
+            libnotify4 \
+            libopus0 \
+            libsecret-1-0 \
+            libwebpdemux2 \
+            libwoff1 \
+            libxslt1.1 \
+            libxt6 \
+            xvfb
+
       - name: configure line endings
         run: |
           git config --global core.autocrlf false
 
       - name: git checkout
         uses: actions/checkout@v3
-
       - name: env (conda)
         uses: conda-incubator/setup-miniconda@v2
         with:
@@ -222,7 +243,7 @@ jobs:
         if: ${{ contains(matrix.os, 'ubuntu') }}
         shell: bash -l {0}
         run: |
-          doit -n4 test || doit test || exit 1
+          xvfb-run --auto-servernum doit -n4 test || xvfb-run --auto-servernum doit test || exit 1
 
       - name: test (macos)
         if: ${{ contains(matrix.os, 'macos') }}
@@ -243,7 +264,7 @@ jobs:
           name: |-
             ipyforcegraph-${{ github.run_number }}-${{ job.status }}-reports-${{ matrix.os }}-${{ matrix.py }}
           path: |
-            ./atest/output
+            ./build/robot
             ./build/htmcov
             ./build/pytest.html
         if: always()

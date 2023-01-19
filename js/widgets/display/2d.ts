@@ -2,6 +2,7 @@
  * Copyright (c) 2023 ipyforcegraph contributors.
  * Distributed under the terms of the Modified BSD License.
  */
+import { ObjectHash } from 'backbone';
 import type {
   ForceGraphGenericInstance,
   ForceGraphInstance,
@@ -11,14 +12,19 @@ import type {
 } from 'force-graph';
 
 import { PromiseDelegate } from '@lumino/coreutils';
+import { ISignal, Signal } from '@lumino/signaling';
 
 import {
   DOMWidgetModel,
   DOMWidgetView,
+  IBackboneModelOptions,
+  WidgetView,
   unpack_models as deserialize,
 } from '@jupyter-widgets/base';
 
 import {
+  ALL_LINK_METHODS,
+  ALL_NODE_METHODS,
   CSS,
   DEBUG,
   DEFAULT_COLORS,
@@ -29,10 +35,14 @@ import {
   ILinkBehaveOptions,
   INodeBehaveOptions,
   INodeEventBehaveOptions,
+  IRenderOptions,
   ISource,
   TLinkBehaveMethod,
+  TLinkMethodMap,
   TNodeBehaveMethod,
+  TNodeMethodMap,
   WIDGET_DEFAULTS,
+  emptyArray,
 } from '../../tokens';
 
 export class ForceGraphModel extends DOMWidgetModel {
@@ -43,6 +53,10 @@ export class ForceGraphModel extends DOMWidgetModel {
     behaviors: { deserialize },
   };
 
+  protected _nodeBehaviorsByMethod: TNodeMethodMap;
+  protected _linkBehaviorsByMethod: TLinkMethodMap;
+  protected _behaviorsChanged: Signal<ForceGraphModel, void>;
+
   defaults() {
     return {
       ...super.defaults(),
@@ -52,8 +66,52 @@ export class ForceGraphModel extends DOMWidgetModel {
       source: null,
       behaviors: [],
       default_node_color: DEFAULT_COLORS.node,
-      default_edge_color: DEFAULT_COLORS.link,
+      default_link_color: DEFAULT_COLORS.link,
     };
+  }
+
+  initialize(attributes: ObjectHash, options: IBackboneModelOptions): void {
+    super.initialize(attributes, options);
+    this.on('change:behaviors', this.onBehaviorsChange, this);
+    this.onBehaviorsChange();
+  }
+
+  onBehaviorsChange(): void {
+    if (!this._behaviorsChanged) {
+      this._behaviorsChanged = new Signal(this);
+      this._linkBehaviorsByMethod = new Map();
+      this._nodeBehaviorsByMethod = new Map();
+    }
+    const { behaviors } = this;
+
+    for (let linkMethod of ALL_LINK_METHODS) {
+      let methodBehaviors: IBehave[] = [];
+      for (const behavior of behaviors) {
+        if (behavior[linkMethod]) {
+          methodBehaviors.push(behavior);
+        }
+      }
+      this._linkBehaviorsByMethod.set(linkMethod, methodBehaviors);
+    }
+
+    for (let nodeMethod of ALL_NODE_METHODS) {
+      let methodBehaviors: IBehave[] = [];
+      for (const behavior of behaviors) {
+        if (behavior[nodeMethod]) {
+          methodBehaviors.push(behavior);
+        }
+      }
+      this._nodeBehaviorsByMethod.set(nodeMethod, methodBehaviors);
+    }
+    this._behaviorsChanged.emit(void 0);
+  }
+
+  linkBehaviorsForMethod(method: TLinkBehaveMethod): readonly IBehave[] {
+    return this._linkBehaviorsByMethod.get(method) || emptyArray;
+  }
+
+  nodeBehaviorsForMethod(method: TNodeBehaveMethod): readonly IBehave[] {
+    return this._nodeBehaviorsByMethod.get(method) || emptyArray;
   }
 
   get graphData(): GraphData {
@@ -63,6 +121,14 @@ export class ForceGraphModel extends DOMWidgetModel {
 
   get behaviors(): IBehave[] {
     return this.get('behaviors') || [];
+  }
+
+  get behaviorsChanged(): ISignal<ForceGraphModel, void> {
+    return this._behaviorsChanged;
+  }
+
+  get previousBehaviors(): IBehave[] {
+    return (this.previous && this.previous('behaviors')) || [];
   }
 
   get defaultNodeColor(): string {
@@ -89,20 +155,26 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
     return this.model.get('source');
   }
 
+  get previousSource(): ISource | null {
+    return (this.model.previous && this.model.previous('source')) || null;
+  }
+
   get rendered(): Promise<void> {
     return this._rendered.promise;
   }
 
-  initialize(parameters: any) {
+  initialize(parameters: WidgetView.IInitializeParameters<ForceGraphModel>) {
     super.initialize(parameters);
     this.luminoWidget.addClass(CSS.widget);
     this.luminoWidget.addClass(`${CSS.widget}-${this.graphJsClass}`);
     this._rendered = new PromiseDelegate();
     this.model.on('change:source', this.onSourceChange, this);
-    this.model.on('change:behaviors', this.onBehaviorsChange, this);
+
+    this.model.behaviorsChanged.connect(this.onBehaviorsChange, this);
+    this.luminoWidget.disposed.connect(this.onDisposed, this);
+
     this.onSourceChange();
     this.onBehaviorsChange();
-    this.luminoWidget.disposed.connect(this.onDisposed, this);
   }
 
   onDisposed() {
@@ -179,10 +251,10 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
       </head>
       <body>
         <script>
-          window.init = () => {
+          window.init = (args) => {
             const div = document.createElement('div');
             document.body.appendChild(div);
-            return ${this.graphJsClass}()(div);
+            return ${this.graphJsClass}(args || {})(div);
           }
           window.wrapFunction = (fn) => {
             return (...args) => fn(...args);
@@ -206,8 +278,12 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
   }
 
   onSourceChange(change?: any) {
-    // TODO disconnect old model...
-    let source = this.model.get('source');
+    const { source, previousSource } = this;
+
+    if (previousSource) {
+      previousSource.dataUpdated.disconnect(this.update, this);
+    }
+
     if (source) {
       source.dataUpdated.connect(this.update, this);
       this.update();
@@ -250,18 +326,35 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
 
       // evented
       graph.onNodeClick(this.wrapFunction(this.onNodeClick));
+
+      // (3d-)force-graph-specific
+      this.getOnRenderPostUpdate();
     } else {
       console.warn(`${EMOJI} no graph to postUpdate`);
     }
   }
 
+  protected getOnRenderPostUpdate() {
+    const graph = this.graph as ForceGraphInstance;
+    graph.onRenderFramePost(this.wrapFunction(this.onRender));
+  }
+
   // composable behaviors
   async onBehaviorsChange(): Promise<void> {
-    // TODO: disconnect old model...
-    const behaviors: IBehave[] = this.model.behaviors;
-    for (const behavior of behaviors) {
-      behavior.updateRequested.connect(this.postUpdate, this);
+    const { behaviors, previousBehaviors } = this.model;
+
+    for (const previous of previousBehaviors) {
+      if (!behaviors.includes(previous)) {
+        previous.updateRequested.disconnect(this.postUpdate, this);
+      }
     }
+
+    for (const behavior of behaviors) {
+      if (!previousBehaviors.includes(behavior)) {
+        behavior.updateRequested.connect(this.postUpdate, this);
+      }
+    }
+
     await this.update();
   }
 
@@ -326,7 +419,6 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
     methodName: TLinkBehaveMethod,
     defaultValue: string
   ) {
-    const { behaviors } = this.model;
     let value: string | null;
     const graphData = (this.graph as ForceGraphInstance).graphData();
     const options: ILinkBehaveOptions = {
@@ -335,11 +427,8 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
       link,
     };
 
-    for (const behavior of behaviors) {
+    for (const behavior of this.model.linkBehaviorsForMethod(methodName)) {
       let method = behavior[methodName];
-      if (!method) {
-        continue;
-      }
       value = method.call(behavior, options);
       if (value != null) {
         break;
@@ -363,7 +452,6 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
     methodName: TNodeBehaveMethod,
     defaultValue: string
   ) {
-    const { behaviors } = this.model;
     let value: string | null;
     const graphData = (this.graph as ForceGraphInstance).graphData();
     const options: INodeBehaveOptions = {
@@ -372,11 +460,8 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
       node,
     };
 
-    for (const behavior of behaviors) {
+    for (const behavior of this.model.nodeBehaviorsForMethod(methodName)) {
       let method = behavior[methodName];
-      if (!method) {
-        continue;
-      }
       value = method.call(behavior, options);
       if (value != null) {
         break;
@@ -404,6 +489,28 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
       if (!shouldContinue) {
         return;
       }
+    }
+  };
+
+  protected updateRenderOptions(options: IRenderOptions): IRenderOptions {
+    return options;
+  }
+
+  protected onRender = (ctx: CanvasRenderingContext2D, globalScale: any) => {
+    const { behaviors } = this.model;
+    const graphData = (this.graph as ForceGraphInstance).graphData();
+    let options: IRenderOptions = {
+      view: this,
+      graphData,
+      context2d: ctx,
+      globalScale,
+    };
+    options = this.updateRenderOptions(options);
+    for (const behavior of behaviors) {
+      if (!behavior.onRender) {
+        continue;
+      }
+      behavior.onRender(options);
     }
   };
 }

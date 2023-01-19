@@ -6,7 +6,7 @@
 - Get [doit](https://pydoit.org)
 
 ```bash
-mamba install doit
+mamba install -c conda-forge doit
 ```
 
 ## Get Started
@@ -41,12 +41,15 @@ in the extension's source and automatically rebuild the extension and applicatio
 
 - Run:
 
-```bash
-doit watch
-```
+  ```bash
+  doit watch
+  ```
 
 - Open a tab with the provided URL in a standards-compliant browser of choice
+  - e.g., Firefox
 - After making changes, wait for `webpack` terminal output, then reload the browser
+  - output should read something like:
+    `webpack 5.75.0 compiled with 7 warnings in 1528 ms`, it's not necessary to
 - If you add a new file, probably will have to restart the whole thing
 
 ### Logging
@@ -71,9 +74,9 @@ _Log Console_, opened with the _Show Log Console_ command.
 
 - Run:
 
-```bash
-doit lint
-```
+  ```bash
+  doit lint
+  ```
 
 - Ensure the [examples](https://github.com/jupyrdf/ipyforcegraph/tree/main/examples)
   work. These will be tested in CI with:
@@ -130,26 +133,31 @@ doit watch_docs
 ## Releasing
 
 - After merging to `main`, download the ipyforcegraph dist artifacts
-- Inspect the files in `./dist`.
+- Make sure that the [`CHANGELOG`][changelog] contains the relevant changes for the
+  version to be released
+- Inspect the files in `./dist`
 - Check out `main`
-- Tag appropriately
+- Tag appropriately:
 
-```bash
-git push upstream --tags
-```
+  ```bash
+  git push upstream --tags
+  ```
 
 - Ensure you have credentials for `pypi` and `npmjs`
+
   - `npmjs` requires you have set up two-factor authentication (2FA)... this is
     _strongly recommended_ for `pypi`
   - do _not_ use `jlpm publish` or `yarn publish`, as this appears to drop files from
     the distribution
 
-```bash
-npm login
-npm publish
-npm logout
-twine upload where-you-expanded-the-archive/ipyforcegraph-*
-```
+    ```bash
+    npm login
+    npm publish
+    npm logout
+    twine upload where-you-expanded-the-archive/ipyforcegraph-*
+    ```
+
+[changelog]: https://github.com/jupyrdf/ipyforcegraph/tree/main/CHANGELOG.md
 
 ## Updating Dependencies
 
@@ -161,18 +169,18 @@ twine upload where-you-expanded-the-archive/ipyforcegraph-*
   [binder environment](https://github.com/jupyrdf/ipyforcegraph/tree/main/.binder/environment.yml).
 - Run:
 
-```bash
-doit lock
-```
+  ```bash
+  doit lock
+  ```
 
 - Commit the changes to the env specs and the
   [lock files](https://github.com/jupyrdf/ipyforcegraph/tree/main/.github/locks).
 
-> if you delete _all_ the lockfiles, you'll need to `conda-lock` on path with e.g.
->
-> ```bash
-> mamba install -c conda-forge conda-lock
-> ```
+  > if you delete _all_ the lockfiles, you'll need to `conda-lock` on path with e.g.
+  >
+  > ```bash
+  > mamba install -c conda-forge conda-lock
+  > ```
 
 ### Browser Dependencies
 
@@ -180,10 +188,10 @@ doit lock
   [package file](https://github.com/jupyrdf/ipyforcegraph/tree/main/package.json).
 - Run:
 
-```bash
-doit setup:js || doit setup:js || doit setup:js
-doit lint
-```
+  ```bash
+  doit setup:js || doit setup:js || doit setup:js
+  doit lint
+  ```
 
 - Commit the changes to the package file and the
   [yarn lock file](https://github.com/jupyrdf/ipyforcegraph/tree/main/yarn.lock).
