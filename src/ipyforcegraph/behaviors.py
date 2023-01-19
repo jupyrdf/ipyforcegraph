@@ -3,7 +3,7 @@
 # Copyright (c) 2023 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.
 
-from typing import Optional, Tuple
+from typing import Optional, Tuple, Union
 
 import ipywidgets as W
 import traitlets as T
@@ -21,23 +21,25 @@ class GraphImage(Behavior):
 
     frame_count = T.Int(1, help="The number of frames to capture").tag(sync=True)
 
-    frames: Tuple[W.Image] = W.TypedTuple(
+    frames: Tuple[W.Image, ...] = W.TypedTuple(
         T.Instance(W.Image),
         help="A tuple of `ipywidgets.Image`s to be populated with frames of the graph.",
     ).tag(sync=True, **W.widget_serialization)
 
-    def _get_frames(self):
-        return [W.Image(description=f"frame {i}") for i in range(self.frame_count)]
+    def _get_frames(self) -> Tuple[W.Image, ...]:
+        return tuple(
+            [W.Image(description=f"frame {i}") for i in range(self.frame_count)]
+        )
 
     @T.default("frames")
-    def _default_frames(self):
+    def _default_frames(self) -> Tuple[W.Image, ...]:
         return self._get_frames()
 
     @T.observe("frame_count")
-    def _on_frame_count(self, change: T.Bunch):
+    def _on_frame_count(self, change: T.Bunch) -> None:
         frames = self.frames
 
-        self.frames = []
+        self.frames = tuple()
 
         for frame in frames:
             frame.close()
@@ -51,7 +53,7 @@ class NodeSelection(Behavior):
 
     _model_name: str = T.Unicode("NodeSelectionModel").tag(sync=True)
 
-    selected: Tuple[int] = W.TypedTuple(
+    selected: Tuple[Union[int, str], ...] = W.TypedTuple(
         T.Union((T.Int(), T.Unicode())),
         allow_none=True,
         help="the ids of any selected nodes",

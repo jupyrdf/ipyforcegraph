@@ -1,17 +1,16 @@
 # Changelog
 
-## `0.1.1`
+## `0.2.0`
 
-### `ipyforcegraph 0.1.1`
+### `ipyforcegraph 0.2.0`
 
-- fix typings for python 3.7
+- raise minimum python from 3.7 to 3.8
 
-### `@jupyrdf/jupyter-forcegraph 0.1.1`
+### `@jupyrdf/jupyter-forcegraph 0.2.0`
 
 - TBD
 
 ## `0.1.0`
-
 
 ### `ipyforcegraph 0.1.0`
 

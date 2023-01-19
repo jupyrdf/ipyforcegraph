@@ -23,6 +23,7 @@ dependencies:
   - robotframework-robocop
   - robotframework-tidy
   - rope
+  - ssort
   - stringcase
   ### docs/environment.yml ###
   - ansi2html

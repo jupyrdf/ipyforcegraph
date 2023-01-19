@@ -553,28 +553,19 @@ def task_lint():
     if P.TESTING_IN_CI:
         return
 
-    def _ssort():
-        rc = subprocess.call(list(map(str, [*P.IN_ENV, "ssort", *P.ALL_PY])))
-        if rc != 0:
-            print(">>> Don't worry about failing `ssort`")
-
-    if "py_3.7" in str(P.ENV):
-        ssort = lambda: None
-    else:
-        ssort = [*P.IN_ENV, "ssort", *P.ALL_PY]
-
     yield _ok(
         dict(
             name="black",
             file_dep=[*P.ALL_PY, P.HISTORY],
             actions=[
-                ssort,
+                [*P.IN_ENV, "ssort", *P.ALL_PY],
                 [*P.IN_ENV, "isort", "--quiet", "--ac", *P.ALL_PY],
                 [*P.IN_ENV, "black", "--quiet", *P.ALL_PY],
             ],
         ),
         P.OK_BLACK,
     )
+
     yield _ok(
         dict(
             name="pyflakes",
@@ -583,6 +574,16 @@ def task_lint():
         ),
         P.OK_PYFLAKES,
     )
+
+    yield _ok(
+        dict(
+            name="mypy",
+            file_dep=[*P.ALL_PY, P.OK_BLACK],
+            actions=[[*P.IN_ENV, "mypy", *P.ALL_PY_SRC]],
+        ),
+        P.OK_MYPY,
+    )
+
     yield _ok(
         dict(
             name="prettier",

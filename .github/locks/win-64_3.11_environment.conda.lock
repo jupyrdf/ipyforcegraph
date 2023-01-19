@@ -23,6 +23,7 @@
 #   - robotframework-robocop
 #   - robotframework-tidy
 #   - rope
+#   - ssort
 #   - stringcase
 #   ### docs/environment.yml ###
 #   - ansi2html
@@ -59,7 +60,6 @@
 #   ### docs/environment.yml ###
 # dependencies:
 #   - python >=3.11,<3.12
-#   - ssort
 # dependencies: []
 
 @EXPLICIT
@@ -94,7 +94,7 @@ https://conda.anaconda.org/conda-forge/win-64/libflang-5.0.0-h6538335_20180525.t
 https://conda.anaconda.org/conda-forge/win-64/libxml2-2.10.3-hc3477c8_0.tar.bz2#6dcf17bf780618ddb559d992ea3b6961
 https://conda.anaconda.org/conda-forge/win-64/python-3.11.0-hcf16a7b_0_cpython.tar.bz2#13ee3577afc291dabd2d9edc59736688
 https://conda.anaconda.org/conda-forge/win-64/zeromq-4.3.4-h0e60522_1.tar.bz2#e1aff0583dda5fb917eb3d2c1025aa80
-https://conda.anaconda.org/conda-forge/win-64/zstd-1.5.2-h7755175_4.tar.bz2#13acb3626fcc8c0577249f3a7b6129f4
+https://conda.anaconda.org/conda-forge/win-64/zstd-1.5.2-h12be248_5.conda#9e6efd51a39dc60c48f0c7fcfc62bdd2
 https://conda.anaconda.org/conda-forge/noarch/alabaster-0.7.13-pyhd8ed1ab_0.conda#06006184e203b61d3525f90de394471e
 https://conda.anaconda.org/conda-forge/noarch/appdirs-1.4.4-pyh9f0ad1d_0.tar.bz2#5f095bc6454094e96f146491fd03633b
 https://conda.anaconda.org/conda-forge/noarch/async_generator-1.10-py_0.tar.bz2#d56c596e61b1c4952acf0a9920856c12
@@ -129,7 +129,7 @@ https://conda.anaconda.org/conda-forge/noarch/jupyterlab-webrtc-docprovider-0.1.
 https://conda.anaconda.org/conda-forge/noarch/jupyterlab_widgets-3.0.5-pyhd8ed1ab_0.conda#953a312b272f37d39fe9d09f46734622
 https://conda.anaconda.org/conda-forge/win-64/libarchive-3.6.2-h27c7867_0.conda#6e1fc6cfaa26186dd5abd5df8d732193
 https://conda.anaconda.org/conda-forge/win-64/libopenblas-0.3.21-pthreads_h02691f0_0.tar.bz2#8f8aac6d6c5dce28a180c95849e3844d
-https://conda.anaconda.org/conda-forge/win-64/markupsafe-2.1.1-py311ha68e1ae_2.tar.bz2#d782a70b46000ea9a3c5c69c5fe0f767
+https://conda.anaconda.org/conda-forge/win-64/markupsafe-2.1.2-py311ha68e1ae_0.conda#96e7ffe6ea438ba4517152abe3b39874
 https://conda.anaconda.org/conda-forge/noarch/mdurl-0.1.0-pyhd8ed1ab_0.tar.bz2#f8dab71fdc13b1bf29a01248b156d268
 https://conda.anaconda.org/conda-forge/noarch/mistune-2.0.4-pyhd8ed1ab_0.tar.bz2#78e0a90393b79b378b8ff6d32893d58a
 https://conda.anaconda.org/conda-forge/noarch/more-itertools-9.0.0-pyhd8ed1ab_0.tar.bz2#9b6ad26944f19f599800b068e0582227
@@ -275,7 +275,7 @@ https://conda.anaconda.org/conda-forge/noarch/ipython-8.8.0-pyh08f2357_0.conda#0
 https://conda.anaconda.org/conda-forge/noarch/jupyter_client-7.4.9-pyhd8ed1ab_0.conda#5cbf9a31a19d4ef9103adb7d71fd45fd
 https://conda.anaconda.org/conda-forge/noarch/nbformat-5.7.3-pyhd8ed1ab_0.conda#9714111cb6c7dbbc9a9f34de205c2f29
 https://conda.anaconda.org/conda-forge/win-64/numcodecs-0.11.0-py311h12c1d0e_1.conda#9b66ec550742f950ba5fdc1fe650ce26
-https://conda.anaconda.org/conda-forge/win-64/pandas-1.5.2-py311hf63dbb6_2.conda#6657e2e9ccfc95b5f5cd6279c69c0e80
+https://conda.anaconda.org/conda-forge/win-64/pandas-1.5.3-py311hf63dbb6_0.conda#6bd7d08da09b8fd7ca3d076af9040d82
 https://conda.anaconda.org/conda-forge/noarch/robotframework-tidy-3.3.3-pyhd8ed1ab_0.conda#bc4e21b26f0e5bb7517c5d6200912d35
 https://conda.anaconda.org/conda-forge/noarch/urllib3-1.26.14-pyhd8ed1ab_0.conda#01f33ad2e0aaf6b5ba4add50dad5ad29
 https://conda.anaconda.org/conda-forge/noarch/black-jupyter-22.12.0-hd8ed1ab_0.conda#421077052ae1530402ee4c78ba7939bb
