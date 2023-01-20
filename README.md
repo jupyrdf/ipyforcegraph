@@ -9,27 +9,31 @@
 
 ## Screenshots
 
-_TODO_
+| 2D graphs                                                                                   | 3D graphs                                                                                   |
+| ------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| [![a screenshot of capturing animated 2D graphs][screenshot-2d-image]][screenshot-2d-image] | [![a screenshot of capturing animated 3D graphs][screenshot-3d-image]][screenshot-3d-image] |
+
+[screenshot-2d-image]:
+  https://user-images.githubusercontent.com/7581399/212385447-1eb47e5d-a8a4-4ffd-bc7d-b8d280935d35.png
+[screenshot-3d-image]:
+  https://user-images.githubusercontent.com/7581399/213015998-73867583-3914-4add-9199-202bf5ce663e.png
 
 ## Prerequisites
 
-- `python >=3.7`
-
-### JupyterLab compatibility
-
-| `jupyterlab` | `ipyforcegraph` | special concerns |
-| ------------ | --------------- | ---------------- |
-|              |                 |                  |
+- `python >=3.8`
+- `jupyterlab >=3`
 
 ## Install
 
 `ipyforcegraph` is distributed on [conda-forge] and [PyPI].
 
-### `ipyforcegraph` with `conda` (recommended)
+### `ipyforcegraph` with `mamba` (recommended)
 
 ```bash
-conda install -c conda-forge ipyforcegraph jupyterlab=3
+mamba install -c conda-forge ipyforcegraph jupyterlab
 ```
+
+> ... or `conda`, if you _must_
 
 ### `ipyforcegraph` with `pip`
 
@@ -45,9 +49,17 @@ See [CONTRIBUTING] for a development install.
 
 ## How it works
 
-_TODO_
+- Provide _Sources_ of _nodes_ and _links_ as e.g. `pandas.DataFrame`s
+- Annotate with _Behaviors_ such as _NodeSelection_ and _LinkColor_
+- Visualize and interact with the graph in JupyterLab (or JupyterLite)
 
 ## Uninstall
+
+```bash
+mamba uninstall ipyforcegraph
+```
+
+> ... or `conda`, if you _must_
 
 ```bash
 pip uninstall ipyforcegraph
@@ -74,7 +86,7 @@ This work is licensed under the [BSD-3-Clause License][license].
 [networkx]: https://networkx.github.io
 [widgets]: https://jupyter.org/widgets
 [npm-badge]: https://img.shields.io/npm/v/@jupyrdf/jupyter-forcegraph
-[npm]: https://www.npmjs.com/package/@jupyrdf/jupyter-ipyforcegraph
+[npm]: https://www.npmjs.com/package/@jupyrdf/jupyter-forcegraph
 [pypi]: https://pypi.org/project/ipyforcegraph
 [pypi-badge]: https://img.shields.io/pypi/v/ipyforcegraph
 [conda-badge]: https://img.shields.io/conda/vn/conda-forge/ipyforcegraph

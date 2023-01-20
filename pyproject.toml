@@ -4,7 +4,7 @@ build-backend = "flit_core.buildapi"
 
 [project]
 name = "ipyforcegraph"
-version = "0.1.0"
+version = "0.2.0"
 description = "2D and 3D force-directed graph widgets for Jupyter"
 authors = [
     {name = "ipyforcegraph contributors", email = "jupyrdf@users.noreply.github.com"},
@@ -21,13 +21,12 @@ classifiers = [
     "License :: OSI Approved :: BSD License",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
 ]
-requires-python = ">=3.7"
+requires-python = ">=3.8"
 dependencies = [
     "ipywidgets >=8.0.4,<9",
     "numcodecs",
@@ -52,8 +51,28 @@ profile = "black"
 known_first_party = "ipyforcegraph"
 
 [tool.mypy]
-files = "src"
+python_version = '3.8'
+# settings
 allow_redefinition = true
+check_untyped_defs = true
+disallow_untyped_defs = true
+no_implicit_optional = true
+show_error_codes = true
+warn_return_any = true
+warn_unused_ignores = true
+# broken by ipywidgets
+# disallow_any_unimported = true
+
+[[tool.mypy.overrides]]
+module = [
+    'importlib.metadata',
+    'ipywidgets',
+    'numcodecs',
+    'numpy',
+    'pandas',
+    'traittypes',
+]
+ignore_missing_imports = true
 
 [tool.pytest.ini_options]
 junit_family = "xunit2"

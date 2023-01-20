@@ -2,10 +2,12 @@
 # Copyright (c) 2023 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.
 
+from typing import Dict, List
+
 from .constants import EXTENSION_NAME, __version__
 
 
-def _jupyter_labextension_paths():
+def _jupyter_labextension_paths() -> List[Dict[str, str]]:
     from .js import __prefix__
 
     return [dict(src=str(__prefix__), dest=EXTENSION_NAME)]

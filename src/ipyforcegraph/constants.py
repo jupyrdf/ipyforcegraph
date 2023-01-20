@@ -12,7 +12,10 @@ NAME = "ipyforcegraph"
 
 __version__ = version(NAME)
 
+#: the name of the front-end package
 EXTENSION_NAME = "@jupyrdf/jupyter-forcegraph"
+
+#: the compatibility range for versions of the the front-end package
 EXTENSION_SPEC_VERSION = (
     __version__.replace("a", "-alpha").replace("b", "-beta").replace("rc", "-rc")
 )

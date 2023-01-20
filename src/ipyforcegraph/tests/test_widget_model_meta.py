@@ -2,15 +2,20 @@
 # Distributed under the terms of the Modified BSD License.
 
 from pprint import pprint
+from typing import Dict, Set, Type
 
+import ipywidgets as W
 import pytest
 
 from ipyforcegraph import behaviors, forcegraph
 from ipyforcegraph._base import ForceBase
 
+TSubclassSet = Set[Type[W.Widget]]
+TSubclassData = Dict[Type[W.Widget], str]
+
 
 @pytest.fixture
-def widget_subclasses():
+def widget_subclasses() -> TSubclassSet:
     assert behaviors
     assert forcegraph
 
@@ -28,14 +33,16 @@ def widget_subclasses():
 
 
 @pytest.fixture
-def widget_subclass_model_names(widget_subclasses):
+def widget_subclass_model_names(widget_subclasses: TSubclassSet) -> TSubclassData:
     return {
         s: s._model_name.default_value
         for s in sorted(widget_subclasses, key=lambda s: s.__name__)
     }
 
 
-def test_unique_model_names(widget_subclasses, widget_subclass_model_names):
+def test_unique_model_names(
+    widget_subclasses: TSubclassSet, widget_subclass_model_names: TSubclassData
+) -> None:
     pprint(widget_subclass_model_names)
     unique_names = sorted(set(widget_subclass_model_names.values()))
     assert len(widget_subclasses) == len(unique_names), widget_subclass_model_names

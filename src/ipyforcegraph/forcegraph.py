@@ -3,6 +3,8 @@
 # Copyright (c) 2023 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.
 
+from typing import Tuple
+
 import ipywidgets as W
 import traitlets as T
 
@@ -20,17 +22,17 @@ class ForceGraph(W.DOMWidget, ForceBase):
     source: DataFrameSource = T.Instance(
         DataFrameSource, kw={}, help="the source of `nodes` and `link` data"
     ).tag(sync=True, **W.widget_serialization)
-    behaviors: tuple[Behavior] = W.TypedTuple(
+    behaviors: Tuple[Behavior, ...] = W.TypedTuple(
         T.Instance(Behavior),
         kw={},
         help="the behaviors that modify the appearance of nodes, links and the graph itself",
     ).tag(sync=True, **W.widget_serialization)
 
     default_node_color: str = T.Unicode(
-        "#1f78b3", help="a default node color, which can be overriden by `NodeColors`"
+        "#1f78b3", help="a default node color, which can be overridden by `NodeColors`"
     ).tag(sync=True)
     default_link_color: str = T.Unicode(
-        "#666666", help="a default link color, which can be overriden by `LinkColors`"
+        "#666666", help="a default link color, which can be overridden by `LinkColors`"
     ).tag(sync=True)
 
 

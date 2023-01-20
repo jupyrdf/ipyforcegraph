@@ -219,6 +219,7 @@ OK_BLACK = BUILD / "black.ok"
 OK_ROBOT_LINT = BUILD / "robot.lint.ok"
 OK_LINT = BUILD / "lint.ok"
 OK_PYFLAKES = BUILD / "pyflakes.ok"
+OK_MYPY = BUILD / "mypy.ok"
 OK_NBLINT = {nb.name: BUILD / f"nblint.{nb.name}.ok" for nb in EXAMPLE_IPYNB}
 OK_PIP_INSTALL = BUILD / "pip_install.ok"
 OK_DOCS_PIP_INSTALL = BUILD / "docs_pip_install.ok"

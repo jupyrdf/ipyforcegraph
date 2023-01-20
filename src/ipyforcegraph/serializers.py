@@ -2,6 +2,7 @@
 # Distributed under the terms of the Modified BSD License.
 
 import json
+from typing import Dict, Optional
 
 import ipywidgets as W
 import numcodecs as N
@@ -17,7 +18,9 @@ except ImportError:
     pass
 
 
-def dataframe_to_json(value: P.DataFrame, widget: W.Widget):
+def dataframe_to_json(
+    value: P.DataFrame, widget: W.Widget
+) -> Optional[Dict[str, memoryview]]:
     """DataFrame JSON serializer."""
     if value is None:
         return None
@@ -34,7 +37,7 @@ def dataframe_to_json(value: P.DataFrame, widget: W.Widget):
     return {"buffer": memoryview(N.zstd.compress(df_json))}
 
 
-def dataframe_from_json(value: P.DataFrame, widget: W.Widget):
+def dataframe_from_json(value: P.DataFrame, widget: W.Widget) -> P.DataFrame:
     """DataFrame JSON de-serializer."""
     if value is None:
         return None

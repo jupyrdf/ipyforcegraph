@@ -1,5 +1,7 @@
 0a1
 2FA
+3d
+bool
 ci
 composable
 conda
@@ -9,6 +11,7 @@ DataFrameSource
 doit
 env
 evented
+ForceBase
 forcegraph
 ForceGraph
 ForceGraph3D
@@ -20,8 +23,10 @@ jupyrdf
 jupyter
 Jupyter
 JupyterLab
+JupyterLite
 kwargs
 labextension
+LinkColor
 LinkColors
 LinkDirectionalArrowColor
 LinkDirectionalArrowLength
@@ -40,6 +45,7 @@ NodeColors
 NodeLabels
 NodeSelection
 npm
+numpy
 nunjucks
 PRs
 PyData
@@ -47,6 +53,8 @@ pypi
 PyPI
 ReadTheDocs
 repr
+str
 TBD
 TODO
+traitlets
 TypeScript

@@ -17,7 +17,7 @@ class DataFrameSource(ForceBase):
     _model_name: str = T.Unicode("DataFrameSourceModel").tag(sync=True)
 
     nodes: P.DataFrame = TT.PandasType(
-        klass=P.DataFrame, help="the DataFrame of node metadata"
+        klass=P.DataFrame, help="the `DataFrame` of node metadata"
     ).tag(sync=True, **dataframe_serialization)
 
     node_id_column: str = T.Unicode(
@@ -26,7 +26,7 @@ class DataFrameSource(ForceBase):
     ).tag(sync=True)
 
     links: P.DataFrame = TT.PandasType(
-        klass=P.DataFrame, help="the DataFrame of link metadata"
+        klass=P.DataFrame, help="the `DataFrame` of link metadata"
     ).tag(sync=True, **dataframe_serialization)
 
     link_source_column: str = T.Unicode(
@@ -39,8 +39,8 @@ class DataFrameSource(ForceBase):
         help="the name of the column for a link's target, defaulting to `target`",
     ).tag(sync=True)
 
-    def __repr__(self):
-        """A dumb repr to avoid string nasty pandas comparison stuff."""
+    def __repr__(self) -> str:
+        """A custom representation to avoid `pandas`/`numpy` comparison issues."""
         name = self.__class__.__name__
         nodes_shape = self.nodes.shape if self.nodes is not None else None
         links_shape = self.links.shape if self.links is not None else None

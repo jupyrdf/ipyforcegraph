@@ -14,7 +14,7 @@ env:
   CONDA_EXE: mamba
   # our stuff
   SKIP_CONDA_PREFLIGHT: 1
-  CACHE_EPOCH: 1
+  CACHE_EPOCH: 2
 
 jobs:
   build:
@@ -163,7 +163,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu, macos, windows]
-        py: ['3.7', '3.11']
+        py: ['3.8', '3.11']
         include:
           - os: ubuntu
             subdir: linux-64
@@ -171,7 +171,7 @@ jobs:
             subdir: osx-64
           - os: windows
             subdir: win-64
-          - py: '3.7'
+          - py: '3.8'
             artifact: sdist
           - py: '3.11'
             artifact: wheel
