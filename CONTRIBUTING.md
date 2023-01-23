@@ -49,7 +49,9 @@ in the extension's source and automatically rebuild the extension and applicatio
   - e.g., Firefox
 - After making changes, wait for `webpack` terminal output, then reload the browser
   - output should read something like:
-    `webpack 5.75.0 compiled with 7 warnings in 1528 ms`, it's not necessary to
+    ```bash
+    webpack 5.75.0 compiled with 7 warnings in 1528 ms
+    ```
 - If you add a new file, probably will have to restart the whole thing
 
 ### Logging
@@ -80,7 +82,9 @@ _Log Console_, opened with the _Show Log Console_ command.
 
 - Ensure the [examples](https://github.com/jupyrdf/ipyforcegraph/tree/main/examples)
   work. These will be tested in CI with:
-  - `nbconvert --execute`
+  ```bash
+  nbconvert --execute
+  ```
   - in JupyterLab by Robot Framework with _Restart Kernel and Run All Cells_
 - If you add new features:
   - Add a new, minimal demonstration notebook to the examples.
