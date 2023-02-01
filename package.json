@@ -36,10 +36,9 @@
   ],
   "types": "lib/index.d.ts",
   "resolutions": {
-    "verdaccio": "file:./scripts/not-a-package",
     "typescript": "~4.9.3",
     "json5": "^2.1.1",
-    "prettier": "^2.8.0"
+    "prettier": "^2.8.3"
   },
   "dependencies": {
     "@bokuweb/zstd-wasm": "^0.0.17",
@@ -62,7 +61,7 @@
     "@types/three": "^0.148.0",
     "file-loader": "^6.2.0",
     "npm-run-all": "^4.1.5",
-    "prettier": "^2.8.0",
+    "prettier": "^2.8.3",
     "prettier-package-json": "^2.7.0",
     "prettier-plugin-sort-json": "^0.0.3",
     "rimraf": "^3.0.2",
