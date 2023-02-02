@@ -43,12 +43,14 @@ def dataframe_from_json(value: Dict[str, Any], widget: W.Widget) -> P.DataFrame:
         return None
 
     if "buffer" in value:
-        value = N.zstd.decompress(value["buffer"]).decode("utf-8")
+        decompressed = N.zstd.decompress(value["buffer"])
 
-    if HAS_ORJSON:
-        df_data = orjson.loads(value)
+        if HAS_ORJSON:
+            df_data = orjson.loads(decompressed.decode("utf-8"))
+        else:
+            df_data = json.loads(decompressed)
     else:
-        df_data = json.loads(value)
+        df_data = value
 
     return P.DataFrame(df_data)
 
