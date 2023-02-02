@@ -21,8 +21,13 @@ export function jsonToDataFrame(
   obj: IReceivedSerializedDataFrame | null,
   manager?: IWidgetManager
 ): any {
-  const data = decompress(Buffer.from(obj.buffer.buffer));
-  const json = JSON.parse(Buffer.prototype.toString.call(data, 'utf8'));
+  if (!obj.buffer) {
+    return obj;
+  }
+  const compressedData = Buffer.from(obj.buffer.buffer);
+  const data = decompress(compressedData);
+  const jsonString = Buffer.prototype.toString.call(data, 'utf8');
+  const json = JSON.parse(jsonString);
   return json;
 }
 
@@ -30,12 +35,11 @@ export function dataFrameToJson(
   obj: any,
   widget?: WidgetModel
 ): ISendSerializedDataFrame | null {
-  console.warn(compress);
-  if (obj === null) {
-    return null;
-  }
+  const jsonString = JSON.stringify(obj);
+  const data = Buffer.from(jsonString, 'utf-8');
+  const compressedData = compress(data);
   return {
-    buffer: null as any,
+    buffer: compressedData.buffer as any,
   };
 }
 

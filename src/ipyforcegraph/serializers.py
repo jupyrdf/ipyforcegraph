@@ -2,7 +2,7 @@
 # Distributed under the terms of the Modified BSD License.
 
 import json
-from typing import Dict, Optional
+from typing import Any, Dict, Optional
 
 import ipywidgets as W
 import numcodecs as N
@@ -37,19 +37,23 @@ def dataframe_to_json(
     return {"buffer": memoryview(N.zstd.compress(df_json))}
 
 
-def dataframe_from_json(value: P.DataFrame, widget: W.Widget) -> P.DataFrame:
+def dataframe_from_json(value: Dict[str, Any], widget: W.Widget) -> P.DataFrame:
     """DataFrame JSON de-serializer."""
     if value is None:
         return None
 
+    if "buffer" in value:
+        value = N.zstd.decompress(value["buffer"]).decode("utf-8")
+
     if HAS_ORJSON:
         df_data = orjson.loads(value)
     else:
-        df_data = json.loads(df_data)
+        df_data = json.loads(value)
 
-    df_json = json.loads(N.zstd.decompress(value["buffer"]))
-
-    return P.DataFrame(df_json)
+    return P.DataFrame(df_data)
 
 
-dataframe_serialization = dict(to_json=dataframe_to_json, from_json=dataframe_from_json)
+dataframe_serialization = dict(
+    to_json=dataframe_to_json,
+    from_json=dataframe_from_json,
+)
