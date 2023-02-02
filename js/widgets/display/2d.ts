@@ -10,6 +10,7 @@ import type {
   LinkObject,
   NodeObject,
 } from 'force-graph';
+import { ForceBehaviorModel } from "../behaviors";
 
 import { PromiseDelegate } from '@lumino/coreutils';
 import { ISignal, Signal } from '@lumino/signaling';
@@ -175,6 +176,9 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
 
     this.onSourceChange();
     this.onBehaviorsChange();
+    if (DEBUG){
+      (<any>window).fg = this;
+    }
   }
 
   onDisposed() {
@@ -329,6 +333,11 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
 
       // (3d-)force-graph-specific
       this.getOnRenderPostUpdate();
+
+      // forces
+      for (let f of this.getForceBehaviors()){
+        graph.d3Force(f.key, f.force)
+      }
     } else {
       console.warn(`${EMOJI} no graph to postUpdate`);
     }
@@ -513,4 +522,14 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
       behavior.onRender(options);
     }
   };
+
+  protected* getForceBehaviors(): Generator<ForceBehaviorModel>{
+    const { behaviors } = this.model;
+    for (let behavior of behaviors){
+      if (behavior instanceof ForceBehaviorModel){
+        yield behavior
+      }
+    }
+    return
+  }
 }
