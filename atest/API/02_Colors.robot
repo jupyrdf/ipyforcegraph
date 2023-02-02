@@ -34,7 +34,8 @@ Color Feature Works As Expected
     ${transparent} =    Get Frame Screenshot Size    ${screens}    01-transparent.png
     Add And Run JupyterLab Code Cell
     ...    fg.${feature} = "rgba(255, 0, 0, 1.0)"
-    Sleep    0.5s
+    Wait For All Cells To Run
+    Sleep    1s
     ${color} =    Get Frame Screenshot Size    ${screens}    02-color.png
     Should Be True    ${color} > ${transparent}
     [Teardown]    Clean Up Color Example
