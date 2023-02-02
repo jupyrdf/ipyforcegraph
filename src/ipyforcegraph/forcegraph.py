@@ -29,10 +29,15 @@ class ForceGraph(W.DOMWidget, ForceBase):
     ).tag(sync=True, **W.widget_serialization)
 
     default_node_color: str = T.Unicode(
-        "#1f78b3", help="a default node color, which can be overridden by `NodeColors`"
+        "rgba(31, 120, 179, 1.0)",
+        help="a default node color, which can be overridden by `NodeColors`",
     ).tag(sync=True)
     default_link_color: str = T.Unicode(
-        "#666666", help="a default link color, which can be overridden by `LinkColors`"
+        "rgba(66, 66, 66, 0.5)",
+        help="a default link color, which can be overridden by `LinkColors`",
+    ).tag(sync=True)
+    background_color: str = T.Unicode(
+        "rgba(0, 0, 0, 0.0)", help="the graph background color"
     ).tag(sync=True)
 
 

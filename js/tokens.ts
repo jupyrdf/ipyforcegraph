@@ -32,9 +32,10 @@ export const DEFAULT_COLUMNS = {
 };
 
 export const DEFAULT_COLORS = {
-  selected: '#b3a369',
-  node: '#1f78b3',
-  link: 'rgba(66,66,66,0.5)',
+  selected: 'rgba(179, 163, 105, 1.0)',
+  node: 'rgba(31, 120, 179, 1.0)',
+  link: 'rgba(66, 66, 66, 0.5)',
+  background: 'rgba(0, 0, 0, 0.0)',
 };
 
 export const WIDGET_DEFAULTS = {
