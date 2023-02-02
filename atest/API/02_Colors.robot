@@ -17,18 +17,19 @@ ${SCREENS}      ${SCREENS ROOT}${/}api
 *** Test Cases ***
 Colors Can Update
     [Template]    Color Feature Works As Expected
-    background_color    ForceGraph
-    background_color    ForceGraph3D
-    default_link_color    ForceGraph
-    default_link_color    ForceGraph3D
-    default_node_color    ForceGraph
-    default_node_color    ForceGraph3D
+    ${IPYFORCGRAPH CLASS 3D}    background_color
+    ${IPYFORCGRAPH CLASS 3D}    default_link_color
+    ${IPYFORCGRAPH CLASS 3D}    default_node_color
+    ${IPYFORCGRAPH CLASS}    background_color
+    ${IPYFORCGRAPH CLASS}    default_link_color
+    ${IPYFORCGRAPH CLASS}    default_node_color
 
 
 *** Keywords ***
 Color Feature Works As Expected
-    [Arguments]    ${feature}    ${widget_class}
+    [Arguments]    ${widget_class}    ${feature}
     ${screens} =    Set Variable    ${SCREENS}${/}${widget_class.lower()}_${feature}
+    Maybe Skip A Test    widget_class=${widget_class}
     Set Screenshot Directory    ${screens}
     Set Up Color Example    ${feature}    ${widget_class}
     ${transparent} =    Get Frame Screenshot Size    ${screens}    01-transparent.png

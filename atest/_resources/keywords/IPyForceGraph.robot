@@ -104,3 +104,13 @@ Wait Until No Tag Widgets Exist
     [Arguments]    ${screenshot}=02-not-tagged.png
     Wait Until Element Is Not Visible    css:${CSS WIDGET TAG}
     Capture Page Screenshot    ${screenshot}
+
+Maybe Skip A Test
+    [Documentation]    Capture common reasons for skipping tests
+    [Arguments]    ${widget_class}=${EMPTY}
+    IF    "${OS}" == "Darwin"
+        IF    "${widget_class}" == "${IPYFORCGRAPH CLASS 3D}"
+            Pass Execution    Can't test 3d canvas on MacOS
+            ...    skip:darwin:3d
+        END
+    END
