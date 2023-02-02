@@ -261,7 +261,11 @@ DOCS_LINKS = BUILD / "links"
 
 def template_one(src: Path, dest: Path, context=None):
     """Update a file from a template"""
-    import jinja2
+    try:
+        import jinja2
+    except ImportError:
+        print(f"Can't update {src} without jinja2")
+        return
 
     context = context or {}
 
