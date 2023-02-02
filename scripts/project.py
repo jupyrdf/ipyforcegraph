@@ -257,3 +257,14 @@ ATEST_CANARY = BUILD / f"robot.{PLATFORM.lower()}_success.ok"
 # docs
 DOCS_BUILDINFO = DOCS_BUILD / "html" / ".buildinfo"
 DOCS_LINKS = BUILD / "links"
+
+
+def template_one(src: Path, dest: Path, context=None):
+    """Update a file from a template"""
+    import jinja2
+
+    context = context or {}
+
+    tmpl = jinja2.Template(src.read_text(encoding="utf-8"))
+    text = tmpl.render(**context)
+    dest.write_text(text, encoding="utf-8")

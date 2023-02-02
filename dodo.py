@@ -525,6 +525,15 @@ def task_test():
     for nb in P.EXAMPLE_IPYNB:
         yield _nb_test(nb)
 
+    for robot_template in P.ATEST.rglob("*.j2"):
+        robot_out = robot_template.parent / robot_template.name.replace(".j2", "")
+        yield dict(
+            name=f"atest:template:{robot_template.relative_to(P.ATEST)}",
+            actions=[(P.template_one, [robot_template, robot_out])],
+            file_dep=[robot_template],
+            targets=[robot_out],
+        )
+
     def _pabot_logs():
         for robot_out in sorted(P.ATEST_OUT.rglob("robot_*.out")):
             print(f"\n[{robot_out.relative_to(P.ROOT)}]")
