@@ -7,6 +7,7 @@
 - raise minimum python from 3.7 to 3.8
 - improve types and add `py.typed` file
 - adds `background_color` (defaults to transparent, encoded as `rgba(0, 0, 0, 0.0)`)
+- adds `GraphData` which can capture the as-simulated data from the browser
 
 ### `@jupyrdf/jupyter-forcegraph 0.2.0`
 
