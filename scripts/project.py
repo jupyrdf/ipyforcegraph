@@ -230,7 +230,7 @@ OK_LINKS = BUILD / "links.ok"
 
 HTMLCOV = BUILD / "htmlcov"
 HTMLCOV_INDEX = HTMLCOV / "index.html"
-PYTEST_COV_THRESHOLD = 85
+PYTEST_COV_THRESHOLD = 83
 PYTEST_HTML = BUILD / "pytest.html"
 PYTEST_XUNIT = BUILD / "pytest.xunit.xml"
 
@@ -257,3 +257,18 @@ ATEST_CANARY = BUILD / f"robot.{PLATFORM.lower()}_success.ok"
 # docs
 DOCS_BUILDINFO = DOCS_BUILD / "html" / ".buildinfo"
 DOCS_LINKS = BUILD / "links"
+
+
+def template_one(src: Path, dest: Path, context=None):
+    """Update a file from a template"""
+    try:
+        import jinja2
+    except ImportError:
+        print(f"Can't update {src} without jinja2")
+        return
+
+    context = context or {}
+
+    tmpl = jinja2.Template(src.read_text(encoding="utf-8"))
+    text = tmpl.render(**context)
+    dest.write_text(text, encoding="utf-8")

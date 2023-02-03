@@ -68,6 +68,7 @@ export class ForceGraphModel extends DOMWidgetModel {
       behaviors: [],
       default_node_color: DEFAULT_COLORS.node,
       default_link_color: DEFAULT_COLORS.link,
+      background_color: DEFAULT_COLORS.background,
     };
   }
 
@@ -139,6 +140,10 @@ export class ForceGraphModel extends DOMWidgetModel {
   get defaultLinkColor(): string {
     return this.get('default_link_color') || DEFAULT_COLORS.link;
   }
+
+  get backgroundColor(): string {
+    return this.get('background_color') || DEFAULT_COLORS.background;
+  }
 }
 
 export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
@@ -170,6 +175,7 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
     this.luminoWidget.addClass(`${CSS.widget}-${this.graphJsClass}`);
     this._rendered = new PromiseDelegate();
     this.model.on('change:source', this.onSourceChange, this);
+    this.model.on('change:background_color', this.onBackgroundColorChange, this);
 
     this.model.behaviorsChanged.connect(this.onBehaviorsChange, this);
     this.luminoWidget.disposed.connect(this.onDisposed, this);
@@ -213,6 +219,7 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
     this.graph = graph as any;
     contentWindow.addEventListener('resize', this.onWindowResize);
     this._rendered.resolve(void 0);
+    await this.onBackgroundColorChange();
     await this.update();
   };
 
@@ -252,6 +259,11 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
       </head>
       <body>
         <script>
+          window.process = {
+            env: {
+              NODE_ENV: '${DEBUG ? 'development' : 'production'}'
+            }
+          };
           window.init = (args) => {
             const div = document.createElement('div');
             document.body.appendChild(div);
@@ -276,6 +288,11 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
 
   wrapFunction(fn: Function) {
     return (this._iframe.contentWindow as any).wrapFunction(fn);
+  }
+
+  async onBackgroundColorChange() {
+    await this.rendered;
+    (this.graph as ForceGraphInstance).backgroundColor(this.model.backgroundColor);
   }
 
   onSourceChange(change?: any) {
