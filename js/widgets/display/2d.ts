@@ -10,7 +10,6 @@ import type {
   LinkObject,
   NodeObject,
 } from 'force-graph';
-import { ForceBehaviorModel } from "../behaviors";
 
 import { PromiseDelegate } from '@lumino/coreutils';
 import { ISignal, Signal } from '@lumino/signaling';
@@ -45,6 +44,7 @@ import {
   WIDGET_DEFAULTS,
   emptyArray,
 } from '../../tokens';
+import { ForceBehaviorModel } from '../behaviors';
 
 export class ForceGraphModel extends DOMWidgetModel {
   static model_name = 'ForceGraphModel';
@@ -176,9 +176,6 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
 
     this.onSourceChange();
     this.onBehaviorsChange();
-    if (DEBUG){
-      (<any>window).fg = this;
-    }
   }
 
   onDisposed() {
@@ -297,50 +294,54 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
   protected async postUpdate(): Promise<void> {
     await this.rendered;
     const graph = this.graph as ForceGraphInstance;
-    if (graph) {
-      // link
-      graph.linkColor(this.wrapFunction(this.getLinkColor));
-      graph.linkLabel(this.wrapFunction(this.getLinkLabel));
-
-      graph.linkDirectionalArrowColor(
-        this.wrapFunction(this.getLinkDirectionalArrowColor)
-      );
-      graph.linkDirectionalArrowLength(
-        this.wrapFunction(this.getLinkDirectionalArrowLength)
-      );
-      graph.linkDirectionalArrowRelPos(
-        this.wrapFunction(this.getLinkDirectionalArrowRelPos)
-      );
-      graph.linkDirectionalParticleColor(
-        this.wrapFunction(this.getLinkDirectionalParticleColor)
-      );
-      graph.linkDirectionalParticleSpeed(
-        this.wrapFunction(this.getLinkDirectionalParticleSpeed)
-      );
-      graph.linkDirectionalParticleWidth(
-        this.wrapFunction(this.getLinkDirectionalParticleWidth)
-      );
-      graph.linkDirectionalParticles(
-        this.wrapFunction(this.getLinkDirectionalParticles)
-      );
-
-      // node
-      graph.nodeColor(this.wrapFunction(this.getNodeColor));
-      graph.nodeLabel(this.wrapFunction(this.getNodeLabel));
-
-      // evented
-      graph.onNodeClick(this.wrapFunction(this.onNodeClick));
-
-      // (3d-)force-graph-specific
-      this.getOnRenderPostUpdate();
-
-      // forces
-      for (let f of this.getForceBehaviors()){
-        graph.d3Force(f.key, f.force)
-      }
-    } else {
+    if (!graph) {
       console.warn(`${EMOJI} no graph to postUpdate`);
+      return;
     }
+    // link
+    graph.linkColor(this.wrapFunction(this.getLinkColor));
+    graph.linkLabel(this.wrapFunction(this.getLinkLabel));
+
+    graph.linkDirectionalArrowColor(
+      this.wrapFunction(this.getLinkDirectionalArrowColor)
+    );
+    graph.linkDirectionalArrowLength(
+      this.wrapFunction(this.getLinkDirectionalArrowLength)
+    );
+    graph.linkDirectionalArrowRelPos(
+      this.wrapFunction(this.getLinkDirectionalArrowRelPos)
+    );
+    graph.linkDirectionalParticleColor(
+      this.wrapFunction(this.getLinkDirectionalParticleColor)
+    );
+    graph.linkDirectionalParticleSpeed(
+      this.wrapFunction(this.getLinkDirectionalParticleSpeed)
+    );
+    graph.linkDirectionalParticleWidth(
+      this.wrapFunction(this.getLinkDirectionalParticleWidth)
+    );
+    graph.linkDirectionalParticles(this.wrapFunction(this.getLinkDirectionalParticles));
+
+    // node
+    graph.nodeColor(this.wrapFunction(this.getNodeColor));
+    graph.nodeLabel(this.wrapFunction(this.getNodeLabel));
+
+    // evented
+    graph.onNodeClick(this.wrapFunction(this.onNodeClick));
+
+    // forces
+    // TODO wrapping simulation behavior
+    for (let force of this.getForceBehaviors()) {
+      console.log(force);
+      // if (force.enabled) {
+      //   graph.d3Force(force.key, this.wrapFunction(force.force));
+      // } else {
+      //   graph.d3Force(force.key, null);
+      // }
+    }
+
+    // finally, (3d-)force-graph-specific after all other behaviors
+    this.getOnRenderPostUpdate();
   }
 
   protected getOnRenderPostUpdate() {
@@ -523,13 +524,13 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
     }
   };
 
-  protected* getForceBehaviors(): Generator<ForceBehaviorModel>{
+  protected *getForceBehaviors(): Generator<ForceBehaviorModel> {
     const { behaviors } = this.model;
-    for (let behavior of behaviors){
-      if (behavior instanceof ForceBehaviorModel){
-        yield behavior
+    for (let behavior of behaviors) {
+      if (behavior instanceof ForceBehaviorModel) {
+        yield behavior;
       }
     }
-    return
+    return;
   }
 }

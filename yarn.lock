@@ -1150,6 +1150,11 @@
     "@types/jquery" "*"
     "@types/underscore" "*"
 
+"@types/d3-force@^3.0.4":
+  version "3.0.4"
+  resolved "https://registry.npmjs.org/@types/d3-force/-/d3-force-3.0.4.tgz#2d50bd2b695f709797e1745644f6bc123e6e5f5a"
+  integrity sha512-q7xbVLrWcXvSBBEoadowIUJ7sRpS1yvgMWnzHJggFy5cUZBq2HZL5k/pBSm0GdYWS1vs5/EDwMjSKF55PDY4Aw==
+
 "@types/dom4@^2.0.1":
   version "2.0.2"
   resolved "https://registry.npmjs.org/@types/dom4/-/dom4-2.0.2.tgz#6495303f049689ce936ed328a3e5ede9c51408ee"
