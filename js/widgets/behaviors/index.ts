@@ -13,6 +13,7 @@ export * from './link-directional-particle-speed';
 export * from './link-directional-particle-width';
 export * from './link-directional-particles';
 export * from './link-label';
+export * from './graph-data';
 export * from './graph-image';
 export * from './node-color';
 export * from './node-label';

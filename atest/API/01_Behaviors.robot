@@ -18,26 +18,34 @@ ${SCREENS}      ${SCREENS ROOT}${/}api
 
 *** Test Cases ***
 2D Node Select
-    [Setup]    Set Up Behavior Example    NodeSelection    ForceGraph
+    [Setup]    Set Up Behavior Example    NodeSelection    ${IPYFORCGRAPH CLASS}
     Click IPyForceGraph Canvas
     Wait Until Tag Widget Exists    hello world
     Remove Widget Tag
     Wait Until No Tag Widgets Exist
 
 2D Node Labels
-    [Setup]    Set Up Behavior Example    NodeLabels    ForceGraph
+    [Setup]    Set Up Behavior Example    NodeLabels    ${IPYFORCGRAPH CLASS}
     Click IPyForceGraph Canvas    text=hello world
 
 3D Node Select
-    [Setup]    Set Up Behavior Example    NodeSelection    ForceGraph3D
+    [Setup]    Set Up Behavior Example    NodeSelection    ${IPYFORCGRAPH CLASS 3D}
     Click IPyForceGraph Canvas
     Wait Until Tag Widget Exists    hello world
     Remove Widget Tag
     Wait Until No Tag Widgets Exist
 
 3D Node Labels
-    [Setup]    Set Up Behavior Example    NodeLabels    ForceGraph3D
+    [Setup]    Set Up Behavior Example    NodeLabels    ${IPYFORCGRAPH CLASS 3D}
     Click IPyForceGraph Canvas    text=hello world
+
+2D Graph Data
+    [Setup]    Set Up Behavior Example    GraphData    ${IPYFORCGRAPH CLASS}
+    Page Should Not Contain Standard Errors    01-no-errors.png
+
+3D Graph Data
+    [Setup]    Set Up Behavior Example    GraphData    ${IPYFORCGRAPH CLASS 3D}
+    Page Should Not Contain Standard Errors    01-no-errors.png
 
 
 *** Keywords ***

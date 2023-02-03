@@ -14,14 +14,14 @@ import {
   WIDGET_DEFAULTS,
   emptyArray,
 } from '../../tokens';
-import { jsonToDataFrame } from '../serializers';
+import { dataframe_serialization } from '../serializers';
 
 export class DataFrameSourceModel extends WidgetModel {
   static model_name = 'DataFrameSourceModel';
   static serializers = {
     ...WidgetModel.serializers,
-    nodes: { deserialize: jsonToDataFrame },
-    links: { deserialize: jsonToDataFrame },
+    nodes: dataframe_serialization,
+    links: dataframe_serialization,
   };
 
   protected _dataUpdated: Signal<DataFrameSourceModel, void> = new Signal(this);
@@ -83,6 +83,58 @@ export class DataFrameSourceModel extends WidgetModel {
   set graphData(graphData: GraphData) {
     this._graphData = graphData;
     this._dataUpdated.emit(void 0);
+  }
+
+  setFromGraphData(graphData: GraphData) {
+    const { nodes, links } = graphData;
+
+    let nodeCount = nodes.length;
+    let linkCount = links.length;
+
+    let nodeRecords: Record<string, any[]> = {};
+    let linkRecords: Record<string, any[]> = {};
+
+    let i: number;
+    let colName: string;
+    let col: any[];
+    let value: any;
+
+    const { nodeIdColumn, linkSourceColumn, linkTargetColumn } = this;
+
+    if (nodeCount) {
+      for (colName of Object.keys(nodes[0])) {
+        col = nodeRecords[colName] = new Array(nodeCount);
+        i = 0;
+        while (i < nodeCount) {
+          col[i] = nodes[i][colName];
+          i++;
+        }
+      }
+    }
+
+    if (linkCount) {
+      for (colName of Object.keys(links[0])) {
+        col = linkRecords[colName] = new Array(nodeCount);
+        i = 0;
+        while (i < linkCount) {
+          value = links[i][colName];
+
+          switch (colName) {
+            case linkTargetColumn:
+            case linkSourceColumn:
+              value = value[nodeIdColumn];
+              break;
+            default:
+              break;
+          }
+
+          col[i] = value;
+          i++;
+        }
+      }
+    }
+
+    this.set({ nodes: nodeRecords, links: linkRecords });
   }
 
   protected graphUpdate() {

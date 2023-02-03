@@ -9,10 +9,13 @@ import ipywidgets as W
 import traitlets as T
 
 from ._base import Behavior
+from .sources.dataframe import DataFrameSource
 
 
 @W.register
 class GraphImage(Behavior):
+    """Captures multiple subsequent frames of a canvas, each as an Image."""
+
     _model_name: str = T.Unicode("GraphImageModel").tag(sync=True)
 
     capturing = T.Bool(False, help="Whether the frame capture is currently active").tag(
@@ -45,6 +48,42 @@ class GraphImage(Behavior):
             frame.close()
 
         self.frames = self._get_frames()
+
+
+@W.register
+class GraphData(Behavior):
+    """Captures multiple subsequent frames of a canvas, each as an DataFrameSource."""
+
+    _model_name: str = T.Unicode("GraphDataModel").tag(sync=True)
+
+    capturing: bool = T.Bool(
+        False, help="Whether the dataframe capture is currently active"
+    ).tag(sync=True)
+
+    source_count = T.Int(1, help="The number of sources to capture").tag(sync=True)
+
+    sources: Tuple[DataFrameSource, ...] = W.TypedTuple(
+        T.Instance(DataFrameSource),
+        help="A tuple of `DataFrameSource`s to be populated with data of the graph.",
+    ).tag(sync=True, **W.widget_serialization)
+
+    def _get_sources(self) -> Tuple[DataFrameSource, ...]:
+        return tuple([DataFrameSource() for i in range(self.source_count)])
+
+    @T.default("sources")
+    def _default_sources(self) -> Tuple[DataFrameSource, ...]:
+        return self._get_sources()
+
+    @T.observe("source_count")
+    def _on_source_count(self, change: T.Bunch) -> None:
+        sources = self.sources
+
+        self.sources = tuple()
+
+        for source in sources:
+            source.close()
+
+        self.sources = self._get_sources()
 
 
 @W.register
