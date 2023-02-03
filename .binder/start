@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 set -e
 source activate $NB_PYTHON_PREFIX
-exec jupyter-lab --collaborative "${@:4}"
+exec jupyter-lab --collaborative --expose-app-in-browser "${@:4}"

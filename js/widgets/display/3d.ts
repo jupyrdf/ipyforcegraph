@@ -38,9 +38,9 @@ export class ForceGraph3DView extends ForceGraphView<
   protected async getJsUrl(): Promise<string> {
     return (
       await import(
-        '!!file-loader!../../../node_modules/3d-force-graph/dist/3d-force-graph.min.js'
+        '!!file-loader!../../../node_modules/3d-force-graph/dist/3d-force-graph.js'
       )
-    ).default;
+    ).default as any;
   }
 
   protected get threeRenderer(): WebGLRenderer {

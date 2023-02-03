@@ -232,9 +232,9 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
   protected async getJsUrl(): Promise<string> {
     return (
       await import(
-        '!!file-loader!../../../node_modules/force-graph/dist/force-graph.min.js'
+        '!!file-loader!../../../node_modules/force-graph/dist/force-graph.js'
       )
-    ).default;
+    ).default as any;
   }
 
   protected get graphJsClass(): string {
