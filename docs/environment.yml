@@ -13,7 +13,6 @@ dependencies:
   - jupyterlab >=3,<4
   - jupyterlab-deck
   - jupyterlab-myst
-  - jupyterlab-webrtc-docprovider
   - myst-nb
   - networkx
   - nodejs >=18,<19

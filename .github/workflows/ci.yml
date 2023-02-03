@@ -14,7 +14,7 @@ env:
   CONDA_EXE: mamba
   # our stuff
   SKIP_CONDA_PREFLIGHT: 1
-  CACHE_EPOCH: 2
+  CACHE_EPOCH: 3
 
 jobs:
   build:
@@ -163,7 +163,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu, macos, windows]
-        py: ['3.8', '3.11']
+        py: ['py3.8', 'py3.11']
         include:
           - os: ubuntu
             subdir: linux-64
@@ -171,15 +171,18 @@ jobs:
             subdir: osx-64
           - os: windows
             subdir: win-64
-          - py: '3.8'
+          - py: 'py3.8'
             artifact: sdist
-          - py: '3.11'
+            lab: 'lab3.5'
+          - py: 'py3.11'
             artifact: wheel
+            lab: 'lab3.6'
     env:
       INSTALL_ARTIFACT: ${{ matrix.artifact }}
       TESTING_IN_CI: 'true'
       ATEST_RETRIES: '2'
       IPYFORCEGRAPH_PY: ${{ matrix.py }}
+      IPYFORCEGRAPH_LAB: ${{ matrix.lab }}
     steps:
       - name: install apt dependencies (linux)
         if: ${{ contains(matrix.os, 'ubuntu') }}
@@ -262,7 +265,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: |-
-            ipyforcegraph-${{ github.run_number }}-${{ job.status }}-reports-${{ matrix.os }}-${{ matrix.py }}
+            ipyforcegraph-${{ github.run_number }}-${{ job.status }}-reports-${{ matrix.os }}-${{ matrix.py }}-${{ matrix.lab }}
           path: |
             ./build/robot
             ./build/htmcov
