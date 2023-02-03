@@ -11,7 +11,8 @@
 
 ### `@jupyrdf/jupyter-forcegraph 0.2.0`
 
-- TBD
+- implements bidirectional serialization of `zstd`-compressed dataframes
+- updates TypeScript `target` to `es2018`
 
 ## `0.1.0`
 
