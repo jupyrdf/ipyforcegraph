@@ -7,7 +7,7 @@ from typing import Dict, Set, Type
 import ipywidgets as W
 import pytest
 
-from ipyforcegraph import behaviors, forcegraph
+from ipyforcegraph import behaviors, forcegraph, forces
 from ipyforcegraph._base import ForceBase
 
 TSubclassSet = Set[Type[W.Widget]]
@@ -18,6 +18,7 @@ TSubclassData = Dict[Type[W.Widget], str]
 def widget_subclasses() -> TSubclassSet:
     assert behaviors
     assert forcegraph
+    assert forces
 
     subclasses = set([ForceBase])
     subclass_count = -1
