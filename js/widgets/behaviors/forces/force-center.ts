@@ -4,18 +4,18 @@
  */
 import { forceCenter as d3ForceCenter } from 'd3-force-3d';
 
-import { IBehave } from '../../../tokens';
+import { IBehave, IForce } from '../../../tokens';
 
 import { ForceBehaviorModel } from './force';
 
-export class CenterForce extends ForceBehaviorModel implements IBehave {
+export class CenterForceModel extends ForceBehaviorModel implements IBehave, IForce {
   static model_name = 'CenterForceModel';
-  static force_factory: d3ForceCenter;
+  forceFactory: d3ForceCenter = d3ForceCenter;
 
   defaults() {
     return {
       ...super.defaults(),
-      _model_name: CenterForce.model_name,
+      _model_name: CenterForceModel.model_name,
       x: null,
       y: null,
       z: null,

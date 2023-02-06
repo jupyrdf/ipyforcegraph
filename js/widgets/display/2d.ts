@@ -44,7 +44,7 @@ import {
   WIDGET_DEFAULTS,
   emptyArray,
 } from '../../tokens';
-import { ForceBehaviorModel } from '../behaviors';
+import { ForceBehaviorModel, GraphForcesBehaviorModel } from '../behaviors';
 
 export class ForceGraphModel extends DOMWidgetModel {
   static model_name = 'ForceGraphModel';
@@ -348,13 +348,12 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
 
     // forces
     // TODO wrapping simulation behavior
-    for (let force of this.getForceBehaviors()) {
-      console.log(force);
-      // if (force.enabled) {
-      //   graph.d3Force(force.key, this.wrapFunction(force.force));
-      // } else {
-      //   graph.d3Force(force.key, null);
-      // }
+    for (let simBehavior of this.getGraphForcesBehaviors()) {
+      for (let key in simBehavior.forces) {
+        let behavior: ForceBehaviorModel | null = simBehavior.forces[key];
+        let force = behavior?.force || null
+        graph.d3Force(key, force);
+      }
     }
 
     // finally, (3d-)force-graph-specific after all other behaviors
@@ -541,10 +540,10 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
     }
   };
 
-  protected *getForceBehaviors(): Generator<ForceBehaviorModel> {
+  protected *getGraphForcesBehaviors(): Generator<GraphForcesBehaviorModel> {
     const { behaviors } = this.model;
     for (let behavior of behaviors) {
-      if (behavior instanceof ForceBehaviorModel) {
+      if (behavior instanceof GraphForcesBehaviorModel) {
         yield behavior;
       }
     }

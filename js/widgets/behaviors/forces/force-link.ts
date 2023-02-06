@@ -8,10 +8,11 @@ import { forceLink as d3ForceLink } from 'd3-force-3d';
 import { IBehave } from '../../../tokens';
 
 import { ForceBehaviorModel } from './force';
+import { IForce } from "../../../tokens";
 
-export class LinkForceModel extends ForceBehaviorModel implements IBehave {
+export class LinkForceModel extends ForceBehaviorModel implements IBehave, IForce {
   static model_name = 'LinkForceModel';
-  static force_factory: d3ForceLink;
+  forceFactory:d3ForceLink = d3ForceLink;
 
   defaults() {
     return {

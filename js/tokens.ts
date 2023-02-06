@@ -9,6 +9,8 @@ import type { ISignal } from '@lumino/signaling';
 
 import type { DOMWidgetView } from '@jupyter-widgets/base';
 
+import type d3Force from 'd3-force';
+
 import PKG from '../package.json';
 
 export const NAME = PKG.name;
@@ -118,6 +120,11 @@ export interface IHasGraph<T = any> extends DOMWidgetView {
 export interface ISource {
   graphData: GraphData;
   dataUpdated: ISignal<ISource, void>;
+}
+
+export type TAnyForce = d3Force.Force<any, any>
+export interface IForce{
+  forceFactory(): TAnyForce
 }
 
 export const emptyArray = Object.freeze([]);

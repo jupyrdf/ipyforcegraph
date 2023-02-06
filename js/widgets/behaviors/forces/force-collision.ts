@@ -4,19 +4,18 @@
  */
 import { forceCollide as d3ForceCollision } from 'd3-force-3d';
 
-import { IBehave } from '../../../tokens';
+import { IBehave, IForce } from '../../../tokens';
 
 import { ForceBehaviorModel } from './force';
 
-export class CollisionForce extends ForceBehaviorModel implements IBehave {
+export class CollisionForceModel extends ForceBehaviorModel implements IBehave, IForce {
   static model_name = 'CollisionForceModel';
-  static force: d3ForceCollision;
+  forceFactory: d3ForceCollision = d3ForceCollision;
 
   defaults() {
     return {
       ...super.defaults(),
-      _model_name: CollisionForce.model_name,
-      force: d3ForceCollision(),
+      _model_name: CollisionForceModel.model_name,
     };
   }
 }

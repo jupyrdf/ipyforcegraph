@@ -74,7 +74,7 @@ class CenterForce(BaseD3Force):
 
 @W.register
 class ManyBodyForce(BaseD3Force):
-    _model_name: str = T.Unicode("ManyBodyForce").tag(sync=True)
+    _model_name: str = T.Unicode("ManyBodyForceModel").tag(sync=True)
     key: str = T.Unicode("charge").tag(sync=True)
 
 @W.register

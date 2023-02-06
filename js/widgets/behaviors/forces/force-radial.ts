@@ -4,19 +4,18 @@
  */
 import { forceRadial as d3ForceRadial } from 'd3-force-3d';
 
-import { IBehave } from '../../../tokens';
+import { IBehave, IForce } from '../../../tokens';
 
 import { ForceBehaviorModel } from './force';
 
-export class RadialForce extends ForceBehaviorModel implements IBehave {
+export class RadialForceModel extends ForceBehaviorModel implements IBehave, IForce {
   static model_name = 'RadialForceModel';
-  static force: d3ForceRadial;
+  forceFactory: d3ForceRadial = d3ForceRadial;
 
   defaults() {
     return {
       ...super.defaults(),
-      _model_name: RadialForce.model_name,
-      force: d3ForceRadial(),
+      _model_name: RadialForceModel.model_name,
     };
   }
 }

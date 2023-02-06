@@ -4,19 +4,18 @@
  */
 import { forceManyBody as d3ForceManyBody } from 'd3-force-3d';
 
-import { IBehave } from '../../../tokens';
+import { IBehave, IForce } from '../../../tokens';
 
 import { ForceBehaviorModel } from './force';
 
-export class ManyBodyForce extends ForceBehaviorModel implements IBehave {
+export class ManyBodyForceModel extends ForceBehaviorModel implements IBehave, IForce {
   static model_name = 'ManyBodyForceModel';
-  static force: d3ForceManyBody;
+  forceFactory:d3ForceManyBody = d3ForceManyBody;
 
   defaults() {
     return {
       ...super.defaults(),
-      _model_name: ManyBodyForce.model_name,
-      force: d3ForceManyBody(),
+      _model_name: ManyBodyForceModel.model_name,
     };
   }
 }

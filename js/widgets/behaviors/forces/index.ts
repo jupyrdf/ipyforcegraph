@@ -6,4 +6,5 @@ export * from './force-center';
 export * from './force-collision';
 export * from './force-radial';
 export * from './force-manybody';
+export * from './force-link';
 export * from './force';
