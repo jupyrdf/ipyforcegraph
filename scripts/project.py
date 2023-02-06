@@ -56,7 +56,8 @@ INSTALL_ARTIFACT = os.environ.get("INSTALL_ARTIFACT")
 UTEST_PROCESSES = os.environ.get(
     "UTEST_PROCESSES", os.environ.get("ATEST_PROCESSES", "")
 )
-IPYFORCEGRAPH_PY = os.environ.get("IPYFORCEGRAPH", "3.11")
+IPYFORCEGRAPH_PY = os.environ.get("IPYFORCEGRAPH_PY", "py3.11")
+IPYFORCEGRAPH_LAB = os.environ.get("IPYFORCEGRAPH_LAB", "lab3.6")
 
 # find root
 SCRIPTS = Path(__file__).parent.resolve()
@@ -107,19 +108,27 @@ LITE_CONFIG = LITE / "jupyter_lite_config.json"
 ENV_SPECS = GH / "env_specs"
 LOCK_ENV_YAML = GH / "lock-environment.yml"
 PY_SPECS = sorted(ENV_SPECS.glob("py/*.yml"))
+LAB_SPECS = sorted(ENV_SPECS.glob("lab/*.yml"))
 SUBDIR_SPECS = sorted(ENV_SPECS.glob("subdir/*.yml"))
 SUBDIR_LOCK_SPECS = sorted(ENV_SPECS.glob("subdir-lock/*.yml"))
 ENV_MATRIX = [
-    *itertools.product(SUBDIR_SPECS, PY_SPECS, [BINDER_ENV_YAML]),
+    *itertools.product(SUBDIR_SPECS, PY_SPECS, LAB_SPECS, [BINDER_ENV_YAML]),
     *itertools.product(SUBDIR_LOCK_SPECS, [LOCK_ENV_YAML]),
 ]
 EXPLICIT = "@EXPLICIT"
 LOCKS = GH / "locks"
 PIP_BUILD_ENV = GH / "requirements-build.txt"
-LOCKFILE = LOCKS / f"{THIS_SUBDIR}_{IPYFORCEGRAPH_PY}_environment.conda.lock"
+LOCKFILE = (
+    LOCKS
+    / f"{THIS_SUBDIR}_{IPYFORCEGRAPH_PY}_{IPYFORCEGRAPH_LAB}_environment.conda.lock"
+)
 LOCK_LOCKFILE = LOCKS / f"{THIS_SUBDIR}_lock-environment.conda.lock"
 USE_LOCK_ENV = not (BUILDING_IN_CI or IN_RTD or IN_BINDER)
-ENV = Path(sys.prefix) if IN_RTD or IN_BINDER else ROOT / f"envs/py_{IPYFORCEGRAPH_PY}"
+ENV = (
+    Path(sys.prefix)
+    if IN_RTD or IN_BINDER
+    else ROOT / f"envs/{IPYFORCEGRAPH_PY}_{IPYFORCEGRAPH_LAB}"
+)
 LOCK_ENV = ROOT / "envs/lock"
 
 CONDA_RUN = ["conda", "run", "--live-stream", "--prefix"]
@@ -216,6 +225,7 @@ OK_PREFLIGHT_KERNEL = BUILD / "preflight.kernel.ok"
 OK_PREFLIGHT_LAB = BUILD / "preflight.lab.ok"
 OK_PREFLIGHT_RELEASE = BUILD / "preflight.release.ok"
 OK_BLACK = BUILD / "black.ok"
+OK_PYPROJ_FMT = BUILD / "pyproject.ok"
 OK_ROBOT_LINT = BUILD / "robot.lint.ok"
 OK_LINT = BUILD / "lint.ok"
 OK_PYFLAKES = BUILD / "pyflakes.ok"

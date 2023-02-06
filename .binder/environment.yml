@@ -12,6 +12,7 @@ dependencies:
   - keyring
   - mypy
   - pyflakes
+  - pyproject-fmt
   - pytest-asyncio
   - pytest-check-links
   - pytest-cov
@@ -36,7 +37,6 @@ dependencies:
   - jupyterlab >=3,<4
   - jupyterlab-deck
   - jupyterlab-myst
-  - jupyterlab-webrtc-docprovider
   - myst-nb
   - networkx
   - nodejs >=18,<19
