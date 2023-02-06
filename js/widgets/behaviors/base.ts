@@ -14,18 +14,19 @@ import {
   IHasGraph,
   ILinkBehaveOptions,
   INodeBehaveOptions,
+  TUpdateKind,
   WIDGET_DEFAULTS,
 } from '../../tokens';
 
 export class BehaviorModel extends WidgetModel implements IBehave {
-  protected _updateRequested: Signal<IBehave, void>;
+  protected _updateRequested: Signal<IBehave, TUpdateKind>;
 
   initialize(attributes: Backbone.ObjectHash, options: IBackboneModelOptions) {
     super.initialize(attributes, options);
     this._updateRequested = new Signal(this);
   }
 
-  get updateRequested(): ISignal<IBehave, void> {
+  get updateRequested(): ISignal<IBehave, TUpdateKind> {
     return this._updateRequested;
   }
 }

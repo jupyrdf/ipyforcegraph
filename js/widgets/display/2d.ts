@@ -30,6 +30,7 @@ import {
   DEFAULT_COLORS,
   EMOJI,
   EMPTY_GRAPH_DATA,
+  EUpdate,
   IBehave,
   IHasGraph,
   ILinkBehaveOptions,
@@ -41,6 +42,7 @@ import {
   TLinkMethodMap,
   TNodeBehaveMethod,
   TNodeMethodMap,
+  TUpdateKind,
   WIDGET_DEFAULTS,
   emptyArray,
 } from '../../tokens';
@@ -312,7 +314,7 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
     }
   }
 
-  protected async postUpdate(): Promise<void> {
+  protected async postUpdate(caller?: any, kind?: TUpdateKind): Promise<void> {
     await this.rendered;
     const graph = this.graph as ForceGraphInstance;
     if (!graph) {
@@ -355,13 +357,17 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
     for (let simBehavior of this.getGraphForcesBehaviors()) {
       for (let key in simBehavior.forces) {
         let behavior: ForceBehaviorModel | null = simBehavior.forces[key];
-        let force = behavior?.force || null
+        let force = behavior?.force || null;
         graph.d3Force(key, force);
       }
     }
 
     // finally, (3d-)force-graph-specific after all other behaviors
     this.getOnRenderPostUpdate();
+
+    if (kind && EUpdate.Reheat === (kind & EUpdate.Reheat)) {
+      graph.d3ReheatSimulation();
+    }
   }
 
   protected getOnRenderPostUpdate() {

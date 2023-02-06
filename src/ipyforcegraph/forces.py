@@ -38,7 +38,7 @@ class GraphForcesBehavior(Behavior):
 
 @W.register
 class LinkForce(BaseD3Force):
-    """TODO
+    """This Link Force is between two nodes that share an edge.
 
     https://github.com/d3/d3-force#links
     """
@@ -66,29 +66,64 @@ class LinkForce(BaseD3Force):
 class CenterForce(BaseD3Force):
     _model_name: str = T.Unicode("CenterForceModel").tag(sync=True)
     key: str = T.Unicode("center").tag(sync=True)
-    x: Optional[int] = T.Int(
+    x: Optional[int] = T.Float(
+        None,
+        allow_none=True,
+        help="sets the x-coordinate of the centering position to the specified number and returns this force."
+    ).tag(sync=True)
+    y: Optional[int] = T.Float(
+        None,
+        allow_none=True,
+        help="sets the y-coordinate of the centering position to the specified number and returns this force."
+    ).tag(sync=True)
+    z: Optional[int] = T.Float(
+        None,
+        allow_none=True,
+        help="sets the z-coordinate of the centering position to the specified number and returns this force."
+    ).tag(sync=True)
+
+@W.register
+class XForce(BaseD3Force):
+    _model_name: str = T.Unicode("XForceModel").tag(sync=True)
+    x: Optional[int] = T.Float(
         None,
         allow_none=True,
         help="sets the x-coordinate of the centering position to the specified number and returns this force."
     ).tag(sync=True)
 
+
+@W.register
+class YForce(BaseD3Force):
+    _model_name: str = T.Unicode("YForceModel").tag(sync=True)
+    y: Optional[int] = T.Float(
+        None,
+        allow_none=True,
+        help="sets the y-coordinate of the centering position to the specified number and returns this force."
+    ).tag(sync=True)
+
+
+@W.register
+class ZForce(BaseD3Force):
+    _model_name: str = T.Unicode("ZForceModel").tag(sync=True)
+    z: Optional[int] = T.Float(
+        None,
+        allow_none=True,
+        help="sets the z-coordinate of the centering position to the specified number and returns this force."
+    ).tag(sync=True)
+
 @W.register
 class ManyBodyForce(BaseD3Force):
     _model_name: str = T.Unicode("ManyBodyForceModel").tag(sync=True)
-    key: str = T.Unicode("charge").tag(sync=True)
 
 @W.register
 class RadialForce(BaseD3Force):
     """[](https://github.com/d3/d3-force#collision)"""
     _model_name: str = T.Unicode("RadialForceModel").tag(sync=True)
-    key: str = T.Unicode("radial").tag(sync=True)
 
 @W.register
 class CollisionForce(BaseD3Force):
     """[](https://github.com/d3/d3-force#collision)"""
     _model_name: str = T.Unicode("CollisionForceModel").tag(sync=True)
-    key: str = T.Unicode("collide").tag(sync=True)
-
     radius: Optional[str] = T.Unicode(
         None,
         allow_none=True,

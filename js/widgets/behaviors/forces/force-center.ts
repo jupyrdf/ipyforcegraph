@@ -4,13 +4,12 @@
  */
 import { forceCenter as d3ForceCenter } from 'd3-force-3d';
 
-import { IBehave, IForce } from '../../../tokens';
+import { IBehave, IForce, TAnyForce } from '../../../tokens';
 
 import { ForceBehaviorModel } from './force';
 
 export class CenterForceModel extends ForceBehaviorModel implements IBehave, IForce {
   static model_name = 'CenterForceModel';
-  forceFactory: d3ForceCenter = d3ForceCenter;
 
   defaults() {
     return {
@@ -20,5 +19,30 @@ export class CenterForceModel extends ForceBehaviorModel implements IBehave, IFo
       y: null,
       z: null,
     };
+  }
+  get triggerChanges(): string {
+    return 'change:x change:y change:z';
+  }
+
+  get force(): TAnyForce {
+    const { x, y, z } = this;
+
+    let force = d3ForceCenter();
+    force = x == null ? force : force.x(x);
+    force = y == null ? force : force.y(y);
+    force = z == null ? force : force.z(z);
+    return force;
+  }
+
+  get x() {
+    return this.get('x');
+  }
+
+  get y() {
+    return this.get('y');
+  }
+
+  get z() {
+    return this.get('z');
   }
 }

@@ -10,7 +10,7 @@ import { ForceBehaviorModel } from './force';
 
 export class ManyBodyForceModel extends ForceBehaviorModel implements IBehave, IForce {
   static model_name = 'ManyBodyForceModel';
-  forceFactory:d3ForceManyBody = d3ForceManyBody;
+  forceFactory: d3ForceManyBody = d3ForceManyBody;
 
   defaults() {
     return {

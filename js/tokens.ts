@@ -2,14 +2,13 @@
  * Copyright (c) 2023 ipyforcegraph contributors.
  * Distributed under the terms of the Modified BSD License.
  */
+import type d3Force from 'd3-force';
 import type { GraphData, LinkObject, NodeObject } from 'force-graph';
 import type { WebGLRenderer } from 'three';
 
 import type { ISignal } from '@lumino/signaling';
 
 import type { DOMWidgetView } from '@jupyter-widgets/base';
-
-import type d3Force from 'd3-force';
 
 import PKG from '../package.json';
 
@@ -47,8 +46,17 @@ export const WIDGET_DEFAULTS = {
   _view_module_version: VERSION,
 };
 
+//  Using bit flags for the TUpdateKind number
+export enum EUpdate {
+  Unknown = 0,
+  Reheat = 1 << 0,
+  Cosmetic = 1 << 1,
+  Render = 1 << 2,
+}
+export type TUpdateKind = void | number;
+
 export interface IBehave {
-  updateRequested: ISignal<IBehave, void>;
+  updateRequested: ISignal<IBehave, TUpdateKind>;
   // link
   getLinkColor?(options: ILinkBehaveOptions): string | null;
   getLinkLabel?(options: ILinkBehaveOptions): string | null;
@@ -122,9 +130,9 @@ export interface ISource {
   dataUpdated: ISignal<ISource, void>;
 }
 
-export type TAnyForce = d3Force.Force<any, any>
-export interface IForce{
-  forceFactory(): TAnyForce
+export type TAnyForce = d3Force.Force<any, any>;
+export interface IForce {
+  forceFactory(): TAnyForce;
 }
 
 export const emptyArray = Object.freeze([]);

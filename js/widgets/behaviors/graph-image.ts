@@ -9,7 +9,7 @@ import {
 } from '@jupyter-widgets/base';
 import { ImageModel } from '@jupyter-widgets/controls';
 
-import { EMOJI, IBehave, IRenderOptions, WIDGET_DEFAULTS } from '../../tokens';
+import { EMOJI, EUpdate, IBehave, IRenderOptions, WIDGET_DEFAULTS } from '../../tokens';
 
 import { BehaviorModel } from './base';
 
@@ -53,6 +53,9 @@ export class GraphImageModel extends BehaviorModel implements IBehave {
 
   protected onCapturingChanged(e?: any): void {
     this._framesToCapture = this.capturing ? this.frameCount : 0;
+    if (this._framesToCapture) {
+      this._updateRequested.emit(EUpdate.Render);
+    }
   }
 
   onRender(options: IRenderOptions): void {

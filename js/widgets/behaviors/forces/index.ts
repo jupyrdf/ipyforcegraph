@@ -3,6 +3,9 @@
  * Distributed under the terms of the Modified BSD License.
  */
 export * from './force-center';
+export * from './force-x';
+export * from './force-y';
+export * from './force-z';
 export * from './force-collision';
 export * from './force-radial';
 export * from './force-manybody';
