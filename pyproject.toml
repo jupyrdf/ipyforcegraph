@@ -1,15 +1,18 @@
 [build-system]
-requires = ["flit_core >=3.7.1,<4"]
 build-backend = "flit_core.buildapi"
+requires = [
+  "flit_core<4,>=3.7.1",
+]
 
 [project]
 name = "ipyforcegraph"
 version = "0.2.0"
 description = "2D and 3D force-directed graph widgets for Jupyter"
+readme = "README.md"
 authors = [
     {name = "ipyforcegraph contributors", email = "jupyrdf@users.noreply.github.com"},
 ]
-readme = "README.md"
+requires-python = ">=3.8"
 classifiers = [
     "Framework :: Jupyter :: JupyterLab :: 3",
     "Framework :: Jupyter :: JupyterLab :: Extensions :: Prebuilt",
@@ -26,19 +29,18 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
 ]
-requires-python = ">=3.8"
 dependencies = [
-    "ipywidgets >=8.0.4,<9",
-    "numcodecs",
-    "traittypes",
-    "pandas",
+  "ipywidgets<9,>=8.0.4",
+  "numcodecs",
+  "pandas",
+  "traittypes",
 ]
-
 [project.urls]
 "Bug Tracker" = "https://github.com/jupyrdf/ipyforcegraph/issues"
 "Changelog" = "https://github.com/jupyrdf/ipyforcegraph/blob/main/CHANGELOG.md"
 "Documentation" = "https://ipyforcegraph.rtfd.io"
 "Source" = "https://github.com/jupyrdf/ipyforcegraph"
+
 
 [tool.flit.sdist]
 include = ["src/_d"]

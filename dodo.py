@@ -564,6 +564,15 @@ def task_lint():
 
     yield _ok(
         dict(
+            name="pyproject",
+            file_dep=[P.PY_PROJ, P.HISTORY],
+            actions=[[*P.IN_ENV, "pyproject-fmt", P.PY_PROJ]],
+        ),
+        P.OK_PYPROJ_FMT,
+    )
+
+    yield _ok(
+        dict(
             name="black",
             file_dep=[*P.ALL_PY, P.HISTORY],
             actions=[
@@ -678,10 +687,11 @@ def task_lint():
             actions=[_echo_ok("all ok")],
             file_dep=[
                 P.OK_BLACK,
+                P.OK_INDEX,
                 P.OK_PRETTIER,
                 P.OK_PYFLAKES,
+                P.OK_PYPROJ_FMT,
                 P.OK_ROBOT_LINT,
-                P.OK_INDEX,
             ],
         ),
         P.OK_LINT,

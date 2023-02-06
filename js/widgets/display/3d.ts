@@ -35,9 +35,12 @@ export class ForceGraph3DView extends ForceGraphView<
     return 'ForceGraph3D';
   }
 
-  protected async getJsUrl() {
-    return (await import('!!file-loader!3d-force-graph/dist/3d-force-graph.js'))
-      .default;
+  protected async getJsUrl(): Promise<string> {
+    return (
+      await import(
+        '!!file-loader!../../../node_modules/3d-force-graph/dist/3d-force-graph.js'
+      )
+    ).default as any;
   }
 
   protected get threeRenderer(): WebGLRenderer {

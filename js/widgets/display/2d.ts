@@ -230,8 +230,12 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
     graph.height(contentWindow.innerHeight);
   };
 
-  protected async getJsUrl() {
-    return (await import('!!file-loader!force-graph/dist/force-graph.js')).default;
+  protected async getJsUrl(): Promise<string> {
+    return (
+      await import(
+        '!!file-loader!../../../node_modules/force-graph/dist/force-graph.js'
+      )
+    ).default as any;
   }
 
   protected get graphJsClass(): string {
