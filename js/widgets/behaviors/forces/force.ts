@@ -14,6 +14,7 @@ import { EUpdate, IForce, TAnyForce } from '../../../tokens';
 import { LinkColumnOrTemplateModel } from '../base';
 
 export type TForceRecord = Record<string, ForceBehaviorModel | null>;
+
 export class ForceBehaviorModel extends LinkColumnOrTemplateModel implements IForce {
   static model_name = 'ForceBehaviorModel';
   _force: TAnyForce;
@@ -33,7 +34,6 @@ export class ForceBehaviorModel extends LinkColumnOrTemplateModel implements IFo
   }
 
   onChanged() {
-    console.log(this.triggerChanges, arguments);
     this._updateRequested.emit(void 0);
   }
 
@@ -63,12 +63,21 @@ export class GraphForcesBehaviorModel extends LinkColumnOrTemplateModel {
       ...super.defaults(),
       _model_name: GraphForcesBehaviorModel.model_name,
       forces: {},
+      warmup_ticks: 0,
+      cooldown_ticks: -1,
+      alpha_min: 0.0,
+      alpha_decay: 0.228,
+      velocity_decay: 0.4,
     };
   }
 
   initialize(attributes: ObjectHash, options: IBackboneModelOptions): void {
     super.initialize(attributes, options);
-    this.on('change:forces', this.onForcesChange, this);
+    this.on(
+      'change:forces change:cooldown_ticks change:warmup_ticks change:alpha_min change:alpha_decay change:velocity_decay',
+      this.onForcesChange,
+      this
+    );
     this.onForcesChange();
   }
 
@@ -99,5 +108,26 @@ export class GraphForcesBehaviorModel extends LinkColumnOrTemplateModel {
 
   protected onForceUpdated(change?: any) {
     this._updateRequested.emit(EUpdate.Reheat);
+  }
+
+  get warmupTicks(): number {
+    return this.get('warmup_ticks');
+  }
+
+  get cooldownTicks(): number {
+    const ticks = this.get('cooldown_ticks');
+    return ticks < 0 ? Infinity : ticks;
+  }
+
+  get alphaMin(): number {
+    return this.get('alpha_min');
+  }
+
+  get alphaDecay(): number {
+    return this.get('alpha_decay');
+  }
+
+  get velocityDecay(): number {
+    return this.get('velocity_decay');
   }
 }

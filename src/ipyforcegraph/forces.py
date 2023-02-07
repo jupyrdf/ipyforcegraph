@@ -4,7 +4,7 @@
 # Copyright (c) 2023 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.
 
-from typing import Optional
+from typing import Dict, Optional
 
 import ipywidgets as W
 import traitlets as T
@@ -33,10 +33,40 @@ class GraphForcesBehavior(Behavior):
     """
 
     _model_name: str = T.Unicode("GraphForcesBehaviorModel").tag(sync=True)
-    forces: dict = T.Dict(
+
+    forces: Dict[str, BaseD3Force] = T.Dict(
         value_trait=T.Instance(BaseD3Force, allow_none=True),
-        help="ForceGraph has `link`, `charge`, and `center`",
+        help="named forces. Set a name `None` to remove a force: By default, ForceGraph has `link`, `charge`, and `center`.",
     ).tag(sync=True, **W.widget_serialization)
+
+    warmup_ticks: Optional[int] = T.Int(
+        0,
+        min=0,
+        help="layout engine cycles to dry-run at ignition before starting to render.",
+    ).tag(sync=True)
+
+    cooldown_ticks: Optional[int] = T.Int(
+        -1,
+        help="frames to render before stopping and freezing the layout engine. Values less than zero will be translated to `Infinity`.",
+    ).tag(sync=True)
+
+    alpha_min: Optional[float] = T.Float(
+        0.0, min=0.0, max=1.0, help="simulation alpha min parameter"
+    ).tag(sync=True)
+
+    alpha_decay: Optional[float] = T.Float(
+        0.0228,
+        min=0.0,
+        max=1.0,
+        help="simulation intensity decay parameter",
+    ).tag(sync=True)
+
+    velocity_decay: Optional[float] = T.Float(
+        0.4,
+        min=0.0,
+        max=1.0,
+        help="nodes' velocity decay that simulates the medium resistance",
+    ).tag(sync=True)
 
 
 @W.register
@@ -83,11 +113,13 @@ class CenterForce(BaseD3Force):
         allow_none=True,
         help="sets the x-coordinate of the centering position to the specified number and returns this force.",
     ).tag(sync=True)
+
     y: Optional[float] = T.Float(
         None,
         allow_none=True,
         help="sets the y-coordinate of the centering position to the specified number and returns this force.",
     ).tag(sync=True)
+
     z: Optional[float] = T.Float(
         None,
         allow_none=True,
@@ -109,6 +141,7 @@ class XForce(BaseD3Force):
         allow_none=True,
         help="sets the x-coordinate of the centering position to the specified number and returns this force.",
     ).tag(sync=True)
+
     strength: Optional[str] = T.Unicode(
         None,
         allow_none=True,
@@ -125,11 +158,13 @@ class YForce(BaseD3Force):
     """
 
     _model_name: str = T.Unicode("YForceModel").tag(sync=True)
+
     y: Optional[int] = T.Float(
         None,
         allow_none=True,
         help="sets the y-coordinate of the centering position to the specified number and returns this force.",
     ).tag(sync=True)
+
     strength: Optional[str] = T.Unicode(
         None,
         allow_none=True,
@@ -146,11 +181,13 @@ class ZForce(BaseD3Force):
     """
 
     _model_name: str = T.Unicode("ZForceModel").tag(sync=True)
+
     z: Optional[int] = T.Float(
         None,
         allow_none=True,
         help="sets the z-coordinate of the centering position to the specified number and returns this force.",
     ).tag(sync=True)
+
     strength: Optional[str] = T.Unicode(
         None,
         allow_none=True,
@@ -176,16 +213,19 @@ class ManyBodyForce(BaseD3Force):
         allow_none=True,
         help="a nunjucks template to use to calculate strength. Context takes `node`",
     ).tag(sync=True)
+
     theta: Optional[float] = T.Float(
         None,
         allow_none=True,
         help="sets the Barnes–Hut approximation criterion to the specified number and returns this force.",
     ).tag(sync=True)
+
     distance_min: Optional[float] = T.Float(
         None,
         allow_none=True,
         help="sets the minimum distance between nodes over which this force is considered.",
     ).tag(sync=True)
+
     distance_max: Optional[float] = T.Float(
         None,
         allow_none=True,
@@ -212,16 +252,19 @@ class RadialForce(BaseD3Force):
         allow_none=True,
         help="a nunjucks template to use to calculate strength. Context takes `node`",
     ).tag(sync=True)
+
     x: Optional[float] = T.Float(
         None,
         allow_none=True,
         help="sets the x-coordinate of the centering position to the specified number and returns this force.",
     ).tag(sync=True)
+
     y: Optional[float] = T.Float(
         None,
         allow_none=True,
         help="sets the y-coordinate of the centering position to the specified number and returns this force.",
     ).tag(sync=True)
+
     z: Optional[float] = T.Float(
         None,
         allow_none=True,
@@ -242,11 +285,13 @@ class CollisionForce(BaseD3Force):
         allow_none=True,
         help="a nunjucks template to use to calculate node radius",
     ).tag(sync=True)
+
     strength: Optional[str] = T.Unicode(
         None,
         allow_none=True,
         help="a nunjucks template to use to calculate force strength",
     ).tag(sync=True)
+
     iterations: Optional[int] = T.Unicode(
         None,
         allow_none=True,

@@ -353,20 +353,32 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
     graph.onNodeClick(this.wrapFunction(this.onNodeClick));
 
     // forces
-    // TODO wrapping simulation behavior
-    for (let simBehavior of this.getGraphForcesBehaviors()) {
-      for (let key in simBehavior.forces) {
-        let behavior: ForceBehaviorModel | null = simBehavior.forces[key];
-        let force = behavior?.force || null;
-        graph.d3Force(key, force);
-      }
-    }
+    this.getForceUpdate();
 
     // finally, (3d-)force-graph-specific after all other behaviors
     this.getOnRenderPostUpdate();
 
     if (kind && EUpdate.Reheat === (kind & EUpdate.Reheat)) {
       graph.d3ReheatSimulation();
+    }
+  }
+
+  protected getForceUpdate() {
+    const graph = this.graph as ForceGraphInstance;
+    for (let simBehavior of this.getGraphForcesBehaviors()) {
+      const { warmupTicks, cooldownTicks, alphaDecay, alphaMin, velocityDecay } =
+        simBehavior;
+      graph.cooldownTicks(cooldownTicks);
+      graph.warmupTicks(warmupTicks);
+      graph.d3AlphaDecay(alphaDecay);
+      graph.d3AlphaMin(alphaMin);
+      graph.d3VelocityDecay(velocityDecay);
+
+      for (let key in simBehavior.forces) {
+        let behavior: ForceBehaviorModel | null = simBehavior.forces[key];
+        let force = behavior?.force || null;
+        graph.d3Force(key, force);
+      }
     }
   }
 
