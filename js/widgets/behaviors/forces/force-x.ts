@@ -10,6 +10,7 @@ import { ForceBehaviorModel } from './force';
 
 export class XForceModel extends ForceBehaviorModel implements IBehave, IForce {
   static model_name = 'XForceModel';
+  _force: d3XForce;
 
   defaults() {
     return {
@@ -18,6 +19,11 @@ export class XForceModel extends ForceBehaviorModel implements IBehave, IForce {
       x: null,
     };
   }
+
+  forceFactory(): d3XForce {
+    return d3XForce();
+  }
+
   get triggerChanges(): string {
     return 'change:x';
   }
@@ -25,7 +31,7 @@ export class XForceModel extends ForceBehaviorModel implements IBehave, IForce {
   get force(): TAnyForce {
     const { x } = this;
 
-    let force = d3XForce();
+    let force = this._force;
     force = x == null ? force : force.x(x);
     return force;
   }

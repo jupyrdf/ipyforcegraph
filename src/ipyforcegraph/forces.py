@@ -173,17 +173,17 @@ class ManyBodyForce(BaseD3Force):
         help="a nunjucks template to use to calculate strength. Context takes `node`",
     ).tag(sync=True)
     theta: Optional[float] = T.Unicode(
-        Node,
+        None,
         allow_node=True,
         help="sets the Barnes–Hut approximation criterion to the specified number and returns this force."
     )
     distance_min: Optional[float] = T.Unicode(
-        Node,
+        None,
         allow_node=True,
         help="sets the minimum distance between nodes over which this force is considered."
     )
     distance_man: Optional[float] = T.Unicode(
-        Node,
+        None,
         allow_node=True,
         help="sets the maximum distance between nodes over which this force is considered."
     )

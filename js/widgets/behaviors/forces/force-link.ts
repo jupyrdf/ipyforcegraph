@@ -11,6 +11,7 @@ import { ForceBehaviorModel } from './force';
 
 export class LinkForceModel extends ForceBehaviorModel implements IBehave, IForce {
   static model_name = 'LinkForceModel';
+  _force: d3ForceLink;
 
   defaults() {
     return {
@@ -19,10 +20,14 @@ export class LinkForceModel extends ForceBehaviorModel implements IBehave, IForc
     };
   }
 
+  forceFactory(): d3ForceLink {
+    return d3ForceLink();
+  }
+
   get force(): d3ForceLink {
     const { strength, distance } = this;
 
-    let force = d3ForceLink();
+    let force = this._force;
     force = strength == null ? force : force.strength(strength);
     force = distance == null ? force : force.distance(distance);
     return force;

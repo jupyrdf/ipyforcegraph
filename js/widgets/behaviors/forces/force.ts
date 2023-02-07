@@ -16,6 +16,7 @@ import { LinkColumnOrTemplateModel } from '../base';
 export type TForceRecord = Record<string, ForceBehaviorModel | null>;
 export class ForceBehaviorModel extends LinkColumnOrTemplateModel implements IForce {
   static model_name = 'ForceBehaviorModel';
+  _force: TAnyForce;
 
   defaults() {
     return {
@@ -27,7 +28,7 @@ export class ForceBehaviorModel extends LinkColumnOrTemplateModel implements IFo
   initialize(attributes: ObjectHash, options: IBackboneModelOptions): void {
     super.initialize(attributes, options);
 
-    // this.on(this.triggerChanges, () => this._updateRequested.emit(void 0));
+    this._force = this.forceFactory();
     this.on(this.triggerChanges, this.onChanged, this);
   }
 
@@ -46,7 +47,7 @@ export class ForceBehaviorModel extends LinkColumnOrTemplateModel implements IFo
   }
 
   get force(): TAnyForce {
-    return this.forceFactory();
+    return this._force;
   }
 }
 

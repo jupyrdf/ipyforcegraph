@@ -10,6 +10,7 @@ import { ForceBehaviorModel } from './force';
 
 export class CenterForceModel extends ForceBehaviorModel implements IBehave, IForce {
   static model_name = 'CenterForceModel';
+  _force: d3ForceCenter;
 
   defaults() {
     return {
@@ -20,6 +21,11 @@ export class CenterForceModel extends ForceBehaviorModel implements IBehave, IFo
       z: null,
     };
   }
+
+  forceFactory(): d3ForceCenter {
+    return d3ForceCenter();
+  }
+
   get triggerChanges(): string {
     return 'change:x change:y change:z';
   }
@@ -27,7 +33,7 @@ export class CenterForceModel extends ForceBehaviorModel implements IBehave, IFo
   get force(): TAnyForce {
     const { x, y, z } = this;
 
-    let force = d3ForceCenter();
+    let force = this._force;
     force = x == null ? force : force.x(x);
     force = y == null ? force : force.y(y);
     force = z == null ? force : force.z(z);

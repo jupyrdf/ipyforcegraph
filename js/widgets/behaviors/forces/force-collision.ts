@@ -10,6 +10,7 @@ import { ForceBehaviorModel } from './force';
 
 export class CollisionForceModel extends ForceBehaviorModel implements IBehave, IForce {
   static model_name = 'CollisionForceModel';
+  _force: d3ForceCollision;
 
   defaults() {
     return {
@@ -20,10 +21,14 @@ export class CollisionForceModel extends ForceBehaviorModel implements IBehave, 
     };
   }
 
+  forceFactory(): d3ForceCollision {
+    return d3ForceCollision();
+  }
+
   get force(): d3ForceCollision {
     const { radius, strength } = this;
 
-    let force = d3ForceCollision();
+    let force =this._force;
     force = radius == null ? force : force.radius(radius);
     force = strength == null ? force : force.strength(strength);
     return force;
