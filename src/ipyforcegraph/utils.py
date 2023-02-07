@@ -10,7 +10,7 @@ import traitlets as T
 
 def wait_for_change(widget: W.Widget, value: Any) -> asyncio.Future[Any]:
     """Initial pattern from
-    https://ipywidgets.readthedocs.io/en/stable/examples/Widget%20Asynchronous.html?highlight=async#Waiting-for-user-interaction
+    https://ipywidgets.readthedocs.io/en/stable/examples/Widget%20Asynchronous.html
     """
 
     future: asyncio.Future[Any] = asyncio.Future()
