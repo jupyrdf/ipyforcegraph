@@ -26,7 +26,7 @@ export class ManyBodyForceModel extends ForceBehaviorModel implements IBehave, I
   get force(): d3ForceManyBody {
     const { strength, theta, distanceMax, distanceMin } = this;
 
-    let force =this._force;
+    let force = this._force;
     force = strength == null ? force : force.strength(strength);
     force = theta == null ? force : force.theta(theta);
     force = distanceMax == null ? force : force.distanceMax(distanceMax);
@@ -35,7 +35,7 @@ export class ManyBodyForceModel extends ForceBehaviorModel implements IBehave, I
   }
 
   get triggerChanges(): string {
-    return "change:strength change:theta change:distance_min change:distance_max";
+    return 'change:strength change:theta change:distance_min change:distance_max';
   }
 
   get strength() {
