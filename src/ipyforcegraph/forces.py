@@ -75,6 +75,7 @@ class CenterForce(BaseD3Force):
 
     https://github.com/d3/d3-force#centering
     """
+
     _model_name: str = T.Unicode("CenterForceModel").tag(sync=True)
     key: str = T.Unicode("center").tag(sync=True)
     x: Optional[float] = T.Float(
@@ -101,6 +102,7 @@ class XForce(BaseD3Force):
 
     https://github.com/d3/d3-force#positioning
     """
+
     _model_name: str = T.Unicode("XForceModel").tag(sync=True)
     x: Optional[int] = T.Float(
         None,
@@ -114,7 +116,6 @@ class XForce(BaseD3Force):
     ).tag(sync=True)
 
 
-
 @W.register
 class YForce(BaseD3Force):
     """The Y position force push nodes towards a desired position along the
@@ -122,6 +123,7 @@ class YForce(BaseD3Force):
 
     https://github.com/d3/d3-force#positioning
     """
+
     _model_name: str = T.Unicode("YForceModel").tag(sync=True)
     y: Optional[int] = T.Float(
         None,
@@ -142,6 +144,7 @@ class ZForce(BaseD3Force):
 
     https://github.com/d3/d3-force#positioning
     """
+
     _model_name: str = T.Unicode("ZForceModel").tag(sync=True)
     z: Optional[int] = T.Float(
         None,
@@ -166,27 +169,28 @@ class ManyBodyForce(BaseD3Force):
 
     https://github.com/d3/d3-force#many-body
     """
+
     _model_name: str = T.Unicode("ManyBodyForceModel").tag(sync=True)
     strength: Optional[str] = T.Unicode(
         None,
         allow_none=True,
         help="a nunjucks template to use to calculate strength. Context takes `node`",
     ).tag(sync=True)
-    theta: Optional[float] = T.Unicode(
+    theta: Optional[float] = T.Float(
         None,
-        allow_node=True,
-        help="sets the Barnes–Hut approximation criterion to the specified number and returns this force."
-    )
-    distance_min: Optional[float] = T.Unicode(
+        allow_none=True,
+        help="sets the Barnes–Hut approximation criterion to the specified number and returns this force.",
+    ).tag(sync=True)
+    distance_min: Optional[float] = T.Float(
         None,
-        allow_node=True,
-        help="sets the minimum distance between nodes over which this force is considered."
-    )
-    distance_man: Optional[float] = T.Unicode(
+        allow_none=True,
+        help="sets the minimum distance between nodes over which this force is considered.",
+    ).tag(sync=True)
+    distance_max: Optional[float] = T.Float(
         None,
-        allow_node=True,
-        help="sets the maximum distance between nodes over which this force is considered."
-    )
+        allow_none=True,
+        help="sets the maximum distance between nodes over which this force is considered.",
+    ).tag(sync=True)
 
 
 @W.register

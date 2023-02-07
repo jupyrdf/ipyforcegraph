@@ -28,7 +28,7 @@ export class CollisionForceModel extends ForceBehaviorModel implements IBehave, 
   get force(): d3ForceCollision {
     const { radius, strength } = this;
 
-    let force =this._force;
+    let force = this._force;
     force = radius == null ? force : force.radius(radius);
     force = strength == null ? force : force.strength(strength);
     return force;
