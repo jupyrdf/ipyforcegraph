@@ -26,7 +26,7 @@ export class RadialForceModel extends ForceBehaviorModel implements IBehave, IFo
   get force(): d3ForceRadial {
     const { strength, radius, x, y, z } = this;
 
-    let force =this._force;
+    let force = this._force;
     force = strength == null ? force : force.strength(strength);
     force = radius == null ? force : force.radius(this.radius);
     force = x == null ? force : force.x(x);
@@ -36,7 +36,7 @@ export class RadialForceModel extends ForceBehaviorModel implements IBehave, IFo
   }
 
   get triggerChanges(): string {
-    return "change:strength change:radius change:x change:y change:z";
+    return 'change:strength change:radius change:x change:y change:z';
   }
 
   get strength() {

@@ -1,7 +1,5 @@
 # from https://github.com/jupyrdf/ipyradiant/blob/master/_scripts/utils.py
 
-# Copyright (c) 2020 ipyradiant contributors.
-# Distributed under the terms of the Modified BSD License.
 # Copyright (c) 2023 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.
 
