@@ -39,4 +39,4 @@ Initialize Jupyter Directory
 
 Tear Down Everything
     Close All Browsers
-    Terminate All Jupyter Servers
+    Run Keyword and Ignore Error    Terminate All Jupyter Servers
