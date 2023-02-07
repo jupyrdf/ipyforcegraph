@@ -288,8 +288,8 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
     await this._rendered.promise;
     let { graphData } = this.model;
     DEBUG && console.warn(`${EMOJI} updating...`, graphData);
-    (this.graph as any).graphData(graphData);
     await this.postUpdate();
+    (this.graph as any).graphData(graphData);
   }
 
   wrapFunction(fn: Function) {
