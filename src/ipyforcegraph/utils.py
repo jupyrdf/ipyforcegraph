@@ -8,12 +8,12 @@ import ipywidgets as W
 import traitlets as T
 
 
-def wait_for_change(widget: W.Widget, value: Any) -> asyncio.Future[Any]:
+def wait_for_change(widget: W.Widget, value: Any) -> asyncio.Future:
     """Initial pattern from
     https://ipywidgets.readthedocs.io/en/stable/examples/Widget%20Asynchronous.html
     """
 
-    future: asyncio.Future[Any] = asyncio.Future()
+    future: asyncio.Future = asyncio.Future()
 
     def getvalue(change: T.Bunch) -> None:
         """make the new value available"""
