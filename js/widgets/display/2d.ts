@@ -222,7 +222,7 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
     contentWindow.addEventListener('resize', this.onWindowResize);
     this._rendered.resolve(void 0);
     await this.onBackgroundColorChange();
-    await this.update();
+    await this.redraw();
   };
 
   protected onWindowResize = () => {
@@ -284,7 +284,7 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
     return src;
   }
 
-  async update(): Promise<void> {
+  async redraw(): Promise<void> {
     await this._rendered.promise;
     let { graphData } = this.model;
     DEBUG && console.warn(`${EMOJI} updating...`, graphData);
@@ -305,12 +305,12 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
     const { source, previousSource } = this;
 
     if (previousSource) {
-      previousSource.dataUpdated.disconnect(this.update, this);
+      previousSource.dataUpdated.disconnect(this.redraw, this);
     }
 
     if (source) {
-      source.dataUpdated.connect(this.update, this);
-      this.update();
+      source.dataUpdated.connect(this.redraw, this);
+      this.redraw();
     }
   }
 
@@ -403,7 +403,7 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
       }
     }
 
-    await this.update();
+    await this.postUpdate();
   }
 
   // link behaviors
