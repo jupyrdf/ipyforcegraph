@@ -2,7 +2,7 @@
  * Copyright (c) 2023 ipyforcegraph contributors.
  * Distributed under the terms of the Modified BSD License.
  */
-import type d3Force from 'd3-force';
+import d3Force3d from 'd3-force-3d';
 import type { GraphData, LinkObject, NodeObject } from 'force-graph';
 import type { WebGLRenderer } from 'three';
 
@@ -130,7 +130,17 @@ export interface ISource {
   dataUpdated: ISignal<ISource, void>;
 }
 
-export type TAnyForce = d3Force.Force<any, any>;
+export type TAnyForce =
+  | d3Force3d.forceCenter
+  | d3Force3d.forceCollide
+  | d3Force3d.forceLink
+  | d3Force3d.forceManyBody
+  | d3Force3d.forceRadial
+  | d3Force3d.forceSimulation
+  | d3Force3d.forceX
+  | d3Force3d.forceY
+  | d3Force3d.forceZ;
+
 export interface IForce {
   forceFactory(): TAnyForce;
 }
