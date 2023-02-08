@@ -19,6 +19,7 @@ from . import project as P
 NODE = [shutil.which("node") or shutil.which("node.exe") or shutil.which("node.cmd")]
 
 NB_METADATA_KEYS = ["kernelspec", "language_info"]
+CLOBBER_CELL_METADATA_KEYS = ["jupyter", "collapsed"]
 
 ISORT_CONFIG = isort.settings.Config(settings_path=P.PY_PROJ)
 
@@ -33,6 +34,10 @@ def nblint_one(nb_node):
             nb_node.metadata.pop(key)
     for cell in nb_node.cells:
         cell_type = cell["cell_type"]
+        for clobber in CLOBBER_CELL_METADATA_KEYS:
+            if clobber in cell["metadata"]:
+                cell["metadata"].pop(clobber)
+                changes += 1
         source = "".join(cell["source"])
         if not source.strip():
             has_empty += 1
