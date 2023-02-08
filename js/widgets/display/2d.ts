@@ -178,6 +178,11 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
     this._rendered = new PromiseDelegate();
     this.model.on('change:source', this.onSourceChange, this);
     this.model.on('change:background_color', this.onBackgroundColorChange, this);
+    this.model.on(
+      'change:default_node_color change:default_link_color',
+      this.postUpdate,
+      this
+    );
 
     this.model.behaviorsChanged.connect(this.onBehaviorsChange, this);
     this.luminoWidget.disposed.connect(this.onDisposed, this);
