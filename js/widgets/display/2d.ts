@@ -47,7 +47,7 @@ import {
   emptyArray,
 } from '../../tokens';
 import { ForceBehaviorModel, GraphForcesBehaviorModel } from '../behaviors';
-
+import { forceLink as d3ForceLink } from 'd3-force-3d';
 export class ForceGraphModel extends DOMWidgetModel {
   static model_name = 'ForceGraphModel';
   static serializers = {
@@ -383,6 +383,10 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
         let behavior: ForceBehaviorModel | null = simBehavior.forces[key];
         let force = behavior?.force || null;
         graph.d3Force(key, force);
+        if ((<d3ForceLink>force)?.links){
+          let f: d3ForceLink = force;
+          f.links(graph.graphData().links)
+        }
       }
     }
   }
