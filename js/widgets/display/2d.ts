@@ -33,6 +33,7 @@ import {
   IBehave,
   IHasGraph,
   ILinkBehaveOptions,
+  ILinkEventBehaveOptions,
   INodeBehaveOptions,
   INodeEventBehaveOptions,
   IRenderOptions,
@@ -347,6 +348,7 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
 
       // evented
       graph.onNodeClick(this.wrapFunction(this.onNodeClick));
+      graph.onLinkClick(this.wrapFunction(this.onLinkClick));
 
       // (3d-)force-graph-specific
       this.getOnRenderPostUpdate();
@@ -444,6 +446,7 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
     const graphData = (this.graph as ForceGraphInstance).graphData();
     const options: ILinkBehaveOptions = {
       view: this,
+      index: graphData.links.indexOf(link),
       graphData,
       link,
     };
@@ -507,6 +510,28 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
         continue;
       }
       shouldContinue = behavior.onNodeClick(options);
+      if (!shouldContinue) {
+        return;
+      }
+    }
+  };
+
+  protected onLinkClick = (link: LinkObject, event: MouseEvent) => {
+    const { behaviors } = this.model;
+    const graphData = (this.graph as ForceGraphInstance).graphData();
+    let shouldContinue = true;
+    const options: ILinkEventBehaveOptions = {
+      view: this,
+      graphData,
+      event,
+      link,
+      index: graphData.links.indexOf(link),
+    };
+    for (const behavior of behaviors) {
+      if (!behavior.onLinkClick) {
+        continue;
+      }
+      shouldContinue = behavior.onLinkClick(options);
       if (!shouldContinue) {
         return;
       }

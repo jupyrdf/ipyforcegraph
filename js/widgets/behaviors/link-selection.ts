@@ -7,22 +7,22 @@ import { IBackboneModelOptions } from '@jupyter-widgets/base';
 import {
   DEFAULT_COLORS,
   IBehave,
-  INodeBehaveOptions,
-  INodeEventBehaveOptions,
+  ILinkBehaveOptions,
+  ILinkEventBehaveOptions,
   TSelectedSet,
   WIDGET_DEFAULTS,
 } from '../../tokens';
 
 import { BehaviorModel } from './base';
 
-export class NodeSelectionModel extends BehaviorModel implements IBehave {
-  static model_name = 'NodeSelectionModel';
+export class LinkSelectionModel extends BehaviorModel implements IBehave {
+  static model_name = 'LinkSelectionModel';
 
   defaults() {
     return {
       ...super.defaults(),
       ...WIDGET_DEFAULTS,
-      _model_name: NodeSelectionModel.model_name,
+      _model_name: LinkSelectionModel.model_name,
       selected: [],
       selected_color: DEFAULT_COLORS.selected,
       multiple: true,
@@ -52,19 +52,18 @@ export class NodeSelectionModel extends BehaviorModel implements IBehave {
     return this.get('selected_color') || DEFAULT_COLORS.selected;
   }
 
-  getNodeColor({ node }: INodeBehaveOptions): string | null {
-    const color = this.selected.has(node.id) ? this.selectedColor : null;
+  getLinkColor({ index }: ILinkBehaveOptions): string | null {
+    const color = this.selected.has(index) ? this.selectedColor : null;
     return color;
   }
 
-  onNodeClick = ({ node, event }: INodeEventBehaveOptions): boolean => {
+  onLinkClick = ({ index, event }: ILinkEventBehaveOptions): boolean => {
     let { selected } = this;
-    const id = node.id;
     if (this.get('multiple') && (event.ctrlKey || event.shiftKey || event.altKey)) {
-      selected.has(id) ? selected.delete(id) : selected.add(id);
+      selected.has(index) ? selected.delete(index) : selected.add(index);
     } else {
       selected.clear();
-      selected.add(id);
+      selected.add(index);
     }
 
     this.selected = selected;

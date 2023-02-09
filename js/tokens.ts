@@ -62,6 +62,7 @@ export interface IBehave {
   getNodeLabel?(options: INodeBehaveOptions): string | null;
   // evented
   onNodeClick?(options: INodeEventBehaveOptions): boolean;
+  onLinkClick?(options: ILinkEventBehaveOptions): boolean;
   onRender?(options: IRenderOptions): void;
 }
 
@@ -99,6 +100,11 @@ export interface INodeEventBehaveOptions extends INodeBehaveOptions {
 
 export interface ILinkBehaveOptions extends IBehaveOptions {
   link: LinkObject;
+  index: number;
+}
+
+export interface ILinkEventBehaveOptions extends ILinkBehaveOptions {
+  event: MouseEvent;
 }
 
 export interface IRenderOptions extends IBehaveOptions {
@@ -119,5 +125,7 @@ export interface ISource {
   graphData: GraphData;
   dataUpdated: ISignal<ISource, void>;
 }
+
+export type TSelectedSet = Set<string | number>;
 
 export const emptyArray = Object.freeze([]);

@@ -4,6 +4,8 @@
  */
 
 export * from './base';
+export * from './graph-data';
+export * from './graph-image';
 export * from './link-color';
 export * from './link-directional-arrow-color';
 export * from './link-directional-arrow-length';
@@ -13,8 +15,7 @@ export * from './link-directional-particle-speed';
 export * from './link-directional-particle-width';
 export * from './link-directional-particles';
 export * from './link-label';
-export * from './graph-data';
-export * from './graph-image';
+export * from './link-selection';
 export * from './node-color';
 export * from './node-label';
 export * from './node-selection';
