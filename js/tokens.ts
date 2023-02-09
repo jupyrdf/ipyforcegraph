@@ -38,6 +38,11 @@ export const DEFAULT_COLORS = {
   background: 'rgba(0, 0, 0, 0.0)',
 };
 
+export const DEFAULT_WIDTHS = {
+  link: 1,
+  selected: 2,
+};
+
 export const WIDGET_DEFAULTS = {
   _model_module: NAME,
   _model_module_version: VERSION,
@@ -49,6 +54,7 @@ export interface IBehave {
   updateRequested: ISignal<IBehave, void>;
   // link
   getLinkColor?(options: ILinkBehaveOptions): string | null;
+  getLinkWidth?(options: ILinkBehaveOptions): string | null;
   getLinkLabel?(options: ILinkBehaveOptions): string | null;
   getLinkDirectionalArrowColor?(options: ILinkBehaveOptions): string | null;
   getLinkDirectionalArrowLength?(options: ILinkBehaveOptions): string | null;
@@ -69,6 +75,7 @@ export interface IBehave {
 export const ALL_LINK_METHODS = [
   'getLinkLabel',
   'getLinkColor',
+  'getLinkWidth',
   'getLinkDirectionalArrowColor',
   'getLinkDirectionalArrowLength',
   'getLinkDirectionalArrowRelPos',

@@ -6,6 +6,7 @@ import { IBackboneModelOptions } from '@jupyter-widgets/base';
 
 import {
   DEFAULT_COLORS,
+  DEFAULT_WIDTHS,
   IBehave,
   ILinkBehaveOptions,
   ILinkEventBehaveOptions,
@@ -25,6 +26,7 @@ export class LinkSelectionModel extends BehaviorModel implements IBehave {
       _model_name: LinkSelectionModel.model_name,
       selected: [],
       selected_color: DEFAULT_COLORS.selected,
+      selected_width: DEFAULT_WIDTHS.selected,
       multiple: true,
     };
   }
@@ -50,6 +52,15 @@ export class LinkSelectionModel extends BehaviorModel implements IBehave {
 
   get selectedColor(): string {
     return this.get('selected_color') || DEFAULT_COLORS.selected;
+  }
+
+  get selectedWidth(): string {
+    return this.get('selected_width') || DEFAULT_WIDTHS.selected;
+  }
+
+  getLinkWidth({ index }: ILinkBehaveOptions): string | null {
+    const width = this.selected.has(index) ? this.selectedWidth : null;
+    return width;
   }
 
   getLinkColor({ index }: ILinkBehaveOptions): string | null {

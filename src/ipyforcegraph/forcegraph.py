@@ -22,6 +22,7 @@ class ForceGraph(W.DOMWidget, ForceBase):
     source: DataFrameSource = T.Instance(
         DataFrameSource, kw={}, help="the source of `nodes` and `link` data"
     ).tag(sync=True, **W.widget_serialization)
+
     behaviors: Tuple[Behavior, ...] = W.TypedTuple(
         T.Instance(Behavior),
         kw={},
@@ -32,10 +33,17 @@ class ForceGraph(W.DOMWidget, ForceBase):
         "rgba(31, 120, 179, 1.0)",
         help="a default node color, which can be overridden by `NodeColors`",
     ).tag(sync=True)
+
     default_link_color: str = T.Unicode(
         "rgba(66, 66, 66, 0.5)",
         help="a default link color, which can be overridden by `LinkColors`",
     ).tag(sync=True)
+
+    default_link_width: str = T.Float(
+        1.0,
+        help="a default link width, which can be overridden by `LinkWidths`",
+    ).tag(sync=True)
+
     background_color: str = T.Unicode(
         "rgba(0, 0, 0, 0.0)", help="the graph background color"
     ).tag(sync=True)

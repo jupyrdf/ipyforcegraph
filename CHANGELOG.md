@@ -10,6 +10,7 @@
 - adds `GraphData` which can capture the as-simulated data from the browser
 - adds `LinkSelection` which mirrors `NodeSelection`, but returns link indices in
   `.source.links`, as they are not guaranteed to have a an `id` column
+- adds `LinkWidths`
 
 ### `@jupyrdf/jupyter-forcegraph 0.2.0`
 
