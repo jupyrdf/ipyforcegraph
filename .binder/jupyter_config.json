@@ -1,15 +1,14 @@
 {
-  "LabApp": {
-    "collaborative": true,
-    "expose_app_in_browser": true,
+  "ServerApp": {
     "tornado_settings": {
       "page_config_data": {
         "buildAvailable": false,
-        "buildCheck": false,
-        "disabledExtensions": {
-          "jupyter-offlinenotebook": true
-        }
+        "buildCheck": false
       }
     }
+  },
+  "LabApp": {
+    "collaborative": true,
+    "expose_app_in_browser": true
   }
 }
