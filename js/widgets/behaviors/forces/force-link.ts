@@ -3,8 +3,8 @@
  * Distributed under the terms of the Modified BSD License.
  */
 // import type d3Force from 'd3-force';
-import type { Template } from 'nunjucks';
 import { forceLink as d3ForceLink } from 'd3-force-3d';
+import type { Template } from 'nunjucks';
 
 import { IBehave, IForce } from '../../../tokens';
 

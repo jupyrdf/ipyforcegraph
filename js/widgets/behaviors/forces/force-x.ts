@@ -8,11 +8,11 @@ import { EMOJI, IBehave, IForce, TAnyForce } from '../../../tokens';
 
 import { ForceBehaviorModel } from './force';
 
-const isNumeric = (val: string) : boolean => {
+const isNumeric = (val: string): boolean => {
   return !isNaN(Number(val));
-}
+};
 
-async function makeTemplate(template:string): Promise<CallableFunction>{
+async function makeTemplate(template: string): Promise<CallableFunction> {
   const nunjucks = await import('nunjucks');
   let newTemplate = await new nunjucks.Template(template);
 
@@ -22,22 +22,22 @@ async function makeTemplate(template:string): Promise<CallableFunction>{
     } catch (err) {
       console.warn(EMOJI, err);
     }
-  }
-  return renderTemplate
+  };
+  return renderTemplate;
 }
 
 export class XForceModel extends ForceBehaviorModel implements IBehave, IForce {
   static model_name = 'XForceModel';
   _force: d3XForce;
-  x: CallableFunction | Number | null
-  strength: CallableFunction | Number | null
+  x: CallableFunction | Number | null;
+  strength: CallableFunction | Number | null;
 
   defaults() {
     return {
       ...super.defaults(),
       _model_name: XForceModel.model_name,
       x: null,
-      strength:null,
+      strength: null,
     };
   }
 
@@ -50,7 +50,7 @@ export class XForceModel extends ForceBehaviorModel implements IBehave, IForce {
   }
 
   get force(): TAnyForce {
-    const { x , strength } = this;
+    const { x, strength } = this;
 
     let force = this._force;
     force = x == null ? force : force.x(x);
@@ -59,27 +59,26 @@ export class XForceModel extends ForceBehaviorModel implements IBehave, IForce {
   }
 
   async onChanged() {
-    await this.update_x()
-    await this.update_strength()
+    await this.update_x();
+    await this.update_strength();
     this._updateRequested.emit(void 0);
   }
 
-  async update_x(){
+  async update_x() {
     let value = this.get('x');
-    if (isNumeric(value)){
-      this.x = Number(value)
-    } else{
-      this.x = await makeTemplate(value)
+    if (isNumeric(value)) {
+      this.x = Number(value);
+    } else {
+      this.x = await makeTemplate(value);
     }
-
   }
 
-  async update_strength(){
+  async update_strength() {
     let value = this.get('strength');
-    if (isNumeric(value)){
-      this.strength = Number(value)
+    if (isNumeric(value)) {
+      this.strength = Number(value);
     } else {
-      this.strength = await makeTemplate(value)
+      this.strength = await makeTemplate(value);
     }
   }
 }
