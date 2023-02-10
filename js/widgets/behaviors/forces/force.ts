@@ -42,8 +42,7 @@ export class ForceBehaviorModel extends LinkColumnOrTemplateModel implements IFo
   }
 
   get triggerChanges(): string {
-    // "change:X change:y"
-    return '';
+    throw new Error('Not implemented');
   }
 
   get force(): TAnyForce {
