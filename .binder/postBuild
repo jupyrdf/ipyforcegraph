@@ -10,7 +10,8 @@ export IN_BINDER=1
 source activate ${NB_PYTHON_PREFIX}
 
 # force jupyter_server 2 for collab
-mamba install -yc conda-forge "jupyter_server>2.11"
+mamba install -yc conda-forge "jupyter_server>=2.11"
+conda clean -yaf
 
 doit list
 doit -n4 || doit list
