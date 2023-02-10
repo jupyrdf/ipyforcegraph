@@ -25,18 +25,22 @@ export class YForceModel extends ForceBehaviorModel implements IBehave, IForce {
   }
 
   get triggerChanges(): string {
-    return 'change:y';
+    return 'change:y change:strength';
   }
 
   get force(): TAnyForce {
-    const { y } = this;
+    const { y, strength } = this;
 
     let force = this._force;
     force = y == null ? force : force.y(y);
+    force = strength == null ? force : force.strength(strength);
     return force;
   }
 
   get y() {
     return this.get('y');
+  }
+  get strength() {
+    return this.get('strength');
   }
 }

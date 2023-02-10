@@ -136,10 +136,10 @@ class XForce(BaseD3Force):
     """
 
     _model_name: str = T.Unicode("XForceModel").tag(sync=True)
-    x: Optional[int] = T.Float(
+    x: Optional[str] = T.Unicode(
         None,
         allow_none=True,
-        help="sets the x-coordinate of the centering position to the specified number and returns this force.",
+        help="nunjucks template sets the x-coordinate of the centering position to the specified number and returns this force. Context takes `node`.",
     ).tag(sync=True)
 
     strength: Optional[str] = T.Unicode(
@@ -159,10 +159,10 @@ class YForce(BaseD3Force):
 
     _model_name: str = T.Unicode("YForceModel").tag(sync=True)
 
-    y: Optional[int] = T.Float(
+    y: Optional[str] = T.Unicode(
         None,
         allow_none=True,
-        help="sets the y-coordinate of the centering position to the specified number and returns this force.",
+        help="nunjucks template sets the y-coordinate of the centering position to the specified number and returns this force. Context takes `node`.",
     ).tag(sync=True)
 
     strength: Optional[str] = T.Unicode(
@@ -182,10 +182,10 @@ class ZForce(BaseD3Force):
 
     _model_name: str = T.Unicode("ZForceModel").tag(sync=True)
 
-    z: Optional[int] = T.Float(
+    z: Optional[str] = T.Unicode(
         None,
         allow_none=True,
-        help="sets the z-coordinate of the centering position to the specified number and returns this force.",
+        help="nunjucks template sets the z-coordinate of the centering position to the specified number and returns this force. Context takes `node`.",
     ).tag(sync=True)
 
     strength: Optional[str] = T.Unicode(

@@ -25,18 +25,23 @@ export class ZForceModel extends ForceBehaviorModel implements IBehave, IForce {
   }
 
   get triggerChanges(): string {
-    return 'change:z';
+    return 'change:z change:strength';
   }
 
   get force(): TAnyForce {
-    const { z } = this;
+    const { z, strength } = this;
 
     let force = this._force;
     force = z == null ? force : force.z(z);
+    force = strength == null ? force : force.strength(strength);
     return force;
   }
 
   get z() {
     return this.get('z');
+  }
+
+  get strength() {
+    return this.get('strength');
   }
 }

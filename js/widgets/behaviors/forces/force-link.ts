@@ -3,6 +3,7 @@
  * Distributed under the terms of the Modified BSD License.
  */
 // import type d3Force from 'd3-force';
+import type { Template } from 'nunjucks';
 import { forceLink as d3ForceLink } from 'd3-force-3d';
 
 import { IBehave, IForce } from '../../../tokens';
@@ -12,6 +13,9 @@ import { ForceBehaviorModel } from './force';
 export class LinkForceModel extends ForceBehaviorModel implements IBehave, IForce {
   static model_name = 'LinkForceModel';
   _force: d3ForceLink;
+
+  protected _strengthTemplate: Template | null;
+  protected _distanceTemplate: Template | null;
 
   defaults() {
     return {
