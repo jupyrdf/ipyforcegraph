@@ -9,6 +9,7 @@ dependencies:
   - hypothesis
   - importnb
   - isort
+  - jupyterlab-link-share
   - keyring
   - mypy
   - pyflakes

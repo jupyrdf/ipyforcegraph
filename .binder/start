@@ -3,15 +3,12 @@
 # Copyright (c) 2023 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.
 
-set -eux
+set -e
 
 export IN_BINDER=1
 
 source activate ${NB_PYTHON_PREFIX}
 
-doit list
-doit -n4 || doit list
-doit
+echo $@
 
-mkdir -p ${NB_PYTHON_PREFIX}/share/jupyter/lab/settings
-cp overrides.json ${NB_PYTHON_PREFIX}/share/jupyter/lab/settings/
+exec jupyter-lab --collaborative --debug --expose-app-in-browser "${@:4}"
