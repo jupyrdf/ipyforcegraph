@@ -12,7 +12,6 @@ dependencies:
   - ipywidgets >=8.0.4,<9
   - jupyterlab >=3,<4
   - jupyterlab-deck
-  - jupyterlab-myst
   - myst-nb
   - networkx
   - nodejs >=18,<19

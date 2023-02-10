@@ -41,7 +41,6 @@ dependencies = [
 "Documentation" = "https://ipyforcegraph.rtfd.io"
 "Source" = "https://github.com/jupyrdf/ipyforcegraph"
 
-
 [tool.flit.sdist]
 include = ["src/_d"]
 
