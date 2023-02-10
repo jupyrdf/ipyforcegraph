@@ -9,11 +9,22 @@ export IN_BINDER=1
 
 source activate ${NB_PYTHON_PREFIX}
 
+# force jupyter_server 2 for collab
+mamba install -yc conda-forge "jupyter_server>2.11"
+
 doit list
 doit -n4 || doit list
 doit
 
+# tidy up big downloads
+rm -rf node_modules .yarn-packages
+
+# work around default start command
+cp ${NB_PYTHON_PREFIX}/bin/jupyter-lab ${NB_PYTHON_PREFIX}/bin/jupyter-notebook
+
+# clean up some settings
 mkdir -p ${NB_PYTHON_PREFIX}/share/jupyter/lab/settings
 cp .binder/overrides.json ${NB_PYTHON_PREFIX}/share/jupyter/lab/settings/
 
-cp ${NB_PYTHON_PREFIX}/bin/jupyter-lab ${NB_PYTHON_PREFIX}/bin/jupyter-notebook
+mkdir -p .jupyter/
+cp .binder/jupyter_config.json .jupyter/
