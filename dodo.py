@@ -801,7 +801,14 @@ def task_watch_docs():
         file_dep=[P.DOCS_BUILDINFO, *P.ALL_MD, P.OK_PIP_INSTALL],
         actions=[
             LongRunning(
-                [*P.IN_ENV, "sphinx-autobuild", P.DOCS, P.DOCS_BUILD], shell=False
+                [
+                    *P.IN_ENV,
+                    "sphinx-autobuild",
+                    f"--watch={P.PY_SRC}",
+                    P.DOCS,
+                    P.DOCS_BUILD,
+                ],
+                shell=False,
             )
         ],
     )

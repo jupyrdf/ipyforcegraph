@@ -12,12 +12,12 @@ from ..serializers import dataframe_serialization
 
 @W.register
 class DataFrameSource(ForceBase):
-    """A Graph Source that stores the nodes and links as a pandas DataFrame."""
+    """A Graph Source that stores the ``nodes`` and ``links`` as :class:`~pandas.DataFrame` instances."""
 
     _model_name: str = T.Unicode("DataFrameSourceModel").tag(sync=True)
 
     nodes: P.DataFrame = TT.PandasType(
-        klass=P.DataFrame, help="the `DataFrame` of node metadata"
+        klass=P.DataFrame, help="the :class:`~pandas.DataFrame` of node data"
     ).tag(sync=True, **dataframe_serialization)
 
     node_id_column: str = T.Unicode(
@@ -26,21 +26,21 @@ class DataFrameSource(ForceBase):
     ).tag(sync=True)
 
     links: P.DataFrame = TT.PandasType(
-        klass=P.DataFrame, help="the `DataFrame` of link metadata"
+        klass=P.DataFrame, help="the :class:`~pandas.DataFrame` of link data"
     ).tag(sync=True, **dataframe_serialization)
 
     link_source_column: str = T.Unicode(
         "source",
-        help="the name of the column for a link's source, defaulting to `source`",
+        help="the name of the column for a link's source, defaulting to ``source``",
     ).tag(sync=True)
 
     link_target_column: str = T.Unicode(
         "target",
-        help="the name of the column for a link's target, defaulting to `target`",
+        help="the name of the column for a link's target, defaulting to ``target``",
     ).tag(sync=True)
 
     def __repr__(self) -> str:
-        """A custom representation to avoid `pandas`/`numpy` comparison issues."""
+        """A custom representation to avoid ``pandas``/``numpy`` equality issues."""
         name = self.__class__.__name__
         nodes_shape = self.nodes.shape if self.nodes is not None else None
         links_shape = self.links.shape if self.links is not None else None
