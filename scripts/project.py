@@ -208,7 +208,7 @@ ALL_PY = [
     DODO,
 ]
 ALL_YML = [*ROOT.glob("*.yml"), *GH.rglob("*.yml"), *DOCS.glob("*.yml")]
-ALL_JSON = [*ROOT.glob("*.json"), *EXAMPLE_JSON, *LITE_JSON]
+ALL_JSON = [*ROOT.glob("*.json"), *EXAMPLE_JSON, *LITE_JSON, *BINDER.glob("*.json")]
 ALL_DOCS_MD = [*DOCS.rglob("*.md")]
 ALL_MD = [*ROOT.glob("*.md"), *ALL_DOCS_MD]
 ALL_TS = [*TS_SRC.rglob("*.ts")]
