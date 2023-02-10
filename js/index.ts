@@ -6,3 +6,4 @@
 export * from './tokens';
 export * from './widgets';
 export * from './widgets/serializers';
+export * from './template-utils';
