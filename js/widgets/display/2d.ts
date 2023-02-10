@@ -28,11 +28,13 @@ import {
   CSS,
   DEBUG,
   DEFAULT_COLORS,
+  DEFAULT_WIDTHS,
   EMOJI,
   EMPTY_GRAPH_DATA,
   IBehave,
   IHasGraph,
   ILinkBehaveOptions,
+  ILinkEventBehaveOptions,
   INodeBehaveOptions,
   INodeEventBehaveOptions,
   IRenderOptions,
@@ -67,6 +69,7 @@ export class ForceGraphModel extends DOMWidgetModel {
       behaviors: [],
       default_node_color: DEFAULT_COLORS.node,
       default_link_color: DEFAULT_COLORS.link,
+      default_link_width: DEFAULT_WIDTHS.link,
       background_color: DEFAULT_COLORS.background,
     };
   }
@@ -138,6 +141,10 @@ export class ForceGraphModel extends DOMWidgetModel {
 
   get defaultLinkColor(): string {
     return this.get('default_link_color') || DEFAULT_COLORS.link;
+  }
+
+  get defaultLinkWidth(): string {
+    return this.get('default_link_width') || DEFAULT_WIDTHS.link;
   }
 
   get backgroundColor(): string {
@@ -317,6 +324,7 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
     if (graph) {
       // link
       graph.linkColor(this.wrapFunction(this.getLinkColor));
+      graph.linkWidth(this.wrapFunction(this.getLinkWidth));
       graph.linkLabel(this.wrapFunction(this.getLinkLabel));
 
       graph.linkDirectionalArrowColor(
@@ -347,6 +355,7 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
 
       // evented
       graph.onNodeClick(this.wrapFunction(this.onNodeClick));
+      graph.onLinkClick(this.wrapFunction(this.onLinkClick));
 
       // (3d-)force-graph-specific
       this.getOnRenderPostUpdate();
@@ -382,6 +391,9 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
   // link behaviors
   protected getLinkColor = (link: LinkObject): string => {
     return this.getComposedLinkAttr(link, 'getLinkColor', this.model.defaultLinkColor);
+  };
+  protected getLinkWidth = (link: LinkObject): string => {
+    return this.getComposedLinkAttr(link, 'getLinkWidth', this.model.defaultLinkWidth);
   };
 
   protected getLinkLabel = (link: LinkObject): string => {
@@ -444,6 +456,7 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
     const graphData = (this.graph as ForceGraphInstance).graphData();
     const options: ILinkBehaveOptions = {
       view: this,
+      index: graphData.links.indexOf(link),
       graphData,
       link,
     };
@@ -507,6 +520,28 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
         continue;
       }
       shouldContinue = behavior.onNodeClick(options);
+      if (!shouldContinue) {
+        return;
+      }
+    }
+  };
+
+  protected onLinkClick = (link: LinkObject, event: MouseEvent) => {
+    const { behaviors } = this.model;
+    const graphData = (this.graph as ForceGraphInstance).graphData();
+    let shouldContinue = true;
+    const options: ILinkEventBehaveOptions = {
+      view: this,
+      graphData,
+      event,
+      link,
+      index: graphData.links.indexOf(link),
+    };
+    for (const behavior of behaviors) {
+      if (!behavior.onLinkClick) {
+        continue;
+      }
+      shouldContinue = behavior.onLinkClick(options);
       if (!shouldContinue) {
         return;
       }

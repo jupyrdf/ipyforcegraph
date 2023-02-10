@@ -145,6 +145,29 @@ class NodeColors(Behavior):
 
 
 @W.register
+class LinkSelection(Behavior):
+    """Enable link selection with synced ids of selected links."""
+
+    _model_name: str = T.Unicode("LinkSelectionModel").tag(sync=True)
+
+    selected: Tuple[Union[int, str], ...] = W.TypedTuple(
+        T.Union((T.Int(), T.Unicode())),
+        allow_none=True,
+        help="the 0-based indices of any selected links",
+    ).tag(sync=True)
+
+    multiple: bool = T.Bool(True).tag(sync=True)
+
+    selected_color: str = T.Unicode(
+        "rgba(31, 120, 179, 1.0)", help="the color of selected links"
+    ).tag(sync=True)
+
+    selected_width: float = T.Float(2, help="the width of selected links").tag(
+        sync=True
+    )
+
+
+@W.register
 class LinkColors(Behavior):
     _model_name: str = T.Unicode("LinkColorModel").tag(sync=True)
 
@@ -158,6 +181,23 @@ class LinkColors(Behavior):
         None,
         allow_none=True,
         help="a nunjucks template to use to calculate link colors",
+    ).tag(sync=True)
+
+
+@W.register
+class LinkWidths(Behavior):
+    _model_name: str = T.Unicode("LinkWidthModel").tag(sync=True)
+
+    column_name: str = T.Unicode(
+        None,
+        allow_none=True,
+        help="name of the source column to use for link widths.",
+    ).tag(sync=True)
+
+    template: Optional[str] = T.Unicode(
+        None,
+        allow_none=True,
+        help="a nunjucks template to use to calculate link widths",
     ).tag(sync=True)
 
 
