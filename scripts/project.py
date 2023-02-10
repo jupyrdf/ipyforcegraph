@@ -206,7 +206,6 @@ ALL_PY = [
     *SCRIPTS.rglob("*.py"),
     DOCS_CONF,
     DODO,
-    POSTBUILD,
 ]
 ALL_YML = [*ROOT.glob("*.yml"), *GH.rglob("*.yml"), *DOCS.glob("*.yml")]
 ALL_JSON = [*ROOT.glob("*.json"), *EXAMPLE_JSON, *LITE_JSON]

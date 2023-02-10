@@ -8,7 +8,7 @@ dependencies:
   - docutils >=0.19
   - doit
   - flit >=3.7.1,<4
-  - ipython >=7
+  - ipython >=8.10
   - ipywidgets >=8.0.4,<9
   - jupyterlab >=3,<4
   - jupyterlab-deck
@@ -24,12 +24,13 @@ dependencies:
   - pkginfo
   - pydata-sphinx-theme
   - python >=3.8,<3.12.0a0
+  - python-libarchive-c
   - sphinx
   - sphinx-autobuild
   - sphinx-autodoc-typehints
+  - sphinx-copybutton
   - tomli
   - traittypes
   - twine
   - wheel
-  - python-libarchive-c
   ### docs/environment.yml ###
