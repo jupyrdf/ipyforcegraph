@@ -24,6 +24,13 @@ ${SCREENS}      ${SCREENS ROOT}${/}api
     Remove Widget Tag
     Wait Until No Tag Widgets Exist
 
+2D Link Select
+    [Setup]    Set Up Behavior Example    LinkSelection    ${IPYFORCGRAPH CLASS}
+    Click IPyForceGraph Canvas
+    Wait Until Tag Widget Exists    0
+    Remove Widget Tag
+    Wait Until No Tag Widgets Exist
+
 2D Node Labels
     [Setup]    Set Up Behavior Example    NodeLabels    ${IPYFORCGRAPH CLASS}
     Click IPyForceGraph Canvas    text=hello world
@@ -32,6 +39,13 @@ ${SCREENS}      ${SCREENS ROOT}${/}api
     [Setup]    Set Up Behavior Example    NodeSelection    ${IPYFORCGRAPH CLASS 3D}
     Click IPyForceGraph Canvas
     Wait Until Tag Widget Exists    hello world
+    Remove Widget Tag
+    Wait Until No Tag Widgets Exist
+
+3D Link Select
+    [Setup]    Set Up Behavior Example    LinkSelection    ${IPYFORCGRAPH CLASS 3D}
+    Click IPyForceGraph Canvas
+    Wait Until Tag Widget Exists    0
     Remove Widget Tag
     Wait Until No Tag Widgets Exist
 

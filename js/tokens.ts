@@ -39,6 +39,11 @@ export const DEFAULT_COLORS = {
   background: 'rgba(0, 0, 0, 0.0)',
 };
 
+export const DEFAULT_WIDTHS = {
+  link: 1,
+  selected: 2,
+};
+
 export const WIDGET_DEFAULTS = {
   _model_module: NAME,
   _model_module_version: VERSION,
@@ -59,6 +64,7 @@ export interface IBehave {
   updateRequested: ISignal<IBehave, TUpdateKind>;
   // link
   getLinkColor?(options: ILinkBehaveOptions): string | null;
+  getLinkWidth?(options: ILinkBehaveOptions): string | null;
   getLinkLabel?(options: ILinkBehaveOptions): string | null;
   getLinkDirectionalArrowColor?(options: ILinkBehaveOptions): string | null;
   getLinkDirectionalArrowLength?(options: ILinkBehaveOptions): string | null;
@@ -72,12 +78,14 @@ export interface IBehave {
   getNodeLabel?(options: INodeBehaveOptions): string | null;
   // evented
   onNodeClick?(options: INodeEventBehaveOptions): boolean;
+  onLinkClick?(options: ILinkEventBehaveOptions): boolean;
   onRender?(options: IRenderOptions): void;
 }
 
 export const ALL_LINK_METHODS = [
   'getLinkLabel',
   'getLinkColor',
+  'getLinkWidth',
   'getLinkDirectionalArrowColor',
   'getLinkDirectionalArrowLength',
   'getLinkDirectionalArrowRelPos',
@@ -109,6 +117,11 @@ export interface INodeEventBehaveOptions extends INodeBehaveOptions {
 
 export interface ILinkBehaveOptions extends IBehaveOptions {
   link: LinkObject;
+  index: number;
+}
+
+export interface ILinkEventBehaveOptions extends ILinkBehaveOptions {
+  event: MouseEvent;
 }
 
 export interface IRenderOptions extends IBehaveOptions {
@@ -144,5 +157,7 @@ export type TAnyForce =
 export interface IForce {
   forceFactory(): TAnyForce;
 }
+
+export type TSelectedSet = Set<string | number>;
 
 export const emptyArray = Object.freeze([]);
