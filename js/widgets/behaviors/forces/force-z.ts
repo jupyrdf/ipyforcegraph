@@ -4,6 +4,7 @@
  */
 import { forceZ as d3ZForce } from 'd3-force-3d';
 
+import { isNumeric, makeNodeTemplate } from '../../../template-utils';
 import { IBehave, IForce, TAnyForce } from '../../../tokens';
 
 import { ForceBehaviorModel } from './force';
@@ -11,6 +12,8 @@ import { ForceBehaviorModel } from './force';
 export class ZForceModel extends ForceBehaviorModel implements IBehave, IForce {
   static model_name = 'ZForceModel';
   _force: d3ZForce;
+  z: CallableFunction | Number | null;
+  strength: CallableFunction | Number | null;
 
   defaults() {
     return {
@@ -37,11 +40,27 @@ export class ZForceModel extends ForceBehaviorModel implements IBehave, IForce {
     return force;
   }
 
-  get z() {
-    return this.get('z');
+  async onChanged() {
+    await this.update_z();
+    await this.update_strength();
+    this._updateRequested.emit(void 0);
   }
 
-  get strength() {
-    return this.get('strength');
+  async update_z() {
+    let value = this.get('z');
+    if (isNumeric(value)) {
+      this.z = Number(value);
+    } else {
+      this.z = await makeNodeTemplate(value);
+    }
+  }
+
+  async update_strength() {
+    let value = this.get('strength');
+    if (isNumeric(value)) {
+      this.strength = Number(value);
+    } else {
+      this.strength = await makeNodeTemplate(value);
+    }
   }
 }

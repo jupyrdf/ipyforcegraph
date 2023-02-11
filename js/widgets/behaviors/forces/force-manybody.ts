@@ -4,6 +4,7 @@
  */
 import { forceManyBody as d3ForceManyBody } from 'd3-force-3d';
 
+import { isNumeric, makeNodeTemplate } from '../../../template-utils';
 import { IBehave, IForce } from '../../../tokens';
 
 import { ForceBehaviorModel } from './force';
@@ -11,6 +12,7 @@ import { ForceBehaviorModel } from './force';
 export class ManyBodyForceModel extends ForceBehaviorModel implements IBehave, IForce {
   static model_name = 'ManyBodyForceModel';
   _force: d3ForceManyBody;
+  strength: CallableFunction | Number | null;
 
   defaults() {
     return {
@@ -38,8 +40,18 @@ export class ManyBodyForceModel extends ForceBehaviorModel implements IBehave, I
     return 'change:strength change:theta change:distance_min change:distance_max';
   }
 
-  get strength() {
-    return this.get('strength');
+  async onChanged() {
+    await this.update_strength();
+    this._updateRequested.emit(void 0);
+  }
+
+  async update_strength() {
+    let value = this.get('strength');
+    if (isNumeric(value)) {
+      this.strength = Number(value);
+    } else {
+      this.strength = await makeNodeTemplate(value);
+    }
   }
 
   get theta() {
