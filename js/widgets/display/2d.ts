@@ -431,16 +431,12 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
   async onBehaviorsChange(): Promise<void> {
     const { behaviors, previousBehaviors } = this.model;
 
-    for (const previous of previousBehaviors) {
-      if (!behaviors.includes(previous)) {
-        previous.updateRequested.disconnect(this.postUpdate, this);
-      }
+    for (const behavior of previousBehaviors) {
+      behavior.updateRequested.disconnect(this.postUpdate, this);
     }
 
     for (const behavior of behaviors) {
-      if (!previousBehaviors.includes(behavior)) {
-        behavior.updateRequested.connect(this.postUpdate, this);
-      }
+      behavior.updateRequested.connect(this.postUpdate, this);
     }
 
     await this.postUpdate();
