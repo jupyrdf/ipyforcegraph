@@ -31,17 +31,17 @@ class ForceGraph(W.DOMWidget, ForceBase):
 
     default_node_color: str = T.Unicode(
         "rgba(31, 120, 179, 1.0)",
-        help="a default node color, which can be overridden by `NodeColors`",
+        help="a default node color, which can be overridden by :class:`~ipyforcegraph.behaviors.NodeColors`.",
     ).tag(sync=True)
 
     default_link_color: str = T.Unicode(
         "rgba(66, 66, 66, 0.5)",
-        help="a default link color, which can be overridden by `LinkColors`",
+        help="a default link color, which can be overridden by :class:`~ipyforcegraph.behaviors.LinkColors`",
     ).tag(sync=True)
 
     default_link_width: str = T.Float(
         1.0,
-        help="a default link width, which can be overridden by `LinkWidths`",
+        help="a default link width, which can be overridden by :class:`~ipyforcegraph.behaviors.LinkWidths`",
     ).tag(sync=True)
 
     background_color: str = T.Unicode(

@@ -2,16 +2,16 @@
 # yarn lockfile v1
 
 
-"3d-force-graph@~1.70.20":
-  version "1.70.20"
-  resolved "https://registry.npmjs.org/3d-force-graph/-/3d-force-graph-1.70.20.tgz#e1cab33dc7f5033e98ceb6d8ce0c921dc896fc48"
-  integrity sha512-yu0b2+FEsBOsxJ8z0bGkFGHj0MlA+83MPZo9z0oGWgzPgnWpuwbYOHkNAX0x89cSOq9GQwDwEIjt7H2cUbclCQ==
+"3d-force-graph@~1.71.1":
+  version "1.71.1"
+  resolved "https://registry.npmjs.org/3d-force-graph/-/3d-force-graph-1.71.1.tgz#9135fe651df5f367aec21fc1d00b2a139731905a"
+  integrity sha512-mhzkODv64dAbCmGql51DIgBHdXiyqYYN0DfeNdgaCgVMHbjJt6oYzEfRS9AQQuA4t4sR78+71XjQC/JrMVmF6A==
   dependencies:
     accessor-fn "1"
-    kapsule "^1.13"
+    kapsule "^1.14"
     three ">=0.118 <1"
     three-forcegraph "^1.41"
-    three-render-objects "^1.27"
+    three-render-objects "^1.28"
 
 "@ampproject/remapping@^2.1.0":
   version "2.2.0"
@@ -2804,10 +2804,10 @@ jsonpointer@^5.0.0:
   resolved "https://registry.npmjs.org/jsonpointer/-/jsonpointer-5.0.1.tgz#2110e0af0900fd37467b5907ecd13a7884a1b559"
   integrity sha512-p/nXbhSEcu3pZRdkW1OfJhpsVtW1gd4Wa1fnQc9YLiTfAjn0312eMKimbdIQzuZl9aa9xUGaRlP9T/CJE/ditQ==
 
-kapsule@^1.13:
-  version "1.13.8"
-  resolved "https://registry.npmjs.org/kapsule/-/kapsule-1.13.8.tgz#1f43f8111b1b78d13e45daeff35dbef1e81114c2"
-  integrity sha512-Y1lLt1htHNofIM5kxS5OdEqDm7WFqHF4hm6DrrvNEKIJugfQrxDBycV41QI5FpnBGHqyBD99VpTB5ARnlufP6w==
+kapsule@^1.13, kapsule@^1.14:
+  version "1.14.1"
+  resolved "https://registry.npmjs.org/kapsule/-/kapsule-1.14.1.tgz#344a0a7b3e48ee0942ad58ee97daac12433bc1ef"
+  integrity sha512-zA9LbOApzkDtulUYNp5R2RVXX1mS6tIoPlhsr8bVQPsGvTQHXnF8W3n0mC//lMciu/NNvtqv+lXUahDn9P6Y0Q==
   dependencies:
     debounce "^1.2.1"
 
@@ -3487,10 +3487,10 @@ prettier-plugin-sort-json@^1.0.0:
   dependencies:
     "@types/prettier" "^2.7.2"
 
-prettier@^2.8.3:
-  version "2.8.3"
-  resolved "https://registry.npmjs.org/prettier/-/prettier-2.8.3.tgz#ab697b1d3dd46fb4626fbe2f543afe0cc98d8632"
-  integrity sha512-tJ/oJ4amDihPoufT5sM0Z1SKEuKay8LfVAMlbbhnnkvt6BUserZylqo2PN+p9KeljLr0OHa2rXHU1T8reeoTrw==
+prettier@^2.8.3, prettier@^2.8.4:
+  version "2.8.4"
+  resolved "https://registry.npmjs.org/prettier/-/prettier-2.8.4.tgz#34dd2595629bfbb79d344ac4a91ff948694463c3"
+  integrity sha512-vIS4Rlc2FNh0BySk3Wkd6xmwxB0FpOndW5fisM5H8hsZSxU2VWVB5CWIkIjWvrHjIhxk2g3bfMKM87zNTrZddw==
 
 process@^0.11.10:
   version "0.11.10"
@@ -4051,14 +4051,14 @@ three-forcegraph@^1.41:
     ngraph.graph "^20.0"
     tinycolor2 "^1.5"
 
-three-render-objects@^1.27:
-  version "1.27.8"
-  resolved "https://registry.npmjs.org/three-render-objects/-/three-render-objects-1.27.8.tgz#571302850d0c9be131d35ed5d9efe3aacfce0f52"
-  integrity sha512-ufnSu2AT1bPcg1NX91SS3hz6OxJcpNUGOjNtarCmzNmRkVlhc/PZJHcF4aPU6cy8X7R3bQfGRgUdh75kpAyTgg==
+three-render-objects@^1.28:
+  version "1.28.1"
+  resolved "https://registry.npmjs.org/three-render-objects/-/three-render-objects-1.28.1.tgz#a25f8a1f136a0d00bf96b486d73153e0a0d4abb2"
+  integrity sha512-8FIvzTcmLGMtCl8EZvzUFgLKTC7DTZWYnPIbEz51oi4jS5ugzQBKt8wNZyan448Vokl6noky5PnjzcONzIpgyQ==
   dependencies:
     "@tweenjs/tween.js" "18"
     accessor-fn "1"
-    kapsule "^1.13"
+    kapsule "^1.14"
     polished "4"
 
 "three@>=0.118 <1":
@@ -4112,7 +4112,7 @@ typed-styles@^0.0.7:
   resolved "https://registry.npmjs.org/typed-styles/-/typed-styles-0.0.7.tgz#93392a008794c4595119ff62dde6809dbc40a3d9"
   integrity sha512-pzP0PWoZUhsECYjABgCGQlRGL1n7tOHsgwYv3oIiEpJwGhFTuty/YNeduxQYzXXa3Ge5BdT6sHYIQYpl4uJ+5Q==
 
-typescript@~4.9.3, typescript@~4.9.5:
+typescript@~4.9.5:
   version "4.9.5"
   resolved "https://registry.npmjs.org/typescript/-/typescript-4.9.5.tgz#095979f9bcc0d09da324d58d03ce8f8374cbe65a"
   integrity sha512-1FXk9E2Hm+QzZQ7z+McJiHL4NW1F2EzMu9Nq9i3zAaGqibafqYwCVU6WyWAuyQRRzOlxou8xZSyXLEN8oKj24g==

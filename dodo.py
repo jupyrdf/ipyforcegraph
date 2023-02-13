@@ -32,6 +32,7 @@ from scripts import reporter
 from scripts import utils as U
 
 os.environ.update(
+    BLACK_CACHE_DIR=str(P.BUILD / ".black"),
     MAMBA_NO_BANNER="1",
     NODE_OPTS="--max-old-space-size=4096",
     PIP_DISABLE_PIP_VERSION_CHECK="1",
@@ -800,7 +801,14 @@ def task_watch_docs():
         file_dep=[P.DOCS_BUILDINFO, *P.ALL_MD, P.OK_PIP_INSTALL],
         actions=[
             LongRunning(
-                [*P.IN_ENV, "sphinx-autobuild", P.DOCS, P.DOCS_BUILD], shell=False
+                [
+                    *P.IN_ENV,
+                    "sphinx-autobuild",
+                    f"--watch={P.PY_SRC}",
+                    P.DOCS,
+                    P.DOCS_BUILD,
+                ],
+                shell=False,
             )
         ],
     )

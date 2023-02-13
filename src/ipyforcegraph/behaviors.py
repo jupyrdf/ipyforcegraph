@@ -14,7 +14,7 @@ from .sources.dataframe import DataFrameSource
 
 @W.register
 class GraphImage(Behavior):
-    """Captures multiple subsequent frames of a canvas, each as an Image."""
+    """Captures multiple subsequent frames of a canvas, each as an :class:`~ipywidgets.widgets.widget_media.Image`."""
 
     _model_name: str = T.Unicode("GraphImageModel").tag(sync=True)
 
@@ -26,7 +26,7 @@ class GraphImage(Behavior):
 
     frames: Tuple[W.Image, ...] = W.TypedTuple(
         T.Instance(W.Image),
-        help="A tuple of `ipywidgets.Image`s to be populated with frames of the graph.",
+        help="A tuple of :class:`~ipywidgets.widgets.widget_media.Image` to populate with frames of the graph.",
     ).tag(sync=True, **W.widget_serialization)
 
     def _get_frames(self) -> Tuple[W.Image, ...]:
@@ -52,7 +52,7 @@ class GraphImage(Behavior):
 
 @W.register
 class GraphData(Behavior):
-    """Captures multiple subsequent frames of a canvas, each as an DataFrameSource."""
+    """Captures multiple subsequent ticks of a graph simulation, each as a :class:`~pandas.DataFrame`."""
 
     _model_name: str = T.Unicode("GraphDataModel").tag(sync=True)
 
@@ -64,7 +64,7 @@ class GraphData(Behavior):
 
     sources: Tuple[DataFrameSource, ...] = W.TypedTuple(
         T.Instance(DataFrameSource),
-        help="A tuple of `DataFrameSource`s to be populated with data of the graph.",
+        help="A tuple of :class:`~ipyforcegraph.sources.dataframe.DataFrameSource` to be populated with data of the graph.",
     ).tag(sync=True, **W.widget_serialization)
 
     def _get_sources(self) -> Tuple[DataFrameSource, ...]:

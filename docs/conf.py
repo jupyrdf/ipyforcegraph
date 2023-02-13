@@ -29,6 +29,7 @@ extensions = [
     "sphinx_autodoc_typehints",
     "sphinx.ext.viewcode",
     "sphinx.ext.intersphinx",
+    "sphinx_copybutton",
 ]
 
 # meta
