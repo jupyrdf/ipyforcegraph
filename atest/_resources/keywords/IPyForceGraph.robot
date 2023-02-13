@@ -77,6 +77,7 @@ Clean up after IPyForceGraph Example
     ${data} =    Get All IPyForceGraph Example Data Names
     Clean up after Working With Files    @{files}
     Clean up after Working With Files    @{data}
+    Gently Reset Workspace
 
 Click IPyForceGraph Canvas
     [Arguments]    ${x}=0    ${y}=0    ${text}=${EMPTY}

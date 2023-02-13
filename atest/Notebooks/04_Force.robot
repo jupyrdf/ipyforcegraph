@@ -6,6 +6,8 @@ Library             Collections
 
 Test Teardown       Clean up after IPyForceGraph Example
 
+Test Tags           data:miserables    widget:forcegraph    behavior:forces
+
 
 *** Variables ***
 ${SCREENS}      ${SCREENS ROOT}${/}forces
@@ -13,10 +15,9 @@ ${SCREENS}      ${SCREENS ROOT}${/}forces
 
 *** Test Cases ***
 Forces
-    [Tags]    data:miserables    widget:forcegraph    behavior:forces
     Example Should Restart-and-Run-All    ${FORCES}
 
 Forces Test
-    [Tags]    data:miserables    widget:forcegraph    behavior:forces
     Example Should Restart-and-Run-All    ${FORCES_TEST}
-    Wait Until Page Contains    ✅✅✅    timeout=180s
+    Wait Until Page Contains    Tests Completed    timeout=120s
+    Page Should Not Contain    💥
