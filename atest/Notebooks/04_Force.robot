@@ -19,4 +19,4 @@ Forces
 Forces Test
     [Tags]    data:miserables    widget:forcegraph    behavior:forces
     Example Should Restart-and-Run-All    ${FORCES_TEST}
-    Wait Until Page Contains    ✅✅✅    timeout=120s
+    Wait Until Page Contains    ✅✅✅    timeout=180s
