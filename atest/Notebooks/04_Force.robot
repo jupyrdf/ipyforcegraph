@@ -18,6 +18,7 @@ Forces
     Example Should Restart-and-Run-All    ${FORCES}
 
 Forces Test
+    Maybe Skip A Test    example=${FORCES_TEST}
     Example Should Restart-and-Run-All    ${FORCES_TEST}
     Wait Until Page Contains    Tests Completed    timeout=120s
     Page Should Not Contain    💥

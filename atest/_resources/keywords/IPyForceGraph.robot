@@ -108,10 +108,15 @@ Wait Until No Tag Widgets Exist
 
 Maybe Skip A Test
     [Documentation]    Capture common reasons for skipping tests
-    [Arguments]    ${widget_class}=${EMPTY}
+    [Arguments]    ${widget_class}=${EMPTY}    ${example}=${EMPTY}
     IF    "${OS}" == "Darwin"
-        IF    "${widget_class}" == "${IPYFORCGRAPH CLASS 3D}"
+        IF    "${widget_class}" == "${IPYFORCEGRAPH CLASS 3D}"
             Pass Execution    Can't test 3d canvas on MacOS
             ...    skip:darwin:3d
+        END
+    ELSE IF    "${OS}" == "Windows"
+        IF    "${example}" == "${FORCES_TEST}"
+            Pass Execution    Windows asyncio issues
+            ...    skip:windows:asyncio
         END
     END

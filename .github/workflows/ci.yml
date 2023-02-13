@@ -185,7 +185,7 @@ jobs:
     env:
       INSTALL_ARTIFACT: ${{ matrix.artifact }}
       TESTING_IN_CI: 'true'
-      ATEST_RETRIES: '3'
+      ATEST_RETRIES: '2'
       IPYFORCEGRAPH_PY: ${{ matrix.py }}
       IPYFORCEGRAPH_LAB: ${{ matrix.lab }}
     steps:
