@@ -1,15 +1,34 @@
-#!/usr/bin/env python3
+#!/usr/bin/env bash
 
 # Copyright (c) 2023 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.
 
-import os
-import subprocess
+set -eux
 
-os.environ.update(IN_BINDER="1")
+export IN_BINDER=1
 
-subprocess.call(["doit", "-n4"])
-subprocess.call(["doit", "list"])
-subprocess.check_call(["doit"])
+source activate ${NB_PYTHON_PREFIX}
 
-print(">>> OK")
+# force jupyter_server 2 for collab
+mamba install -yc conda-forge "jupyter_server>=2.2.1"
+conda clean -yaf
+
+doit list
+doit -n4 || doit list
+doit
+
+# tidy up big downloads
+rm -rf node_modules .yarn-packages
+
+# work around default start command
+cp ${NB_PYTHON_PREFIX}/bin/jupyter-lab ${NB_PYTHON_PREFIX}/bin/jupyter-notebook
+
+# disable some extensions
+jupyter labextension disable jupyter-offlinenotebook
+
+# clean up some settings
+mkdir -p ${NB_PYTHON_PREFIX}/share/jupyter/lab/settings
+cp .binder/overrides.json ${NB_PYTHON_PREFIX}/share/jupyter/lab/settings/
+
+mkdir -p .jupyter/
+cp .binder/jupyter_config.json .jupyter/

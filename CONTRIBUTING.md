@@ -66,7 +66,7 @@ http://localhost:8888/lab#FORCEGRAPH_DEBUG
 ```
 
 > Note: if a message will be helpful for debugging, make sure to `import` and guard
-> `console.*` or higher with `FORCEGRAPH_DEBUG &&`
+> `console.*` or higher with `DEBUG &&`
 
 On the python side, each `Widget` has `.log.debug` which is preferable to `print`
 statements. The log level can be increased for a running kernel through the JupyterLab's

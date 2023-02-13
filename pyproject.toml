@@ -53,7 +53,9 @@ profile = "black"
 known_first_party = "ipyforcegraph"
 
 [tool.mypy]
-python_version = '3.8'
+cache_dir = "build/.mypy_cache"
+sqlite_cache = true
+python_version = "3.8"
 # settings
 allow_redefinition = true
 check_untyped_defs = true
@@ -67,12 +69,12 @@ warn_unused_ignores = true
 
 [[tool.mypy.overrides]]
 module = [
-    'importlib.metadata',
-    'ipywidgets',
-    'numcodecs',
-    'numpy',
-    'pandas',
-    'traittypes',
+    "importlib.metadata",
+    "ipywidgets",
+    "numcodecs",
+    "numpy",
+    "pandas",
+    "traittypes",
 ]
 ignore_missing_imports = true
 

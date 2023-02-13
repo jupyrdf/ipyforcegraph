@@ -1,0 +1,14 @@
+{
+  "@jupyterlab/apputils-extension:notification": {
+    "fetchNews": "false"
+  },
+  "@jupyterlab/apputils-extension:palette": {
+    "modal": false
+  },
+  "@jupyterlab/extensionmanager-extension:plugin": {
+    "enabled": false
+  },
+  "@jupyterlab/statusbar-extension:plugin": {
+    "visible": false
+  }
+}
