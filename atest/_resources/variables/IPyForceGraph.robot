@@ -2,6 +2,8 @@
 ${INDEX}                    _index
 ${BEHAVIORS}                Behaviors
 ${THREEDEE}                 3D
+${FORCES}                   Forces
+${FORCES_TEST}              Test_Forces
 
 ${IPYFORCEGRAPH GRAPH}      .jp-ForceGraph
 ${IPYFORCEGRAPH FRAME}      ${IPYFORCEGRAPH GRAPH} iframe

@@ -8,6 +8,7 @@ import { ISignal, Signal } from '@lumino/signaling';
 
 import { IBackboneModelOptions, WidgetModel } from '@jupyter-widgets/base';
 
+import { newTemplate } from '../../template-utils';
 import {
   EMOJI,
   IBehave,
@@ -62,9 +63,8 @@ export class ColumnOrTemplateModel extends BehaviorModel implements IBehave {
     if (template == null) {
       this._nunjucksTemplate = null;
     } else {
-      const nunjucks = await import('nunjucks');
       try {
-        this._nunjucksTemplate = new nunjucks.Template(template);
+        this._nunjucksTemplate = await newTemplate(template);
       } catch (err) {
         console.warn(EMOJI, err, err['message']);
         this._nunjucksTemplate = null;

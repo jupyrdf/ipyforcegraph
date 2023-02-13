@@ -4,7 +4,7 @@
  */
 import { forceY as d3YForce } from 'd3-force-3d';
 
-import { isNumeric, makeNodeTemplate } from '../../../template-utils';
+import { isNumeric, makeForceNodeTemplate } from '../../../template-utils';
 import { IBehave, IForce, TAnyForce } from '../../../tokens';
 
 import { ForceBehaviorModel } from './force';
@@ -51,7 +51,7 @@ export class YForceModel extends ForceBehaviorModel implements IBehave, IForce {
     if (isNumeric(value)) {
       this.y = Number(value);
     } else {
-      this.y = await makeNodeTemplate(value);
+      this.y = await makeForceNodeTemplate(value);
     }
   }
 
@@ -60,7 +60,7 @@ export class YForceModel extends ForceBehaviorModel implements IBehave, IForce {
     if (isNumeric(value)) {
       this.strength = Number(value);
     } else {
-      this.strength = await makeNodeTemplate(value);
+      this.strength = await makeForceNodeTemplate(value);
     }
   }
 }

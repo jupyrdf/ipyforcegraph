@@ -5,7 +5,7 @@
 // import type d3Force from 'd3-force';
 import { forceLink as d3ForceLink } from 'd3-force-3d';
 
-import { isNumeric, makeLinkTemplate } from '../../../template-utils';
+import { isNumeric, makeForceLinkTemplate } from '../../../template-utils';
 import { IBehave, IForce } from '../../../tokens';
 
 import { ForceBehaviorModel } from './force';
@@ -54,7 +54,7 @@ export class LinkForceModel extends ForceBehaviorModel implements IBehave, IForc
     if (isNumeric(value)) {
       this.strength = Number(value);
     } else {
-      this.strength = await makeLinkTemplate(value);
+      this.strength = await makeForceLinkTemplate(value);
     }
   }
 
@@ -63,7 +63,7 @@ export class LinkForceModel extends ForceBehaviorModel implements IBehave, IForc
     if (isNumeric(value)) {
       this.distance = Number(value);
     } else {
-      this.distance = await makeLinkTemplate(value);
+      this.distance = await makeForceLinkTemplate(value);
     }
   }
 }

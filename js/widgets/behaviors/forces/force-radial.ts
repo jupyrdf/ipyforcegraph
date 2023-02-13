@@ -4,7 +4,7 @@
  */
 import { forceRadial as d3ForceRadial } from 'd3-force-3d';
 
-import { isNumeric, makeNodeTemplate } from '../../../template-utils';
+import { isNumeric, makeForceNodeTemplate } from '../../../template-utils';
 import { IBehave, IForce } from '../../../tokens';
 
 import { ForceBehaviorModel } from './force';
@@ -55,7 +55,7 @@ export class RadialForceModel extends ForceBehaviorModel implements IBehave, IFo
     if (isNumeric(value)) {
       this.radius = Number(value);
     } else {
-      this.radius = await makeNodeTemplate(value);
+      this.radius = await makeForceNodeTemplate(value);
     }
   }
 
