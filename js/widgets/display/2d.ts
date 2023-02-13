@@ -61,6 +61,7 @@ export class ForceGraphModel extends DOMWidgetModel {
 
   protected _nodeBehaviorsByMethod: TNodeMethodMap;
   protected _linkBehaviorsByMethod: TLinkMethodMap;
+  protected _forceBehaviors: GraphForcesBehaviorModel[];
   protected _behaviorsChanged: Signal<ForceGraphModel, void>;
 
   defaults() {
@@ -111,6 +112,13 @@ export class ForceGraphModel extends DOMWidgetModel {
       }
       this._nodeBehaviorsByMethod.set(nodeMethod, methodBehaviors);
     }
+
+    this._forceBehaviors = [];
+    for (const behavior of behaviors) {
+      if (behavior instanceof GraphForcesBehaviorModel) {
+        this._forceBehaviors.push(behavior);
+      }
+    }
     this._behaviorsChanged.emit(void 0);
   }
 
@@ -120,6 +128,10 @@ export class ForceGraphModel extends DOMWidgetModel {
 
   nodeBehaviorsForMethod(method: TNodeBehaveMethod): readonly IBehave[] {
     return this._nodeBehaviorsByMethod.get(method) || emptyArray;
+  }
+
+  get forceBehaviors(): readonly GraphForcesBehaviorModel[] {
+    return this._forceBehaviors;
   }
 
   get graphData(): GraphData {
@@ -381,7 +393,7 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
   protected getForceUpdate() {
     const graph = this.graph as ForceGraphInstance;
     let needsPost: TAnyForce[] = [];
-    for (let simBehavior of this.getGraphForcesBehaviors()) {
+    for (let simBehavior of this.model.forceBehaviors) {
       const { warmupTicks, cooldownTicks, alphaDecay, alphaMin, velocityDecay } =
         simBehavior;
       graph.cooldownTicks(cooldownTicks);
@@ -623,14 +635,4 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
       behavior.onRender(options);
     }
   };
-
-  protected *getGraphForcesBehaviors(): Generator<GraphForcesBehaviorModel> {
-    const { behaviors } = this.model;
-    for (let behavior of behaviors) {
-      if (behavior instanceof GraphForcesBehaviorModel) {
-        yield behavior;
-      }
-    }
-    return;
-  }
 }
