@@ -13,7 +13,6 @@ export class RadialForceModel extends ForceBehaviorModel implements IBehave, IFo
   static model_name = 'RadialForceModel';
   _force: d3ForceRadial;
   radius: CallableFunction | Number | null;
-  strength: CallableFunction | Number | null;
 
   defaults() {
     return {
@@ -44,17 +43,11 @@ export class RadialForceModel extends ForceBehaviorModel implements IBehave, IFo
 
   async onChanged() {
     await this.update_radius();
-    await this.update_strength();
     this._updateRequested.emit(void 0);
   }
 
-  async update_strength() {
-    let value = this.get('strength');
-    if (isNumeric(value)) {
-      this.strength = Number(value);
-    } else {
-      this.strength = await makeNodeTemplate(value);
-    }
+  get strength() {
+    return this.get('strength');
   }
 
   async update_radius() {
