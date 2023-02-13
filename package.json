@@ -26,7 +26,7 @@
     "clean": "rimraf ./lib ./src/ipyforcegraph/_d",
     "deduplicate": "yarn-deduplicate -s fewer --fail",
     "lint": "jlpm lint:prettier",
-    "lint:prettier": "prettier-package-json --write package.json && prettier --cache --cache-location build/.prettiercache --write --list-different \"*.{json,yml,md}\" \"{js,style,lite,src,.github,examples,docs}/**/*.{ts,tsx,js,jsx,css,json,md,yml,yaml}\"",
+    "lint:prettier": "prettier-package-json --write package.json && prettier --cache --cache-location build/.prettiercache --write --list-different \"*.{json,yml,md}\" \"{js,style,lite,src,.github,examples,docs,.binder}/**/*.{ts,tsx,js,jsx,css,json,md,yml,yaml}\"",
     "watch": "run-p watch:lib watch:ext",
     "watch:ext": "jupyter labextension watch .",
     "watch:lib": "jlpm build:ts --watch --preserveWatchOutput"
@@ -36,7 +36,7 @@
   ],
   "types": "lib/index.d.ts",
   "resolutions": {
-    "typescript": "~4.9.3",
+    "typescript": "~4.9.5",
     "json5": "^2.1.1",
     "prettier": "^2.8.3"
   },
@@ -45,7 +45,7 @@
     "@jupyter-widgets/base": "^6.0.2",
     "@jupyter-widgets/controls": "^5.0.3",
     "@jupyter-widgets/jupyterlab-manager": "^5.0.5",
-    "3d-force-graph": "~1.70.20",
+    "3d-force-graph": "~1.71.1",
     "buffer": "^6.0.3",
     "force-graph": "~1.43.0",
     "nunjucks": "^3.2.3"
@@ -56,12 +56,11 @@
     "@jupyterlab/theme-dark-extension": "3",
     "@jupyterlab/theme-light-extension": "3",
     "@trivago/prettier-plugin-sort-imports": "^4.0.0",
-    "@types/d3-force": "^3.0.4",
     "@types/nunjucks": "^3.2.1",
     "@types/three": "^0.148.0",
     "file-loader": "^6.2.0",
     "npm-run-all": "^4.1.5",
-    "prettier": "^2.8.3",
+    "prettier": "^2.8.4",
     "prettier-package-json": "^2.8.0",
     "prettier-plugin-sort-json": "^1.0.0",
     "rimraf": "^4.1.2",

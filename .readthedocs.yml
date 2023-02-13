@@ -6,8 +6,11 @@ build:
     python: mambaforge-4.10
   jobs:
     pre_build:
+      - doit list
       - doit setup
+      - doit list
       - doit lite
+      - doit list
 
 sphinx:
   builder: html
