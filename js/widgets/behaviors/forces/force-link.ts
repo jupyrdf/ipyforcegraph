@@ -4,8 +4,8 @@
  */
 // import type d3Force from 'd3-force';
 import { forceLink as d3ForceLink } from 'd3-force-3d';
-import type { Template } from 'nunjucks';
 
+import { isNumeric, makeLinkTemplate } from '../../../template-utils';
 import { IBehave, IForce } from '../../../tokens';
 
 import { ForceBehaviorModel } from './force';
@@ -14,13 +14,15 @@ export class LinkForceModel extends ForceBehaviorModel implements IBehave, IForc
   static model_name = 'LinkForceModel';
   _force: d3ForceLink;
 
-  protected _strengthTemplate: Template | null;
-  protected _distanceTemplate: Template | null;
+  protected strength: CallableFunction | Number | null;
+  protected distance: CallableFunction | Number | null;
 
   defaults() {
     return {
       ...super.defaults(),
       _model_name: LinkForceModel.model_name,
+      strength: null,
+      distance: null,
     };
   }
 
@@ -41,11 +43,27 @@ export class LinkForceModel extends ForceBehaviorModel implements IBehave, IForc
     return 'change:strength change:distance';
   }
 
-  get strength() {
-    return this.get('strength');
+  async onChanged() {
+    await this.update_distance();
+    await this.update_strength();
+    this._updateRequested.emit(void 0);
   }
 
-  get distance() {
-    return this.get('distance');
+  async update_strength() {
+    let value = this.get('strength');
+    if (isNumeric(value)) {
+      this.strength = Number(value);
+    } else {
+      this.strength = await makeLinkTemplate(value);
+    }
+  }
+
+  async update_distance() {
+    let value = this.get('distance');
+    if (isNumeric(value)) {
+      this.distance = Number(value);
+    } else {
+      this.distance = await makeLinkTemplate(value);
+    }
   }
 }

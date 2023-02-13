@@ -4,27 +4,10 @@
  */
 import { forceX as d3XForce } from 'd3-force-3d';
 
-import { EMOJI, IBehave, IForce, TAnyForce } from '../../../tokens';
+import { isNumeric, makeNodeTemplate } from '../../../template-utils';
+import { IBehave, IForce, TAnyForce } from '../../../tokens';
 
 import { ForceBehaviorModel } from './force';
-
-const isNumeric = (val: string): boolean => {
-  return !isNaN(Number(val));
-};
-
-async function makeTemplate(template: string): Promise<CallableFunction> {
-  const nunjucks = await import('nunjucks');
-  let newTemplate = await new nunjucks.Template(template);
-
-  const renderTemplate = (options: any) => {
-    try {
-      return Number(newTemplate.render(options)) || null;
-    } catch (err) {
-      console.warn(EMOJI, err);
-    }
-  };
-  return renderTemplate;
-}
 
 export class XForceModel extends ForceBehaviorModel implements IBehave, IForce {
   static model_name = 'XForceModel';
@@ -69,7 +52,7 @@ export class XForceModel extends ForceBehaviorModel implements IBehave, IForce {
     if (isNumeric(value)) {
       this.x = Number(value);
     } else {
-      this.x = await makeTemplate(value);
+      this.x = await makeNodeTemplate(value);
     }
   }
 
@@ -78,7 +61,7 @@ export class XForceModel extends ForceBehaviorModel implements IBehave, IForce {
     if (isNumeric(value)) {
       this.strength = Number(value);
     } else {
-      this.strength = await makeTemplate(value);
+      this.strength = await makeNodeTemplate(value);
     }
   }
 }

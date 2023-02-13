@@ -4,6 +4,7 @@
  */
 import { forceRadial as d3ForceRadial } from 'd3-force-3d';
 
+import { isNumeric, makeNodeTemplate } from '../../../template-utils';
 import { IBehave, IForce } from '../../../tokens';
 
 import { ForceBehaviorModel } from './force';
@@ -11,6 +12,7 @@ import { ForceBehaviorModel } from './force';
 export class RadialForceModel extends ForceBehaviorModel implements IBehave, IForce {
   static model_name = 'RadialForceModel';
   _force: d3ForceRadial;
+  radius: CallableFunction | Number | null;
 
   defaults() {
     return {
@@ -39,12 +41,22 @@ export class RadialForceModel extends ForceBehaviorModel implements IBehave, IFo
     return 'change:strength change:radius change:x change:y change:z';
   }
 
+  async onChanged() {
+    await this.update_radius();
+    this._updateRequested.emit(void 0);
+  }
+
   get strength() {
     return this.get('strength');
   }
 
-  get radius() {
-    return this.get('radius');
+  async update_radius() {
+    let value = this.get('radius');
+    if (isNumeric(value)) {
+      this.radius = Number(value);
+    } else {
+      this.radius = await makeNodeTemplate(value);
+    }
   }
 
   get x() {

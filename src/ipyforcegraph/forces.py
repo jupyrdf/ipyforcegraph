@@ -286,10 +286,13 @@ class CollisionForce(BaseD3Force):
         help="a nunjucks template to use to calculate node radius",
     ).tag(sync=True)
 
-    strength: Optional[str] = T.Unicode(
+    strength: Optional[float] = T.Float(
         None,
         allow_none=True,
-        help="a nunjucks template to use to calculate force strength",
+        min=0,
+        max=1,
+        default=1,
+        help="sets the strength of the force.",
     ).tag(sync=True)
 
     iterations: Optional[int] = T.Unicode(

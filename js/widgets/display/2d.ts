@@ -40,6 +40,7 @@ import {
   INodeEventBehaveOptions,
   IRenderOptions,
   ISource,
+  TAnyForce,
   TLinkBehaveMethod,
   TLinkMethodMap,
   TNodeBehaveMethod,
@@ -379,6 +380,7 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
 
   protected getForceUpdate() {
     const graph = this.graph as ForceGraphInstance;
+    let needsPost: TAnyForce[] = [];
     for (let simBehavior of this.getGraphForcesBehaviors()) {
       const { warmupTicks, cooldownTicks, alphaDecay, alphaMin, velocityDecay } =
         simBehavior;
@@ -392,12 +394,33 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
         let behavior: ForceBehaviorModel | null = simBehavior.forces[key];
         let force = behavior?.force || null;
         graph.d3Force(key, force);
-        if (force.links) {
-          force.links(graph.graphData().links);
+        if (force?.links) {
+          needsPost.push(force);
         }
       }
     }
+    if (needsPost.length) {
+      setTimeout(this.postForceUpdate, 250, needsPost);
+    }
   }
+
+  protected postForceUpdate = (forces: TAnyForce[]) => {
+    const { links } = (this.graph as ForceGraphInstance).graphData();
+    if (!links.length) {
+      return;
+    }
+    const firstSource = typeof links[0].source;
+    if (firstSource === 'string' || firstSource === 'number') {
+      setTimeout(this.postForceUpdate, 250, forces);
+      DEBUG && console.log('Polling postForceUpdate...');
+      return;
+    }
+    for (let force of forces) {
+      if (force.links) {
+        force.links(links);
+      }
+    }
+  };
 
   protected getOnRenderPostUpdate() {
     const graph = this.graph as ForceGraphInstance;
