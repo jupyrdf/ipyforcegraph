@@ -348,5 +348,5 @@ def notebook_lint(ipynb: Path):
     print(f"... blackening {ipynb.stem}")
     black_args = []
     black_args += ["--quiet"]
-    if subprocess.call([shutil.which("black"), *black_args, ipynb]) != 0:
+    if subprocess.call([*IN_ENV, "black", *black_args, ipynb]) != 0:
         return False
