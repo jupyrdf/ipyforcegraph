@@ -12,6 +12,7 @@ import {
 
 import { EUpdate, IForce, TAnyForce } from '../../../tokens';
 import { LinkColumnOrTemplateModel } from '../base';
+import type { GraphData, NodeObject } from 'force-graph/dist/force-graph';
 
 export type TForceRecord = Record<string, ForceBehaviorModel | null>;
 
@@ -128,5 +129,58 @@ export class GraphForcesBehaviorModel extends LinkColumnOrTemplateModel {
 
   get velocityDecay(): number {
     return this.get('velocity_decay');
+  }
+
+  checkPositions(graphdata:GraphData){
+    let nodes = graphdata.nodes;
+
+    let anyNaN = false;
+    for (let n of nodes){
+      if (isNaN(n.x) || isNaN(n.y)){
+        anyNaN = true;
+        break
+      }
+    }
+    if (anyNaN){
+      initializeNodes(nodes)
+    }
+  }
+}
+
+// initializeNodes function from `d3-force-3d/simulation.js`
+function initializeNodes(nodes: NodeObject[], numDimensions=2) {
+  let MAX_DIMENSIONS = 3;
+  let nDim = Math.min(MAX_DIMENSIONS, Math.max(1, Math.round(numDimensions)))
+  var initialRadius = 10,
+    initialAngleRoll = Math.PI * (3 - Math.sqrt(5)), // Golden ratio angle
+    initialAngleYaw = Math.PI * 20 / (9 + Math.sqrt(221)); // Markov irrational number
+
+
+  for (var i = 0, n = nodes.length, node; i < n; ++i) {
+    node = nodes[i], node.index = i;
+    if (node.fx != null) node.x = node.fx;
+    if (node.fy != null) node.y = node.fy;
+    if (node.fz != null) node.z = node.fz;
+    if (isNaN(node.x) || (nDim > 1 && isNaN(node.y)) || (nDim > 2 && isNaN(node.z))) {
+      var radius = initialRadius * (nDim > 2 ? Math.cbrt(0.5 + i) : (nDim > 1 ? Math.sqrt(0.5 + i) : i)),
+        rollAngle = i * initialAngleRoll,
+        yawAngle = i * initialAngleYaw;
+
+      if (nDim === 1) {
+        node.x = radius;
+      } else if (nDim === 2) {
+        node.x = radius * Math.cos(rollAngle);
+        node.y = radius * Math.sin(rollAngle);
+      } else { // 3 dimensions: use spherical distribution along 2 irrational number angles
+        node.x = radius * Math.sin(rollAngle) * Math.cos(yawAngle);
+        node.y = radius * Math.cos(rollAngle);
+        node.z = radius * Math.sin(rollAngle) * Math.sin(yawAngle);
+      }
+    }
+    if (isNaN(node.vx) || (nDim > 1 && isNaN(node.vy)) || (nDim > 2 && isNaN(node.vz))) {
+      node.vx = 0;
+      if (nDim > 1) { node.vy = 0; }
+      if (nDim > 2) { node.vz = 0; }
+    }
   }
 }
