@@ -114,6 +114,7 @@ function addCustomGlobals(env: Environment) {
   for (const fn of MATH_N_ARY) {
     env.addGlobal(fn.name, wrapNAry(fn));
   }
+  env.addGlobal('now', () => performance.now());
   env.addFilter('where', (iterable: any[], attr: string, value: any) => {
     const results: any[] = [];
     for (const item of iterable) {
