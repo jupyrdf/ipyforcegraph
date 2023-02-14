@@ -4,6 +4,7 @@ channels:
 dependencies:
   ### docs/environment.yml ###
   - ansi2html
+  - autodoc-traits
   - bqplot >=0.12.20
   - docutils >=0.19
   - doit
