@@ -58,6 +58,10 @@ export class LinkSelectionModel extends BehaviorModel implements IBehave {
     return this.get('selected_width') || DEFAULT_WIDTHS.selected;
   }
 
+  get multiple(): boolean {
+    return this.get('multiple');
+  }
+
   getLinkWidth({ index }: ILinkBehaveOptions): string | null {
     const width = this.selected.has(index) ? this.selectedWidth : null;
     return width;
@@ -69,12 +73,13 @@ export class LinkSelectionModel extends BehaviorModel implements IBehave {
   }
 
   onLinkClick = ({ index, event }: ILinkEventBehaveOptions): boolean => {
-    let { selected } = this;
-    if (this.get('multiple') && (event.ctrlKey || event.shiftKey || event.altKey)) {
-      selected.has(index) ? selected.delete(index) : selected.add(index);
+    let { selected, multiple } = this;
+    const indexSelected = selected.has(index);
+    if (multiple && (event.ctrlKey || event.shiftKey || event.altKey)) {
+      indexSelected ? selected.delete(index) : selected.add(index);
     } else {
       selected.clear();
-      selected.add(index);
+      !indexSelected && selected.add(index);
     }
 
     this.selected = selected;

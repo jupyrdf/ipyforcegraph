@@ -52,19 +52,25 @@ export class NodeSelectionModel extends BehaviorModel implements IBehave {
     return this.get('selected_color') || DEFAULT_COLORS.selected;
   }
 
+  get multiple(): boolean {
+    return this.get('multiple');
+  }
+
   getNodeColor({ node }: INodeBehaveOptions): string | null {
     const color = this.selected.has(node.id) ? this.selectedColor : null;
     return color;
   }
 
   onNodeClick = ({ node, event }: INodeEventBehaveOptions): boolean => {
-    let { selected } = this;
+    let { selected, multiple } = this;
     const id = node.id;
-    if (this.get('multiple') && (event.ctrlKey || event.shiftKey || event.altKey)) {
-      selected.has(id) ? selected.delete(id) : selected.add(id);
+    const idSelected = selected.has(id);
+
+    if (multiple && (event.ctrlKey || event.shiftKey || event.altKey)) {
+      idSelected ? selected.delete(id) : selected.add(id);
     } else {
       selected.clear();
-      selected.add(id);
+      !idSelected && selected.add(id);
     }
 
     this.selected = selected;

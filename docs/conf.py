@@ -26,6 +26,7 @@ extensions = [
     "sphinx.ext.autosectionlabel",
     "sphinx.ext.extlinks",
     "sphinx.ext.autodoc",
+    "autodoc_traits",
     "sphinx_autodoc_typehints",
     "sphinx.ext.viewcode",
     "sphinx.ext.intersphinx",
@@ -48,6 +49,7 @@ autodoc_typehints = "none"
 autodoc_default_options = {
     "members": True,
     "show-inheritance": True,
+    "undoc-members": True,
 }
 inheritance_alias = {}
 

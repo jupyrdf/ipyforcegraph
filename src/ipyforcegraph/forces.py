@@ -1,4 +1,9 @@
-"""Forces for ``ipyforcegraph``. Using documentation from [d3-forces](https://github.com/d3/d3-force#links).
+"""Forces for ``ipyforcegraph``.
+
+Using documentation from:
+
+- `d3-forces <https://github.com/d3/d3-force#links>`_
+- `d3-forces-3d <https://github.com/vasturiano/d3-force-3d#api-reference>`_
 """
 
 # Copyright (c) 2023 ipyforcegraph contributors.
@@ -26,10 +31,11 @@ class BaseD3Force(Behavior):
 
 @W.register
 class GraphForcesBehavior(Behavior):
-    """Customize ForceGraph force simulation.
+    """Customize :class:`~ipyforcegraph.forcegraph.ForceGraph` force simulation.
 
-    Holds all kinds of stuff:
-    https://github.com/vasturiano/force-graph#force-engine-d3-force-configuration
+    These also apply to :class:`~ipyforcegraph.forcegraph.ForceGraph3D`
+
+    For more, see the frontend documentation on https://github.com/vasturiano/force-graph#force-engine-d3-force-configuration
     """
 
     _model_name: str = T.Unicode("GraphForcesBehaviorModel").tag(sync=True)

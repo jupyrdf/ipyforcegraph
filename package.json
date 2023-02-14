@@ -47,6 +47,7 @@
     "@jupyter-widgets/jupyterlab-manager": "^5.0.5",
     "3d-force-graph": "~1.71.1",
     "buffer": "^6.0.3",
+    "d3-force-3d": "^3.0.5",
     "d3-force-cluster-3d": "~1.1.1",
     "force-graph": "~1.43.0",
     "nunjucks": "^3.2.3"

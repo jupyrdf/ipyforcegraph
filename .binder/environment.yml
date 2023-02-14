@@ -13,7 +13,7 @@ dependencies:
   - keyring
   - mypy >=1.0.0
   - pyflakes
-  - pyproject-fmt
+  - pyproject-fmt !=0.9.1
   - pytest-asyncio
   - pytest-check-links
   - pytest-cov

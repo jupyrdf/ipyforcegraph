@@ -13,7 +13,7 @@
 #   - keyring
 #   - mypy >=1.0.0
 #   - pyflakes
-#   - pyproject-fmt
+#   - pyproject-fmt !=0.9.1
 #   - pytest-asyncio
 #   - pytest-check-links
 #   - pytest-cov
@@ -29,6 +29,7 @@
 #   - stringcase
 #   ### docs/environment.yml ###
 #   - ansi2html
+#   - autodoc-traits
 #   - bqplot >=0.12.20
 #   - docutils >=0.19
 #   - doit
@@ -259,7 +260,7 @@ https://conda.anaconda.org/conda-forge/osx-64/cmarkgfm-0.8.0-py38hef030d1_2.tar.
 https://conda.anaconda.org/conda-forge/osx-64/cryptography-39.0.1-py38h4257468_0.conda#8690c39b6d44c9dcc298da68a284e7a9
 https://conda.anaconda.org/conda-forge/noarch/doit-0.36.0-pyhd8ed1ab_0.tar.bz2#fc5e53d070f1ee7bb38c2ece282dcb82
 https://conda.anaconda.org/conda-forge/osx-64/git-2.39.1-pl5321h0195497_0.conda#a52d6e4a846f6381b815ad3442101559
-https://conda.anaconda.org/conda-forge/noarch/hypothesis-6.68.0-pyha770c72_0.conda#84601b6f71f06e161c68e459d4708534
+https://conda.anaconda.org/conda-forge/noarch/hypothesis-6.68.1-pyha770c72_0.conda#3c044b3b920eb287f8c095c7f086ba64
 https://conda.anaconda.org/conda-forge/noarch/importlib_metadata-6.0.0-hd8ed1ab_0.conda#a67d43e1527a37199dd8db913366f68e
 https://conda.anaconda.org/conda-forge/noarch/jsonschema-4.17.3-pyhd8ed1ab_0.conda#723268a468177cd44568eb8f794e0d80
 https://conda.anaconda.org/conda-forge/noarch/jupyter_server_terminals-0.4.4-pyhd8ed1ab_1.conda#7c0965e1d4a0ee1529e8eaa03a78a5b3
@@ -303,7 +304,7 @@ https://conda.anaconda.org/conda-forge/osx-64/pandas-1.5.3-py38hec72209_0.conda#
 https://conda.anaconda.org/conda-forge/noarch/robotframework-tidy-3.3.3-pyhd8ed1ab_0.conda#bc4e21b26f0e5bb7517c5d6200912d35
 https://conda.anaconda.org/conda-forge/noarch/urllib3-1.26.14-pyhd8ed1ab_0.conda#01f33ad2e0aaf6b5ba4add50dad5ad29
 https://conda.anaconda.org/conda-forge/noarch/black-jupyter-23.1.0-hd8ed1ab_0.conda#5703ad719698bf0d936764e60c7e790e
-https://conda.anaconda.org/conda-forge/noarch/ipykernel-6.21.1-pyh736e0ef_0.conda#feda661e258c358a604927b13aa2858b
+https://conda.anaconda.org/conda-forge/noarch/ipykernel-6.21.2-pyh736e0ef_0.conda#aa43ffb10a39d9eb2538761a3f838a87
 https://conda.anaconda.org/conda-forge/noarch/nbclient-0.5.13-pyhd8ed1ab_0.tar.bz2#3edde88a191701cf052216c4ba353a83
 https://conda.anaconda.org/conda-forge/noarch/requests-2.28.2-pyhd8ed1ab_0.conda#11d178fc55199482ee48d6812ea83983
 https://conda.anaconda.org/conda-forge/noarch/selenium-4.7.2-pyhd8ed1ab_0.conda#4f6238a5e80996ee0bbee28b487aada5
@@ -315,6 +316,7 @@ https://conda.anaconda.org/conda-forge/noarch/requests-cache-0.9.8-pyhd8ed1ab_0.
 https://conda.anaconda.org/conda-forge/noarch/requests-toolbelt-0.10.1-pyhd8ed1ab_0.tar.bz2#a4cd20af9711434f89d1ec0d2b3ae6ba
 https://conda.anaconda.org/conda-forge/noarch/robotframework-seleniumlibrary-6.0.0-pyhd8ed1ab_0.tar.bz2#2acaef9c04081dc3644501ac575953bf
 https://conda.anaconda.org/conda-forge/noarch/sphinx-5.3.0-pyhd8ed1ab_0.tar.bz2#f9e1fcfe235d655900bfeb6aee426472
+https://conda.anaconda.org/conda-forge/noarch/autodoc-traits-1.1.0-pyhd8ed1ab_0.conda#66907045fcff46748e485201304cea80
 https://conda.anaconda.org/conda-forge/noarch/bqplot-0.12.36-pyhd8ed1ab_0.tar.bz2#bff49231f6b67c01a7a89d56ca0693ab
 https://conda.anaconda.org/conda-forge/noarch/jupyter_server-2.2.1-pyhd8ed1ab_0.conda#a753c19a0db139920092aaaed7b05a54
 https://conda.anaconda.org/conda-forge/noarch/myst-parser-0.18.1-pyhd8ed1ab_0.tar.bz2#bcfdf5c7d8bf5c6f6be7b4c66fff2eca

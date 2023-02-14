@@ -1,4 +1,9 @@
-"""Behaviors for ``ipyforcegraph``."""
+"""Behaviors for ``ipyforcegraph``.
+
+Some special behaviors are more complicated, and have their own modules, such as:
+
+- :class:`~ipyforcegraph.forces.GraphForcesBehavior`
+"""
 
 # Copyright (c) 2023 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.

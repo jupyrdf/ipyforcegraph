@@ -9,6 +9,7 @@ This page describe the overall API for `ipyforcegraph`.
 widgets
 sources
 behaviors
+forces
 ```
 
 ## Bases
