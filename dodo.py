@@ -816,33 +816,72 @@ def task_watch_docs():
 
 def _make_spellcheck(dep, html):
     ok = P.BUILD / "spell" / f"{dep.relative_to(html)}.ok"
+    fail_path = P.BUILD / "spell" / f"{dep.relative_to(html)}.fail"
+
+    def spell():
+        if fail_path.exists():
+            fail_path.unlink()
+        fails = sorted(
+            set(
+                subprocess.check_output(
+                    [
+                        *P.IN_ENV,
+                        "hunspell",
+                        "-l",
+                        "-d",
+                        "en_US,en-GB",
+                        "-p",
+                        P.DICTIONARY,
+                        "-H",
+                        dep,
+                    ]
+                )
+                .decode("utf-8")
+                .strip()
+                .splitlines()
+            )
+        )
+
+        if fails:
+            fail_str = "\n".join(fails)
+            print("Unrecognized words in", dep)
+            print(fail_str)
+            fail_path.parent.mkdir(exist_ok=True, parents=True)
+            fail_path.write_text(fail_str, encoding="utf-8")
+
     return _ok(
         dict(
             name=f"""spell:{dep.relative_to(html)}""".replace("/", "_"),
             doc=f"check spelling in {dep.relative_to(html)}",
             file_dep=[dep, P.DICTIONARY],
-            actions=[
-                [
-                    *P.IN_ENV,
-                    "hunspell",
-                    "-l",
-                    "-d",
-                    "en_US,en-GB",
-                    "-p",
-                    P.DICTIONARY,
-                    "-H",
-                    dep,
-                ]
-            ],
+            actions=[spell],
         ),
         ok,
     )
 
 
+def _all_spell():
+    all_fail = []
+    for path in sorted(P.ALL_SPELL.parent.rglob("*.fail")):
+        if path == P.ALL_SPELL:
+            continue
+        all_fail += path.read_text(encoding="utf-8").strip().splitlines()
+
+    all_fail_str = "\n".join(sorted(set(all_fail)))
+
+    if all_fail_str:
+        print("ALL Unrecognized words")
+        print(all_fail_str)
+
+    P.ALL_SPELL.write_text(all_fail_str, encoding="utf-8")
+
+    return len(all_fail) == 0
+
+
 @create_after(executed="docs", target_regex=r"build/docs/html/.*\.html")
 def task_checkdocs():
     """check spelling and links of build docs HTML."""
-    no_check = ["htmlcov", "pytest", "_static"]
+    no_check = ["htmlcov", "pytest", "_static", "genindex"]
     html = P.DOCS_BUILD / "html"
     file_dep = sorted(
         {
@@ -880,5 +919,16 @@ def task_checkdocs():
         P.OK_LINKS,
     )
 
+    spell_tasks = []
+
     for dep in file_dep:
-        yield _make_spellcheck(dep, html)
+        task = _make_spellcheck(dep, html)
+        spell_tasks += [f"""checkdocs:{task["name"]}"""]
+        yield task
+
+    yield dict(
+        name="spell:ALL",
+        task_dep=spell_tasks,
+        actions=[_all_spell],
+        targets=[P.ALL_SPELL],
+    )
