@@ -10,6 +10,46 @@ import { PromiseDelegate } from '@lumino/coreutils';
 
 import { DEBUG, EMOJI } from './tokens';
 
+export const MATH_CONST = {
+  E: Math.E,
+  LN10: Math.LN10,
+  LN2: Math.LN2,
+  LOG10E: Math.LOG10E,
+  LOG2E: Math.LOG2E,
+  PI: Math.PI,
+  SQRT1_2: Math.SQRT1_2,
+  SQRT2: Math.SQRT2,
+};
+
+export const MATH_UNARY = [
+  Math.acos,
+  Math.acosh,
+  Math.asin,
+  Math.asinh,
+  Math.atan,
+  Math.atanh,
+  Math.cbrt,
+  Math.ceil,
+  Math.cos,
+  Math.exp,
+  Math.expm1,
+  Math.floor,
+  Math.fround,
+  Math.log,
+  Math.log10,
+  Math.log1p,
+  Math.log2,
+  Math.sign,
+  Math.sin,
+  Math.sqrt,
+  Math.tan,
+  Math.trunc,
+];
+
+export const MATH_BINARY = [Math.imul, Math.atan2];
+
+export const MATH_N_ARY = [Math.min, Math.max];
+
 export function isNumeric(val: string): boolean {
   return !isNaN(Number(val));
 }
@@ -29,15 +69,6 @@ export async function newTemplate(src: string, path?: string): Promise<Template>
   return new Private.TemplateClass(src, env, path, true);
 }
 
-function addCustomFilters(env: Environment) {
-  env.addFilter('min', (values: number[], ...rest: number[]) =>
-    Array.isArray(values) ? Math.min(...values) : Math.min(values, ...rest)
-  );
-  env.addFilter('max', (values: number[], ...rest: number[]) =>
-    Array.isArray(values) ? Math.max(...values) : Math.max(values, ...rest)
-  );
-}
-
 export async function nunjucksEnv(): Promise<Environment> {
   if (Private.env) {
     return Private.env;
@@ -50,13 +81,50 @@ export async function nunjucksEnv(): Promise<Environment> {
   const nunjucks = await import('nunjucks');
   const env = new nunjucks.Environment();
   // install custom tags
-  addCustomFilters(env);
+  addCustomGlobals(env);
 
   // save in namespace
   Private.TemplateClass = nunjucks.Template;
   Private.env = env;
   Private.loading.resolve(env);
   return env;
+}
+
+export interface INAryJs {
+  (...values: number[]): number;
+}
+
+export interface INAryPy {
+  (values: number[] | number, ...moreValues: number[]): number;
+}
+
+/**
+ * Register globals in the environment that can be called by any template.
+ */
+function addCustomGlobals(env: Environment) {
+  for (const [constName, constValue] of Object.entries(MATH_CONST)) {
+    env.addGlobal(constName, constValue);
+  }
+  for (const fn of MATH_UNARY) {
+    env.addGlobal(fn.name, fn);
+  }
+  for (const fn of MATH_BINARY) {
+    env.addGlobal(fn.name, fn);
+  }
+  for (const fn of MATH_N_ARY) {
+    env.addGlobal(fn.name, wrapNAry(fn));
+  }
+}
+
+/**
+ * Make a `Math` method more like python.
+ */
+function wrapNAry(jsFn: INAryJs): INAryPy {
+  function pyFn(values: number[] | number, ...rest: number[]) {
+    return Array.isArray(values) ? jsFn(...values) : jsFn(values, ...rest);
+  }
+  pyFn.name = jsFn.name;
+  return pyFn;
 }
 
 async function makeForceTemplate<T = any>(

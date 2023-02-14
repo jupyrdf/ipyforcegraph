@@ -100,9 +100,10 @@ class NodeSelection(Behavior):
 
     multiple: bool = T.Bool(True).tag(sync=True)
 
-    selected_color: str = T.Unicode("#B3A369", help="the color of selected nodes").tag(
-        sync=True
-    )
+    selected_color: str = T.Unicode(
+        "rgba(179, 163, 105, 1.0)",
+        help="the color of selected nodes",
+    ).tag(sync=True)
 
 
 @W.register

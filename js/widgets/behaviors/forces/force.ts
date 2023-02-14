@@ -87,14 +87,14 @@ export class GraphForcesBehaviorModel extends LinkColumnOrTemplateModel {
   async onForcesChange(): Promise<void> {
     const { forces, previousForces } = this;
 
-    for (const [key, previous] of Object.entries(previousForces)) {
-      if (previous && previous !== forces[key]) {
-        previous.updateRequested.disconnect(this.onForceUpdated, this);
+    for (const force of Object.values(previousForces)) {
+      if (force) {
+        force.updateRequested.disconnect(this.onForceUpdated, this);
       }
     }
 
-    for (const [key, force] of Object.entries(forces)) {
-      if (force && force !== previousForces[key]) {
+    for (const force of Object.values(forces)) {
+      if (force) {
         force.updateRequested.connect(this.onForceUpdated, this);
       }
     }
