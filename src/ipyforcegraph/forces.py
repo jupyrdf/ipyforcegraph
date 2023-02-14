@@ -300,3 +300,34 @@ class CollisionForce(BaseD3Force):
         allow_none=True,
         help="the number of iterations per application to the specified number and returns this force.",
     ).tag(sync=True)
+
+
+@W.register
+class ClusterForce(BaseD3Force):
+    """A force type that attracts nodes toward a set of cluster centers.
+
+    https://github.com/vasturiano/d3-force-cluster-3d
+    """
+
+    _model_name: str = T.Unicode("ClusterForceModel").tag(sync=True)
+    centers: Optional[str] = T.Unicode(
+        None,
+        allow_none=True,
+        help="Defines each node's cluster center. All cluster centers should be defined as a radius and set of coordinates { radius, x, y, z }, according to the number of spatial dimensions in the simulation.",
+    ).tag(sync=True)
+    strength: Optional[float] = T.Float(
+        None,
+        allow_none=True,
+        min=0,
+        max=1,
+        default=0.1,
+        help="sets the strength of the force.",
+    ).tag(sync=True)
+    center_inertia: Optional[float] = T.Float(
+        None,
+        allow_none=True,
+        min=0,
+        max=1,
+        default=0,
+        help="Lower values (close to 0) result in cluster center nodes with lower inertia: they are easily pulled around by other nodes in the cluster.",
+    ).tag(sync=True)
