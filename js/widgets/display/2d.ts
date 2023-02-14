@@ -155,6 +155,10 @@ export class ForceGraphModel extends DOMWidgetModel {
     return this.get('default_node_color') || DEFAULT_COLORS.node;
   }
 
+  get defaultNodeSize(): string {
+    return this.get('default_node_size') || DEFAULT_WIDTHS.node;
+  }
+
   get defaultLinkColor(): string {
     return this.get('default_link_color') || DEFAULT_COLORS.link;
   }
@@ -374,6 +378,7 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
     // node
     graph.nodeColor(this.wrapFunction(this.getNodeColor));
     graph.nodeLabel(this.wrapFunction(this.getNodeLabel));
+    graph.nodeVal(this.wrapFunction(this.getNodeSize));
 
     // evented
     graph.onNodeClick(this.wrapFunction(this.onNodeClick));
@@ -545,6 +550,10 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
 
   protected getNodeLabel = (node: NodeObject): string => {
     return this.getComposedNodeAttr(node, 'getNodeLabel', '');
+  };
+
+  protected getNodeSize = (node: NodeObject): string => {
+    return this.getComposedNodeAttr(node, 'getNodeSize', this.model.defaultNodeSize);
   };
 
   getComposedNodeAttr(

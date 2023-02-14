@@ -66,7 +66,7 @@ export class ColumnOrTemplateModel extends BehaviorModel implements IBehave {
       try {
         this._nunjucksTemplate = await newTemplate(template);
       } catch (err) {
-        console.warn(EMOJI, err, err['message']);
+        console.warn(EMOJI, err['message']);
         this._nunjucksTemplate = null;
       }
     }

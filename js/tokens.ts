@@ -42,6 +42,7 @@ export const DEFAULT_COLORS = {
 export const DEFAULT_WIDTHS = {
   link: 1,
   selected: 2,
+  node: 1,
 };
 
 export const WIDGET_DEFAULTS = {
@@ -76,6 +77,7 @@ export interface IBehave {
   // node
   getNodeColor?(options: INodeBehaveOptions): string | null;
   getNodeLabel?(options: INodeBehaveOptions): string | null;
+  getNodeSize?(options: INodeBehaveOptions): string | null;
   // evented
   onNodeClick?(options: INodeEventBehaveOptions): boolean;
   onLinkClick?(options: ILinkEventBehaveOptions): boolean;
@@ -96,7 +98,7 @@ export const ALL_LINK_METHODS = [
 ];
 export type TLinkBehaveMethod = (typeof ALL_LINK_METHODS)[number];
 
-export const ALL_NODE_METHODS = ['getNodeLabel', 'getNodeColor'];
+export const ALL_NODE_METHODS = ['getNodeLabel', 'getNodeColor', 'getNodeSize'];
 export type TNodeBehaveMethod = (typeof ALL_NODE_METHODS)[number];
 
 export type TNodeMethodMap = Map<TNodeBehaveMethod, IBehave[]>;

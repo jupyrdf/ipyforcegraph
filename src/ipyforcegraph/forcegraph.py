@@ -34,6 +34,11 @@ class ForceGraph(W.DOMWidget, ForceBase):
         help="a default node color, which can be overridden by :class:`~ipyforcegraph.behaviors.NodeColors`.",
     ).tag(sync=True)
 
+    default_node_size: float = T.Float(
+        1,
+        help="a default node size, which can be overridden by :class:`~ipyforcegraph.behaviors.NodeSizes`.",
+    ).tag(sync=True)
+
     default_link_color: str = T.Unicode(
         "rgba(66, 66, 66, 0.5)",
         help="a default link color, which can be overridden by :class:`~ipyforcegraph.behaviors.LinkColors`",

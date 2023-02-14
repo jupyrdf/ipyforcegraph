@@ -129,6 +129,25 @@ class NodeLabels(Behavior):
 
 
 @W.register
+class NodeSizes(Behavior):
+    """Change the size of nodes."""
+
+    _model_name: str = T.Unicode("NodeSizeModel").tag(sync=True)
+
+    column_name: str = T.Unicode(
+        None,
+        allow_none=True,
+        help="name of the source column to use for node sizes.",
+    ).tag(sync=True)
+
+    template: Optional[str] = T.Unicode(
+        None,
+        allow_none=True,
+        help="a nunjucks template to use to calculate node sizes",
+    ).tag(sync=True)
+
+
+@W.register
 class NodeColors(Behavior):
     _model_name: str = T.Unicode("NodeColorModel").tag(sync=True)
 

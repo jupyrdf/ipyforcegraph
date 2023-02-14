@@ -64,9 +64,9 @@ namespace Private {
   export let TemplateClass: typeof Template | null = null;
 }
 
-export async function newTemplate(src: string, path?: string): Promise<Template> {
+export async function newTemplate(src: string): Promise<Template> {
   const env = await nunjucksEnv();
-  return new Private.TemplateClass(src, env, path, true);
+  return new Private.TemplateClass(src, env, null, true);
 }
 
 export async function nunjucksEnv(): Promise<Environment> {
@@ -114,6 +114,15 @@ function addCustomGlobals(env: Environment) {
   for (const fn of MATH_N_ARY) {
     env.addGlobal(fn.name, wrapNAry(fn));
   }
+  env.addFilter('where', (iterable: any[], attr: string, value: any) => {
+    const results: any[] = [];
+    for (const item of iterable) {
+      if (item[attr] === value) {
+        results.push(item);
+      }
+    }
+    return results;
+  });
 }
 
 /**
@@ -123,7 +132,6 @@ function wrapNAry(jsFn: INAryJs): INAryPy {
   function pyFn(values: number[] | number, ...rest: number[]) {
     return Array.isArray(values) ? jsFn(...values) : jsFn(values, ...rest);
   }
-  pyFn.name = jsFn.name;
   return pyFn;
 }
 
@@ -134,7 +142,7 @@ async function makeForceTemplate<T = any>(
 ): Promise<CallableFunction> {
   let template: Template;
   try {
-    template = await newTemplate(src, contextName);
+    template = await newTemplate(src);
   } catch (err) {
     DEBUG && console.warn(EMOJI, err);
     return noop;

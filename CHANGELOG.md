@@ -11,6 +11,7 @@
 - adds `LinkSelection` which mirrors `NodeSelection`, but returns link indices in
   `.source.links`, as they are not guaranteed to have a an `id` column
 - adds `LinkWidths`
+- adds `NodeSizes`
 - adds most of the browser's `Math` functions and constants to the environment made
   available to `.template` values
 - adds `GraphForces`, which exposes a large number of the forces from [`d3-force-3d`]
