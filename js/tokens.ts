@@ -95,14 +95,24 @@ export const ALL_LINK_METHODS = [
   'getLinkDirectionalParticleSpeed',
   'getLinkDirectionalParticleWidth',
   'getLinkDirectionalParticles',
+  'onLinkClick',
 ];
 export type TLinkBehaveMethod = (typeof ALL_LINK_METHODS)[number];
 
-export const ALL_NODE_METHODS = ['getNodeLabel', 'getNodeColor', 'getNodeSize'];
+export const ALL_NODE_METHODS = [
+  'getNodeLabel',
+  'getNodeColor',
+  'getNodeSize',
+  'onNodeClick',
+];
 export type TNodeBehaveMethod = (typeof ALL_NODE_METHODS)[number];
+
+export const ALL_GRAPH_METHODS = ['onRender'];
+export type TGraphBehaveMethod = (typeof ALL_GRAPH_METHODS)[number];
 
 export type TNodeMethodMap = Map<TNodeBehaveMethod, IBehave[]>;
 export type TLinkMethodMap = Map<TLinkBehaveMethod, IBehave[]>;
+export type TGraphMethodMap = Map<TGraphBehaveMethod, IBehave[]>;
 
 export interface IBehaveOptions {
   view: IHasGraph;

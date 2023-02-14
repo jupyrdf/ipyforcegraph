@@ -49,7 +49,11 @@ export class ForceGraph3DView extends ForceGraphView<
   }
 
   protected getOnRenderPostUpdate() {
-    this.threeRenderer.setAnimationLoop(this.wrapFunction(this.onRender));
+    this.threeRenderer.setAnimationLoop(
+      this.model.graphBehaviorsForMethod('onRender').length
+        ? this.wrapFunction(this.onRender)
+        : null
+    );
   }
 
   protected updateRenderOptions(options: IRenderOptions): IRenderOptions {
