@@ -12,6 +12,7 @@ dependencies:
   - jupyterlab-link-share
   - keyring
   - mypy >=1.0.0
+  - nbstripout
   - pyflakes
   - pyproject-fmt !=0.9.1
   - pytest-asyncio

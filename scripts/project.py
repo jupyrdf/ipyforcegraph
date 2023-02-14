@@ -13,6 +13,7 @@ import platform
 import shutil
 import subprocess
 import sys
+import tempfile
 from pathlib import Path
 
 try:
@@ -269,6 +270,11 @@ DOCS_BUILDINFO = DOCS_BUILD / "html" / ".buildinfo"
 DOCS_LINKS = BUILD / "links"
 
 
+# nblint
+NB_METADATA_KEYS = ["kernelspec", "language_info"]
+CLOBBER_CELL_METADATA_KEYS = ["jupyter", "collapsed"]
+
+
 def template_one(src: Path, dest: Path, context=None):
     """Update a file from a template"""
     try:
@@ -282,3 +288,65 @@ def template_one(src: Path, dest: Path, context=None):
     tmpl = jinja2.Template(src.read_text(encoding="utf-8"))
     text = tmpl.render(**context)
     dest.write_text(text, encoding="utf-8")
+
+
+def clean_notebook_metadata(nb_json):
+    nb_metadata_keys = list(nb_json["metadata"].keys())
+    for key in nb_metadata_keys:
+        if key not in NB_METADATA_KEYS:
+            nb_json["metadata"].pop(key)
+    for cell in nb_json["cells"]:
+        for clobber in CLOBBER_CELL_METADATA_KEYS:
+            if clobber in cell["metadata"]:
+                cell["metadata"].pop(clobber)
+
+
+def pretty_markdown_cells(ipynb, nb_json):
+    cells = [c for c in nb_json["cells"] if c["cell_type"] == "markdown"]
+
+    if not cells:
+        return
+
+    print(f"... prettying {len(cells)} markdown cells of {ipynb.stem}")
+    with tempfile.TemporaryDirectory() as td:
+        tdp = Path(td)
+
+        files = {}
+
+        for i, cell in enumerate(cells):
+            files[i] = tdp / f"{ipynb.stem}-{i:03d}.md"
+            files[i].write_text("".join([*cell["source"], "\n"]), encoding="utf-8")
+
+        args = [
+            *IN_ENV,
+            "jlpm",
+            "--silent",
+            "prettier",
+            "--config",
+            PACKAGE_JSON,
+            "--write",
+            "--list-different",
+        ]
+
+        subprocess.call([*args, tdp])
+
+        for i, cell in enumerate(cells):
+            cells[i]["source"] = (
+                files[i].read_text(encoding="utf-8").rstrip().splitlines(True)
+            )
+
+
+def notebook_lint(ipynb: Path):
+    nb_text = ipynb.read_text(encoding="utf-8")
+    nb_json = json.loads(nb_text)
+
+    pretty_markdown_cells(ipynb, nb_json)
+    clean_notebook_metadata(nb_json)
+
+    ipynb.write_text(json.dumps(nb_json), encoding="utf-8")
+
+    print(f"... blackening {ipynb.stem}")
+    black_args = []
+    black_args += ["--quiet"]
+    if subprocess.call([shutil.which("black"), *black_args, ipynb]) != 0:
+        return False
