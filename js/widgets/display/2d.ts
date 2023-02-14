@@ -401,7 +401,7 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
     for (let simBehavior of this.model.forceBehaviors) {
       const { warmupTicks, cooldownTicks, alphaDecay, alphaMin, velocityDecay } =
         simBehavior;
-      simBehavior.checkPositions(graph.graphData())
+      simBehavior.checkPositions(graph.graphData());
       graph.cooldownTicks(cooldownTicks);
       graph.warmupTicks(warmupTicks);
       graph.d3AlphaDecay(alphaDecay);
