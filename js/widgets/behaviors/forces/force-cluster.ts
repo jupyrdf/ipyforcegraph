@@ -4,6 +4,7 @@
  */
 import { ObjectHash } from 'backbone';
 import { default as d3ClusterForce } from 'd3-force-cluster-3d';
+import { NodeObject } from 'force-graph/dist/force-graph';
 
 import { IBackboneModelOptions } from '@jupyter-widgets/base';
 
@@ -11,7 +12,6 @@ import { isNumeric, makeForceNodeTemplate } from '../../../template-utils';
 import { IBehave, IForce, TAnyForce } from '../../../tokens';
 
 import { ForceBehaviorModel } from './force';
-import { NodeObject } from 'force-graph/dist/force-graph';
 
 // interface Cluster{
 //   x: number,
@@ -24,7 +24,7 @@ export class ClusterForceModel extends ForceBehaviorModel implements IBehave, IF
   _force: d3ClusterForce;
   strength: CallableFunction | Number | null;
   clusters: object;
-  get_cluster: CallableFunction  // render the cluster template
+  get_cluster: CallableFunction; // render the cluster template
 
   defaults() {
     return {
@@ -70,32 +70,32 @@ export class ClusterForceModel extends ForceBehaviorModel implements IBehave, IF
     this.get_cluster = await makeForceNodeTemplate(value);
   }
 
-  centers = (node: NodeObject, i:number, nodes: NodeObject[]) => {
+  centers = (node: NodeObject, i: number, nodes: NodeObject[]) => {
     if (!(node as any)?.radius) {
       (node as any).radius = 1;
     }
-    let key = this.get_cluster(node, i, nodes)
+    let key = this.get_cluster(node, i, nodes);
 
     // get the cluster center and reset if the position has gone NaN
     if (!(key in this.clusters)) {
       this.clusters[key] = { x: 0, y: 0, z: 0, radius: 0 };
     }
     let center = this.clusters[key];
-    if (isNaN(center.x)){
+    if (isNaN(center.x)) {
       center.x = 0;
     }
-    if (isNaN(center.y)){
+    if (isNaN(center.y)) {
       center.y = 0;
     }
-    if (isNaN(center.z)){
+    if (isNaN(center.z)) {
       center.z = 0;
     }
-    if (isNaN(center.radius) || center.radius == undefined){
+    if (isNaN(center.radius) || center.radius == undefined) {
       center.radius = 0;
     }
 
-    return center
-  }
+    return center;
+  };
 
   async update_strength() {
     let value = this.get('strength');

@@ -132,34 +132,34 @@ export class GraphForcesBehaviorModel extends LinkColumnOrTemplateModel {
   }
 
   checkPositions(graph: ForceGraphInstance) {
-  let { nodes, links } = graph.graphData();
+    let { nodes, links } = graph.graphData();
 
-  let anyNaN = false;
-  for (let n of nodes) {
-    if (isNaN(n.x) || isNaN(n.y)) {
-      anyNaN = true;
-      break;
-    }
-  }
-  if (anyNaN) {
+    let anyNaN = false;
     for (let n of nodes) {
-      n.x = NaN;
-      n.y = NaN;
-      // n.z = NaN,
-      n.vx = NaN;
-      n.vy = NaN;
-      // n.vz = NaN;
-    }
-    initializeNodes(nodes);
-    // parse links
-    links.forEach(link => {
-      let source = link.source as any;
-      if (source !== nodes[source.index]){
-        console.log("mismatch", source, nodes[source.index]);
+      if (isNaN(n.x) || isNaN(n.y)) {
+        anyNaN = true;
+        break;
       }
-    });
+    }
+    if (anyNaN) {
+      for (let n of nodes) {
+        n.x = NaN;
+        n.y = NaN;
+        // n.z = NaN,
+        n.vx = NaN;
+        n.vy = NaN;
+        // n.vz = NaN;
+      }
+      initializeNodes(nodes);
+      // parse links
+      links.forEach((link) => {
+        let source = link.source as any;
+        if (source !== nodes[source.index]) {
+          console.log('mismatch', source, nodes[source.index]);
+        }
+      });
+    }
   }
-}
 }
 
 // initializeNodes function from `d3-force-3d/simulation.js`
@@ -177,8 +177,8 @@ function initializeNodes(nodes: NodeObject[], numDimensions = 2) {
     if (node.fz != null) node.z = node.fz;
     if (isNaN(node.x) || (nDim > 1 && isNaN(node.y)) || (nDim > 2 && isNaN(node.z))) {
       var radius =
-        initialRadius *
-        (nDim > 2 ? Math.cbrt(0.5 + i) : nDim > 1 ? Math.sqrt(0.5 + i) : i),
+          initialRadius *
+          (nDim > 2 ? Math.cbrt(0.5 + i) : nDim > 1 ? Math.sqrt(0.5 + i) : i),
         rollAngle = i * initialAngleRoll,
         yawAngle = i * initialAngleYaw;
 
