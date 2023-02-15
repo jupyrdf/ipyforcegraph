@@ -76,10 +76,12 @@ str
 TBD
 TODO
 traitlets
+traittypes
 TypedTuple
 TypeScript
 vasturiano
 warmup
+WidgetSource
 XForce
 YForce
 ZForce

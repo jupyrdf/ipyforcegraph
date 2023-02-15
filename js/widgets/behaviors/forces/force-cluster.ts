@@ -4,6 +4,7 @@
  */
 import { ObjectHash } from 'backbone';
 import { default as d3ClusterForce } from 'd3-force-cluster-3d';
+import { NodeObject } from 'force-graph/dist/force-graph';
 
 import { IBackboneModelOptions } from '@jupyter-widgets/base';
 
@@ -21,9 +22,9 @@ import { ForceBehaviorModel } from './force';
 export class ClusterForceModel extends ForceBehaviorModel implements IBehave, IForce {
   static model_name = 'ClusterForceModel';
   _force: d3ClusterForce;
-  centers: CallableFunction | Number | null;
   strength: CallableFunction | Number | null;
   clusters: object;
+  get_cluster: CallableFunction; // render the cluster template
 
   defaults() {
     return {
@@ -37,6 +38,7 @@ export class ClusterForceModel extends ForceBehaviorModel implements IBehave, IF
   initialize(attributes: ObjectHash, options: IBackboneModelOptions): void {
     super.initialize(attributes, options);
     this.clusters = {};
+    this.get_cluster = () => 0;
   }
 
   forceFactory(): d3ClusterForce {
@@ -65,23 +67,35 @@ export class ClusterForceModel extends ForceBehaviorModel implements IBehave, IF
 
   async update_centers() {
     let value = this.get('centers');
-    let template = await makeForceNodeTemplate(value);
-
-    this.centers = (node, i, nodes) => {
-      // refresh cluster centers?
-      if (!node.radius) {
-        node.radius = 1;
-      }
-      return this.get_cluster(template(node, i, nodes));
-    };
+    this.get_cluster = await makeForceNodeTemplate(value);
   }
 
-  get_cluster(key: string | number) {
+  centers = (node: NodeObject, i: number, nodes: NodeObject[]) => {
+    if (!(node as any)?.radius) {
+      (node as any).radius = 1;
+    }
+    let key = this.get_cluster(node, i, nodes);
+
+    // get the cluster center and reset if the position has gone NaN
     if (!(key in this.clusters)) {
       this.clusters[key] = { x: 0, y: 0, z: 0, radius: 0 };
     }
-    return this.clusters[key];
-  }
+    let center = this.clusters[key];
+    if (isNaN(center.x)) {
+      center.x = 0;
+    }
+    if (isNaN(center.y)) {
+      center.y = 0;
+    }
+    if (isNaN(center.z)) {
+      center.z = 0;
+    }
+    if (isNaN(center.radius) || center.radius == undefined) {
+      center.radius = 0;
+    }
+
+    return center;
+  };
 
   async update_strength() {
     let value = this.get('strength');

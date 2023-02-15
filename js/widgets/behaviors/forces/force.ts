@@ -3,7 +3,7 @@
  * Distributed under the terms of the Modified BSD License.
  */
 import { ObjectHash } from 'backbone';
-import type { GraphData, NodeObject } from 'force-graph/dist/force-graph';
+import type { ForceGraphInstance, NodeObject } from 'force-graph/dist/force-graph';
 
 import {
   IBackboneModelOptions,
@@ -131,8 +131,8 @@ export class GraphForcesBehaviorModel extends LinkColumnOrTemplateModel {
     return this.get('velocity_decay');
   }
 
-  checkPositions(graphdata: GraphData) {
-    let nodes = graphdata.nodes;
+  checkPositions(graph: ForceGraphInstance) {
+    let { nodes, links } = graph.graphData();
 
     let anyNaN = false;
     for (let n of nodes) {
@@ -142,7 +142,22 @@ export class GraphForcesBehaviorModel extends LinkColumnOrTemplateModel {
       }
     }
     if (anyNaN) {
+      for (let n of nodes) {
+        n.x = NaN;
+        n.y = NaN;
+        // n.z = NaN,
+        n.vx = NaN;
+        n.vy = NaN;
+        // n.vz = NaN;
+      }
       initializeNodes(nodes);
+      // parse links
+      links.forEach((link) => {
+        let source = link.source as any;
+        if (source !== nodes[source.index]) {
+          console.log('mismatch', source, nodes[source.index]);
+        }
+      });
     }
   }
 }
