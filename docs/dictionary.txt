@@ -27,6 +27,7 @@ GraphForcesBehavior
 GraphImage
 ipyforcegraph
 IPyForceGraph
+IPython
 ipywidgets
 js
 jupyrdf
@@ -75,6 +76,7 @@ rgba
 str
 TBD
 TODO
+traitleted
 traitlets
 traittypes
 TypedTuple
