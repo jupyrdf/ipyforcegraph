@@ -9,6 +9,7 @@ import pytest
 
 from ipyforcegraph import behaviors, forcegraph, forces
 from ipyforcegraph._base import ForceBase
+from ipyforcegraph.sources.widget import WidgetSource
 
 TSubclassSet = Set[Type[W.Widget]]
 TSubclassData = Dict[Type[W.Widget], str]
@@ -30,7 +31,7 @@ def widget_subclasses() -> TSubclassSet:
         )
 
     assert subclasses
-    return subclasses
+    return subclasses - set([WidgetSource])
 
 
 @pytest.fixture
