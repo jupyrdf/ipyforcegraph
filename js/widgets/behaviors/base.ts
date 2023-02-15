@@ -56,6 +56,8 @@ export class ColumnOrTemplateModel extends BehaviorModel implements IBehave {
     super.initialize(attributes, options);
     this.on('change:column_name', this.onColumnNameChange, this);
     this.on('change:template', this.onTemplateChange, this);
+    void this.onColumnNameChange();
+    void this.onTemplateChange();
   }
 
   protected async onTemplateChange(): Promise<void> {
