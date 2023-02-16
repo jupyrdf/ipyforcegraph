@@ -24,6 +24,7 @@ export class ForceBehaviorModel extends LinkColumnOrTemplateModel implements IFo
     return {
       ...super.defaults(),
       _model_name: ForceBehaviorModel.model_name,
+      active: true,
     };
   }
 
@@ -34,8 +35,17 @@ export class ForceBehaviorModel extends LinkColumnOrTemplateModel implements IFo
     this.on(this.triggerChanges, this.onChanged, this);
   }
 
-  onChanged() {
-    this._updateRequested.emit(void 0);
+  async onChanged(model) {
+    if (this.active) {
+      await this.update();
+      this._updateRequested.emit(void 0);
+    } else if ('active' in model.changed) {
+      this._updateRequested.emit(void 0);
+    }
+  }
+
+  async update() {
+    // method for subclasses to implement addition state updates
   }
 
   forceFactory(): TAnyForce {
@@ -48,6 +58,10 @@ export class ForceBehaviorModel extends LinkColumnOrTemplateModel implements IFo
 
   get force(): TAnyForce {
     return this._force;
+  }
+
+  get active(): boolean {
+    return this.get('active');
   }
 }
 

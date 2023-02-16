@@ -46,7 +46,7 @@ export class ClusterForceModel extends ForceBehaviorModel implements IBehave, IF
   }
 
   get triggerChanges(): string {
-    return 'change:centers change:strength change:Inertia';
+    return 'change:centers change:strength change:center_inertia change:active';
   }
 
   get force(): TAnyForce {
@@ -59,10 +59,9 @@ export class ClusterForceModel extends ForceBehaviorModel implements IBehave, IF
     return force;
   }
 
-  async onChanged() {
+  async update() {
     await this.update_centers();
     await this.update_strength();
-    this._updateRequested.emit(void 0);
   }
 
   async update_centers() {

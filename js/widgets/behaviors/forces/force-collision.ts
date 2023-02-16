@@ -38,13 +38,12 @@ export class CollisionForceModel extends ForceBehaviorModel implements IBehave, 
   }
 
   get triggerChanges(): string {
-    return 'change:radius change:strength';
+    return 'change:radius change:strength change:active';
   }
 
-  async onChanged() {
+  async update() {
     await this.update_radius();
     await this.update_strength();
-    this._updateRequested.emit(void 0);
   }
 
   async update_strength() {

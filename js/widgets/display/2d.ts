@@ -484,6 +484,9 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
       for (let key in simBehavior.forces) {
         let behavior: ForceBehaviorModel | null = simBehavior.forces[key];
         let force = behavior?.force || null;
+        if (force && !behavior?.active) {
+          force = null;
+        }
         graph.d3Force(key, force);
         if (force?.links) {
           needsPost.push(force);

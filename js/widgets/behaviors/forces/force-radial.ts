@@ -38,12 +38,11 @@ export class RadialForceModel extends ForceBehaviorModel implements IBehave, IFo
   }
 
   get triggerChanges(): string {
-    return 'change:strength change:radius change:x change:y change:z';
+    return 'change:strength change:radius change:x change:y change:z change:active';
   }
 
-  async onChanged() {
+  async update() {
     await this.update_radius();
-    this._updateRequested.emit(void 0);
   }
 
   get strength() {

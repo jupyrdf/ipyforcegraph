@@ -27,7 +27,7 @@ export class CenterForceModel extends ForceBehaviorModel implements IBehave, IFo
   }
 
   get triggerChanges(): string {
-    return 'change:x change:y change:z';
+    return 'change:x change:y change:z change:active';
   }
 
   get force(): TAnyForce {

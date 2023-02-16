@@ -29,7 +29,7 @@ export class XForceModel extends ForceBehaviorModel implements IBehave, IForce {
   }
 
   get triggerChanges(): string {
-    return 'change:x change:strength';
+    return 'change:x change:strength change:active';
   }
 
   get force(): TAnyForce {
@@ -41,10 +41,9 @@ export class XForceModel extends ForceBehaviorModel implements IBehave, IForce {
     return force;
   }
 
-  async onChanged() {
+  async update() {
     await this.update_x();
     await this.update_strength();
-    this._updateRequested.emit(void 0);
   }
 
   async update_x() {

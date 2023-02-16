@@ -40,13 +40,12 @@ export class LinkForceModel extends ForceBehaviorModel implements IBehave, IForc
   }
 
   get triggerChanges(): string {
-    return 'change:strength change:distance';
+    return 'change:strength change:distance change:active';
   }
 
-  async onChanged() {
+  async update() {
     await this.update_distance();
     await this.update_strength();
-    this._updateRequested.emit(void 0);
   }
 
   async update_strength() {

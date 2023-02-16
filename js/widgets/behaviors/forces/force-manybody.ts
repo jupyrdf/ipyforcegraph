@@ -37,12 +37,11 @@ export class ManyBodyForceModel extends ForceBehaviorModel implements IBehave, I
   }
 
   get triggerChanges(): string {
-    return 'change:strength change:theta change:distance_min change:distance_max';
+    return 'change:strength change:theta change:distance_min change:distance_max change:active';
   }
 
-  async onChanged() {
+  async update() {
     await this.update_strength();
-    this._updateRequested.emit(void 0);
   }
 
   async update_strength() {
