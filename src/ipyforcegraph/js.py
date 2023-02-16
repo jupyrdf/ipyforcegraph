@@ -1,4 +1,4 @@
-"""Client resource discovery and metadata for ipyforcegraph."""
+"""Client resource discovery and metadata for ``ipyforcegraph``."""
 
 # Copyright (c) 2023 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.

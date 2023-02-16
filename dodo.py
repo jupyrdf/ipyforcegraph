@@ -1,4 +1,4 @@
-""" doit tasks for ipyforcegraph
+"""doit tasks for ``ipyforcegraph``
 
     Generally, you'll just want to `doit`.
 
@@ -530,7 +530,7 @@ def task_test():
         robot_out = robot_template.parent / robot_template.name.replace(".j2", "")
         yield dict(
             name=f"atest:template:{robot_template.relative_to(P.ATEST)}",
-            actions=[(P.template_one, [robot_template, robot_out])],
+            actions=[(U.template_one, [robot_template, robot_out])],
             file_dep=[robot_template],
             targets=[robot_out],
         )
@@ -634,7 +634,7 @@ def task_lint():
                 file_dep=[P.YARN_INTEGRITY, nb, P.HISTORY, P.OK_BLACK],
                 actions=[
                     [*P.IN_ENV, "nbstripout", nb],
-                    (P.notebook_lint, [nb]),
+                    (U.notebook_lint, [nb]),
                     [
                         *P.IN_ENV,
                         "jupyter-nbconvert",

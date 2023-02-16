@@ -1,7 +1,4 @@
-""" ensure the development environment is sane
-
-    be careful about imports here:
-"""
+"""ensure the development environment is sane"""
 
 # Copyright (c) 2023 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.

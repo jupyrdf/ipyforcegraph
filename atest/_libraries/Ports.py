@@ -1,5 +1,4 @@
-""" get a random port
-"""
+"""get a random port"""
 import socket
 
 

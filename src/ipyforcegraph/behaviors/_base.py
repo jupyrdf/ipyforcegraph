@@ -1,5 +1,5 @@
-""" Base classes for behaviors.
-"""
+"""Base classes for all behaviors and forces."""
+
 # Copyright (c) 2023 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.
 

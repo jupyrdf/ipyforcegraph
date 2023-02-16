@@ -1,4 +1,4 @@
-"""Base widget identification for ipyforcegraph."""
+"""Base widget identification for ``ipyforcegraph``."""
 
 # Copyright (c) 2023 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.

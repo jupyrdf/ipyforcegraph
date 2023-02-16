@@ -1,8 +1,7 @@
-""" documentation for ipyforcegraph
-"""
+"""documentation for ``ipyforcegraph``"""
+
 # Copyright (c) 2023 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.
-
 
 from datetime import datetime
 from pathlib import Path
