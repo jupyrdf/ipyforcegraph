@@ -15,6 +15,8 @@
 - adds most of the browser's `Math` functions and constants to the environment made
   available to `.template` values
 - adds `GraphForces`, which exposes a large number of the forces from [`d3-force-3d`]
+- renames the top-level graph imports `ipyforcegraph.graphs` (was
+  `ipyforcegraph.forcegraph`)
 
 [d3-force-3d]: https://github.com/vasturiano/d3-force-3d
 

@@ -1,4 +1,4 @@
-from ipyforcegraph.forcegraph import WIDGET_CLASS
+from ipyforcegraph.graphs import WIDGET_CLASS
 from ipyforcegraph import behaviors as B
 import asyncio
 g = B.GraphData(column_name="id")

@@ -2,5 +2,5 @@
 
 ```{eval-rst}
 .. currentmodule:: ipyforcegraph
-.. automodule:: ipyforcegraph.forces
+.. automodule:: ipyforcegraph.behaviors.forces
 ```

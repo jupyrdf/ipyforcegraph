@@ -65,8 +65,8 @@ export class ForceBehaviorModel extends LinkColumnOrTemplateModel implements IFo
   }
 }
 
-export class GraphForcesBehaviorModel extends LinkColumnOrTemplateModel {
-  static model_name = 'GraphForcesBehaviorModel';
+export class GraphForcesModel extends LinkColumnOrTemplateModel {
+  static model_name = 'GraphForcesModel';
   static serializers = {
     ...WidgetModel.serializers,
     forces: { deserialize },
@@ -75,7 +75,7 @@ export class GraphForcesBehaviorModel extends LinkColumnOrTemplateModel {
   defaults() {
     return {
       ...super.defaults(),
-      _model_name: GraphForcesBehaviorModel.model_name,
+      _model_name: GraphForcesModel.model_name,
       forces: {},
       warmup_ticks: 0,
       cooldown_ticks: -1,

@@ -1,5 +1,5 @@
 import traitlets as T, ipywidgets as W
-from ipyforcegraph.forcegraph import WIDGET_CLASS
+from ipyforcegraph.graphs import WIDGET_CLASS
 from ipyforcegraph import behaviors as B
 
 b = B.NodeSelection()

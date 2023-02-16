@@ -9,70 +9,12 @@ Using documentation from:
 # Copyright (c) 2023 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.
 
-from typing import Dict, Optional
+from typing import Optional
 
 import ipywidgets as W
 import traitlets as T
 
-from ._base import Behavior
-
-
-@W.register
-class BaseD3Force(Behavior):
-    _model_name: str = T.Unicode("BaseD3ForceModel").tag(sync=True)
-    key: str = T.Unicode(
-        "link",
-        help="force simulation identifier for the force. Must be unique.",
-    ).tag(sync=True)
-    active: bool = T.Bool(True).tag(sync=True)
-
-    # TODO implement custom force function pass through
-
-
-@W.register
-class GraphForcesBehavior(Behavior):
-    """Customize :class:`~ipyforcegraph.forcegraph.ForceGraph` force simulation.
-
-    These also apply to :class:`~ipyforcegraph.forcegraph.ForceGraph3D`
-
-    For more, see the frontend documentation on https://github.com/vasturiano/force-graph#force-engine-d3-force-configuration
-    """
-
-    _model_name: str = T.Unicode("GraphForcesBehaviorModel").tag(sync=True)
-
-    forces: Dict[str, BaseD3Force] = T.Dict(
-        value_trait=T.Instance(BaseD3Force, allow_none=True),
-        help="named forces. Set a name `None` to remove a force: By default, ForceGraph has `link`, `charge`, and `center`.",
-    ).tag(sync=True, **W.widget_serialization)
-
-    warmup_ticks: Optional[int] = T.Int(
-        0,
-        min=0,
-        help="layout engine cycles to dry-run at ignition before starting to render.",
-    ).tag(sync=True)
-
-    cooldown_ticks: Optional[int] = T.Int(
-        -1,
-        help="frames to render before stopping and freezing the layout engine. Values less than zero will be translated to `Infinity`.",
-    ).tag(sync=True)
-
-    alpha_min: Optional[float] = T.Float(
-        0.0, min=0.0, max=1.0, help="simulation alpha min parameter"
-    ).tag(sync=True)
-
-    alpha_decay: Optional[float] = T.Float(
-        0.0228,
-        min=0.0,
-        max=1.0,
-        help="simulation intensity decay parameter",
-    ).tag(sync=True)
-
-    velocity_decay: Optional[float] = T.Float(
-        0.4,
-        min=0.0,
-        max=1.0,
-        help="nodes' velocity decay that simulates the medium resistance",
-    ).tag(sync=True)
+from ._base import BaseD3Force
 
 
 @W.register
@@ -243,6 +185,7 @@ class ManyBodyForce(BaseD3Force):
 class RadialForce(BaseD3Force):
     """The radial positioning force create a force towards a circle of the
     specified radius centered at (x, y).
+
     https://github.com/d3/d3-force#forceRadial
     """
 
@@ -282,6 +225,7 @@ class RadialForce(BaseD3Force):
 class CollisionForce(BaseD3Force):
     """The collision force treats nodes as circles with a given `radius`, rather
     than points and prevents nodes from overlapping.
+
     https://github.com/d3/d3-force#collision
     """
 

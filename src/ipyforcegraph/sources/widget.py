@@ -14,8 +14,9 @@ TAnyDict = Dict[str, Any]
 
 
 class WidgetSource(DataFrameSource):
-    """A source that displays the widgets, traits, links, and/or other features of one or
-    more :class:`~ipywidgets.widgets.widget.Widget` instances.
+    """A source that displays the widgets, traits, links, and other features of one or
+    more :class:`~ipywidgets.widgets.widget.Widget` (or, technically,
+    :class:`~traitlets.HasTraits`) instances.
     """
 
     _shell: Optional[IPython.InteractiveShell]
@@ -48,12 +49,10 @@ class WidgetSource(DataFrameSource):
 
     @T.default("nodes")
     def _default_nodes(self) -> P.DataFrame:
-        """Initialize links from graph data."""
         return P.DataFrame(self.graph_data["nodes"].values())
 
     @T.default("links")
     def _default_links(self) -> P.DataFrame:
-        """Initialize links from graph data."""
         return P.DataFrame(self.graph_data["links"].values())
 
     @T.default("ignore_classes")
@@ -68,11 +67,10 @@ class WidgetSource(DataFrameSource):
 
     @T.default("ignore_modules")
     def _default_ignore_modules(self) -> Tuple[str, ...]:
-        return ("IPython", "ipykernel")
+        return ("IPython", "ipykernel", "comm")
 
     @T.default("graph_data")
     def _default_graph_data(self) -> TAnyDict:
-        """Initialize the graph data."""
         return self.find_graph_data()
 
     @T.default("ignore_traits")
@@ -88,6 +86,7 @@ class WidgetSource(DataFrameSource):
         return graph_data
 
     def should_discover(self, candidate: Any, graph_data: TAnyDict) -> bool:
+        """Whether the candidate is a :class:`~traitlets.HasTraits`, and has not been otherwise ignored."""
         if not isinstance(candidate, T.HasTraits):
             return False
         if candidate in graph_data["widgets"]:
@@ -209,7 +208,7 @@ class WidgetSource(DataFrameSource):
     def find_trait_notifier_graph_data(
         self, widget: T.HasTraits, graph_data: TAnyDict
     ) -> None:
-        """Discover trait notifiers from the observed widgets."""
+        """Discover trait notifiers from the observed has_traits."""
         for trait_name, event_notifiers in widget._trait_notifiers.items():
             if trait_name == "comm":
                 continue

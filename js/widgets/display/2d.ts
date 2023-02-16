@@ -52,7 +52,7 @@ import {
   WIDGET_DEFAULTS,
   emptyArray,
 } from '../../tokens';
-import { ForceBehaviorModel, GraphForcesBehaviorModel } from '../behaviors';
+import { ForceBehaviorModel, GraphForcesModel } from '../behaviors';
 
 export class ForceGraphModel extends DOMWidgetModel {
   static model_name = 'ForceGraphModel';
@@ -65,7 +65,7 @@ export class ForceGraphModel extends DOMWidgetModel {
   protected _nodeBehaviorsByMethod: TNodeMethodMap;
   protected _linkBehaviorsByMethod: TLinkMethodMap;
   protected _graphBehaviorsByMethod: TGraphMethodMap;
-  protected _forceBehaviors: GraphForcesBehaviorModel[];
+  protected _forceBehaviors: GraphForcesModel[];
   protected _behaviorsChanged: Signal<ForceGraphModel, void>;
 
   defaults() {
@@ -131,7 +131,7 @@ export class ForceGraphModel extends DOMWidgetModel {
 
     this._forceBehaviors = [];
     for (const behavior of behaviors) {
-      if (behavior instanceof GraphForcesBehaviorModel) {
+      if (behavior instanceof GraphForcesModel) {
         this._forceBehaviors.push(behavior);
       }
     }
@@ -150,7 +150,7 @@ export class ForceGraphModel extends DOMWidgetModel {
     return this._graphBehaviorsByMethod.get(method) || emptyArray;
   }
 
-  get forceBehaviors(): readonly GraphForcesBehaviorModel[] {
+  get forceBehaviors(): readonly GraphForcesModel[] {
     return this._forceBehaviors;
   }
 

@@ -1,4 +1,5 @@
 """Base widget identification for ipyforcegraph."""
+
 # Copyright (c) 2023 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.
 
@@ -16,9 +17,3 @@ class ForceBase(W.Widget):
     _model_module_version: str = T.Unicode(EXTENSION_SPEC_VERSION).tag(sync=True)
     _view_module: str = T.Unicode(EXTENSION_NAME).tag(sync=True)
     _view_module_version: str = T.Unicode(EXTENSION_SPEC_VERSION).tag(sync=True)
-
-
-class Behavior(ForceBase):
-    """The base class for all IPyForceGraph graph behaviors."""
-
-    _model_name: str = T.Unicode("BehaviorModel").tag(sync=True)

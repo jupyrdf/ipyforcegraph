@@ -1,4 +1,4 @@
-from ipyforcegraph.forcegraph import WIDGET_CLASS
+from ipyforcegraph.graphs import WIDGET_CLASS
 fg = WIDGET_CLASS()
 display(fg)
 fg.source.nodes = [{"id": "hello"}, {"id": "world"}]

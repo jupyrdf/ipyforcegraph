@@ -23,7 +23,7 @@ forcegraph
 ForceGraph
 ForceGraph3D
 GraphData
-GraphForcesBehavior
+GraphForces
 GraphImage
 ipyforcegraph
 IPyForceGraph
