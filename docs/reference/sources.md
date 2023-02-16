@@ -4,3 +4,8 @@
 .. currentmodule:: ipyforcegraph
 .. automodule:: ipyforcegraph.sources.dataframe
 ```
+
+```{eval-rst}
+.. currentmodule:: ipyforcegraph
+.. automodule:: ipyforcegraph.sources.widget
+```
