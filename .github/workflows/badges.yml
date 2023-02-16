@@ -16,7 +16,8 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            var PR_NUMBER = context.issue.number
+            const PR_NUMBER = context.issue.number
+            const {PR_HEAD_REF, PR_HEAD_USERREPO} = process.env;
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
