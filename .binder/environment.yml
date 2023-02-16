@@ -12,8 +12,9 @@ dependencies:
   - jupyterlab-link-share
   - keyring
   - mypy >=1.0.0
+  - nbstripout
   - pyflakes
-  - pyproject-fmt
+  - pyproject-fmt !=0.9.1
   - pytest-asyncio
   - pytest-check-links
   - pytest-cov
@@ -29,6 +30,7 @@ dependencies:
   - stringcase
   ### docs/environment.yml ###
   - ansi2html
+  - autodoc-traits
   - bqplot >=0.12.20
   - docutils >=0.19
   - doit

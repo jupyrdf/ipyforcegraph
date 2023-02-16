@@ -1,8 +1,7 @@
-""" documentation for ipyforcegraph
-"""
+"""documentation for ``ipyforcegraph``"""
+
 # Copyright (c) 2023 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.
-
 
 from datetime import datetime
 from pathlib import Path
@@ -26,6 +25,7 @@ extensions = [
     "sphinx.ext.autosectionlabel",
     "sphinx.ext.extlinks",
     "sphinx.ext.autodoc",
+    "autodoc_traits",
     "sphinx_autodoc_typehints",
     "sphinx.ext.viewcode",
     "sphinx.ext.intersphinx",
@@ -48,6 +48,7 @@ autodoc_typehints = "none"
 autodoc_default_options = {
     "members": True,
     "show-inheritance": True,
+    "undoc-members": True,
 }
 inheritance_alias = {}
 

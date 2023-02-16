@@ -98,7 +98,6 @@ Clean Up After Working With Files
         ${src}    ${name} =    Split Path    ${file}
         Remove File    ${nb_dir}${/}${name}
     END
-    Maybe Reset Application State
 
 Wait For Dialog
     Wait Until Page Contains Element    ${DIALOG WINDOW}    timeout=180s

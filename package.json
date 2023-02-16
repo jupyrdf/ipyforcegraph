@@ -47,6 +47,8 @@
     "@jupyter-widgets/jupyterlab-manager": "^5.0.5",
     "3d-force-graph": "~1.71.1",
     "buffer": "^6.0.3",
+    "d3-force-3d": "^3.0.5",
+    "d3-force-cluster-3d": "~1.1.1",
     "force-graph": "~1.43.0",
     "nunjucks": "^3.2.3"
   },
@@ -56,6 +58,7 @@
     "@jupyterlab/theme-dark-extension": "3",
     "@jupyterlab/theme-light-extension": "3",
     "@trivago/prettier-plugin-sort-imports": "^4.0.0",
+    "@types/d3-force": "^3.0.4",
     "@types/nunjucks": "^3.2.1",
     "@types/three": "^0.148.0",
     "file-loader": "^6.2.0",
@@ -91,6 +94,15 @@
         "bundled": true
       },
       "buffer": {
+        "bundled": true
+      },
+      "nunjucks": {
+        "bundled": true
+      },
+      "d3-force-3d": {
+        "bundled": true
+      },
+      "d3-force-cluster-3d": {
         "bundled": true
       }
     }

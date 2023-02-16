@@ -1,8 +1,6 @@
-# Widgets
+# Graphs
 
 ```{eval-rst}
 .. currentmodule:: ipyforcegraph
-.. automodule:: ipyforcegraph.forcegraph
-    :members:
-    :special-members:
+.. automodule:: ipyforcegraph.graphs
 ```

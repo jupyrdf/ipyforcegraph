@@ -23,6 +23,7 @@ import {
 } from '@jupyter-widgets/base';
 
 import {
+  ALL_GRAPH_METHODS,
   ALL_LINK_METHODS,
   ALL_NODE_METHODS,
   CSS,
@@ -31,6 +32,7 @@ import {
   DEFAULT_WIDTHS,
   EMOJI,
   EMPTY_GRAPH_DATA,
+  EUpdate,
   IBehave,
   IHasGraph,
   ILinkBehaveOptions,
@@ -39,13 +41,18 @@ import {
   INodeEventBehaveOptions,
   IRenderOptions,
   ISource,
+  TAnyForce,
+  TGraphBehaveMethod,
+  TGraphMethodMap,
   TLinkBehaveMethod,
   TLinkMethodMap,
   TNodeBehaveMethod,
   TNodeMethodMap,
+  TUpdateKind,
   WIDGET_DEFAULTS,
   emptyArray,
 } from '../../tokens';
+import { ForceBehaviorModel, GraphForcesModel } from '../behaviors';
 
 export class ForceGraphModel extends DOMWidgetModel {
   static model_name = 'ForceGraphModel';
@@ -57,6 +64,8 @@ export class ForceGraphModel extends DOMWidgetModel {
 
   protected _nodeBehaviorsByMethod: TNodeMethodMap;
   protected _linkBehaviorsByMethod: TLinkMethodMap;
+  protected _graphBehaviorsByMethod: TGraphMethodMap;
+  protected _forceBehaviors: GraphForcesModel[];
   protected _behaviorsChanged: Signal<ForceGraphModel, void>;
 
   defaults() {
@@ -67,10 +76,11 @@ export class ForceGraphModel extends DOMWidgetModel {
       _view_name: ForceGraphView.view_name,
       source: null,
       behaviors: [],
-      default_node_color: DEFAULT_COLORS.node,
+      background_color: DEFAULT_COLORS.background,
       default_link_color: DEFAULT_COLORS.link,
       default_link_width: DEFAULT_WIDTHS.link,
-      background_color: DEFAULT_COLORS.background,
+      default_node_color: DEFAULT_COLORS.node,
+      default_node_size: DEFAULT_WIDTHS.node,
     };
   }
 
@@ -85,6 +95,7 @@ export class ForceGraphModel extends DOMWidgetModel {
       this._behaviorsChanged = new Signal(this);
       this._linkBehaviorsByMethod = new Map();
       this._nodeBehaviorsByMethod = new Map();
+      this._graphBehaviorsByMethod = new Map();
     }
     const { behaviors } = this;
 
@@ -107,6 +118,23 @@ export class ForceGraphModel extends DOMWidgetModel {
       }
       this._nodeBehaviorsByMethod.set(nodeMethod, methodBehaviors);
     }
+
+    for (let graphMethod of ALL_GRAPH_METHODS) {
+      let graphBehaviors: IBehave[] = [];
+      for (const behavior of behaviors) {
+        if (behavior[graphMethod]) {
+          graphBehaviors.push(behavior);
+        }
+      }
+      this._graphBehaviorsByMethod.set(graphMethod, graphBehaviors);
+    }
+
+    this._forceBehaviors = [];
+    for (const behavior of behaviors) {
+      if (behavior instanceof GraphForcesModel) {
+        this._forceBehaviors.push(behavior);
+      }
+    }
     this._behaviorsChanged.emit(void 0);
   }
 
@@ -116,6 +144,14 @@ export class ForceGraphModel extends DOMWidgetModel {
 
   nodeBehaviorsForMethod(method: TNodeBehaveMethod): readonly IBehave[] {
     return this._nodeBehaviorsByMethod.get(method) || emptyArray;
+  }
+
+  graphBehaviorsForMethod(method: TGraphBehaveMethod): readonly IBehave[] {
+    return this._graphBehaviorsByMethod.get(method) || emptyArray;
+  }
+
+  get forceBehaviors(): readonly GraphForcesModel[] {
+    return this._forceBehaviors;
   }
 
   get graphData(): GraphData {
@@ -137,6 +173,10 @@ export class ForceGraphModel extends DOMWidgetModel {
 
   get defaultNodeColor(): string {
     return this.get('default_node_color') || DEFAULT_COLORS.node;
+  }
+
+  get defaultNodeSize(): string {
+    return this.get('default_node_size') || DEFAULT_WIDTHS.node;
   }
 
   get defaultLinkColor(): string {
@@ -181,7 +221,11 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
     this.luminoWidget.addClass(`${CSS.widget}-${this.graphJsClass}`);
     this._rendered = new PromiseDelegate();
     this.model.on('change:source', this.onSourceChange, this);
-    this.model.on('change:background_color', this.onBackgroundColorChange, this);
+    this.model.on(
+      'change:default_node_color change:default_link_color change:background_color change:default_node_size change:default_link_width',
+      this.postUpdate,
+      this
+    );
 
     this.model.behaviorsChanged.connect(this.onBehaviorsChange, this);
     this.luminoWidget.disposed.connect(this.onDisposed, this);
@@ -225,8 +269,7 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
     this.graph = graph as any;
     contentWindow.addEventListener('resize', this.onWindowResize);
     this._rendered.resolve(void 0);
-    await this.onBackgroundColorChange();
-    await this.update();
+    await this.redraw();
   };
 
   protected onWindowResize = () => {
@@ -288,104 +331,213 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
     return src;
   }
 
-  async update(): Promise<void> {
+  async redraw(): Promise<void> {
     await this._rendered.promise;
     let { graphData } = this.model;
     DEBUG && console.warn(`${EMOJI} updating...`, graphData);
-    (this.graph as any).graphData(graphData);
     await this.postUpdate();
+    (this.graph as any).graphData(graphData);
   }
 
   wrapFunction(fn: Function) {
     return (this._iframe.contentWindow as any).wrapFunction(fn);
   }
 
-  async onBackgroundColorChange() {
-    await this.rendered;
-    (this.graph as ForceGraphInstance).backgroundColor(this.model.backgroundColor);
-  }
-
   onSourceChange(change?: any) {
     const { source, previousSource } = this;
 
     if (previousSource) {
-      previousSource.dataUpdated.disconnect(this.update, this);
+      previousSource.dataUpdated.disconnect(this.redraw, this);
     }
 
     if (source) {
-      source.dataUpdated.connect(this.update, this);
-      this.update();
+      source.dataUpdated.connect(this.redraw, this);
+      this.redraw();
     }
   }
 
-  protected async postUpdate(): Promise<void> {
+  protected async postUpdate(caller?: any, kind?: TUpdateKind): Promise<void> {
     await this.rendered;
     const graph = this.graph as ForceGraphInstance;
-    if (graph) {
-      // link
-      graph.linkColor(this.wrapFunction(this.getLinkColor));
-      graph.linkWidth(this.wrapFunction(this.getLinkWidth));
-      graph.linkLabel(this.wrapFunction(this.getLinkLabel));
-
-      graph.linkDirectionalArrowColor(
-        this.wrapFunction(this.getLinkDirectionalArrowColor)
-      );
-      graph.linkDirectionalArrowLength(
-        this.wrapFunction(this.getLinkDirectionalArrowLength)
-      );
-      graph.linkDirectionalArrowRelPos(
-        this.wrapFunction(this.getLinkDirectionalArrowRelPos)
-      );
-      graph.linkDirectionalParticleColor(
-        this.wrapFunction(this.getLinkDirectionalParticleColor)
-      );
-      graph.linkDirectionalParticleSpeed(
-        this.wrapFunction(this.getLinkDirectionalParticleSpeed)
-      );
-      graph.linkDirectionalParticleWidth(
-        this.wrapFunction(this.getLinkDirectionalParticleWidth)
-      );
-      graph.linkDirectionalParticles(
-        this.wrapFunction(this.getLinkDirectionalParticles)
-      );
-
-      // node
-      graph.nodeColor(this.wrapFunction(this.getNodeColor));
-      graph.nodeLabel(this.wrapFunction(this.getNodeLabel));
-
-      // evented
-      graph.onNodeClick(this.wrapFunction(this.onNodeClick));
-      graph.onLinkClick(this.wrapFunction(this.onLinkClick));
-
-      // (3d-)force-graph-specific
-      this.getOnRenderPostUpdate();
-    } else {
+    if (!graph) {
       console.warn(`${EMOJI} no graph to postUpdate`);
+      return;
+    }
+
+    const {
+      backgroundColor,
+      defaultLinkColor,
+      defaultNodeColor,
+      defaultLinkWidth,
+      defaultNodeSize,
+    } = this.model;
+
+    // graph
+    graph.backgroundColor(backgroundColor);
+
+    // link
+    graph.linkColor(
+      this.model.linkBehaviorsForMethod('getLinkColor').length
+        ? this.wrapFunction(this.getLinkColor)
+        : this.wrapFunction(() => defaultLinkColor)
+    );
+    graph.linkWidth(
+      this.model.linkBehaviorsForMethod('getLinkWidth').length
+        ? this.wrapFunction(this.getLinkWidth)
+        : this.wrapFunction(() => defaultLinkWidth)
+    );
+    graph.linkLabel(
+      this.model.linkBehaviorsForMethod('getLinkLabel').length
+        ? this.wrapFunction(this.getLinkLabel)
+        : null
+    );
+
+    graph.linkDirectionalArrowColor(
+      this.model.linkBehaviorsForMethod('getLinkDirectionalArrowColor').length
+        ? this.wrapFunction(this.getLinkDirectionalArrowColor)
+        : null
+    );
+    graph.linkDirectionalArrowLength(
+      this.model.linkBehaviorsForMethod('getLinkDirectionalArrowLength').length
+        ? this.wrapFunction(this.getLinkDirectionalArrowLength)
+        : null
+    );
+    graph.linkDirectionalArrowRelPos(
+      this.model.linkBehaviorsForMethod('getLinkDirectionalArrowRelPos').length
+        ? this.wrapFunction(this.getLinkDirectionalArrowRelPos)
+        : null
+    );
+    graph.linkDirectionalParticleColor(
+      this.model.linkBehaviorsForMethod('getLinkDirectionalParticleColor').length
+        ? this.wrapFunction(this.getLinkDirectionalParticleColor)
+        : null
+    );
+    graph.linkDirectionalParticleSpeed(
+      this.model.linkBehaviorsForMethod('getLinkDirectionalParticleSpeed').length
+        ? this.wrapFunction(this.getLinkDirectionalParticleSpeed)
+        : null
+    );
+    graph.linkDirectionalParticleWidth(
+      this.model.linkBehaviorsForMethod('getLinkDirectionalParticleWidth').length
+        ? this.wrapFunction(this.getLinkDirectionalParticleWidth)
+        : null
+    );
+    graph.linkDirectionalParticles(
+      this.model.linkBehaviorsForMethod('getLinkDirectionalParticles').length
+        ? this.wrapFunction(this.getLinkDirectionalParticles)
+        : null
+    );
+
+    // node
+    graph.nodeColor(
+      this.model.nodeBehaviorsForMethod('getNodeColor').length
+        ? this.wrapFunction(this.getNodeColor)
+        : this.wrapFunction(() => defaultNodeColor)
+    );
+    graph.nodeVal(
+      this.model.nodeBehaviorsForMethod('getNodeSize').length
+        ? this.wrapFunction(this.getNodeSize)
+        : this.wrapFunction(() => defaultNodeSize)
+    );
+    graph.nodeLabel(
+      this.model.nodeBehaviorsForMethod('getNodeLabel').length
+        ? this.wrapFunction(this.getNodeLabel)
+        : null
+    );
+
+    // evented
+    graph.onNodeClick(
+      this.model.nodeBehaviorsForMethod('onNodeClick').length
+        ? this.wrapFunction(this.onNodeClick)
+        : null
+    );
+    graph.onLinkClick(
+      this.model.linkBehaviorsForMethod('onLinkClick').length
+        ? this.wrapFunction(this.onLinkClick)
+        : null
+    );
+
+    // forces
+    this.getForceUpdate();
+
+    // finally, (3d-)force-graph-specific after all other behaviors
+    this.getOnRenderPostUpdate();
+
+    if (kind && EUpdate.Reheat === (kind & EUpdate.Reheat)) {
+      graph.d3ReheatSimulation();
     }
   }
+
+  protected getForceUpdate() {
+    const graph = this.graph as ForceGraphInstance;
+    let needsPost: TAnyForce[] = [];
+    for (let simBehavior of this.model.forceBehaviors) {
+      const { warmupTicks, cooldownTicks, alphaDecay, alphaMin, velocityDecay } =
+        simBehavior;
+      simBehavior.checkPositions(graph);
+      graph.cooldownTicks(cooldownTicks);
+      graph.warmupTicks(warmupTicks);
+      graph.d3AlphaDecay(alphaDecay);
+      graph.d3AlphaMin(alphaMin);
+      graph.d3VelocityDecay(velocityDecay);
+
+      for (let key in simBehavior.forces) {
+        let behavior: ForceBehaviorModel | null = simBehavior.forces[key];
+        let force = behavior?.force || null;
+        if (force && !behavior?.active) {
+          force = null;
+        }
+        graph.d3Force(key, force);
+        if (force?.links) {
+          needsPost.push(force);
+        }
+      }
+    }
+    if (needsPost.length) {
+      setTimeout(this.postForceUpdate, 250, needsPost);
+    }
+  }
+
+  protected postForceUpdate = (forces: TAnyForce[]) => {
+    const { links } = (this.graph as ForceGraphInstance).graphData();
+    if (!links.length) {
+      return;
+    }
+    const firstSource = typeof links[0].source;
+    if (firstSource === 'string' || firstSource === 'number') {
+      setTimeout(this.postForceUpdate, 250, forces);
+      DEBUG && console.log('Polling postForceUpdate...');
+      return;
+    }
+    for (let force of forces) {
+      if (force.links) {
+        force.links(links);
+      }
+    }
+  };
 
   protected getOnRenderPostUpdate() {
     const graph = this.graph as ForceGraphInstance;
-    graph.onRenderFramePost(this.wrapFunction(this.onRender));
+    graph.onRenderFramePost(
+      this.model.graphBehaviorsForMethod('onRender').length
+        ? this.wrapFunction(this.onRender)
+        : null
+    );
   }
 
   // composable behaviors
   async onBehaviorsChange(): Promise<void> {
     const { behaviors, previousBehaviors } = this.model;
 
-    for (const previous of previousBehaviors) {
-      if (!behaviors.includes(previous)) {
-        previous.updateRequested.disconnect(this.postUpdate, this);
-      }
+    for (const behavior of previousBehaviors) {
+      behavior.updateRequested.disconnect(this.postUpdate, this);
     }
 
     for (const behavior of behaviors) {
-      if (!previousBehaviors.includes(behavior)) {
-        behavior.updateRequested.connect(this.postUpdate, this);
-      }
+      behavior.updateRequested.connect(this.postUpdate, this);
     }
 
-    await this.update();
+    await this.postUpdate();
   }
 
   // link behaviors
@@ -481,6 +633,10 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
     return this.getComposedNodeAttr(node, 'getNodeLabel', '');
   };
 
+  protected getNodeSize = (node: NodeObject): string => {
+    return this.getComposedNodeAttr(node, 'getNodeSize', this.model.defaultNodeSize);
+  };
+
   getComposedNodeAttr(
     node: NodeObject,
     methodName: TNodeBehaveMethod,
@@ -506,7 +662,6 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
   }
 
   protected onNodeClick = (node: NodeObject, event: MouseEvent) => {
-    const { behaviors } = this.model;
     const graphData = (this.graph as ForceGraphInstance).graphData();
     let shouldContinue = true;
     const options: INodeEventBehaveOptions = {
@@ -515,10 +670,7 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
       event,
       node,
     };
-    for (const behavior of behaviors) {
-      if (!behavior.onNodeClick) {
-        continue;
-      }
+    for (const behavior of this.model.nodeBehaviorsForMethod('onNodeClick')) {
       shouldContinue = behavior.onNodeClick(options);
       if (!shouldContinue) {
         return;
@@ -527,7 +679,6 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
   };
 
   protected onLinkClick = (link: LinkObject, event: MouseEvent) => {
-    const { behaviors } = this.model;
     const graphData = (this.graph as ForceGraphInstance).graphData();
     let shouldContinue = true;
     const options: ILinkEventBehaveOptions = {
@@ -537,10 +688,7 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
       link,
       index: graphData.links.indexOf(link),
     };
-    for (const behavior of behaviors) {
-      if (!behavior.onLinkClick) {
-        continue;
-      }
+    for (const behavior of this.model.linkBehaviorsForMethod('onLinkClick')) {
       shouldContinue = behavior.onLinkClick(options);
       if (!shouldContinue) {
         return;
@@ -553,7 +701,6 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
   }
 
   protected onRender = (ctx: CanvasRenderingContext2D, globalScale: any) => {
-    const { behaviors } = this.model;
     const graphData = (this.graph as ForceGraphInstance).graphData();
     let options: IRenderOptions = {
       view: this,
@@ -562,10 +709,7 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
       globalScale,
     };
     options = this.updateRenderOptions(options);
-    for (const behavior of behaviors) {
-      if (!behavior.onRender) {
-        continue;
-      }
+    for (const behavior of this.model.graphBehaviorsForMethod('onRender')) {
       behavior.onRender(options);
     }
   };

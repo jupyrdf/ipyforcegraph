@@ -8,24 +8,26 @@ import { ISignal, Signal } from '@lumino/signaling';
 
 import { IBackboneModelOptions, WidgetModel } from '@jupyter-widgets/base';
 
+import { newTemplate } from '../../template-utils';
 import {
   EMOJI,
   IBehave,
   IHasGraph,
   ILinkBehaveOptions,
   INodeBehaveOptions,
+  TUpdateKind,
   WIDGET_DEFAULTS,
 } from '../../tokens';
 
 export class BehaviorModel extends WidgetModel implements IBehave {
-  protected _updateRequested: Signal<IBehave, void>;
+  protected _updateRequested: Signal<IBehave, TUpdateKind>;
 
   initialize(attributes: Backbone.ObjectHash, options: IBackboneModelOptions) {
     super.initialize(attributes, options);
     this._updateRequested = new Signal(this);
   }
 
-  get updateRequested(): ISignal<IBehave, void> {
+  get updateRequested(): ISignal<IBehave, TUpdateKind> {
     return this._updateRequested;
   }
 }
@@ -54,6 +56,8 @@ export class ColumnOrTemplateModel extends BehaviorModel implements IBehave {
     super.initialize(attributes, options);
     this.on('change:column_name', this.onColumnNameChange, this);
     this.on('change:template', this.onTemplateChange, this);
+    void this.onColumnNameChange();
+    void this.onTemplateChange();
   }
 
   protected async onTemplateChange(): Promise<void> {
@@ -61,11 +65,10 @@ export class ColumnOrTemplateModel extends BehaviorModel implements IBehave {
     if (template == null) {
       this._nunjucksTemplate = null;
     } else {
-      const nunjucks = await import('nunjucks');
       try {
-        this._nunjucksTemplate = new nunjucks.Template(template);
+        this._nunjucksTemplate = await newTemplate(template);
       } catch (err) {
-        console.warn(EMOJI, err, err['message']);
+        console.warn(EMOJI, err['message']);
         this._nunjucksTemplate = null;
       }
     }

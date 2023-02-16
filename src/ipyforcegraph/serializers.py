@@ -6,6 +6,7 @@ from typing import Any, Dict, Optional
 
 import ipywidgets as W
 import numcodecs as N
+import numpy as np
 import pandas as P
 import traitlets as T
 
@@ -27,7 +28,7 @@ def dataframe_to_json(
     if value is T.Undefined:
         raise T.TraitError("Cannot serialize undefined dataframe!")
 
-    df_data = value.to_dict(orient="list")
+    df_data = value.replace({np.nan: None}).to_dict(orient="list")
 
     if HAS_ORJSON:
         df_json = orjson.dumps(df_data)

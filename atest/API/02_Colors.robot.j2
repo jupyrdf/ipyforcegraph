@@ -37,7 +37,7 @@ Color Feature Works As Expected
     Wait For All Cells To Run
     Sleep    1s
     ${color} =   Get Element Screenshot Size    ${frame}    ${screens}    02-color.png
-    Should Be True    ${color} > ${transparent}
+    Should Be True Or Screenshot    ${color} > ${transparent}  03-color-bigger-than-transparent.png
     [Teardown]    Clean Up Color Example
 
 Set Up Color Example

@@ -1,4 +1,4 @@
-"""Constants for ipyforcegraph."""
+"""Constants for ``ipyforcegraph``."""
 
 # Copyright (c) 2023 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.

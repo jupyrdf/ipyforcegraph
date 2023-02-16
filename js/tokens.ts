@@ -2,6 +2,7 @@
  * Copyright (c) 2023 ipyforcegraph contributors.
  * Distributed under the terms of the Modified BSD License.
  */
+import d3Force3d from 'd3-force-3d';
 import type { GraphData, LinkObject, NodeObject } from 'force-graph';
 import type { WebGLRenderer } from 'three';
 
@@ -41,6 +42,7 @@ export const DEFAULT_COLORS = {
 export const DEFAULT_WIDTHS = {
   link: 1,
   selected: 2,
+  node: 1,
 };
 
 export const WIDGET_DEFAULTS = {
@@ -50,8 +52,17 @@ export const WIDGET_DEFAULTS = {
   _view_module_version: VERSION,
 };
 
+//  Using bit flags for the TUpdateKind number
+export enum EUpdate {
+  Unknown = 0,
+  Reheat = 1 << 0,
+  Cosmetic = 1 << 1,
+  Render = 1 << 2,
+}
+export type TUpdateKind = void | number;
+
 export interface IBehave {
-  updateRequested: ISignal<IBehave, void>;
+  updateRequested: ISignal<IBehave, TUpdateKind>;
   // link
   getLinkColor?(options: ILinkBehaveOptions): string | null;
   getLinkWidth?(options: ILinkBehaveOptions): string | null;
@@ -66,6 +77,7 @@ export interface IBehave {
   // node
   getNodeColor?(options: INodeBehaveOptions): string | null;
   getNodeLabel?(options: INodeBehaveOptions): string | null;
+  getNodeSize?(options: INodeBehaveOptions): string | null;
   // evented
   onNodeClick?(options: INodeEventBehaveOptions): boolean;
   onLinkClick?(options: ILinkEventBehaveOptions): boolean;
@@ -83,14 +95,24 @@ export const ALL_LINK_METHODS = [
   'getLinkDirectionalParticleSpeed',
   'getLinkDirectionalParticleWidth',
   'getLinkDirectionalParticles',
+  'onLinkClick',
 ];
 export type TLinkBehaveMethod = (typeof ALL_LINK_METHODS)[number];
 
-export const ALL_NODE_METHODS = ['getNodeLabel', 'getNodeColor'];
+export const ALL_NODE_METHODS = [
+  'getNodeLabel',
+  'getNodeColor',
+  'getNodeSize',
+  'onNodeClick',
+];
 export type TNodeBehaveMethod = (typeof ALL_NODE_METHODS)[number];
+
+export const ALL_GRAPH_METHODS = ['onRender'];
+export type TGraphBehaveMethod = (typeof ALL_GRAPH_METHODS)[number];
 
 export type TNodeMethodMap = Map<TNodeBehaveMethod, IBehave[]>;
 export type TLinkMethodMap = Map<TLinkBehaveMethod, IBehave[]>;
+export type TGraphMethodMap = Map<TGraphBehaveMethod, IBehave[]>;
 
 export interface IBehaveOptions {
   view: IHasGraph;
@@ -131,6 +153,21 @@ export interface IHasGraph<T = any> extends DOMWidgetView {
 export interface ISource {
   graphData: GraphData;
   dataUpdated: ISignal<ISource, void>;
+}
+
+export type TAnyForce =
+  | d3Force3d.forceCenter
+  | d3Force3d.forceCollide
+  | d3Force3d.forceLink
+  | d3Force3d.forceManyBody
+  | d3Force3d.forceRadial
+  | d3Force3d.forceSimulation
+  | d3Force3d.forceX
+  | d3Force3d.forceY
+  | d3Force3d.forceZ;
+
+export interface IForce {
+  forceFactory(): TAnyForce;
 }
 
 export type TSelectedSet = Set<string | number>;

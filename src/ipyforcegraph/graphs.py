@@ -8,7 +8,8 @@ from typing import Tuple
 import ipywidgets as W
 import traitlets as T
 
-from ._base import Behavior, ForceBase
+from ._base import ForceBase
+from .behaviors import Behavior
 from .sources.dataframe import DataFrameSource
 
 
@@ -26,22 +27,31 @@ class ForceGraph(W.DOMWidget, ForceBase):
     behaviors: Tuple[Behavior, ...] = W.TypedTuple(
         T.Instance(Behavior),
         kw={},
-        help="the behaviors that modify the appearance of nodes, links and the graph itself",
+        help=(
+            "the behaviors that modify the appearance of :mod:`~ipyforcegraph.behaviors.node`, "
+            ":mod:`~ipyforcegraph.behaviors.link`, and the "
+            ":mod:`~ipyforcegraph.behaviors.graph` itself"
+        ),
     ).tag(sync=True, **W.widget_serialization)
 
     default_node_color: str = T.Unicode(
         "rgba(31, 120, 179, 1.0)",
-        help="a default node color, which can be overridden by :class:`~ipyforcegraph.behaviors.NodeColors`.",
+        help="a default node color, which can be overridden by :class:`~ipyforcegraph.behaviors.node.NodeColors`.",
+    ).tag(sync=True)
+
+    default_node_size: float = T.Float(
+        1,
+        help="a default node size, which can be overridden by :class:`~ipyforcegraph.behaviors.node.NodeSizes`.",
     ).tag(sync=True)
 
     default_link_color: str = T.Unicode(
         "rgba(66, 66, 66, 0.5)",
-        help="a default link color, which can be overridden by :class:`~ipyforcegraph.behaviors.LinkColors`",
+        help="a default link color, which can be overridden by :class:`~ipyforcegraph.behaviors.link.LinkColors`",
     ).tag(sync=True)
 
     default_link_width: str = T.Float(
         1.0,
-        help="a default link width, which can be overridden by :class:`~ipyforcegraph.behaviors.LinkWidths`",
+        help="a default link width, which can be overridden by :class:`~ipyforcegraph.behaviors.link.LinkWidths`",
     ).tag(sync=True)
 
     background_color: str = T.Unicode(

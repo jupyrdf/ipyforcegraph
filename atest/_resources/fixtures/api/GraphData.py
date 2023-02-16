@@ -1,14 +1,13 @@
-from ipyforcegraph.forcegraph import WIDGET_CLASS
+from ipyforcegraph.graphs import WIDGET_CLASS
 from ipyforcegraph import behaviors as B
-import pandas as pd
 import asyncio
 g = B.GraphData(column_name="id")
 fg = WIDGET_CLASS(behaviors=[g])
 display(fg)
 g.capturing = True
 await asyncio.sleep(1)
-fg.source.nodes = pd.DataFrame([{"id": "hello"}, {"id": "world"}])
-fg.source.links = pd.DataFrame([{"source": "hello", "target": "world"}])
+fg.source.nodes = [{"id": "hello"}, {"id": "world"}]
+fg.source.links = [{"source": "hello", "target": "world"}]
 await asyncio.sleep(1)
 display(g.sources[0].links, g.sources[0].nodes)
 assert 0 not in g.sources[0].links.shape

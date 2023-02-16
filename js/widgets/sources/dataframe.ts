@@ -43,9 +43,7 @@ export class DataFrameSourceModel extends WidgetModel {
 
   initialize(attributes: Backbone.ObjectHash, options: IBackboneModelOptions) {
     super.initialize(attributes, options);
-
-    this.on('change:nodes', this.graphUpdate, this);
-    this.on('change:links', this.graphUpdate, this);
+    this.on('change:nodes change:links', this.graphUpdate, this);
   }
 
   get dataUpdated(): ISignal<DataFrameSourceModel, void> {

@@ -19,4 +19,6 @@ export * from './link-selection';
 export * from './link-width';
 export * from './node-color';
 export * from './node-label';
+export * from './node-size';
 export * from './node-selection';
+export * from './forces';

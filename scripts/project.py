@@ -1,6 +1,6 @@
-""" important project paths
+"""important project paths
 
-    this should not import anything not in py36+ stdlib, or any local paths
+this should not import anything not in py36+ stdlib, or any local paths
 """
 
 # Copyright (c) 2023 ipyforcegraph contributors.
@@ -167,6 +167,7 @@ LITE_JSON = [*LITE.glob("*.json")]
 DOCS_BUILD = BUILD / "docs"
 DOCS_CONF = DOCS / "conf.py"
 DICTIONARY = DOCS / "dictionary.txt"
+ALL_SPELL = BUILD / "spell/ALL.fail"
 LITE_SPEC = ["--pre", "jupyterlite==0.1.0b18"]
 LITE_BUILD = BUILD / "lite"
 LITE_SHA256SUMS = LITE_BUILD / "SHA256SUMS"
@@ -268,16 +269,6 @@ DOCS_BUILDINFO = DOCS_BUILD / "html" / ".buildinfo"
 DOCS_LINKS = BUILD / "links"
 
 
-def template_one(src: Path, dest: Path, context=None):
-    """Update a file from a template"""
-    try:
-        import jinja2
-    except ImportError:
-        print(f"Can't update {src} without jinja2")
-        return
-
-    context = context or {}
-
-    tmpl = jinja2.Template(src.read_text(encoding="utf-8"))
-    text = tmpl.render(**context)
-    dest.write_text(text, encoding="utf-8")
+# nblint
+NB_METADATA_KEYS = ["kernelspec", "language_info"]
+CLOBBER_CELL_METADATA_KEYS = ["jupyter", "collapsed"]

@@ -13,7 +13,7 @@ Setup Server and Browser
     ${nb_dir} =    Initialize Jupyter Directory
     Wait For New Jupyter Server To Be Ready    jupyter-lab    notebook_dir=${nb_dir}
     ...    cwd=${nb_dir}
-    ...    stdout=${nb_dir}${/}jupyter-lab.log
+    ...    stdout=${OUTPUT_DIR}${/}jupyter-lab.log
     ...    stderr=STDOUT
     Open JupyterLab
     Set Window Size    1920    1080
@@ -39,4 +39,4 @@ Initialize Jupyter Directory
 
 Tear Down Everything
     Close All Browsers
-    Terminate All Jupyter Servers
+    Run Keyword and Ignore Error    Terminate All Jupyter Servers

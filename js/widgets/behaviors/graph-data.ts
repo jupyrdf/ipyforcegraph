@@ -8,7 +8,7 @@ import {
   unpack_models as deserialize,
 } from '@jupyter-widgets/base';
 
-import { IBehave, IRenderOptions, WIDGET_DEFAULTS } from '../../tokens';
+import { EUpdate, IBehave, IRenderOptions, WIDGET_DEFAULTS } from '../../tokens';
 import { DataFrameSourceModel } from '../sources';
 
 import { BehaviorModel } from './base';
@@ -53,6 +53,9 @@ export class GraphDataModel extends BehaviorModel implements IBehave {
 
   protected onCapturingChanged(e?: any): void {
     this._sourcesToCapture = this.capturing ? this.sourceCount : 0;
+    if (this._sourcesToCapture) {
+      this._updateRequested.emit(EUpdate.Render);
+    }
   }
 
   onRender(options: IRenderOptions): void {

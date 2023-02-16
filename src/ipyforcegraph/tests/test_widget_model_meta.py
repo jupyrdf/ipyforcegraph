@@ -7,19 +7,28 @@ from typing import Dict, Set, Type
 import ipywidgets as W
 import pytest
 
-from ipyforcegraph import behaviors, forcegraph
+from ipyforcegraph import behaviors, graphs
 from ipyforcegraph._base import ForceBase
+from ipyforcegraph.behaviors import forces
+from ipyforcegraph.sources.widget import WidgetSource
 
 TSubclassSet = Set[Type[W.Widget]]
 TSubclassData = Dict[Type[W.Widget], str]
+
+#: the bases we'll walk to find subclasses
+SUBCLASS_BASES = {ForceBase}
+
+#: these reuse the upstream data model
+PURE_PY_SUBCLASSES = {WidgetSource}
 
 
 @pytest.fixture
 def widget_subclasses() -> TSubclassSet:
     assert behaviors
-    assert forcegraph
+    assert forces
+    assert graphs
 
-    subclasses = set([ForceBase])
+    subclasses = SUBCLASS_BASES
     subclass_count = -1
 
     while len(subclasses) != subclass_count:
@@ -29,7 +38,7 @@ def widget_subclasses() -> TSubclassSet:
         )
 
     assert subclasses
-    return subclasses
+    return subclasses - PURE_PY_SUBCLASSES
 
 
 @pytest.fixture
