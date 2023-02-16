@@ -26,7 +26,10 @@ labels: maintenance
 - [ ] postmortem
   - [ ] handle `conda-forge` feedstock tasks
   - [ ] validate on binder via simplest-possible gists
+    - [ ] pip
+    - [ ] conda
   - [ ] bump to next development version
   - [ ] bump the `CACHE_EPOCH`
   - [ ] rebuild `yarn.lock`
+  - [ ] remove `.github/locks` and `doit lock`
   - [ ] update release procedures with lessons learned

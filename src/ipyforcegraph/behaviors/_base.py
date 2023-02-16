@@ -22,7 +22,7 @@ class BaseD3Force(Behavior):
         "unknown",
         help=(
             "force simulation identifier for the force. Must be unique, with "
-            "special care taken around the default forces of ``link`` "
+            "special care taken around the default forces of ``link``, "
             "``charge``, ``center``, and ``dagRadial``."
         ),
     ).tag(sync=True)
