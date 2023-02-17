@@ -22,3 +22,4 @@ export * from './node-label';
 export * from './node-size';
 export * from './node-selection';
 export * from './forces';
+export * from './dag';

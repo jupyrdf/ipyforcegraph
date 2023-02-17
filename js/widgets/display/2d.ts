@@ -52,7 +52,7 @@ import {
   WIDGET_DEFAULTS,
   emptyArray,
 } from '../../tokens';
-import { ForceBehaviorModel, GraphForcesModel } from '../behaviors';
+import { DAGBehaviorModel, ForceBehaviorModel, GraphForcesModel } from '../behaviors';
 
 export class ForceGraphModel extends DOMWidgetModel {
   static model_name = 'ForceGraphModel';
@@ -471,6 +471,13 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
   protected getForceUpdate() {
     const graph = this.graph as ForceGraphInstance;
     let needsPost: TAnyForce[] = [];
+
+    for (let behavior of this.model.behaviors) {
+      if (behavior instanceof DAGBehaviorModel) {
+        behavior.refreshBehavior(graph);
+      }
+    }
+
     for (let simBehavior of this.model.forceBehaviors) {
       const { warmupTicks, cooldownTicks, alphaDecay, alphaMin, velocityDecay } =
         simBehavior;
