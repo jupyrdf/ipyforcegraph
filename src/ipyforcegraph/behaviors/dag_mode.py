@@ -9,12 +9,11 @@ Using documentation from:
 # Distributed under the terms of the Modified BSD License.
 
 import enum
-from typing import Optional
 
 import ipywidgets as W
 import traitlets as T
 
-from ._base import BaseD3Force, Behavior
+from ._base import Behavior
 
 
 class DAGMode(enum.Enum):
