@@ -34,7 +34,7 @@ class DAGBehavior(Behavior):
     mode: str = T.Enum(values=[m.value for m in DAGMode], default_value=None).tag(
         sync=True
     )
-    level_distance: float = T.Float(allow_none=True).tag(sync=True)
+    level_distance: float = T.Float(default_value=None, allow_none=True).tag(sync=True)
     node_filter: str = T.Unicode(
         "",
         help="a nunjucks template to use to calculate link distance. Context takes `link`",
