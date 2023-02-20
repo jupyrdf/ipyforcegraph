@@ -54,8 +54,8 @@ inheritance_alias = {}
 
 # theme
 html_theme = "pydata_sphinx_theme"
-# html_logo = "_static/ipyforcegraph.svg"
-# html_favicon = "_static/favicon.ico"
+html_logo = "_static/wordmark.svg"
+html_favicon = "_static/logo.svg"
 
 html_theme_options = {
     "github_url": PROJ["urls"]["Source"],
