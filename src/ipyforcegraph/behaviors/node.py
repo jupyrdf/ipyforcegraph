@@ -9,6 +9,7 @@ import ipywidgets as W
 import traitlets as T
 
 from ._base import Behavior
+from .shape import ObjectTypes
 
 
 @W.register
@@ -91,4 +92,21 @@ class NodeColors(Behavior):
         None,
         allow_none=True,
         help="a nunjucks template to use to calculate colors",
+    ).tag(sync=True)
+
+
+@W.register
+class NodeShape(Behavior):
+    """Change the shape of nodes using declarative statements.
+    
+    Leverages https://github.com/lukix/declarative-canvas to draw in 2D.
+
+    """
+
+    _model_name: str = T.Unicode("NodeShapeModel").tag(sync=True)
+
+    statements: Tuple[str] = W.TypedTuple(
+        T.Instance(ObjectTypes),
+        allow_none=True,
+        help="the drawing objects to include as declarative statements",
     ).tag(sync=True)
