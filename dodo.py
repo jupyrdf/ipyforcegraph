@@ -431,6 +431,8 @@ def task_pytest():
 
 def task_test():
     """run all the notebooks"""
+    if P.IN_BINDER:
+        return
 
     def _nb_test(nb):
         def _test():
