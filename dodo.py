@@ -369,13 +369,14 @@ def task_build():
         targets=[P.NPM_TGZ],
     )
 
-    yield dict(
-        name="py",
-        uptodate=[config_changed(dict(SOURCE_DATE_EPOCH=P.SOURCE_DATE_EPOCH))],
-        file_dep=py_dep,
-        actions=[[*P.IN_ENV, "flit", "--debug", "build"]],
-        targets=[P.WHEEL, P.SDIST],
-    )
+    if not P.IN_BINDER:
+        yield dict(
+            name="py",
+            uptodate=[config_changed(dict(SOURCE_DATE_EPOCH=P.SOURCE_DATE_EPOCH))],
+            file_dep=py_dep,
+            actions=[[*P.IN_ENV, "flit", "--debug", "build"]],
+            targets=[P.WHEEL, P.SDIST],
+        )
 
     def _run_hash():
         # mimic sha256sum CLI
