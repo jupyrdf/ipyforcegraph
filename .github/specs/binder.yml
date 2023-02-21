@@ -13,3 +13,4 @@ _target: ../../.binder/environment.yml
 
 dependencies:
   - jupyter_server >=2.2.1
+  - jupyterlab >=3.6.1,<4.0.0a0

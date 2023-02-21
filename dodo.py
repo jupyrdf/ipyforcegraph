@@ -39,11 +39,7 @@ os.environ.update(
 )
 
 DOIT_CONFIG = dict(
-    backend="sqlite3",
-    default_tasks=["binder"],
-    par_type="thread",
     reporter=reporter.GithubActionsReporter,
-    verbosity=2,
 )
 
 

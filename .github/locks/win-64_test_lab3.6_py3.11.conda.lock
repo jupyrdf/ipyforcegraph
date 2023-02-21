@@ -2,6 +2,7 @@
 #   - conda-forge
 #   - nodefaults
 # dependencies:
+#   - doit
 #   - firefox =102
 #   - geckodriver
 #   - ipywidgets >=8.0.4,<9
@@ -19,7 +20,8 @@
 #   - robotframework-jupyterlibrary
 #   - robotframework-pabot
 #   - robotframework-robocop
-#   - robotframework-tidy
+#   - robotframework-tidy >=3.4.0
+#   - tomli
 #   - traittypes
 
 @EXPLICIT
@@ -55,6 +57,7 @@ https://conda.anaconda.org/conda-forge/noarch/backcall-0.2.0-pyh9f0ad1d_0.tar.bz
 https://conda.anaconda.org/conda-forge/noarch/backports-1.0-pyhd8ed1ab_3.conda#54ca2e08b3220c148a1d8329c2678e02
 https://conda.anaconda.org/conda-forge/noarch/certifi-2022.12.7-pyhd8ed1ab_0.conda#fb9addc3db06e56abe03e0e9f21a63e6
 https://conda.anaconda.org/conda-forge/noarch/charset-normalizer-2.1.1-pyhd8ed1ab_0.tar.bz2#c1d5b294fbf9a795dec349a6f4d8be8e
+https://conda.anaconda.org/conda-forge/noarch/cloudpickle-2.2.1-pyhd8ed1ab_0.conda#b325bfc4cff7d7f8a868f1f7ecc4ed16
 https://conda.anaconda.org/conda-forge/noarch/colorama-0.4.6-pyhd8ed1ab_0.tar.bz2#3faab06a954c2a04039983f2c4a50d99
 https://conda.anaconda.org/conda-forge/win-64/debugpy-1.6.6-py311h12c1d0e_0.conda#5ade06101d9638f230c71507b10a05d2
 https://conda.anaconda.org/conda-forge/noarch/decorator-5.1.1-pyhd8ed1ab_0.tar.bz2#43afe5ab04e35e17ba28649471dd7364
@@ -149,6 +152,7 @@ https://conda.anaconda.org/conda-forge/win-64/argon2-cffi-bindings-21.2.0-py311h
 https://conda.anaconda.org/conda-forge/noarch/bleach-6.0.0-pyhd8ed1ab_0.conda#d48b143d01385872a88ef8417e96c30e
 https://conda.anaconda.org/conda-forge/win-64/brotlipy-0.7.0-py311ha68e1ae_1005.tar.bz2#dd9604ece454103e7210110c6d343e37
 https://conda.anaconda.org/conda-forge/win-64/cryptography-39.0.1-py311h28e9c30_0.conda#617ff3f61e12922a0ba8c112ace9ba30
+https://conda.anaconda.org/conda-forge/noarch/doit-0.36.0-pyhd8ed1ab_0.tar.bz2#fc5e53d070f1ee7bb38c2ece282dcb82
 https://conda.anaconda.org/conda-forge/noarch/importlib_metadata-6.0.0-hd8ed1ab_0.conda#a67d43e1527a37199dd8db913366f68e
 https://conda.anaconda.org/conda-forge/noarch/jsonschema-4.17.3-pyhd8ed1ab_0.conda#723268a468177cd44568eb8f794e0d80
 https://conda.anaconda.org/conda-forge/noarch/jupyter_server_terminals-0.4.4-pyhd8ed1ab_1.conda#7c0965e1d4a0ee1529e8eaa03a78a5b3
@@ -184,7 +188,7 @@ https://conda.anaconda.org/conda-forge/noarch/nbformat-5.7.3-pyhd8ed1ab_0.conda#
 https://conda.anaconda.org/conda-forge/win-64/numcodecs-0.11.0-py311h12c1d0e_1.conda#9b66ec550742f950ba5fdc1fe650ce26
 https://conda.anaconda.org/conda-forge/win-64/pandas-1.5.3-py311hf63dbb6_0.conda#6bd7d08da09b8fd7ca3d076af9040d82
 https://conda.anaconda.org/conda-forge/noarch/pytest-html-3.2.0-pyhd8ed1ab_1.tar.bz2#d5c7a941dfbceaab4b172a56d7918eb0
-https://conda.anaconda.org/conda-forge/noarch/robotframework-tidy-3.3.3-pyhd8ed1ab_0.conda#bc4e21b26f0e5bb7517c5d6200912d35
+https://conda.anaconda.org/conda-forge/noarch/robotframework-tidy-3.4.0-pyhd8ed1ab_0.conda#5256a92a8627ebec037d1457aefdb099
 https://conda.anaconda.org/conda-forge/noarch/urllib3-1.26.14-pyhd8ed1ab_0.conda#01f33ad2e0aaf6b5ba4add50dad5ad29
 https://conda.anaconda.org/conda-forge/noarch/ipykernel-6.21.2-pyh025b116_0.conda#2f0ef6a37b24f898508d7a5026e32c02
 https://conda.anaconda.org/conda-forge/noarch/nbclient-0.7.2-pyhd8ed1ab_0.conda#6c7b0d75b66a220274bb5a28c23197f2

@@ -4,4 +4,4 @@ dependencies:
   - robotframework-jupyterlibrary
   - robotframework-pabot
   - robotframework-robocop
-  - robotframework-tidy
+  - robotframework-tidy >=3.4.0

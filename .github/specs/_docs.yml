@@ -2,7 +2,6 @@ dependencies:
   - ansi2html
   - autodoc-traits
   - docutils >=0.19
-  - doit
   - myst-nb
   - pkginfo
   - pydata-sphinx-theme

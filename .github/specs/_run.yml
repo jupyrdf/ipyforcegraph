@@ -1,6 +1,8 @@
 dependencies:
+  - doit
   - ipywidgets >=8.0.4,<9
   - numcodecs
   - pandas
   - python >=3.8,<3.12
+  - tomli
   - traittypes

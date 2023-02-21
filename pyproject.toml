@@ -42,6 +42,16 @@ dependencies = [
 "Source" = "https://github.com/jupyrdf/ipyforcegraph"
 
 
+[tool.doit]
+backend = "sqlite3"
+verbosity = 2
+par_type = "thread"
+default_tasks = ["binder"]
+
+[tool.doit.commands.list]
+status = true
+subtasks = true
+
 [tool.flit.sdist]
 include = ["src/_d"]
 

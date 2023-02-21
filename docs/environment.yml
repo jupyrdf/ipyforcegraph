@@ -6,7 +6,6 @@ dependencies:
   - autodoc-traits
   - bqplot >=0.12.20
   - docutils >=0.19
-  - doit
   - flit >=3.7.1,<4
   - git
   - ipywidgets >=8.0.4,<9
