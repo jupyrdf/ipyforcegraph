@@ -10,8 +10,8 @@ export IN_BINDER=1
 source activate ${NB_PYTHON_PREFIX}
 
 doit list
-doit -n4 || doit list
-doit
+doit -n4 binder || doit list
+doit binder
 
 # tidy up big downloads
 rm -rf node_modules .yarn-packages
