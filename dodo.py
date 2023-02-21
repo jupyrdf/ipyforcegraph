@@ -262,6 +262,10 @@ def task_setup():
         # ancient sphinx_rtd_theme wants ancient docutils
         py_actions += [[*P.IN_ENV, *P.PIP, "check"]]
 
+    if P.CI:
+        print("setup:py actions")
+        print(py_actions)
+
     py_task = _ok(
         dict(
             name="py",

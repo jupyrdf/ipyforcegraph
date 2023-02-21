@@ -220,9 +220,8 @@ jobs:
       - name: env (conda)
         uses: conda-incubator/setup-miniconda@v2
         with:
-          environment-file:
-            .github/locks/${{ matrix.subdir }}_test_${{ matrix.lab }}_${{ matrix.py
-            }}.conda.lock
+          environment-file: |-
+            .github/locks/${{ matrix.subdir }}_test_${{ matrix.lab }}_${{ matrix.py }}.conda.lock
           miniforge-variant: Mambaforge
           use-mamba: true
 
@@ -247,7 +246,8 @@ jobs:
         env:
           ATEST_PROCESSES: 1
           WIN_CI: 1
-        run: doit -n4 preflight:lab || doit preflight:lab || exit 1
+        run: |
+          doit -n4 preflight:lab || doit preflight:lab || exit 1
 
       - name: test (linux)
         if: ${{ contains(matrix.os, 'ubuntu') }}

@@ -128,7 +128,8 @@ ENV = (
 )
 LOCK_ENV = ROOT / "envs/lock"
 
-CONDA_RUN = ["conda", "run", "--live-stream", "--prefix"]
+CONDA = shutil.which("conda") or shutil.which("conda.exe")
+CONDA_RUN = [CONDA, "run", "--live-stream", "--prefix"]
 MAMBA_CREATE = ["mamba", "create", "-y", "--prefix"]
 
 if BUILDING_IN_CI:
@@ -143,7 +144,7 @@ else:
 # tools
 PY = ["python"]
 PYM = [*PY, "-m"]
-PIP = ["pip"]
+PIP = [*PYM, "pip"]
 
 JLPM = ["jlpm"]
 JLPM_INSTALL = [*JLPM, "--prefer-offline"]
