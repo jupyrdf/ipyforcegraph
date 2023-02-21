@@ -20,6 +20,7 @@ dependencies:
   - packaging >=22.0
   - pandas
   - pip
+  - python >=3.11,<3.12
   - python >=3.8,<3.12
   - stringcase
   - tomli
