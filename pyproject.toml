@@ -91,3 +91,7 @@ ignore_missing_imports = true
 [tool.pytest.ini_options]
 junit_family = "xunit2"
 addopts = "-vv --ff --pyargs ipyforcegraph --cov ipyforcegraph --cov-report term-missing:skip-covered --cov-report html:build/htmlcov --no-cov-on-fail --html build/pytest.html --self-contained-html --junitxml build/pytest.xunit.xml"
+filterwarnings = [
+    "error",
+    "ignore::DeprecationWarning:traittypes",
+]
