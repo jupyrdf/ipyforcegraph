@@ -12,6 +12,7 @@
 #   - numcodecs
 #   - orjson
 #   - pandas
+#   - pip
 #   - pytest-asyncio
 #   - pytest-cov
 #   - pytest-html
@@ -117,6 +118,7 @@ https://conda.anaconda.org/conda-forge/noarch/traitlets-5.9.0-pyhd8ed1ab_0.conda
 https://conda.anaconda.org/conda-forge/noarch/typing_extensions-4.4.0-pyha770c72_0.tar.bz2#2d93b130d148d7fc77e583677792fc6a
 https://conda.anaconda.org/conda-forge/noarch/webencodings-0.5.1-py_1.tar.bz2#3563be4c5611a44210d9ba0c16113136
 https://conda.anaconda.org/conda-forge/noarch/websocket-client-1.5.1-pyhd8ed1ab_0.conda#2a914654b9ade742049dab13e29571c6
+https://conda.anaconda.org/conda-forge/noarch/wheel-0.38.4-pyhd8ed1ab_0.tar.bz2#c829cfb8cb826acb9de0ac1a2df0a940
 https://conda.anaconda.org/conda-forge/noarch/widgetsnbextension-4.0.5-pyhd8ed1ab_0.conda#2af53b3894fb9bdbb3679c0d31028b1b
 https://conda.anaconda.org/conda-forge/osx-64/y-py-0.5.5-py311h890d03e_2.conda#bee629dffad4662f6a94dfe99e89308a
 https://conda.anaconda.org/conda-forge/noarch/zipp-3.14.0-pyhd8ed1ab_0.conda#01ea04980fa39d7b6dbdd6c67016d177
@@ -139,6 +141,7 @@ https://conda.anaconda.org/conda-forge/noarch/matplotlib-inline-0.1.6-pyhd8ed1ab
 https://conda.anaconda.org/conda-forge/noarch/outcome-1.2.0-pyhd8ed1ab_0.tar.bz2#3dbb9ece72652131f12d66e889da7c0a
 https://conda.anaconda.org/conda-forge/noarch/packaging-21.3-pyhd8ed1ab_0.tar.bz2#71f1ab2de48613876becddd496371c85
 https://conda.anaconda.org/conda-forge/noarch/pexpect-4.8.0-pyh1a96a4e_2.tar.bz2#330448ce4403cc74990ac07c555942a1
+https://conda.anaconda.org/conda-forge/noarch/pip-23.0.1-pyhd8ed1ab_0.conda#8025ca83b8ba5430b640b83917c2a6f7
 https://conda.anaconda.org/conda-forge/noarch/pygments-2.14.0-pyhd8ed1ab_0.conda#c78cd16b11cd6a295484bd6c8f24bea1
 https://conda.anaconda.org/conda-forge/noarch/python-dateutil-2.8.2-pyhd8ed1ab_0.tar.bz2#dd999d1cc9f79e67dbb855c8924c7984
 https://conda.anaconda.org/conda-forge/noarch/rfc3339-validator-0.1.4-pyhd8ed1ab_0.tar.bz2#fed45fc5ea0813240707998abe49f520

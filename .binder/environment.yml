@@ -19,6 +19,7 @@ dependencies:
   - orjson
   - packaging >=22.0
   - pandas
+  - pip
   - python >=3.8,<3.12
   - stringcase
   - tomli

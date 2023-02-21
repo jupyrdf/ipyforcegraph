@@ -18,6 +18,7 @@ dependencies:
   - numcodecs
   - packaging >=22.0
   - pandas
+  - pip
   - pkginfo
   - pydata-sphinx-theme
   - python >=3.8,<3.12

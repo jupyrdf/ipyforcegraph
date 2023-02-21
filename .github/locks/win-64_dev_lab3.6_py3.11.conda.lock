@@ -31,6 +31,7 @@
 #   - orjson
 #   - packaging >=22.0
 #   - pandas
+#   - pip
 #   - pkginfo
 #   - pydata-sphinx-theme
 #   - pyflakes
