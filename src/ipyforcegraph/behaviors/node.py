@@ -9,7 +9,7 @@ import ipywidgets as W
 import traitlets as T
 
 from ._base import Behavior
-from .shape import ObjectTypes
+from .shape import GraphicalObject
 
 
 @W.register
@@ -98,7 +98,7 @@ class NodeColors(Behavior):
 @W.register
 class NodeShape(Behavior):
     """Change the shape of nodes using declarative statements.
-    
+
     Leverages https://github.com/lukix/declarative-canvas to draw in 2D.
 
     """
@@ -106,7 +106,7 @@ class NodeShape(Behavior):
     _model_name: str = T.Unicode("NodeShapeModel").tag(sync=True)
 
     statements: Tuple[str] = W.TypedTuple(
-        T.Instance(ObjectTypes),
+        T.Instance(GraphicalObject),
         allow_none=True,
         help="the drawing objects to include as declarative statements",
     ).tag(sync=True)
