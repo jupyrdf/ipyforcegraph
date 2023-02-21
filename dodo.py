@@ -504,7 +504,7 @@ def task_test():
 
 def task_lint():
     """format all source files"""
-    if P.TESTING_IN_CI:
+    if P.TESTING_IN_CI or P.IN_BINDER:
         return
 
     yield _ok(
