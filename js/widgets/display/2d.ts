@@ -33,6 +33,7 @@ import {
   EMOJI,
   EMPTY_GRAPH_DATA,
   EUpdate,
+  IActionMessage,
   IBehave,
   IHasGraph,
   ILinkBehaveOptions,
@@ -229,9 +230,19 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
 
     this.model.behaviorsChanged.connect(this.onBehaviorsChange, this);
     this.luminoWidget.disposed.connect(this.onDisposed, this);
-
+    this.model.on('msg:custom', this.handleMessage, this);
     this.onSourceChange();
     this.onBehaviorsChange();
+  }
+
+  handleMessage(content: IActionMessage): void {
+    switch (content.action) {
+      case 'reheat':
+        if (this.graph) {
+          (this.graph as ForceGraphInstance).d3ReheatSimulation();
+        }
+        break;
+    }
   }
 
   onDisposed() {

@@ -58,6 +58,10 @@ class ForceGraph(W.DOMWidget, ForceBase):
         "rgba(0, 0, 0, 0.0)", help="the graph background color"
     ).tag(sync=True)
 
+    def reheat(self) -> None:
+        """Send the reheat command to restart the force simulation"""
+        self.send({"action": "reheat"})
+
 
 @W.register
 class ForceGraph3D(ForceGraph):
