@@ -30,3 +30,6 @@ cp .binder/jupyter_config.json .jupyter/
 jupyter labextension disable jupyter-offlinenotebook
 jupyter labextension disable @jupyterlab/apputils-extension:notification
 jupyter labextension disable @jupyterlab/extensionmanager-extension
+
+# clean up assets un-needed for demo
+rm -rf ~/.cache .yarn-packages node_modules
