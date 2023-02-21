@@ -166,6 +166,9 @@ def task_binder():
 
 def task_env():
     """ensure environment reproducibility."""
+    if P.CI or P.IN_RTD:
+        return
+
     for spec_path in P.ENV_SPECS.glob("*.yml"):
         if spec_path.name.startswith("_"):
             continue
