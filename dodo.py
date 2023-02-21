@@ -163,7 +163,7 @@ def task_binder():
 
 def task_env():
     """ensure environment reproducibility."""
-    if P.CI or P.IN_RTD:
+    if P.CI or P.IN_RTD or P.IN_BINDER:
         return
 
     for spec_path in P.ENV_SPECS.glob("*.yml"):
