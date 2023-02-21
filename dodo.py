@@ -12,11 +12,7 @@
 
 import os
 import subprocess
-import tempfile
-import textwrap
-import typing
 from hashlib import sha256
-from pathlib import Path
 
 from doit import create_after
 from doit.action import CmdAction
@@ -50,8 +46,6 @@ DOIT_CONFIG = dict(
     verbosity=2,
 )
 
-Paths = typing.List[Path]
-
 
 def _echo_ok(msg):
     def _echo():
@@ -81,75 +75,6 @@ def task_all():
         file_dep=file_dep,
         actions=([_echo_ok("ALL GOOD")]),
     )
-
-
-def task_lock():
-    """create lockfiles from the binder environment and CI excursions."""
-
-    if not P.USE_LOCK_ENV:
-        return
-
-    def _lock_comment(env_yamls: Paths) -> str:
-        comment = ""
-        for env_file in reversed(env_yamls):
-            comment += env_file.read_text(encoding="utf-8").strip() + "\n"
-        return textwrap.indent(comment, "# ")
-
-    def _needs_lock(lockfile: Path, env_yamls: Paths) -> bool:
-        if not lockfile.exists():
-            return True
-        lock_text = lockfile.read_text(encoding="utf-8")
-        comment = _lock_comment(env_yamls)
-        return comment not in lock_text
-
-    def _lock_one(lockfile: Path, env_yamls: typing.List[Path]) -> None:
-        if not _needs_lock(lockfile, env_yamls):
-            print(f"lockfile up-to-date: {lockfile}")
-            return
-
-        lock_args = ["conda-lock", "--kind=explicit"]
-        comment = _lock_comment(env_yamls)
-        for env_file in reversed(env_yamls):
-            lock_args += ["--file", env_file]
-        platform = next(p.stem for p in env_yamls if "subdir" in p.parent.name)
-        lock_args += ["--platform", platform]
-
-        if P.LOCK_HISTORY.exists():
-            lock_args = [*P.IN_LOCK_ENV, *lock_args]
-        elif not P.HAS_CONDA_LOCK:
-            print(
-                "Can't bootstrap lockfiles without `conda-lock`, please:\n\n\t"
-                "mamba install -c conda-forge conda-lock\n\n"
-                "and re-run `doit lock`"
-            )
-            return False
-
-        with tempfile.TemporaryDirectory() as td:
-            tdp = Path(td)
-            tmp_lock = tdp / f"conda-{platform}.lock"
-            subprocess.check_call(list(map(str, lock_args)), cwd=td)
-            raw = tmp_lock.read_text(encoding="utf-8").split(P.EXPLICIT)[1].strip()
-
-        lockfile.parent.mkdir(exist_ok=True, parents=True)
-        lockfile.write_text("\n".join([comment, P.EXPLICIT, raw, ""]), encoding="utf-8")
-
-    for env_yamls in P.ENV_MATRIX:
-        file_dep = [*env_yamls]
-        lock_name = "_".join([f"{p.stem}" for p in env_yamls])
-        lockfile = P.LOCKS / f"{lock_name}.conda.lock"
-
-        if not _needs_lock(lockfile, env_yamls):
-            continue
-
-        if P.LOCK_ENV_YAML not in env_yamls:
-            file_dep += [P.LOCK_HISTORY]
-
-        yield dict(
-            name=lock_name,
-            actions=[(_lock_one, [lockfile, env_yamls])],
-            file_dep=file_dep,
-            targets=[lockfile],
-        )
 
 
 def _ok(task, ok):
@@ -240,21 +165,37 @@ def task_binder():
 
 
 def task_env():
-    """prepare project envs"""
-    yield dict(
-        name="sync:docs:binder",
-        file_dep=[P.DOCS_ENV_YAML],
-        targets=[P.BINDER_ENV_YAML],
-        actions=[
-            (
-                U.replace_between_patterns,
-                [P.DOCS_ENV_YAML, P.BINDER_ENV_YAML, "### docs/environment.yml ###"],
-            )
-        ],
-    )
-
-    if not P.USE_LOCK_ENV:
-        return
+    """ensure environment reproducibility."""
+    for spec_path in P.ENV_SPECS.glob("*.yml"):
+        if spec_path.name.startswith("_"):
+            continue
+        spec = U.safe_load(spec_path)
+        for platform in P.ALL_PLATFORMS:
+            for stack in U.get_spec_stacks(spec_path, platform):
+                yml_target = spec.get("_target")
+                task = dict(file_dep=stack)
+                if yml_target:
+                    target = spec_path.parent / yml_target
+                    yield dict(
+                        doc=f"build environment.yml for {target.parent.name}",
+                        actions=[(U.merge_envs, [target, stack])],
+                        name=f"yml:{spec_path.stem}",
+                        targets=[target.resolve()],
+                        **task,
+                    )
+                else:
+                    lockfile = "_".join(
+                        [platform, stack[0].stem]
+                        + [s.stem for s in stack if s.parent != P.ENV_SPECS]
+                    )
+                    target = P.LOCKS / f"{lockfile}.conda.lock"
+                    yield dict(
+                        doc=f"build lockfile for {lockfile.replace('_', ' ')}",
+                        name=f"lock:{lockfile}",
+                        actions=[(U.lock_one, [platform, target, stack])],
+                        targets=[target],
+                        **task,
+                    )
 
     yield dict(
         name="lock",
@@ -272,7 +213,6 @@ def task_env():
         targets=[P.HISTORY],
         actions=[
             [*P.MAMBA_CREATE, P.ENV, "--file", P.LOCKFILE],
-            [*P.IN_ENV, *P.PIP, "install", "--no-deps", *P.LITE_SPEC],
         ],
     )
 

@@ -1,0 +1,15 @@
+_platforms:
+  - linux-64
+
+_inherit_from:
+  - _channels.yml
+  - _demo.yml
+  - _run.yml
+  - _ext.yml
+  - _nomkl.yml
+  - _build.yml
+
+_target: ../../.binder/environment.yml
+
+dependencies:
+  - jupyter_server >=2.2.1

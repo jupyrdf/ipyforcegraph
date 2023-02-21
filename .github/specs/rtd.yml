@@ -1,0 +1,14 @@
+_platforms:
+  - linux-64
+
+_inherit_from:
+  - _channels.yml
+  - _build.yml
+  - _docs.yml
+  - _ext.yml
+  - _run.yml
+  - _nomkl.yml
+
+_target: ../../docs/environment.yml
+
+dependencies: []

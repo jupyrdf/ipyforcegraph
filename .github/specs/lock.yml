@@ -1,6 +1,5 @@
-channels:
-  - conda-forge
-  - nodefaults
+_inherit_from:
+  - _channels.yml
 
 dependencies:
   - conda-lock >=1.4,<1.5.0
