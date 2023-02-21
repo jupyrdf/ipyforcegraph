@@ -121,7 +121,7 @@ LOCK_LOCKFILE = LOCKS / f"{THIS_SUBDIR}_lock.conda.lock"
 USE_LOCK_ENV = not (CI or IN_RTD or IN_BINDER)
 ENV = (
     Path(sys.prefix)
-    if IN_RTD or IN_BINDER or TESTING_IN_CI
+    if IN_RTD or IN_BINDER or CI
     else ROOT / f"envs/{IPYFORCEGRAPH_PY}_{IPYFORCEGRAPH_LAB}"
 )
 LOCK_ENV = ROOT / "envs/lock"
