@@ -123,7 +123,7 @@ jobs:
       - name: base env (conda)
         uses: conda-incubator/setup-miniconda@v2
         with:
-          environment-file: .github/locks/linux-64_dev.conda.lock
+          environment-file: .github/locks/linux-64_dev_lab3.6_py3.11.conda.lock
           miniforge-variant: Mambaforge
           use-mamba: true
 

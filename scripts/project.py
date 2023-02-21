@@ -116,7 +116,9 @@ SUBDIR_LOCK_SPECS = sorted(ENV_SPECS.glob("subdir-lock/*.yml"))
 EXPLICIT = "@EXPLICIT"
 LOCKS = GH / "locks"
 PIP_BUILD_ENV = GH / "requirements-build.txt"
-LOCKFILE = LOCKS / f"{THIS_SUBDIR}_dev.conda.lock"
+LOCKFILE = (
+    LOCKS / f"{THIS_SUBDIR}_dev_{IPYFORCEGRAPH_LAB}_{IPYFORCEGRAPH_PY}.conda.lock"
+)
 LOCK_LOCKFILE = LOCKS / f"{THIS_SUBDIR}_lock.conda.lock"
 USE_LOCK_ENV = not (CI or IN_RTD or IN_BINDER)
 ENV = (

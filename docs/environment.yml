@@ -6,6 +6,7 @@ dependencies:
   - autodoc-traits
   - bqplot >=0.12.20
   - docutils >=0.19
+  - doit-with-toml
   - flit >=3.7.1,<4
   - git
   - ipywidgets >=8.0.4,<9
@@ -14,7 +15,6 @@ dependencies:
   - jupyterlab-link-share
   - myst-nb
   - nodejs >=18,<19
-  - nomkl
   - numcodecs
   - packaging >=22.0
   - pandas
@@ -26,4 +26,5 @@ dependencies:
   - sphinx-autobuild
   - sphinx-autodoc-typehints
   - sphinx-copybutton
+  - tomli
   - traittypes

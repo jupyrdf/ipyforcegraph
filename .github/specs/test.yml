@@ -2,10 +2,11 @@ _matrix:
   - _lab
   - _py
 _inherit_from:
-  - _channels.yml
-  - _utest.yml
   - _atest.yml
-  - _run.yml
+  - _channels.yml
+  - _doit.yml
   - _nomkl.yml
+  - _run.yml
+  - _utest.yml
 
 dependencies: []

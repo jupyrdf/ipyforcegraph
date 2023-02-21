@@ -2,12 +2,13 @@ _platforms:
   - linux-64
 
 _inherit_from:
-  - _channels.yml
   - _build.yml
+  - _channels.yml
   - _docs.yml
+  - _doit.yml
   - _ext.yml
-  - _run.yml
   - _nomkl.yml
+  - _run.yml
 
 _target: ../../docs/environment.yml
 

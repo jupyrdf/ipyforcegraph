@@ -1,14 +1,17 @@
 _inherit_from:
-  - _channels.yml
   - _atest.yml
-  - _utest.yml
   - _build.yml
+  - _channels.yml
   - _demo.yml
   - _docs.yml
+  - _doit.yml
   - _ext.yml
   - _lint.yml
-  - _spell.yml
-  - _run.yml
   - _release.yml
+  - _run.yml
+  - _spell.yml
+  - _utest.yml
+  - _lab/lab3.6.yml
+  - _py/py3.11.yml
 
 dependencies: []

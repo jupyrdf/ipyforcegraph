@@ -3,20 +3,23 @@ channels:
   - nodefaults
 dependencies:
   - bqplot >=0.12.20
+  - doit-with-toml
   - flit >=3.7.1,<4
   - git
   - importnb
   - ipywidgets >=8.0.4,<9
   - jupyter_server >=2.2.1
   - jupyterlab >=3,<4
+  - jupyterlab >=3.6.1,<3.7
   - jupyterlab-deck
   - jupyterlab-link-share
   - networkx
   - nodejs >=18,<19
-  - nomkl
   - numcodecs
+  - orjson
   - packaging >=22.0
   - pandas
   - python >=3.8,<3.12
   - stringcase
+  - tomli
   - traittypes

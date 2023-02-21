@@ -2,15 +2,15 @@ _platforms:
   - linux-64
 
 _inherit_from:
+  - _build.yml
   - _channels.yml
   - _demo.yml
-  - _run.yml
+  - _doit.yml
   - _ext.yml
   - _nomkl.yml
-  - _build.yml
+  - _run.yml
+  - _lab/lab3.6.yml
 
 _target: ../../.binder/environment.yml
 
-dependencies:
-  - jupyter_server >=2.2.1
-  - jupyterlab >=3.6.1,<4.0.0a0
+dependencies: []

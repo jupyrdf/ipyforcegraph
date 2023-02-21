@@ -146,11 +146,9 @@ def get_spec_stacks(spec_path, platform):
         return
 
     for inherit in spec.get("_inherit_from", []):
-        stacks = [
-            [*stack, *substack]
-            for stack in stacks
-            for substack in get_spec_stacks(spec_path.parent / inherit, platform)
-        ]
+        substacks = [*get_spec_stacks(spec_path.parent / inherit, platform)]
+        if substacks:
+            stacks = [[*stack, *substack] for substack in substacks for stack in stacks]
 
     factors = [
         sorted((spec_path.parent / factor).glob("*.yml"))
@@ -175,6 +173,7 @@ def get_spec_stacks(spec_path, platform):
             for matrix_stack in matrix_stacks
             for stack in stacks
         ]
+
     yield from stacks
 
 
