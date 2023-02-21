@@ -143,7 +143,7 @@ else:
 # tools
 PY = ["python"]
 PYM = [*PY, "-m"]
-PIP = [*PYM, "pip"]
+PIP = ["pip"]
 
 JLPM = ["jlpm"]
 JLPM_INSTALL = [*JLPM, "--prefer-offline"]
