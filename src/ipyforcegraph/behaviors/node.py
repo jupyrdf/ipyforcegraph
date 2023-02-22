@@ -105,7 +105,7 @@ class NodeShape(Behavior):
 
     _model_name: str = T.Unicode("NodeShapeModel").tag(sync=True)
 
-    statements: Tuple[str] = W.TypedTuple(
+    objects_to_render: Tuple[str] = W.TypedTuple(
         T.Instance(GraphicalObject),
         allow_none=True,
         help="the drawing objects to include as declarative statements",

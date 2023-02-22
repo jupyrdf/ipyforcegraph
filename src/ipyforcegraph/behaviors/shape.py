@@ -1,4 +1,4 @@
-"""Base classes for all defining shapes in a 2D canvas (and 3D?)."""
+"""Base classes for all shapes in a 2D canvas (and 3D?)."""
 
 # Copyright (c) 2023 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.
