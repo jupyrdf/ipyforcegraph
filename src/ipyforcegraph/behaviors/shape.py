@@ -4,6 +4,7 @@
 # Distributed under the terms of the Modified BSD License.
 
 import enum
+import json
 import re
 from dataclasses import dataclass
 from typing import Any, ClassVar, Collection, Mapping, Optional, Set, Tuple, Union
@@ -19,7 +20,14 @@ def snake_to_camel(snake_case_text: str) -> str:
     return SNAKE_TO_CAMEL_REGEX.sub(snake_to_camel_sub_regex, snake_case_text, 0)
 
 
-class DrawMethod(enum.Enum):
+class SimpleJsonEncodableEnum(enum.Enum):
+    """A base Enum class that can be encoded in JSON."""
+
+    def __str__(self) -> str:
+        return str(self.value)
+
+
+class DrawMethod(SimpleJsonEncodableEnum):
     """The drawing methods available."""
 
     FILL = "FILL"
@@ -28,6 +36,124 @@ class DrawMethod(enum.Enum):
 
     def __repr__(self) -> str:
         return f"<{self.value}>"
+
+
+class Direction(SimpleJsonEncodableEnum):
+    LEFT_TO_RIGHT = "ltr"
+    RIGHT_TO_LEFT = "rtl"
+    INHERIT = "inherit"
+
+
+class FontKerning(SimpleJsonEncodableEnum):
+    AUTO = "auto"
+    NORMAL = "normal"
+    NONE = "none"
+
+
+class FontStretch(SimpleJsonEncodableEnum):
+    """
+    Property of the Canvas API specifies how the font may be expanded or condensed when drawing text.
+
+    ..note::
+        This is an experimental technology.
+
+    https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fontStretch
+    """
+
+    ULTRA_CONDENSED = "ultra-condensed"
+    EXTRA_CONDENSED = "extra-condensed"
+    CONDENSED = "condensed"
+    SEMI_CONDENSED = "semi-condensed"
+    NORMAL = "normal"
+    SEMI_EXPANDED = "semi-expanded"
+    EXPANDED = "expanded"
+    EXTRA_EXPANDED = "extra-expanded"
+    ULTRA_EXPANDED = "ultra-expanded"
+
+    def __repr__(self) -> str:
+        return f"<{self.value}>"
+
+
+class FontVariantCaps(SimpleJsonEncodableEnum):
+    """
+    Property of the Canvas API specifies an alternative capitalization of the rendered text.
+
+    ..note::
+        This is an experimental technology.
+
+    https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fontVariantCaps
+    """
+
+    NORMAL = "normal"
+    SMALL_CAPS = "small-caps"
+    ALL_SMALL_CAPS = "all-small-caps"
+    PETITE_CAPS = "petite-caps"
+    ALL_PETITE_CAPS = "all-petite-caps"
+    UNICASE = "unicase"
+    TITLING_CAPS = "titling-caps"
+
+    def __repr__(self) -> str:
+        return f"<{self.value}>"
+
+
+class TextAlign(SimpleJsonEncodableEnum):
+    """
+    Property of the Canvas 2D API specifies the current text alignment used when drawing text.
+
+    The alignment is relative to the x value of the ``fillText()`` method.
+    For example, if `textAlign` is "center", then the text's left edge will be at x - (textWidth / 2).
+
+    https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/textAlign
+    """
+
+    CENTER = "center"
+    END = "end"
+    LEFT = "left"
+    RIGHT = "right"
+    START = "start"
+
+
+class TextBaseline(SimpleJsonEncodableEnum):
+    """
+    Property of the Canvas 2D API specifies the current text baseline used when drawing text.
+
+    https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/textBaseline
+    """
+
+    ALPHABETIC = "alphabetic"
+    BOTTOM = "bottom"
+    HANGING = "hanging"
+    IDEOGRAPHIC = "ideographic"
+    MIDDLE = "middle"
+    TOP = "top"
+
+
+class LineJoin(SimpleJsonEncodableEnum):
+    """
+    Property of the Canvas 2D API determines the shape used to join two line segments where they meet.
+
+    https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/lineJoin
+    """
+
+    ROUND = "round"
+    BEVEL = "bevel"
+    MITER = "miter"
+
+
+class TextRendering(SimpleJsonEncodableEnum):
+    """
+    Property of the Canvas API provides information to the rendering engine about what to optimize for when rendering text.
+
+    ..note::
+        This is an experimental technology.
+
+    https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/textRendering
+    """
+
+    AUTO = "auto"
+    OPTIMIZE_SPEED = "optimizeSpeed"
+    OPTIMIZE_LEGIBILITY = "optimizeLegibility"
+    GEOMETRIC_PRECISION = "geometricPrecision"
 
 
 FILL = DrawMethod.FILL
@@ -68,11 +194,23 @@ class GraphicalObject:
             "contextProps": {
                 snake_to_camel(key): data.pop(key)
                 for key in self.CONTEXT_PROPERTIES
-                if key in data
+                if data.get(key) is not None
             },
         }
-        statement.update({snake_to_camel(key): value for key, value in data.items()})
+        statement.update(
+            {
+                snake_to_camel(key): value
+                for key, value in data.items()
+                if value is not None
+            }
+        )
         return statement
+
+    def to_json(self, indent: int = 2, sort_keys: bool = True) -> str:
+        """Encode GraphicalObject as JSON."""
+        return json.dumps(
+            self.statement, default=str, indent=indent, sort_keys=sort_keys
+        )
 
 
 @dataclass(frozen=True, unsafe_hash=True)
@@ -120,6 +258,7 @@ class Image(GraphicalObject):
     """
 
     CONTEXT_PROPERTIES = {
+        "filter",
         "global_alpha",
         "image_smoothing_enabled",
         "image_smoothing_quality",
@@ -133,6 +272,11 @@ class Image(GraphicalObject):
     rotation: float = 0.0  # in radians
     draw_method: DrawMethod = DrawMethod.FILL
 
+    filter: Optional[str] = None
+    global_alpha: Optional[float] = 1.0
+    image_smoothing_enabled: Optional[bool] = True
+    image_smoothing_quality: Optional[str] = None  # low, medium, high
+
 
 @dataclass(frozen=True, unsafe_hash=True)
 class Text(GraphicalObject):
@@ -143,14 +287,14 @@ class Text(GraphicalObject):
 
     CONTEXT_PROPERTIES = {
         "direction",
-        "fill_text",
+        "fill_style",
         "font",
         "font_kerning",
         "font_stretch",
         "font_variant_caps",
         "global_alpha",
         "letter_spacing",
-        "stroke_text",
+        "stroke_style",
         "text_align",
         "text_baseline",
         "text_rendering",
@@ -161,6 +305,20 @@ class Text(GraphicalObject):
     x: float
     y: float
     draw_method: DrawMethod = DrawMethod.FILL_AND_STROKE
+
+    direction: Direction = Direction.INHERIT
+    fill_style: Optional[str] = None
+    font: Optional[str] = None
+    font_kerning: FontKerning = FontKerning.AUTO
+    font_stretch: FontStretch = FontStretch.NORMAL
+    font_variant_caps: FontVariantCaps = FontVariantCaps.NORMAL
+    global_alpha: float = 1.0
+    letter_spacing: str = "0px"
+    stroke_style: Optional[str] = None
+    text_align: TextAlign = TextAlign.START
+    text_baseline: TextBaseline = TextBaseline.ALPHABETIC
+    text_rendering: TextRendering = TextRendering.AUTO
+    word_spacing: Optional[str] = None
 
 
 @dataclass(frozen=True, unsafe_hash=True)
@@ -180,11 +338,15 @@ class Path(GraphicalObject):
 
     CONTEXT_PROPERTIES = {
         "line_join",
+        "miter_limit",
     }
 
     points: Tuple[Point]
     close_path: bool = False
     draw_method: DrawMethod = DrawMethod.FILL_AND_STROKE
+
+    line_join: LineJoin = LineJoin.MITER
+    miter_limit: float = 10.0
 
 
 @dataclass(frozen=True, unsafe_hash=True)
