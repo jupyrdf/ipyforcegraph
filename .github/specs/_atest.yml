@@ -1,0 +1,7 @@
+dependencies:
+  - firefox =102
+  - geckodriver
+  - robotframework-jupyterlibrary
+  - robotframework-pabot
+  - robotframework-robocop
+  - robotframework-tidy >=3.4.0

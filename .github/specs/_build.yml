@@ -1,0 +1,6 @@
+dependencies:
+  - flit >=3.7.1,<4
+  - git
+  - jupyterlab >=3,<4
+  - nodejs >=18,<19
+  - packaging >=22.0
