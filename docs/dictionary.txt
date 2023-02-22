@@ -51,6 +51,7 @@ LinkLabels
 LinkSelection
 LinkWidths
 lockfiles
+lukix
 maintenance
 Mambaforge
 ManyBodyForce
@@ -59,6 +60,7 @@ NetworkX
 NodeColors
 NodeLabels
 NodeSelection
+NodeShape
 NodeSizes
 npm
 numpy
