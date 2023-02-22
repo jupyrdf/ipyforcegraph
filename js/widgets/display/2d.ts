@@ -235,13 +235,21 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
     this.onBehaviorsChange();
   }
 
-  handleMessage(content: IActionMessage): void {
-    switch (content.action) {
+  handleMessage(message: IActionMessage): void {
+    const graph = this.graph as ForceGraphInstance;
+
+    if (!graph) {
+      console.warn(`${EMOJI} graph was not yet initialized, discarding`, message);
+      return;
+    }
+
+    switch (message.action) {
       case 'reheat':
-        if (this.graph) {
-          (this.graph as ForceGraphInstance).d3ReheatSimulation();
-        }
+        graph.d3ReheatSimulation();
         break;
+      default:
+        const exhaustiveCheck: never = message.action;
+        console.error(`${EMOJI} Unhandled custom action: ${exhaustiveCheck}`);
     }
   }
 
