@@ -1,0 +1,12 @@
+dependencies:
+  - black-jupyter
+  - isort
+  - lxml
+  - mypy >=1.0.0
+  - nbstripout
+  - pyflakes
+  - pyproject-fmt !=0.9.1
+  - pytest-check-links
+  - requests-cache
+  - ruff
+  - ssort

@@ -9,13 +9,9 @@ export IN_BINDER=1
 
 source activate ${NB_PYTHON_PREFIX}
 
-# force jupyter_server 2 for collab
-mamba install -yc conda-forge "jupyter_server>=2.2.1"
-conda clean -yaf
-
 doit list
-doit -n4 || doit list
-doit
+doit -n4 binder || doit list
+doit binder
 
 # tidy up big downloads
 rm -rf node_modules .yarn-packages
@@ -23,12 +19,17 @@ rm -rf node_modules .yarn-packages
 # work around default start command
 cp ${NB_PYTHON_PREFIX}/bin/jupyter-lab ${NB_PYTHON_PREFIX}/bin/jupyter-notebook
 
-# disable some extensions
-jupyter labextension disable jupyter-offlinenotebook
-
 # clean up some settings
 mkdir -p ${NB_PYTHON_PREFIX}/share/jupyter/lab/settings
 cp .binder/overrides.json ${NB_PYTHON_PREFIX}/share/jupyter/lab/settings/
 
 mkdir -p .jupyter/
 cp .binder/jupyter_config.json .jupyter/
+
+# disable some extensions
+jupyter labextension disable jupyter-offlinenotebook
+jupyter labextension disable @jupyterlab/apputils-extension:notification
+jupyter labextension disable @jupyterlab/extensionmanager-extension
+
+# clean up assets un-needed for demo
+rm -rf ~/.cache .yarn-packages node_modules /tmp/yarn*

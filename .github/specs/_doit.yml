@@ -1,0 +1,3 @@
+dependencies:
+  - doit-with-toml
+  - pip

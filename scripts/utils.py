@@ -7,9 +7,18 @@ import json
 import re
 import subprocess
 import tempfile
+import textwrap
+from functools import lru_cache
+from itertools import product
 from pathlib import Path
+from typing import Any, Dict, List, Optional
+
+import yaml
 
 from . import project as P
+
+Paths = List[Path]
+
 
 RE_TIMESTAMP = r"\d{4}-\d{2}-\d{2} \d{2}:\d{2} -\d*"
 RE_PYTEST_TIMESTAMP = r"on \d{2}-[^\-]+-\d{4} at \d{2}:\d{2}:\d{2}"
@@ -120,3 +129,116 @@ def notebook_lint(ipynb: Path):
     black_args += ["--quiet"]
     if subprocess.call([*P.IN_ENV, "black", *black_args, ipynb]) != 0:
         return False
+
+
+@lru_cache(1000)
+def safe_load(path: Path) -> Dict[str, Any]:
+    return yaml.safe_load(path.read_bytes())
+
+
+def get_spec_stacks(spec_path, platform):
+    spec = safe_load(spec_path)
+    # initialize the stacks
+    base_stack = [spec_path]
+    stacks = [base_stack]
+
+    if platform not in spec.get("_platforms", P.ALL_PLATFORMS):
+        return
+
+    for inherit in spec.get("_inherit_from", []):
+        substacks = [*get_spec_stacks(spec_path.parent / inherit, platform)]
+        if substacks:
+            stacks = [[*stack, *substack] for substack in substacks for stack in stacks]
+
+    factors = [
+        sorted((spec_path.parent / factor).glob("*.yml"))
+        for factor in spec.get("_matrix", [])
+    ]
+
+    if factors:
+        matrix_stacks = []
+        for row in product(*factors):
+            matrix_stacks += [
+                sum(
+                    [
+                        substack
+                        for factor in row
+                        for substack in get_spec_stacks(factor, platform)
+                    ],
+                    [],
+                )
+            ]
+        stacks = [
+            [*stack, *matrix_stack]
+            for matrix_stack in matrix_stacks
+            for stack in stacks
+        ]
+
+    yield from stacks
+
+
+class IndentDumper(yaml.SafeDumper):
+    def increase_indent(self, flow=False, indentless=False):
+        return super(IndentDumper, self).increase_indent(flow, False)
+
+
+def merge_envs(env_path: Optional[Path], stack: List[Path]) -> Optional[str]:
+    env = {"channels": [], "dependencies": []}
+
+    for stack_yml in stack:
+        stack_data = safe_load(stack_yml)
+        env["channels"] = stack_data.get("channels") or env["channels"]
+        env["dependencies"] += stack_data["dependencies"]
+
+    env["dependencies"] = sorted(set(env["dependencies"]))
+
+    env_str = yaml.dump(env, Dumper=IndentDumper)
+
+    if env_path:
+        env_path.write_text(env_str, encoding="utf-8")
+        return
+
+    return env_str
+
+
+def lock_comment(stack: Paths) -> str:
+    return textwrap.indent(merge_envs(None, stack), "# ")
+
+
+def needs_lock(lockfile: Path, stack: Paths) -> bool:
+    if not lockfile.exists():
+        return True
+    lock_text = lockfile.read_text(encoding="utf-8")
+    comment = lock_comment(stack)
+    return comment not in lock_text
+
+
+def lock_one(platform: str, lockfile: Path, stack: Paths) -> None:
+    if not needs_lock(lockfile, stack):
+        print(f"lockfile up-to-date: {lockfile}")
+        return
+
+    lock_args = ["conda-lock", "--kind=explicit"]
+    comment = lock_comment(stack)
+    for env_file in reversed(stack):
+        lock_args += ["--file", env_file]
+    lock_args += ["--platform", platform]
+
+    if P.LOCK_HISTORY.exists():
+        lock_args = [*P.IN_LOCK_ENV, *lock_args]
+    elif not P.HAS_CONDA_LOCK:
+        print(
+            "Can't bootstrap lockfiles without `conda-lock`, please:\n\n\t"
+            "mamba install -c conda-forge conda-lock\n\n"
+            "and re-run `doit lock`"
+        )
+        return False
+
+    with tempfile.TemporaryDirectory() as td:
+        tdp = Path(td)
+        tmp_lock = tdp / f"conda-{platform}.lock"
+        subprocess.check_call(list(map(str, lock_args)), cwd=td)
+        raw = tmp_lock.read_text(encoding="utf-8").split(P.EXPLICIT)[1].strip()
+
+    lockfile.parent.mkdir(exist_ok=True, parents=True)
+    lockfile.write_text("\n".join([comment, P.EXPLICIT, raw, ""]), encoding="utf-8")

@@ -6,7 +6,6 @@ this should not import anything not in py36+ stdlib, or any local paths
 # Copyright (c) 2023 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.
 
-import itertools
 import json
 import os
 import platform
@@ -99,39 +98,38 @@ README = ROOT / "README.md"
 DOCS = ROOT / "docs"
 BINDER = ROOT / ".binder"
 POSTBUILD = BINDER / "postBuild"
-BINDER_ENV_YAML = BINDER / "environment.yml"
-DOCS_ENV_YAML = DOCS / "environment.yml"
 LITE = ROOT / "lite"
 LITE_CONFIG = LITE / "jupyter_lite_config.json"
 
 # envs
-ENV_SPECS = GH / "env_specs"
+ALL_PLATFORMS = ["linux-64", "osx-64", "win-64"]
+ENV_SPECS = GH / "specs"
+BINDER_ENV_YAML = BINDER / "environment.yml"
+DOCS_ENV_YAML = DOCS / "environment.yml"
+ALL_ENVS_YAML = sorted(ENV_SPECS.glob("*-environment.yml"))
 LOCK_ENV_YAML = GH / "lock-environment.yml"
 PY_SPECS = sorted(ENV_SPECS.glob("py/*.yml"))
 LAB_SPECS = sorted(ENV_SPECS.glob("lab/*.yml"))
 SUBDIR_SPECS = sorted(ENV_SPECS.glob("subdir/*.yml"))
 SUBDIR_LOCK_SPECS = sorted(ENV_SPECS.glob("subdir-lock/*.yml"))
-ENV_MATRIX = [
-    *itertools.product(SUBDIR_SPECS, PY_SPECS, LAB_SPECS, [BINDER_ENV_YAML]),
-    *itertools.product(SUBDIR_LOCK_SPECS, [LOCK_ENV_YAML]),
-]
+
 EXPLICIT = "@EXPLICIT"
 LOCKS = GH / "locks"
 PIP_BUILD_ENV = GH / "requirements-build.txt"
 LOCKFILE = (
-    LOCKS
-    / f"{THIS_SUBDIR}_{IPYFORCEGRAPH_PY}_{IPYFORCEGRAPH_LAB}_environment.conda.lock"
+    LOCKS / f"{THIS_SUBDIR}_dev_{IPYFORCEGRAPH_LAB}_{IPYFORCEGRAPH_PY}.conda.lock"
 )
-LOCK_LOCKFILE = LOCKS / f"{THIS_SUBDIR}_lock-environment.conda.lock"
-USE_LOCK_ENV = not (BUILDING_IN_CI or IN_RTD or IN_BINDER)
+LOCK_LOCKFILE = LOCKS / f"{THIS_SUBDIR}_lock.conda.lock"
+USE_LOCK_ENV = not (CI or IN_RTD or IN_BINDER)
 ENV = (
     Path(sys.prefix)
-    if IN_RTD or IN_BINDER
+    if IN_RTD or IN_BINDER or CI
     else ROOT / f"envs/{IPYFORCEGRAPH_PY}_{IPYFORCEGRAPH_LAB}"
 )
 LOCK_ENV = ROOT / "envs/lock"
 
-CONDA_RUN = ["conda", "run", "--live-stream", "--prefix"]
+CONDA = shutil.which("conda") or shutil.which("conda.exe")
+CONDA_RUN = [CONDA, "run", "--live-stream", "--prefix"]
 MAMBA_CREATE = ["mamba", "create", "-y", "--prefix"]
 
 if BUILDING_IN_CI:
