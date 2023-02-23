@@ -39,7 +39,7 @@ ForceGraph3D Can Update default_node_color
 Color Feature Works As Expected
     [Arguments]    ${widget_class}    ${feature}
     ${screens} =    Set Variable    ${SCREENS}${/}${widget_class.lower()}_${feature}
-    Maybe Skip A Test    widget_class=${widget_class}
+    Maybe Skip A Test    widget_class=${widget_class}    feature=${feature}
     Set Screenshot Directory    ${screens}
     Set Up Color Example    ${feature}    ${widget_class}
     ${frame} =    Set Variable    css:${IPYFORCEGRAPH FRAME}
