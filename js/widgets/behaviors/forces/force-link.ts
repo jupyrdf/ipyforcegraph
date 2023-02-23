@@ -5,8 +5,9 @@
 // import type d3Force from 'd3-force';
 import { forceLink as d3ForceLink } from 'd3-force-3d';
 
-import { isNumeric, makeForceLinkTemplate } from '../../../template-utils';
+import { makeForceLinkTemplate } from '../../../template-utils';
 import { IBehave, IForce } from '../../../tokens';
+import { isNumeric } from '../../../utils';
 
 import { ForceBehaviorModel } from './force';
 

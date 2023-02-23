@@ -38,6 +38,7 @@ import {
   ILinkBehaveOptions,
   ILinkEventBehaveOptions,
   INodeBehaveOptions,
+  INodeCanvasBehaveOptions,
   INodeEventBehaveOptions,
   IRenderOptions,
   ISource,
@@ -444,6 +445,11 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
         ? this.wrapFunction(this.getNodeLabel)
         : null
     );
+    graph.nodeCanvasObject(
+      this.model.nodeBehaviorsForMethod('getNodeCanvasObject').length
+        ? this.wrapFunction(this.getNodeCanvasObject)
+        : null
+    );
 
     // evented
     graph.onNodeClick(
@@ -635,6 +641,30 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
 
   protected getNodeSize = (node: NodeObject): string => {
     return this.getComposedNodeAttr(node, 'getNodeSize', this.model.defaultNodeSize);
+  };
+
+  protected getNodeCanvasObject = (
+    node: NodeObject,
+    context: CanvasRenderingContext2D,
+    globalScale: number
+  ): void => {
+    let value: string | null;
+    const graphData = (this.graph as ForceGraphInstance).graphData();
+    const options: INodeCanvasBehaveOptions = {
+      view: this,
+      context,
+      graphData,
+      node,
+      globalScale,
+    };
+
+    for (const behavior of this.model.nodeBehaviorsForMethod('getNodeCanvasObject')) {
+      let method = behavior.getNodeCanvasObject;
+      value = method.call(behavior, options);
+      if (value != null) {
+        break;
+      }
+    }
   };
 
   getComposedNodeAttr(

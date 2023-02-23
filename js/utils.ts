@@ -1,0 +1,11 @@
+export function noop(...args: any[]): null {
+  return null;
+}
+
+export function isNumeric(val: string): boolean {
+  return !isNaN(Number(val));
+}
+
+export function functor(value: any) {
+  return () => value;
+}

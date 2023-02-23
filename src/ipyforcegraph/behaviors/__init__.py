@@ -3,7 +3,7 @@
 # Copyright (c) 2023 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.
 
-from ._base import Behavior
+from ._base import Behavior, Column, Nunjucks
 from .graph import GraphData, GraphForces, GraphImage
 from .link import (
     LinkColors,
@@ -18,9 +18,11 @@ from .link import (
     LinkSelection,
     LinkWidths,
 )
-from .node import NodeColors, NodeLabels, NodeSelection, NodeSizes
+from .node import NodeColors, NodeLabels, NodeSelection, NodeShapes, NodeSizes
 
 __all__ = [
+    "Column",
+    "Nunjucks",
     "Behavior",
     "GraphData",
     "GraphForces",
@@ -40,4 +42,5 @@ __all__ = [
     "NodeLabels",
     "NodeSelection",
     "NodeSizes",
+    "NodeShapes",
 ]

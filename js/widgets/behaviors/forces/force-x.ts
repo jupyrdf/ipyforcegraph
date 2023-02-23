@@ -4,8 +4,9 @@
  */
 import { forceX as d3XForce } from 'd3-force-3d';
 
-import { isNumeric, makeForceNodeTemplate } from '../../../template-utils';
+import { makeForceNodeTemplate } from '../../../template-utils';
 import { IBehave, IForce, TAnyForce } from '../../../tokens';
+import { isNumeric } from '../../../utils';
 
 import { ForceBehaviorModel } from './force';
 

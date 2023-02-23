@@ -15,12 +15,18 @@ import {
   IHasGraph,
   ILinkBehaveOptions,
   INodeBehaveOptions,
+  INodeCanvasBehaveOptions,
   TUpdateKind,
   WIDGET_DEFAULTS,
 } from '../../tokens';
+import { noop } from '../../utils';
 
 export class BehaviorModel extends WidgetModel implements IBehave {
   protected _updateRequested: Signal<IBehave, TUpdateKind>;
+
+  defaults() {
+    return { ...super.defaults(), ...WIDGET_DEFAULTS };
+  }
 
   initialize(attributes: Backbone.ObjectHash, options: IBackboneModelOptions) {
     super.initialize(attributes, options);
@@ -29,6 +35,66 @@ export class BehaviorModel extends WidgetModel implements IBehave {
 
   get updateRequested(): ISignal<IBehave, TUpdateKind> {
     return this._updateRequested;
+  }
+}
+
+export class DynamicModel extends BehaviorModel {
+  protected _nodeHandler: Function | null = null;
+  protected _linkHandler: Function | null = null;
+
+  defaults() {
+    return { ...super.defaults(), value: '' };
+  }
+
+  initialize(attributes: Backbone.ObjectHash, options: IBackboneModelOptions) {
+    super.initialize(attributes, options);
+    this.on('change:value', this.valueChanged, this);
+  }
+
+  valueChanged(): void {
+    this._nodeHandler = null;
+    this._linkHandler = null;
+    this._updateRequested.emit(void 0);
+  }
+
+  get updateRequested(): ISignal<IBehave, TUpdateKind> {
+    return this._updateRequested;
+  }
+
+  async ensureHandlers() {
+    // nothing to see here
+  }
+
+  get value(): string {
+    return this.get('value') || '';
+  }
+
+  get nodeHandler(): Function | null {
+    return this._nodeHandler || noop;
+  }
+
+  get linkHandler(): Function | null {
+    return this._linkHandler || noop;
+  }
+}
+
+export class NunjucksModel extends DynamicModel {
+  async ensureHandlers() {
+    if (!this._nodeHandler) {
+      const tmpl = await newTemplate(this.value);
+      this._nodeHandler = (opts: any) => tmpl.render(opts);
+      this._linkHandler = this._nodeHandler;
+    }
+  }
+}
+
+export class ColumnModel extends DynamicModel {
+  async ensureHandlers() {
+    if (!this._nodeHandler) {
+      const { value } = this;
+      this._nodeHandler = (options: any) => options.node[value];
+      this._linkHandler = (options: any) => options.link[value];
+    }
   }
 }
 
@@ -135,5 +201,19 @@ export class LinkColumnOrTemplateModel
     }
 
     return value || null;
+  }
+}
+
+export class ShapeBaseModel extends BehaviorModel {
+  async ensureFacets() {
+    // nothing to see here
+  }
+
+  drawNode(options: INodeCanvasBehaveOptions): void {
+    return;
+  }
+
+  drawLink(options: INodeCanvasBehaveOptions): void {
+    return;
   }
 }

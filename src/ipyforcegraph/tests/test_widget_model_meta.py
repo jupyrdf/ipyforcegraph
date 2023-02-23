@@ -9,7 +9,7 @@ import pytest
 
 from ipyforcegraph import behaviors, graphs
 from ipyforcegraph._base import ForceBase
-from ipyforcegraph.behaviors import forces
+from ipyforcegraph.behaviors import forces, shapes
 from ipyforcegraph.sources.widget import WidgetSource
 
 TSubclassSet = Set[Type[W.Widget]]
@@ -27,6 +27,7 @@ def widget_subclasses() -> TSubclassSet:
     assert behaviors
     assert forces
     assert graphs
+    assert shapes
 
     subclasses = SUBCLASS_BASES
     subclass_count = -1

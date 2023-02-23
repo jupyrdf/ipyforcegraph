@@ -78,6 +78,7 @@ export interface IBehave {
   getNodeColor?(options: INodeBehaveOptions): string | null;
   getNodeLabel?(options: INodeBehaveOptions): string | null;
   getNodeSize?(options: INodeBehaveOptions): string | null;
+  getNodeCanvasObject?(options: INodeBehaveOptions): any;
   // evented
   onNodeClick?(options: INodeEventBehaveOptions): boolean;
   onLinkClick?(options: ILinkEventBehaveOptions): boolean;
@@ -103,6 +104,7 @@ export const ALL_NODE_METHODS = [
   'getNodeLabel',
   'getNodeColor',
   'getNodeSize',
+  'getNodeCanvasObject',
   'onNodeClick',
 ];
 export type TNodeBehaveMethod = (typeof ALL_NODE_METHODS)[number];
@@ -121,6 +123,11 @@ export interface IBehaveOptions {
 
 export interface INodeBehaveOptions extends IBehaveOptions {
   node: NodeObject;
+}
+
+export interface INodeCanvasBehaveOptions extends INodeBehaveOptions {
+  context: CanvasRenderingContext2D;
+  globalScale: number;
 }
 
 export interface INodeEventBehaveOptions extends INodeBehaveOptions {
@@ -173,3 +180,7 @@ export interface IForce {
 export type TSelectedSet = Set<string | number>;
 
 export const emptyArray = Object.freeze([]);
+
+export interface IDynamicCallable {
+  (...args: any): string;
+}
