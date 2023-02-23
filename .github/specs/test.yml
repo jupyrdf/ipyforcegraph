@@ -1,0 +1,13 @@
+_matrix:
+  - _lab
+  - _py
+
+_inherit_from:
+  - _atest.yml
+  - _channels.yml
+  - _doit.yml
+  - _nomkl.yml
+  - _run.yml
+  - _utest.yml
+
+dependencies: []

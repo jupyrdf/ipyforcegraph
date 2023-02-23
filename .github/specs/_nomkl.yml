@@ -1,0 +1,5 @@
+_platforms:
+  - win-64
+
+dependencies:
+  - nomkl

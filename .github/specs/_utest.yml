@@ -1,0 +1,6 @@
+dependencies:
+  - importnb
+  - pytest-asyncio
+  - pytest-cov
+  - pytest-html
+  - pytest-xdist

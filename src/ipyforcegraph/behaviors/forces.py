@@ -241,7 +241,6 @@ class CollisionForce(BaseD3Force):
         allow_none=True,
         min=0,
         max=1,
-        default=1,
         help="sets the strength of the force.",
     ).tag(sync=True)
 
@@ -270,7 +269,6 @@ class ClusterForce(BaseD3Force):
         allow_none=True,
         min=0,
         max=1,
-        default=0.1,
         help="sets the strength of the force.",
     ).tag(sync=True)
     center_inertia: Optional[float] = T.Float(
@@ -278,6 +276,5 @@ class ClusterForce(BaseD3Force):
         allow_none=True,
         min=0,
         max=1,
-        default=0,
         help="Lower values (close to 0) result in cluster center nodes with lower inertia: they are easily pulled around by other nodes in the cluster.",
     ).tag(sync=True)

@@ -2,29 +2,28 @@ channels:
   - conda-forge
   - nodefaults
 dependencies:
-  ### docs/environment.yml ###
   - ansi2html
   - autodoc-traits
   - bqplot >=0.12.20
   - docutils >=0.19
-  - doit
+  - doit-with-toml
   - flit >=3.7.1,<4
-  - ipython >=8.10
+  - git
   - ipywidgets >=8.0.4,<9
   - jupyterlab >=3,<4
+  - jupyterlab >=3.5.2,<3.6
   - jupyterlab-deck
+  - jupyterlab-link-share
   - myst-nb
-  - networkx
   - nodejs >=18,<19
-  - nomkl
   - numcodecs
-  - orjson
   - packaging >=22.0
   - pandas
   - pip
   - pkginfo
   - pydata-sphinx-theme
-  - python >=3.8,<3.12.0a0
+  - python >=3.11,<3.12
+  - python >=3.8,<3.12
   - python-libarchive-c
   - sphinx
   - sphinx-autobuild
@@ -32,6 +31,3 @@ dependencies:
   - sphinx-copybutton
   - tomli
   - traittypes
-  - twine
-  - wheel
-  ### docs/environment.yml ###
