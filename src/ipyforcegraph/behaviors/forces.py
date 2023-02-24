@@ -293,13 +293,23 @@ class DAGMode(enum.Enum):
 
 @W.register
 class DAGForce(BaseD3Force):
-    """This behavior enforces constraints for displaying Directed Acyclic Graphs."""
+    """This behavior enforces constraints for displaying Directed Acyclic
+    Graphs.
+
+    https://github.com/vasturiano/force-graph#force-engine-d3-force-configuration
+    """
 
     _model_name: str = T.Unicode("DAGBehaviorModel").tag(sync=True)
-    mode: str = T.Enum(values=[m.value for m in DAGMode], default_value=None).tag(
-        sync=True
-    )
-    level_distance: float = T.Float(default_value=None, allow_none=True).tag(sync=True)
+    mode: str = T.Enum(
+        values=[m.value for m in DAGMode],
+        help="DAG constraint layout mode/direction",
+        default_value=None,
+    ).tag(sync=True)
+    level_distance: float = T.Float(
+        default_value=None,
+        help="Distance between DAG levels",
+        allow_none=True,
+    ).tag(sync=True)
     node_filter: str = T.Unicode(
         "",
         help="a nunjucks template to use to calculate if node is part of the DAG layout",
