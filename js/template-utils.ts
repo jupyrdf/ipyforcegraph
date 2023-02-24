@@ -139,7 +139,8 @@ function wrapNAry(jsFn: INAryJs): INAryPy {
 async function makeForceTemplate<T = any>(
   src: string,
   contextName: string,
-  contextAllName: string
+  contextAllName: string,
+  cast: CallableFunction = Number
 ): Promise<CallableFunction> {
   let template: Template;
   try {
@@ -150,17 +151,18 @@ async function makeForceTemplate<T = any>(
   }
 
   const renderTemplate = (context: T, i: number, contextAll: T[]) => {
-    let value: number | null;
+    let value: number | boolean | null;
     try {
       let rendered = template.render({
         [contextName]: context,
         i,
         [contextAllName]: contextAll,
       });
-      value = rendered == null ? null : Number(rendered);
-
-      if (value == null || isNaN(value)) {
-        value = null;
+      value = rendered == null ? null : cast(rendered);
+      if (typeof value != 'boolean') {
+        if (value == null || isNaN(value)) {
+          value = null;
+        }
       }
     } catch (err) {
       DEBUG && console.warn(EMOJI, err);
@@ -172,13 +174,15 @@ async function makeForceTemplate<T = any>(
 }
 
 export async function makeForceNodeTemplate(
-  template: string
+  template: string,
+  cast: CallableFunction = Number
 ): Promise<CallableFunction> {
-  return await makeForceTemplate<NodeObject>(template, 'node', 'nodes');
+  return await makeForceTemplate<NodeObject>(template, 'node', 'nodes', (cast = cast));
 }
 
 export async function makeForceLinkTemplate(
-  template: string
+  template: string,
+  cast: CallableFunction = Number
 ): Promise<CallableFunction> {
-  return await makeForceTemplate<LinkObject>(template, 'link', 'links');
+  return await makeForceTemplate<LinkObject>(template, 'link', 'links', (cast = cast));
 }
