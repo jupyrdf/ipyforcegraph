@@ -46,6 +46,10 @@ class Column(ForceBase):
     value: str = T.Unicode(
         "", help="The name of the column from a ``DataFrameSource``."
     ).tag(sync=True)
+    coerce: str = T.Unicode(
+        help="name of a JSON Schema ``type`` into which to coerce the final value",
+        allow_none=True,
+    ).tag(sync=True)
 
     def __init__(self, value: Optional[str], **kwargs: Any):
         if value is not None:
@@ -58,6 +62,10 @@ class Nunjucks(ForceBase):
 
     _model_name: str = T.Unicode("NunjucksModel").tag(sync=True)
     value: str = T.Unicode("", help="A ``nunjucks`` template string.").tag(sync=True)
+    coerce: str = T.Unicode(
+        help="name of a JSON Schema ``type`` into which to coerce the final value",
+        allow_none=True,
+    ).tag(sync=True)
 
     def __init__(self, value: Optional[str], **kwargs: Any):
         if value is not None:

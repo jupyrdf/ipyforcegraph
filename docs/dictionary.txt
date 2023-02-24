@@ -51,7 +51,6 @@ LinkLabels
 LinkSelection
 LinkWidths
 lockfiles
-lukix
 maintenance
 Mambaforge
 ManyBodyForce

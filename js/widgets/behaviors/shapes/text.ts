@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2023 ipyforcegraph contributors.
+ * Distributed under the terms of the Modified BSD License.
+ */
 import { JSONExt } from '@lumino/coreutils';
 
 import {
@@ -98,10 +102,10 @@ export class TextShapeModel extends ShapeBaseModel {
       }
     }
 
-    this._draw(draw);
+    this._drawCanvas(draw);
   }
 
-  protected _draw(options: ITextOptions & IBaseOptions): TBoundingBox {
+  protected _drawCanvas(options: ITextOptions & IBaseOptions): TBoundingBox {
     const {
       context,
       text,
