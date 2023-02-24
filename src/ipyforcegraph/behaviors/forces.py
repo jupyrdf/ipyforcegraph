@@ -9,6 +9,7 @@ Using documentation from:
 # Copyright (c) 2023 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.
 
+import enum
 from typing import Optional
 
 import ipywidgets as W
@@ -280,4 +281,29 @@ class ClusterForce(BaseD3Force):
         max=1,
         default=0,
         help="Lower values (close to 0) result in cluster center nodes with lower inertia: they are easily pulled around by other nodes in the cluster.",
+    ).tag(sync=True)
+
+
+class DAGMode(enum.Enum):
+    off = None
+    top_down = "td"
+    button_up = "bu"
+    left_right = "lr"
+    right_left = "rl"
+    radial_out = "radialout"
+    radial_in = "radialin"
+
+
+@W.register
+class DAGForce(BaseD3Force):
+    """This behavior enforces constraints for displaying Directed Acyclic Graphs."""
+
+    _model_name: str = T.Unicode("DAGBehaviorModel").tag(sync=True)
+    mode: str = T.Enum(values=[m.value for m in DAGMode], default_value=None).tag(
+        sync=True
+    )
+    level_distance: float = T.Float(default_value=None, allow_none=True).tag(sync=True)
+    node_filter: str = T.Unicode(
+        "",
+        help="a nunjucks template to use to calculate if node is part of the DAG layout",
     ).tag(sync=True)

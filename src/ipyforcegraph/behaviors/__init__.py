@@ -4,7 +4,6 @@
 # Distributed under the terms of the Modified BSD License.
 
 from ._base import Behavior
-from .dag_mode import DAGBehavior
 from .graph import GraphData, GraphForces, GraphImage
 from .link import (
     LinkColors,
@@ -23,7 +22,6 @@ from .node import NodeColors, NodeLabels, NodeSelection, NodeSizes
 
 __all__ = [
     "Behavior",
-    "DAGBehavior",
     "GraphData",
     "GraphForces",
     "GraphImage",

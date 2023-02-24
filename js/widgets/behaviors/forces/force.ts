@@ -31,7 +31,9 @@ export class ForceBehaviorModel extends LinkColumnOrTemplateModel implements IFo
   initialize(attributes: ObjectHash, options: IBackboneModelOptions): void {
     super.initialize(attributes, options);
 
-    this._force = this.forceFactory();
+    if (this.forceFactory) {
+      this._force = this.forceFactory();
+    }
     this.on(this.triggerChanges, this.onChanged, this);
   }
 

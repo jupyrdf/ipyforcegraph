@@ -2,19 +2,17 @@
  * Copyright (c) 2023 ipyforcegraph contributors.
  * Distributed under the terms of the Modified BSD License.
  */
-import { ObjectHash } from 'backbone';
 import { ForceGraphInstance, NodeObject } from 'force-graph/dist/force-graph';
 
-import { IBackboneModelOptions } from '@jupyter-widgets/base';
+import { makeForceNodeTemplate } from '../../../template-utils';
+import { IBehave, IForce } from '../../../tokens';
 
-import { makeForceNodeTemplate } from '../../template-utils';
-import { IBehave } from '../../tokens';
+import { ForceBehaviorModel } from './force';
 
-import { BehaviorModel } from './base';
-
-export class DAGBehaviorModel extends BehaviorModel implements IBehave {
+export class DAGBehaviorModel extends ForceBehaviorModel implements IBehave, IForce {
   static model_name = 'DAGBehaviorModel';
   _nodeFilter: CallableFunction | null;
+  _force = null;
 
   defaults() {
     return {
@@ -27,29 +25,16 @@ export class DAGBehaviorModel extends BehaviorModel implements IBehave {
     };
   }
 
-  initialize(attributes: ObjectHash, options: IBackboneModelOptions): void {
-    super.initialize(attributes, options);
-    this.on(this.triggerChanges, this.onChanged, this);
-    this._nodeFilter = null;
-  }
+  forceFactory(): void {}
 
   get triggerChanges(): string {
     return 'change:mode change:level_distance change:node_filter change:active';
   }
 
-  async onChanged(model) {
-    if (this.active) {
-      await this.update();
-      this._updateRequested.emit(void 0);
-    } else if ('active' in model.changed) {
-      this._updateRequested.emit(void 0);
-    }
-  }
-
   async update() {
     let value = this.get('node_filter');
     if (value) {
-      this._nodeFilter = await makeForceNodeTemplate(value);
+      this._nodeFilter = await makeForceNodeTemplate(value, toBool);
     } else {
       this._nodeFilter = null;
     }
@@ -69,6 +54,11 @@ export class DAGBehaviorModel extends BehaviorModel implements IBehave {
 
   refreshBehavior(graph: ForceGraphInstance) {
     let { mode, levelDistance, nodeFilter } = this;
+
+    if (!this.active) {
+      mode = null;
+    }
+
     graph.dagMode(mode).dagLevelDistance(levelDistance).dagNodeFilter(nodeFilter);
   }
 
@@ -79,4 +69,13 @@ export class DAGBehaviorModel extends BehaviorModel implements IBehave {
     }
     return template(node);
   };
+}
+
+// Only explicit false values are false
+function toBool(value: string): boolean {
+  value = value?.trim().toLocaleLowerCase();
+  if (value == 'false') {
+    return false;
+  }
+  return true;
 }
