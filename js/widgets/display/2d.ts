@@ -33,6 +33,7 @@ import {
   EMOJI,
   EMPTY_GRAPH_DATA,
   EUpdate,
+  IActionMessage,
   IBehave,
   IHasGraph,
   ILinkBehaveOptions,
@@ -229,9 +230,27 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
 
     this.model.behaviorsChanged.connect(this.onBehaviorsChange, this);
     this.luminoWidget.disposed.connect(this.onDisposed, this);
-
+    this.model.on('msg:custom', this.handleMessage, this);
     this.onSourceChange();
     this.onBehaviorsChange();
+  }
+
+  handleMessage(message: IActionMessage): void {
+    const graph = this.graph as ForceGraphInstance;
+
+    if (!graph) {
+      console.warn(`${EMOJI} graph was not yet initialized, discarding`, message);
+      return;
+    }
+
+    switch (message.action) {
+      case 'reheat':
+        graph.d3ReheatSimulation();
+        break;
+      default:
+        const exhaustiveCheck: never = message.action;
+        console.error(`${EMOJI} Unhandled custom action: ${exhaustiveCheck}`);
+    }
   }
 
   onDisposed() {
