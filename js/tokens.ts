@@ -184,3 +184,9 @@ export const emptyArray = Object.freeze([]);
 export interface IDynamicCallable {
   (...args: any): string;
 }
+
+export type TCustomAction = 'reheat';
+
+export interface IActionMessage {
+  action: TCustomAction;
+}

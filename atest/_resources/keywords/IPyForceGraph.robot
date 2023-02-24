@@ -108,8 +108,12 @@ Wait Until No Tag Widgets Exist
 
 Maybe Skip A Test
     [Documentation]    Capture common reasons for skipping tests
-    [Arguments]    ${widget_class}=${EMPTY}    ${example}=${EMPTY}
+    [Arguments]    ${widget_class}=${EMPTY}    ${example}=${EMPTY}    ${feature}=${EMPTY}
     IF    "${OS}" == "Darwin"
+        IF    "${feature}" in ["default_link_color", "default_node_color", "reheat"]
+            Pass Execution    Can't test canvas feature on MacOS
+            ...    skip:darwin:canvas
+        END
         IF    "${widget_class}" == "${IPYFORCEGRAPH CLASS 3D}"
             Pass Execution    Can't test 3d canvas on MacOS
             ...    skip:darwin:3d
