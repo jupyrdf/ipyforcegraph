@@ -12,3 +12,4 @@ export * from './force-x';
 export * from './force-y';
 export * from './force-z';
 export * from './force';
+export * from './dag';

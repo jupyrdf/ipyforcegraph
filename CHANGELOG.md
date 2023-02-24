@@ -43,11 +43,12 @@
 
 ### `ipyforcegraph 0.2.1`
 
-> TBD
+- adds `DAGForce` to `GraphForces`
+- adds manual `ForceGraph.reheat` to restart simulation
 
 ### `@jupyrdf/jupyter-forcegraph 0.2.1`
 
-> TBD
+- adds connection to `force-graph` DAG configuration
 
 ## `0.2.0`
 
