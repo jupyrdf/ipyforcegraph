@@ -11,6 +11,8 @@ composable
 conda
 cooldown
 d3
+DAGForce
+DAGMode
 dataframe
 DataFrame
 dataframes
@@ -69,6 +71,7 @@ PyData
 pypi
 PyPI
 quadtrees
+qualname
 RadialForce
 ReadTheDocs
 repr
