@@ -6,7 +6,7 @@ requires = [
 
 [project]
 name = "ipyforcegraph"
-version = "0.2.0"
+version = "0.2.1"
 description = "2D and 3D force-directed graph widgets for Jupyter"
 readme = "README.md"
 authors = [
@@ -41,6 +41,16 @@ dependencies = [
 "Documentation" = "https://ipyforcegraph.rtfd.io"
 "Source" = "https://github.com/jupyrdf/ipyforcegraph"
 
+
+[tool.doit]
+backend = "sqlite3"
+verbosity = 2
+par_type = "thread"
+default_tasks = ["binder"]
+
+[tool.doit.commands.list]
+status = true
+subtasks = true
 
 [tool.flit.sdist]
 include = ["src/_d"]
@@ -81,3 +91,7 @@ ignore_missing_imports = true
 [tool.pytest.ini_options]
 junit_family = "xunit2"
 addopts = "-vv --ff --pyargs ipyforcegraph --cov ipyforcegraph --cov-report term-missing:skip-covered --cov-report html:build/htmlcov --no-cov-on-fail --html build/pytest.html --self-contained-html --junitxml build/pytest.xunit.xml"
+filterwarnings = [
+    "error",
+    "ignore::DeprecationWarning:traittypes",
+]

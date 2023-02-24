@@ -1,0 +1,7 @@
+_platforms:
+  - linux-64
+  - osx-64
+
+dependencies:
+  - hunspell-en
+  - hunspell

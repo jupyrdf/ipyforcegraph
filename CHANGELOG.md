@@ -1,5 +1,15 @@
 # Changelog
 
+## `0.2.1` (unreleased)
+
+### `ipyforcegraph 0.2.1`
+
+> TBD
+
+### `@jupyrdf/jupyter-forcegraph 0.2.1`
+
+> TBD
+
 ## `0.2.0`
 
 ### `ipyforcegraph 0.2.0`
@@ -17,6 +27,8 @@
 - adds `GraphForces`, which exposes a large number of the forces from [`d3-force-3d`]
 - renames the top-level graph imports `ipyforcegraph.graphs` (was
   `ipyforcegraph.forcegraph`)
+- the `DataFrameSource`, and its new subclass `WidgetSource`, can be imported from
+  `ipyforcegraph.sources`
 
 [d3-force-3d]: https://github.com/vasturiano/d3-force-3d
 

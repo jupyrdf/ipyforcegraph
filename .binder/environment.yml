@@ -2,62 +2,26 @@ channels:
   - conda-forge
   - nodefaults
 dependencies:
-  - black-jupyter
-  - firefox =102
-  - geckodriver
-  - git
-  - hypothesis
-  - importnb
-  - isort
-  - jupyterlab-link-share
-  - keyring
-  - mypy >=1.0.0
-  - nbstripout
-  - pyflakes
-  - pyproject-fmt !=0.9.1
-  - pytest-asyncio
-  - pytest-check-links
-  - pytest-cov
-  - pytest-html
-  - pytest-xdist
-  - requests-cache
-  - robotframework-jupyterlibrary
-  - robotframework-pabot
-  - robotframework-robocop
-  - robotframework-tidy
-  - rope
-  - ssort
-  - stringcase
-  ### docs/environment.yml ###
-  - ansi2html
-  - autodoc-traits
   - bqplot >=0.12.20
-  - docutils >=0.19
-  - doit
+  - doit-with-toml
   - flit >=3.7.1,<4
-  - ipython >=8.10
+  - git
+  - importnb
   - ipywidgets >=8.0.4,<9
+  - jupyter_server >=2.2.1
   - jupyterlab >=3,<4
+  - jupyterlab >=3.6.1,<3.7
   - jupyterlab-deck
-  - myst-nb
+  - jupyterlab-link-share
   - networkx
   - nodejs >=18,<19
-  - nomkl
   - numcodecs
   - orjson
   - packaging >=22.0
   - pandas
   - pip
-  - pkginfo
-  - pydata-sphinx-theme
-  - python >=3.8,<3.12.0a0
-  - python-libarchive-c
-  - sphinx
-  - sphinx-autobuild
-  - sphinx-autodoc-typehints
-  - sphinx-copybutton
+  - python >=3.11,<3.12
+  - python >=3.8,<3.12
+  - stringcase
   - tomli
   - traittypes
-  - twine
-  - wheel
-  ### docs/environment.yml ###

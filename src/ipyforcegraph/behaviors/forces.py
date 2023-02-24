@@ -30,13 +30,13 @@ class LinkForce(BaseD3Force):
     distance: Optional[str] = T.Unicode(
         None,
         allow_none=True,
-        help="a nunjucks template to use to calculate link distance. Context takes `link`",
+        help="a nunjucks template to use to calculate link distance. Context takes ``link``",
     ).tag(sync=True)
 
     strength: Optional[str] = T.Unicode(
         None,
         allow_none=True,
-        help="a nunjucks template to use to calculate link strength. Context takes `link`",
+        help="a nunjucks template to use to calculate link strength. Context takes ``link``",
     ).tag(sync=True)
 
     iterations: Optional[int] = T.Unicode(
@@ -88,13 +88,13 @@ class XForce(BaseD3Force):
     x: Optional[str] = T.Unicode(
         None,
         allow_none=True,
-        help="nunjucks template sets the x-coordinate of the centering position to the specified number and returns this force. Context takes `node`.",
+        help="nunjucks template sets the x-coordinate of the centering position to the specified number and returns this force. Context takes ``node``.",
     ).tag(sync=True)
 
     strength: Optional[str] = T.Unicode(
         None,
         allow_none=True,
-        help="a nunjucks template to use to calculate strength. Context takes `node`",
+        help="a nunjucks template to use to calculate strength. Context takes ``node```",
     ).tag(sync=True)
 
 
@@ -111,13 +111,13 @@ class YForce(BaseD3Force):
     y: Optional[str] = T.Unicode(
         None,
         allow_none=True,
-        help="nunjucks template sets the y-coordinate of the centering position to the specified number and returns this force. Context takes `node`.",
+        help="nunjucks template sets the y-coordinate of the centering position to the specified number and returns this force. Context takes ``node``.",
     ).tag(sync=True)
 
     strength: Optional[str] = T.Unicode(
         None,
         allow_none=True,
-        help="a nunjucks template to use to calculate strength. Context takes `node`",
+        help="a nunjucks template to use to calculate strength. Context takes ``node``",
     ).tag(sync=True)
 
 
@@ -134,7 +134,7 @@ class ZForce(BaseD3Force):
     z: Optional[str] = T.Unicode(
         None,
         allow_none=True,
-        help="nunjucks template sets the z-coordinate of the centering position to the specified number and returns this force. Context takes `node`.",
+        help="nunjucks template sets the z-coordinate of the centering position to the specified number and returns this force. Context takes ``node``.",
     ).tag(sync=True)
 
     strength: Optional[str] = T.Unicode(
@@ -160,7 +160,7 @@ class ManyBodyForce(BaseD3Force):
     strength: Optional[str] = T.Unicode(
         None,
         allow_none=True,
-        help="a nunjucks template to use to calculate strength. Context takes `node`",
+        help="a nunjucks template to use to calculate strength. Context takes ``node``",
     ).tag(sync=True)
 
     theta: Optional[float] = T.Float(
@@ -194,13 +194,13 @@ class RadialForce(BaseD3Force):
     radius: Optional[str] = T.Unicode(
         None,
         allow_none=True,
-        help="a nunjucks template to use to calculate radius. Context takes `node`",
+        help="a nunjucks template to use to calculate radius. Context takes ``node``",
     ).tag(sync=True)
 
     strength: Optional[str] = T.Unicode(
         None,
         allow_none=True,
-        help="a nunjucks template to use to calculate strength. Context takes `node`",
+        help="a nunjucks template to use to calculate strength. Context takes ``node``",
     ).tag(sync=True)
 
     x: Optional[float] = T.Float(
@@ -224,7 +224,7 @@ class RadialForce(BaseD3Force):
 
 @W.register
 class CollisionForce(BaseD3Force):
-    """The collision force treats nodes as circles with a given `radius`, rather
+    """The collision force treats nodes as circles with a given ``radius``, rather
     than points and prevents nodes from overlapping.
 
     https://github.com/d3/d3-force#collision
@@ -242,7 +242,6 @@ class CollisionForce(BaseD3Force):
         allow_none=True,
         min=0,
         max=1,
-        default=1,
         help="sets the strength of the force.",
     ).tag(sync=True)
 
@@ -271,7 +270,6 @@ class ClusterForce(BaseD3Force):
         allow_none=True,
         min=0,
         max=1,
-        default=0.1,
         help="sets the strength of the force.",
     ).tag(sync=True)
     center_inertia: Optional[float] = T.Float(
@@ -279,7 +277,6 @@ class ClusterForce(BaseD3Force):
         allow_none=True,
         min=0,
         max=1,
-        default=0,
         help="Lower values (close to 0) result in cluster center nodes with lower inertia: they are easily pulled around by other nodes in the cluster.",
     ).tag(sync=True)
 
