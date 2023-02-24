@@ -167,24 +167,31 @@ doit watch_docs
 
 ### Python Dependencies
 
-- Edit the `dependencies` section of
-  [environment specs](https://github.com/jupyrdf/ipyforcegraph/tree/main/.github/env_specs/)
-  or the
-  [binder environment](https://github.com/jupyrdf/ipyforcegraph/tree/main/.binder/environment.yml).
+- Edit the `dependencies` section of the [specs]
+
+  > If this will impact multiple running contexts (e.g. testing in CI and Binder),
+  > consider adding a new environment and adding it in the `_inherit_from` section.
+
 - Run:
 
   ```bash
   doit lock
   ```
 
-- Commit the changes to the env specs and the
-  [lock files](https://github.com/jupyrdf/ipyforcegraph/tree/main/.github/locks).
+- Commit the changes to the env specs, [locks], and generated environments for
+  [ReadTheDocs][env-rtd] and [Binder][env-binder].
 
-  > if you delete _all_ the lockfiles, you'll need to `conda-lock` on path with e.g.
+  > If _all_ the lockfiles are deleted, the outer env needs `conda-lock` on `$PATH` with
+  > e.g.
   >
   > ```bash
   > mamba install -c conda-forge conda-lock
   > ```
+
+[specs]: https://github.com/jupyrdf/ipyforcegraph/tree/main/.github/specs
+[locks]: https://github.com/jupyrdf/ipyforcegraph/tree/main/.github/locks
+[env-rtd]: https://github.com/jupyrdf/ipyforcegraph/blob/main/docs/environment.yml
+[env-binder]: https://github.com/jupyrdf/ipyforcegraph/blob/main/.binder/environment.yml
 
 ### Browser Dependencies
 

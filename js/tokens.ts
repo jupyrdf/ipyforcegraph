@@ -173,3 +173,9 @@ export interface IForce {
 export type TSelectedSet = Set<string | number>;
 
 export const emptyArray = Object.freeze([]);
+
+export type TCustomAction = 'reheat';
+
+export interface IActionMessage {
+  action: TCustomAction;
+}
