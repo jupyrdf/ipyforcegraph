@@ -1,4 +1,4 @@
-"""Styling behaviors for ``ipyforcegraph``."""
+"""Styling behaviors for ``ipyforcegraph`` nodes and links."""
 
 # Copyright (c) 2023 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.

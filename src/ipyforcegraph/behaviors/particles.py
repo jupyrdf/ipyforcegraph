@@ -1,4 +1,4 @@
-"""Particle over links behaviors for ``ipyforcegraph``."""
+"""Behaviors for controlling particles traveling over ``ipyforcegraph`` links."""
 
 # Copyright (c) 2023 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.

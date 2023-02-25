@@ -1,4 +1,4 @@
-"""Recording behaviors for ``ipyforcegraph``."""
+"""Behaviors for recording the state of the ``ipyforcegraph`` graphs."""
 
 # Copyright (c) 2023 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.

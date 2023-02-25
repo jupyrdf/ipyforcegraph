@@ -1,4 +1,4 @@
-"""Forces for ``ipyforcegraph``.
+"""Forces for controlling the layout of ``ipyforcegraph`` graphs.
 
 Using documentation from:
 

@@ -55,12 +55,12 @@ class ShapeBase(ForceBase):
     _model_name: str = T.Unicode("ShapeBaseModel").tag(sync=True)
 
 
-class Column(ForceBase):
-    """A column from a ``DataFrameSource``."""
+class DynamicWidgetTrait(ForceBase):
+    """An abstract class to describe what a Dynamic Widget Trait is and does."""
 
-    _model_name: str = T.Unicode("ColumnModel").tag(sync=True)
+    _model_name: str = T.Unicode("DynamicWidgetTraitModel").tag(sync=True)
     value: str = T.Unicode(
-        "", help="The name of the column from a ``DataFrameSource``."
+        "", help="the source used to compute the value for the trait."
     ).tag(sync=True)
 
     def __init__(self, value: Optional[str], **kwargs: Any):
@@ -69,16 +69,16 @@ class Column(ForceBase):
         super().__init__(**kwargs)
 
 
+class Column(DynamicWidgetTrait):
+    """A column from a ``DataFrameSource``."""
+
+    _model_name: str = T.Unicode("ColumnModel").tag(sync=True)
+
+
 class Nunjucks(ForceBase):
     """A ``nunjucks`` template for customizing a feature."""
 
     _model_name: str = T.Unicode("NunjucksModel").tag(sync=True)
-    value: str = T.Unicode("", help="A ``nunjucks`` template string.").tag(sync=True)
-
-    def __init__(self, value: Optional[str], **kwargs: Any):
-        if value is not None:
-            kwargs["value"] = value
-        super().__init__(**kwargs)
 
 
 def _make_trait(
