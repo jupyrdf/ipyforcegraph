@@ -8,28 +8,7 @@ from typing import Any, Optional, Union
 import ipywidgets as W
 import traitlets as T
 
-from ._base import Column, Nunjucks, ShapeBase
-
-TFeature = Optional[Union[Column, Nunjucks, str]]
-TNumFeature = Optional[Union[Column, Nunjucks, str, int, float]]
-TBoolFeature = Optional[Union[Column, Nunjucks, str, bool]]
-
-
-def _make_trait(
-    help: str, numeric: Optional[bool] = None, boolish: Optional[bool] = None
-) -> Any:
-    if numeric:
-        extra_types = [T.Int(), T.Float()]
-    elif boolish:
-        extra_types = [T.Bool()]
-    else:
-        extra_types = []
-
-    return T.Union(
-        [T.Instance(Column), T.Instance(Nunjucks), T.Unicode(), *extra_types],
-        help=help,
-        allow_none=True,
-    ).tag(sync=True, **W.widget_serialization)
+from ._base import ShapeBase, TBoolFeature, TFeature, TNumFeature, _make_trait
 
 
 @W.register

@@ -3,11 +3,35 @@
 # Copyright (c) 2023 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.
 
-from typing import Any, Optional
+from typing import Any, Optional, Union
+import enum
 
+import ipywidgets as W
 import traitlets as T
 
 from .._base import ForceBase
+
+__all__ = (
+    "_make_trait",
+    "BaseD3Force",
+    "Behavior",
+    "Column",
+    "Nunjucks",
+    "ShapeBase",
+    "TBoolFeature",
+    "TFeature",
+    "TNumFeature",
+)
+
+TFeature = Optional[Union["Column", "Nunjucks", str]]
+TNumFeature = Optional[Union["Column", "Nunjucks", str, int, float]]
+TBoolFeature = Optional[Union["Column", "Nunjucks", str, bool]]
+
+class Types(enum.Enum):
+
+    STRING = "string"
+    NUMBER = "number"
+    BOOLEAN = "boolean"
 
 
 class Behavior(ForceBase):
@@ -55,3 +79,29 @@ class Nunjucks(ForceBase):
         if value is not None:
             kwargs["value"] = value
         super().__init__(**kwargs)
+
+
+def _make_trait(
+    help: str,
+    *,
+    allow_none: bool = True,
+    boolish: bool = False,
+    by_column: bool = True,
+    by_nunjuck: bool = True,
+    numeric: bool = False,
+    stringy: bool = True,
+) -> Any:
+    """Makes a Trait that can accept a Column, a Nunjuck Template, and a literal."""
+    types = ([T.Instance(Column)] if by_column else []) + (
+        [T.Instance(Nunjucks)] if by_nunjuck else []
+    )
+    if stringy:
+        types += [T.Unicode()]
+    if numeric:
+        types += [T.Int(), T.Float()]
+    if boolish:
+        types += [T.Bool()]
+
+    return T.Union(types, help=help, allow_none=allow_none).tag(
+        sync=True, **W.widget_serialization
+    )
