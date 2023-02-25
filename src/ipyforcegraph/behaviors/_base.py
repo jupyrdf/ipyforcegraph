@@ -5,7 +5,7 @@
 
 import enum
 import json
-from typing import Any, List, Optional, Union
+from typing import Any, Callable, List, Optional, Union
 
 import ipywidgets as W
 import traitlets as T
@@ -27,33 +27,39 @@ __all__ = (
 TFeature = Optional[Union["Column", "Nunjucks", str]]
 TNumFeature = Optional[Union["Column", "Nunjucks", str, int, float]]
 TBoolFeature = Optional[Union["Column", "Nunjucks", str, bool]]
-number = Union[int, float]
+Number = Union[int, float]
 
 
-class Types(enum.Enum):
-    """The types TypeScript types as mapped to python types."""
+class DataType(enum.Enum):
+    """Data types for the ``DynamicValue`` Widget."""
+
+    _ignore_ = ["_data_converters"]
 
     BOOLEAN = bool
     INTEGER = int
-    NUMBER = number
+    NUMBER = Number
     REAL = float
     STRING = str
 
-    def to_type(self, value: Any) -> Any:
-        """Convert a value to the appropriate desired type."""
-        new_type = self._value_
-        if new_type == Types.NUMBER:
-            try:
-                value = int(value)
-            except ValueError:
-                value = float(value)
-        elif new_type is bool:
-            if isinstance(value, str):
-                value = json.loads(value.lower())
-            value = bool(value)
-        else:
-            value = new_type(value)
-        return value
+    @staticmethod
+    def _to_boolean(value: Any) -> bool:
+        if isinstance(value, str):
+            value = json.loads(value.lower())
+        return bool(value)
+
+    @staticmethod
+    def _to_number(value: Any) -> Number:
+        try:
+            return int(value)
+        except ValueError:
+            return float(value)
+
+    _data_converters = {bool: _to_boolean, Number: _to_number}
+
+    @property
+    def converter(self) -> Callable:
+        """A callable that converts a value to the type specified."""
+        return self._data_converters.get(self._value_, self._value_)
 
 
 class Behavior(ForceBase):
@@ -77,17 +83,17 @@ class ShapeBase(ForceBase):
     _model_name: str = T.Unicode("ShapeBaseModel").tag(sync=True)
 
 
-class DynamicWidgetTrait(ForceBase):
+class DynamicValue(ForceBase):
     """An abstract class to describe what a Dynamic Widget Trait is and does."""
 
-    _model_name: str = T.Unicode("DynamicWidgetTraitModel").tag(sync=True)
+    _model_name: str = T.Unicode("DynamicValueModel").tag(sync=True)
 
     value: str = T.Unicode(
         "", help="the source used to compute the value for the trait."
     ).tag(sync=True)
 
-    coerce: Types = T.Enum(
-        Types, allow_none=True, help="The type to coerce the value to"
+    data_type: DataType = T.Enum(
+        DataType, allow_none=True, help="the data type to coerce the value to"
     ).tag(sync=True)
 
     def __init__(self, value: Optional[str], **kwargs: Any):
@@ -97,20 +103,20 @@ class DynamicWidgetTrait(ForceBase):
 
     @T.validate("value")
     def _coerce_value(self, proposal: T.Bunch) -> Any:
-        """Coerce the value to a given type."""
+        """Coerce the value to the type specified under ``data_type``."""
         value = proposal.value
-        if self.coerce is None or value is None:
-            return
-        return self.coerce.to_type(value)
+        if None in (value, self.data_type):
+            return value
+        return self.data_type.converter(value)
 
 
-class Column(DynamicWidgetTrait):
+class Column(DynamicValue):
     """A column from a ``DataFrameSource``."""
 
     _model_name: str = T.Unicode("ColumnModel").tag(sync=True)
 
 
-class Nunjucks(ForceBase):
+class Nunjucks(DynamicValue):
     """A ``nunjucks`` template for customizing a feature."""
 
     _model_name: str = T.Unicode("NunjucksModel").tag(sync=True)

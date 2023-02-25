@@ -3,7 +3,7 @@
 # Copyright (c) 2023 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.
 
-from ._base import Behavior, Column, Nunjucks
+from ._base import Behavior, Column, DataType, DynamicValue, Nunjucks
 from .forces import GraphForces
 from .particles import Particles
 from .recording import GraphData, GraphImage
@@ -14,6 +14,8 @@ from .tooltip import LinkTooltip, NodeTooltip
 __all__ = [
     "Behavior",
     "Column",
+    "DataType",
+    "DynamicValue",
     "GraphData",
     "GraphForces",
     "GraphImage",
@@ -27,5 +29,4 @@ __all__ = [
     "NodeTooltip",
     "Nunjucks",
     "Particles",
-    "Types",
 ]
