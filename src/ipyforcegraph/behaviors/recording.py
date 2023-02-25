@@ -3,13 +3,13 @@
 # Copyright (c) 2023 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.
 
-from typing import Dict, Optional, Tuple
+from typing import Tuple
 
 import ipywidgets as W
 import traitlets as T
 
 from ..sources.dataframe import DataFrameSource
-from ._base import BaseD3Force, Behavior
+from ._base import Behavior
 
 
 @W.register

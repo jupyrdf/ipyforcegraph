@@ -3,8 +3,8 @@
 # Copyright (c) 2023 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.
 
-from typing import Any, Optional, Union
 import enum
+from typing import Any, List, Optional, Union
 
 import ipywidgets as W
 import traitlets as T
@@ -27,8 +27,8 @@ TFeature = Optional[Union["Column", "Nunjucks", str]]
 TNumFeature = Optional[Union["Column", "Nunjucks", str, int, float]]
 TBoolFeature = Optional[Union["Column", "Nunjucks", str, bool]]
 
-class Types(enum.Enum):
 
+class Types(enum.Enum):
     STRING = "string"
     NUMBER = "number"
     BOOLEAN = "boolean"
@@ -92,7 +92,7 @@ def _make_trait(
     stringy: bool = True,
 ) -> Any:
     """Makes a Trait that can accept a Column, a Nunjuck Template, and a literal."""
-    types = ([T.Instance(Column)] if by_column else []) + (
+    types: List[Any] = ([T.Instance(Column)] if by_column else []) + (
         [T.Instance(Nunjucks)] if by_nunjuck else []
     )
     if stringy:

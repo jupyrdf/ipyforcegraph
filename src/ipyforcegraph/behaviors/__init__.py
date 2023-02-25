@@ -4,12 +4,12 @@
 # Distributed under the terms of the Modified BSD License.
 
 from ._base import Behavior, Column, Nunjucks
-from .recording import GraphData, GraphImage
 from .forces import GraphForces
-from .selection import NodeSelection, LinkSelection
-from .tooltip import NodeTooltip, LinkTooltip
-from .style import NodeStyle, LinkStyle, NodeShapes, LinkArrow
 from .particles import Particles
+from .recording import GraphData, GraphImage
+from .selection import LinkSelection, NodeSelection
+from .style import LinkArrow, LinkStyle, NodeShapes, NodeStyle
+from .tooltip import LinkTooltip, NodeTooltip
 
 __all__ = [
     "Behavior",
@@ -26,4 +26,5 @@ __all__ = [
     "NodeStyle",
     "NodeTooltip",
     "Nunjucks",
+    "Particles",
 ]

@@ -5,10 +5,11 @@
 
 from typing import Tuple, Union
 
-import traitlets as T
 import ipywidgets as W
+import traitlets as T
 
 from ._base import Behavior
+
 
 @W.register
 class NodeSelection(Behavior):

@@ -5,10 +5,10 @@
 
 from typing import Any, Sequence, Tuple, Union
 
-import traitlets as T
 import ipywidgets as W
+import traitlets as T
 
-from ._base import Behavior, TFeature, _make_trait, ShapeBase, TNumFeature
+from ._base import Behavior, ShapeBase, TFeature, TNumFeature, _make_trait
 
 
 @W.register
@@ -48,7 +48,7 @@ class LinkStyle(Behavior):
 
 
 @W.register
-class LinkArrows(Behavior):
+class LinkArrow(Behavior):
     """Customize arrows on links, based on a column or template."""
 
     _model_name: str = T.Unicode("LinkArrowModel").tag(sync=True)

@@ -18,7 +18,7 @@ class Particles(Behavior):
         or they will exceed the frame rate of the animation.
     """
 
-    _model_name: str = T.Unicode("LinkDirectionalParticleColorModel").tag(sync=True)
+    _model_name: str = T.Unicode("ParticlesModel").tag(sync=True)
     color: TFeature = _make_trait("the color of the particles")
     density: TNumFeature = _make_trait(
         "the number particles, ideally 0.0 < ``value``", numeric=True

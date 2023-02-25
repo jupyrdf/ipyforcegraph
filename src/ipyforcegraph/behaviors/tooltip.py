@@ -3,6 +3,7 @@
 # Copyright (c) 2023 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.
 
+import ipywidgets as W
 import traitlets as T
 
 from ._base import Behavior, TFeature, _make_trait
