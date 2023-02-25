@@ -1,22 +1,22 @@
 # Behaviors
 
-## Graph Behaviors
+## Graph Recording Behaviors
 
 ```{eval-rst}
 .. currentmodule:: ipyforcegraph
-.. automodule:: ipyforcegraph.behaviors.graph
+.. automodule:: ipyforcegraph.behaviors.recording
 ```
 
-## Link Behaviors
+## Selection Behaviors
 
 ```{eval-rst}
 .. currentmodule:: ipyforcegraph
-.. automodule:: ipyforcegraph.behaviors.link
+.. automodule:: ipyforcegraph.behaviors.selection
 ```
 
-## Node Behaviors
+## Style Behaviors
 
 ```{eval-rst}
 .. currentmodule:: ipyforcegraph
-.. automodule:: ipyforcegraph.behaviors.node
+.. automodule:: ipyforcegraph.behaviors.style
 ```

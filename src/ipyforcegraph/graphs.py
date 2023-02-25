@@ -28,9 +28,14 @@ class ForceGraph(W.DOMWidget, ForceBase):
         T.Instance(Behavior),
         kw={},
         help=(
-            "the behaviors that modify the appearance of :mod:`~ipyforcegraph.behaviors.node`, "
-            ":mod:`~ipyforcegraph.behaviors.link`, and the "
-            ":mod:`~ipyforcegraph.behaviors.graph` itself"
+            "the behaviors that provide functionality for "
+            ":mod:`~ipyforcegraph.behaviors.selection`, "
+            "changing the node and link :mod:`~ipyforcegraph.behaviors.style`, "
+            "changing the node :mod:`~ipyforcegraph.behaviors.shapes`, "
+            "changing the on-hover :mod:`~ipyforcegraph.behaviors.tooltips` for nodes and links, "
+            "the :mod:`~ipyforcegraph.behaviors.force` graph layout, "
+            ":mod:`~ipyforcegraph.behaviors.recording` of the graph state, and the "
+            ":mod:`~ipyforcegraph.behaviors.particles` on the links."
         ),
     ).tag(sync=True, **W.widget_serialization)
 
