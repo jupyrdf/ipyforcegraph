@@ -30,38 +30,6 @@ TBoolFeature = Optional[Union["Column", "Nunjucks", str, bool]]
 Number = Union[int, float]
 
 
-class DataType(enum.Enum):
-    """Data types for the ``DynamicValue`` Widget."""
-
-    _ignore_ = ["_data_converters"]
-
-    BOOLEAN = bool
-    INTEGER = int
-    NUMBER = Number
-    REAL = float
-    STRING = str
-
-    @staticmethod
-    def _to_boolean(value: Any) -> bool:
-        if isinstance(value, str):
-            value = json.loads(value.lower())
-        return bool(value)
-
-    @staticmethod
-    def _to_number(value: Any) -> Number:
-        try:
-            return int(value)
-        except ValueError:
-            return float(value)
-
-    _data_converters = {bool: _to_boolean, Number: _to_number}
-
-    @property
-    def converter(self) -> Callable:
-        """A callable that converts a value to the type specified."""
-        return self._data_converters.get(self._value_, self._value_)
-
-
 class Behavior(ForceBase):
     """The base class for all IPyForceGraph graph behaviors."""
 
@@ -81,6 +49,41 @@ class ShapeBase(ForceBase):
     """A column from a ``DataFrameSource``."""
 
     _model_name: str = T.Unicode("ShapeBaseModel").tag(sync=True)
+
+
+class DataType(enum.Enum):
+    """Data types for the ``DynamicValue`` Widget."""
+
+    BOOLEAN = bool
+    FLOAT = float
+    INTEGER = int
+    NUMBER = Number
+    REAL = float
+    STRING = str
+
+    @staticmethod
+    def _to_boolean(value: Any) -> bool:
+        if isinstance(value, str):
+            value = json.loads(value.lower())
+        return bool(value)
+
+    @staticmethod
+    def _to_number(value: Any) -> Number:
+        try:
+            return int(value)
+        except ValueError:
+            return float(value)
+
+    @property
+    def coerce(self) -> Callable:
+        """A callable that converts a value to the type specified."""
+        name = self._name_
+        if name == "BOOLEAN":
+            return self._to_boolean
+        if name == "NUMBER":
+            return self._to_number
+        converter: Callable = self._value_
+        return converter
 
 
 class DynamicValue(ForceBase):
@@ -107,7 +110,7 @@ class DynamicValue(ForceBase):
         value = proposal.value
         if None in (value, self.data_type):
             return value
-        return self.data_type.converter(value)
+        return self.data_type.coerce(value)
 
 
 class Column(DynamicValue):
