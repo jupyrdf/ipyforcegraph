@@ -10,12 +10,58 @@ Using documentation from:
 # Distributed under the terms of the Modified BSD License.
 
 import enum
-from typing import Optional
+from typing import Dict, Optional
 
 import ipywidgets as W
 import traitlets as T
 
-from ._base import BaseD3Force
+from ._base import BaseD3Force, Behavior
+
+
+@W.register
+class GraphForces(Behavior):
+    """Customize :class:`~ipyforcegraph.graphs.ForceGraph` force simulation.
+
+    These also apply to :class:`~ipyforcegraph.graphs.ForceGraph3D`
+
+    For more, see the frontend documentation on https://github.com/vasturiano/force-graph#force-engine-d3-force-configuration
+    """
+
+    _model_name: str = T.Unicode("GraphForcesModel").tag(sync=True)
+
+    forces: Dict[str, BaseD3Force] = T.Dict(
+        value_trait=T.Instance(BaseD3Force, allow_none=True),
+        help="named forces. Set a name `None` to remove a force: By default, ForceGraph has `link`, `charge`, and `center`.",
+    ).tag(sync=True, **W.widget_serialization)
+
+    warmup_ticks: Optional[int] = T.Int(
+        0,
+        min=0,
+        help="layout engine cycles to dry-run at ignition before starting to render.",
+    ).tag(sync=True)
+
+    cooldown_ticks: Optional[int] = T.Int(
+        -1,
+        help="frames to render before stopping and freezing the layout engine. Values less than zero will be translated to `Infinity`.",
+    ).tag(sync=True)
+
+    alpha_min: Optional[float] = T.Float(
+        0.0, min=0.0, max=1.0, help="simulation alpha min parameter"
+    ).tag(sync=True)
+
+    alpha_decay: Optional[float] = T.Float(
+        0.0228,
+        min=0.0,
+        max=1.0,
+        help="simulation intensity decay parameter",
+    ).tag(sync=True)
+
+    velocity_decay: Optional[float] = T.Float(
+        0.4,
+        min=0.0,
+        max=1.0,
+        help="nodes' velocity decay that simulates the medium resistance",
+    ).tag(sync=True)
 
 
 @W.register
