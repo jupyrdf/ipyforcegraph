@@ -26,7 +26,7 @@ class BaseD3Force(Behavior):
 
 
 class ShapeBase(ForceBase):
-    """A columne from a ``DataFrameSource``."""
+    """A column from a ``DataFrameSource``."""
 
     _model_name: str = T.Unicode("ShapeBaseModel").tag(sync=True)
 
