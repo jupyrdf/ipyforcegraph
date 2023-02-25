@@ -27,4 +27,5 @@ __all__ = [
     "NodeTooltip",
     "Nunjucks",
     "Particles",
+    "Types",
 ]

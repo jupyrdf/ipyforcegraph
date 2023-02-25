@@ -4,6 +4,7 @@
 # Distributed under the terms of the Modified BSD License.
 
 import enum
+import json
 from typing import Any, List, Optional, Union
 
 import ipywidgets as W
@@ -26,12 +27,33 @@ __all__ = (
 TFeature = Optional[Union["Column", "Nunjucks", str]]
 TNumFeature = Optional[Union["Column", "Nunjucks", str, int, float]]
 TBoolFeature = Optional[Union["Column", "Nunjucks", str, bool]]
+number = Union[int, float]
 
 
 class Types(enum.Enum):
-    STRING = "string"
-    NUMBER = "number"
-    BOOLEAN = "boolean"
+    """The types TypeScript types as mapped to python types."""
+
+    BOOLEAN = bool
+    INTEGER = int
+    NUMBER = number
+    REAL = float
+    STRING = str
+
+    def to_type(self, value: Any) -> Any:
+        """Convert a value to the appropriate desired type."""
+        new_type = self._value_
+        if new_type == Types.NUMBER:
+            try:
+                value = int(value)
+            except ValueError:
+                value = float(value)
+        elif new_type is bool:
+            if isinstance(value, str):
+                value = json.loads(value.lower())
+            value = bool(value)
+        else:
+            value = new_type(value)
+        return value
 
 
 class Behavior(ForceBase):
@@ -59,14 +81,27 @@ class DynamicWidgetTrait(ForceBase):
     """An abstract class to describe what a Dynamic Widget Trait is and does."""
 
     _model_name: str = T.Unicode("DynamicWidgetTraitModel").tag(sync=True)
+
     value: str = T.Unicode(
         "", help="the source used to compute the value for the trait."
+    ).tag(sync=True)
+
+    coerce: Types = T.Enum(
+        Types, allow_none=True, help="The type to coerce the value to"
     ).tag(sync=True)
 
     def __init__(self, value: Optional[str], **kwargs: Any):
         if value is not None:
             kwargs["value"] = value
         super().__init__(**kwargs)
+
+    @T.validate("value")
+    def _coerce_value(self, proposal: T.Bunch) -> Any:
+        """Coerce the value to a given type."""
+        value = proposal.value
+        if self.coerce is None or value is None:
+            return
+        return self.coerce.to_type(value)
 
 
 class Column(DynamicWidgetTrait):
