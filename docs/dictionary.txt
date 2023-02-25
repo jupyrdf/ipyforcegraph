@@ -39,6 +39,7 @@ JupyterLab
 JupyterLite
 kwargs
 labextension
+LinkArrow
 LinkColor
 LinkColors
 LinkDirectionalArrowColor
@@ -51,6 +52,7 @@ LinkDirectionalParticleWidth
 LinkForce
 LinkLabels
 LinkSelection
+LinkStyle
 LinkWidths
 lockfiles
 lukix
@@ -64,6 +66,7 @@ NodeLabels
 NodeSelection
 NodeShapes
 NodeSizes
+NodeStyle
 npm
 numpy
 nunjucks
