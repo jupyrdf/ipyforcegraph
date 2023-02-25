@@ -14,11 +14,11 @@ import { functor } from '../../utils';
 
 import { BehaviorModel, DynamicModel } from './base';
 
-const FACETS = ['color', 'length', 'relative_position'];
+const LINK_ARROW_FACETS = ['color', 'length', 'relative_position'];
 
 const BOOL_FACETS = [];
 
-export type TFacet = (typeof FACETS)[number];
+export type TLinkArrowFacet = (typeof LINK_ARROW_FACETS)[number];
 
 export class LinkArrowModel extends BehaviorModel {
   static model_name = 'LinkArrowModel';
@@ -27,7 +27,7 @@ export class LinkArrowModel extends BehaviorModel {
     return { ...super.defaults(), _model_name: LinkArrowModel.model_name };
   }
 
-  protected facets: Record<TFacet, Function> = JSONExt.emptyObject as any;
+  protected facets: Record<TLinkArrowFacet, Function> = JSONExt.emptyObject as any;
 
   static serializers = {
     ...BehaviorModel.serializers,
@@ -53,7 +53,7 @@ export class LinkArrowModel extends BehaviorModel {
 
   async ensureFacets() {
     const facets: Record<string, Function> = {};
-    for (const facetName of FACETS) {
+    for (const facetName of LINK_ARROW_FACETS) {
       let facet = this.get(facetName);
       if (facet instanceof DynamicModel) {
         await facet.ensureHandlers();
