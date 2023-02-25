@@ -2,14 +2,21 @@
  * Copyright (c) 2023 ipyforcegraph contributors.
  * Distributed under the terms of the Modified BSD License.
  */
+import { JSONExt } from '@lumino/coreutils';
+
+import {
+  IBackboneModelOptions,
+  unpack_models as deserialize,
+} from '@jupyter-widgets/base';
+
 import { IBehave, ILinkBehaveOptions } from '../../tokens';
+import { INodeCanvasBehaveOptions } from '../../tokens';
+import { functor } from '../../utils';
 
 import { LinkColumnOrTemplateModel } from './base';
+import { DynamicModel } from './base';
 
-export class LinkArrowModel
-  extends LinkColumnOrTemplateModel
-  implements IBehave
-{
+export class LinkArrowModel extends LinkColumnOrTemplateModel implements IBehave {
   static model_name = 'LinkArrowModel';
 
   defaults() {
@@ -23,18 +30,6 @@ export class LinkArrowModel
     return super.getLinkAttr(options);
   }
 }
-
-
-import { JSONExt } from '@lumino/coreutils';
-
-import {
-  IBackboneModelOptions,
-  unpack_models as deserialize,
-} from '@jupyter-widgets/base';
-
-import { INodeCanvasBehaveOptions } from '../../tokens';
-import { functor } from '../../utils';
-import { DynamicModel } from './base';
 
 const FACETS = [
   'text',
