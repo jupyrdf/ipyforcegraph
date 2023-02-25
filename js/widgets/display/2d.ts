@@ -54,7 +54,7 @@ import {
   WIDGET_DEFAULTS,
   emptyArray,
 } from '../../tokens';
-import { ForceBehaviorModel, GraphForcesModel } from '../behaviors';
+import { DAGBehaviorModel, ForceBehaviorModel, GraphForcesModel } from '../behaviors';
 
 export class ForceGraphModel extends DOMWidgetModel {
   static model_name = 'ForceGraphModel';
@@ -496,6 +496,7 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
   protected getForceUpdate() {
     const graph = this.graph as ForceGraphInstance;
     let needsPost: TAnyForce[] = [];
+
     for (let simBehavior of this.model.forceBehaviors) {
       const { warmupTicks, cooldownTicks, alphaDecay, alphaMin, velocityDecay } =
         simBehavior;
@@ -512,7 +513,14 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
         if (force && !behavior?.active) {
           force = null;
         }
-        graph.d3Force(key, force);
+
+        // DAG behavior is treated different compared to other pure D3 Forces.
+        if (behavior instanceof DAGBehaviorModel) {
+          (behavior as DAGBehaviorModel).refreshBehavior(graph);
+        } else {
+          graph.d3Force(key, force);
+        }
+
         if (force?.links) {
           needsPost.push(force);
         }
