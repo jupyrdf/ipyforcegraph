@@ -3,7 +3,7 @@
 # Copyright (c) 2023 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.
 
-from typing import Any, Optional, Union
+from typing import Any
 
 import ipywidgets as W
 import traitlets as T
