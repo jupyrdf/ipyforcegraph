@@ -9,70 +9,37 @@ import {
   unpack_models as deserialize,
 } from '@jupyter-widgets/base';
 
-import { IBehave, ILinkBehaveOptions } from '../../tokens';
-import { INodeCanvasBehaveOptions } from '../../tokens';
+// import { ILinkBehaveOptions } from '../../tokens';
 import { functor } from '../../utils';
 
-import { LinkColumnOrTemplateModel } from './base';
-import { DynamicModel } from './base';
+import { BehaviorModel, DynamicModel } from './base';
 
-export class LinkArrowModel extends LinkColumnOrTemplateModel implements IBehave {
-  static model_name = 'LinkArrowModel';
+const FACETS = ['color', 'length', 'relative_position'];
 
-  defaults() {
-    return {
-      ...super.defaults(),
-      _model_name: LinkArrowModel.model_name,
-    };
-  }
-
-  getLinkDirectionalArrowColor(options: ILinkBehaveOptions): string | null {
-    return super.getLinkAttr(options);
-  }
-}
-
-const FACETS = [
-  'text',
-  'font',
-  'size',
-  'fill',
-  'padding',
-  'background',
-  'scale_on_zoom',
-  'stroke',
-  'stroke_width',
-];
-
-const BOOL_FACETS = ['scale_on_zoom'];
+const BOOL_FACETS = [];
 
 export type TFacet = (typeof FACETS)[number];
 
-export class TextShapeModel extends ShapeBaseModel {
-  static model_name = 'TextShapeModel';
+export class LinkArrowModel extends BehaviorModel {
+  static model_name = 'LinkArrowModel';
 
   defaults() {
-    return { ...super.defaults(), _model_name: TextShapeModel.model_name };
+    return { ...super.defaults(), _model_name: LinkArrowModel.model_name };
   }
 
   protected facets: Record<TFacet, Function> = JSONExt.emptyObject as any;
 
   static serializers = {
-    ...ShapeBaseModel.serializers,
-    text: { deserialize },
-    font: { deserialize },
-    size: { deserialize },
-    fill: { deserialize },
-    stroke: { deserialize },
-    stroke_width: { deserialize },
-    background: { deserialize },
-    padding: { deserialize },
-    scale_on_zoom: { deserialize },
+    ...BehaviorModel.serializers,
+    color: { deserialize },
+    length: { deserialize },
+    relative_position: { deserialize },
   };
 
   initialize(attributes: Backbone.ObjectHash, options: IBackboneModelOptions) {
     super.initialize(attributes, options);
     this.on(
-      'change:text change:font change:size change:fill change:background change:padding',
+      'change:color change:length change:relative_position',
       this.onFacetsChanged,
       this
     );
@@ -104,63 +71,5 @@ export class TextShapeModel extends ShapeBaseModel {
       }
     }
     this.facets = facets;
-  }
-
-  drawNode(options: INodeCanvasBehaveOptions): void {
-    const { context, node, globalScale } = options;
-    const { x, y } = node;
-
-    let draw = { ...TEXT_DEFAULTS, context, node, globalScale, x, y };
-
-    for (const facetName of FACETS) {
-      if (this.facets[facetName]) {
-        draw[facetName] = this.facets[facetName](options);
-      }
-    }
-
-    this._draw(draw);
-  }
-
-  protected _draw(options: ITextOptions & IBaseOptions): TBoundingBox {
-    const {
-      context,
-      text,
-      size,
-      globalScale,
-      font,
-      padding,
-      fill,
-      background,
-      x,
-      y,
-      scale_on_zoom,
-      stroke_width,
-      stroke,
-    } = {
-      ...TEXT_DEFAULTS,
-      ...options,
-    };
-    const fontSize = scale_on_zoom ? size / globalScale : size;
-    context.font = `${fontSize}px ${font}`;
-    const textWidth = context.measureText(text).width;
-    const bb = [textWidth + fontSize * padding, fontSize + fontSize * padding];
-
-    if (background) {
-      context.fillStyle = background;
-      context.fillRect(x - bb[0] / 2, y - bb[1] / 2, bb[0], bb[1]);
-    }
-
-    context.textAlign = 'center';
-    context.textBaseline = 'middle';
-
-    if (stroke) {
-      context.strokeStyle = stroke;
-      context.lineWidth = scale_on_zoom ? stroke_width / globalScale : stroke_width;
-      context.strokeText(text, x, y);
-    }
-
-    context.fillStyle = fill;
-    context.fillText(text, x, y);
-    return bb;
   }
 }
