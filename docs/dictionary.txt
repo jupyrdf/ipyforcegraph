@@ -61,7 +61,7 @@ NetworkX
 NodeColors
 NodeLabels
 NodeSelection
-NodeShape
+NodeShapes
 NodeSizes
 npm
 numpy
@@ -77,6 +77,7 @@ RadialForce
 ReadTheDocs
 repr
 rgba
+ShapeBase
 str
 TBD
 TODO
