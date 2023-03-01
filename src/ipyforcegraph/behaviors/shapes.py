@@ -46,14 +46,14 @@ class HasFillAndStroke(ShapeBase):
 
 @W.register
 class Text(HasFillAndStroke):
-    """Draw a text shape."""
+    """Draw a text shape, with an optional background."""
 
     _model_name: str = T.Unicode("TextShapeModel").tag(sync=True)
 
     text: TFeature = _make_trait("the text of a shape")
     font: TFeature = _make_trait("the font face of a shape")
     size: TNumFeature = _make_trait("the font size of a shape in ``px``", numeric=True)
-    background: TFeature = _make_trait("the background of a shape")
+    background: TFeature = _make_trait("the background fill color of a shape")
     padding: TNumFeature = _make_trait(
         "the padding around the shape in ``px``", numeric=True
     )

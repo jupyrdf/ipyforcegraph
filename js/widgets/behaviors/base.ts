@@ -10,6 +10,7 @@ import { IBackboneModelOptions, WidgetModel } from '@jupyter-widgets/base';
 
 import { newTemplate } from '../../template-utils';
 import {
+  ECoerce,
   EMOJI,
   IBehave,
   IHasGraph,
@@ -19,7 +20,7 @@ import {
   TUpdateKind,
   WIDGET_DEFAULTS,
 } from '../../tokens';
-import { noop } from '../../utils';
+import { getCoercer, noop } from '../../utils';
 
 export class BehaviorModel extends WidgetModel implements IBehave {
   protected _updateRequested: Signal<IBehave, TUpdateKind>;
@@ -43,7 +44,7 @@ export class DynamicModel extends BehaviorModel {
   protected _linkHandler: Function | null = null;
 
   defaults() {
-    return { ...super.defaults(), value: '' };
+    return { ...super.defaults(), value: '', coerce: null };
   }
 
   initialize(attributes: Backbone.ObjectHash, options: IBackboneModelOptions) {
@@ -76,25 +77,33 @@ export class DynamicModel extends BehaviorModel {
   get linkHandler(): Function | null {
     return this._linkHandler || noop;
   }
+
+  get coerce(): ECoerce | null {
+    return this.get('coerce') || null;
+  }
 }
 
 export class NunjucksModel extends DynamicModel {
   async ensureHandlers() {
-    if (!this._nodeHandler) {
-      const tmpl = await newTemplate(this.value);
-      this._nodeHandler = (opts: any) => tmpl.render(opts);
-      this._linkHandler = this._nodeHandler;
+    if (this._nodeHandler) {
+      return;
     }
+    const tmpl = await newTemplate(this.value);
+    const coercer = getCoercer(this.coerce);
+    this._nodeHandler = (opts: any) => coercer(tmpl.render(opts));
+    this._linkHandler = this._nodeHandler;
   }
 }
 
 export class ColumnModel extends DynamicModel {
   async ensureHandlers() {
-    if (!this._nodeHandler) {
-      const { value } = this;
-      this._nodeHandler = (options: any) => options.node[value];
-      this._linkHandler = (options: any) => options.link[value];
+    if (this._nodeHandler) {
+      return;
     }
+    const { value } = this;
+    const coercer = getCoercer(this.coerce);
+    this._nodeHandler = (options: any) => coercer(options.node[value]);
+    this._linkHandler = (options: any) => coercer(options.link[value]);
   }
 }
 

@@ -13,8 +13,8 @@
   - each has a single `value`,
   - and may be `coerce`d into a specific JS-compatible type (e.g. `boolean` or `number`)
 - most dynamic behaviors have been merged to use this pattern, diverging from the
-  upstream JS API in favor of more idomatic, compact descriptions. For example, for link
-  arrows:
+  upstream JS API in favor of more idiomatic, compact descriptions. For example, for
+  link arrows:
 
   - `0.2.x`
     ```py

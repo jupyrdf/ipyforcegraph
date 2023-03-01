@@ -190,3 +190,11 @@ export type TCustomAction = 'reheat';
 export interface IActionMessage {
   action: TCustomAction;
 }
+
+export const FALSEY = ['', '0', 'false'];
+
+export enum ECoerce {
+  boolish = 'boolean',
+  numeric = 'number',
+  nullish = 'null',
+}
