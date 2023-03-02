@@ -4066,6 +4066,11 @@ three-render-objects@^1.28:
     kapsule "^1.14"
     polished "4"
 
+three-spritetext@^1.8.0:
+  version "1.8.0"
+  resolved "https://registry.npmjs.org/three-spritetext/-/three-spritetext-1.8.0.tgz#b7a2c427d5ffe74f7a529051ee9ff5047aecfde2"
+  integrity sha512-ehiATMfR1guCk+knjCxDWp2zikxRbxQaKXJyjXwuZKqjIbKtsCh7BQ00JHaESjzaXXhG5LJV7rXTJ78M/EYWyQ==
+
 "three@>=0.118 <1":
   version "0.148.0"
   resolved "https://registry.npmjs.org/three/-/three-0.148.0.tgz#b6f62f9c84227f8d51c151bf17b67984ded8e4d7"

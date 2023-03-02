@@ -2,12 +2,18 @@
  * Copyright (c) 2023 ipyforcegraph contributors.
  * Distributed under the terms of the Modified BSD License.
  */
+import type { Sprite } from 'three';
+
 import {
   IBackboneModelOptions,
   unpack_models as deserialize,
 } from '@jupyter-widgets/base';
 
-import { IBehave, INodeCanvasBehaveOptions } from '../../tokens';
+import {
+  IBehave,
+  INodeCanvasBehaveOptions,
+  INodeThreeBehaveOptions,
+} from '../../tokens';
 
 import { BehaviorModel, ShapeBaseModel } from './base';
 
@@ -40,9 +46,18 @@ export class NodeShapeModel extends BehaviorModel implements IBehave {
     return this.get('shapes') || [];
   }
 
-  getNodeCanvasObject(options: INodeCanvasBehaveOptions): any {
+  getNodeCanvasObject(options: INodeCanvasBehaveOptions): void {
     for (const shape of this.shapes) {
-      shape.drawNode(options);
+      shape.drawNode2D(options);
+    }
+  }
+
+  getNodeThreeObject(options: INodeThreeBehaveOptions): Sprite | null {
+    for (const shape of this.shapes) {
+      const obj = shape.drawNode3D(options);
+      if (obj) {
+        return obj;
+      }
     }
   }
 

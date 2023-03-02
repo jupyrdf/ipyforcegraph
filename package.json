@@ -50,7 +50,8 @@
     "d3-force-3d": "^3.0.5",
     "d3-force-cluster-3d": "~1.1.1",
     "force-graph": "~1.43.0",
-    "nunjucks": "^3.2.3"
+    "nunjucks": "^3.2.3",
+    "three-spritetext": "^1.8.0"
   },
   "devDependencies": {
     "@jupyterlab/application": "3",
@@ -103,6 +104,9 @@
         "bundled": true
       },
       "d3-force-cluster-3d": {
+        "bundled": true
+      },
+      "three-spritetext": {
         "bundled": true
       }
     }

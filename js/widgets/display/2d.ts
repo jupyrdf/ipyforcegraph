@@ -204,6 +204,7 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
 
   protected _rendered: PromiseDelegate<void>;
   protected _iframe: HTMLIFrameElement | null;
+  protected _iframeClasses: Record<string, any>;
 
   get source(): ISource {
     return this.model.get('source');
@@ -285,7 +286,10 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
     const iframe = event.currentTarget as HTMLIFrameElement;
     const { contentWindow } = iframe;
 
-    const graph: ForceGraphInstance = (contentWindow as any).init();
+    const initResult = (contentWindow as any).init();
+
+    const graph: ForceGraphInstance = initResult.graph;
+    this._iframeClasses = initResult.iframeClasses;
     this.graph = graph as any;
     contentWindow.addEventListener('resize', this.onWindowResize);
     this._rendered.resolve(void 0);
@@ -299,24 +303,36 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
     graph.height(contentWindow.innerHeight);
   };
 
-  protected async getJsUrl(): Promise<string> {
-    return (
-      await import(
-        '!!file-loader!../../../node_modules/force-graph/dist/force-graph.js'
-      )
-    ).default as any;
+  protected async getJsUrls(): Promise<string[]> {
+    return [
+      (
+        await import(
+          '!!file-loader!../../../node_modules/force-graph/dist/force-graph.js'
+        )
+      ).default as any,
+    ];
   }
 
   protected get graphJsClass(): string {
     return 'ForceGraph';
   }
 
+  protected get extraJsClasses(): string {
+    return '{}';
+  }
+
   protected async getIframeSource(): Promise<string> {
-    let url = await this.getJsUrl();
+    let urls = await this.getJsUrls();
+
+    let scripts = '';
+
+    for (const url of urls) {
+      scripts += `<script src="${url}"></script>\n`;
+    }
 
     let src = `
       <head>
-        <script src="${url}"></script>
+        ${scripts}
         <style>
           body, #main {
             overflow: hidden;
@@ -340,7 +356,10 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
           window.init = (args) => {
             const div = document.createElement('div');
             document.body.appendChild(div);
-            return ${this.graphJsClass}(args || {})(div);
+            return {
+              graph: ${this.graphJsClass}(args || {})(div),
+              iframeClasses: ${this.extraJsClasses}
+            };
           }
           window.wrapFunction = (fn) => {
             return (...args) => fn(...args);
@@ -465,14 +484,6 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
         : null
     );
 
-    if (graph.nodeCanvasObject) {
-      graph.nodeCanvasObject(
-        this.model.nodeBehaviorsForMethod('getNodeCanvasObject').length
-          ? this.wrapFunction(this.getNodeCanvasObject)
-          : null
-      );
-    }
-
     // evented
     graph.onNodeClick(
       this.model.nodeBehaviorsForMethod('onNodeClick').length
@@ -554,6 +565,13 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
 
   protected getOnRenderPostUpdate() {
     const graph = this.graph as ForceGraphInstance;
+
+    graph.nodeCanvasObject(
+      this.model.nodeBehaviorsForMethod('getNodeCanvasObject').length
+        ? this.wrapFunction(this.getNodeCanvasObject)
+        : null
+    );
+
     graph.onRenderFramePost(
       this.model.graphBehaviorsForMethod('onRender').length
         ? this.wrapFunction(this.onRender)
