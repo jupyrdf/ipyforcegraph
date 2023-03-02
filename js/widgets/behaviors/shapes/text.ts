@@ -102,10 +102,10 @@ export class TextShapeModel extends ShapeBaseModel {
       }
     }
 
-    this._drawCanvas(draw);
+    this._draw(draw);
   }
 
-  protected _drawCanvas(options: ITextOptions & IBaseOptions): TBoundingBox {
+  protected _draw(options: ITextOptions & IBaseOptions): TBoundingBox {
     const {
       context,
       text,
