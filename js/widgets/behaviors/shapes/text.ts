@@ -58,11 +58,11 @@ export class TextShapeModel extends ShapeBaseModel {
 
   initialize(attributes: Backbone.ObjectHash, options: IBackboneModelOptions) {
     super.initialize(attributes, options);
-    this.on(
-      'change:text change:font change:size change:fill change:background change:padding',
-      this.onFacetsChanged,
-      this
-    );
+    let events = '';
+    for (const facet of FACETS) {
+      events += `change:${facet} `;
+    }
+    this.on(events, this.onFacetsChanged, this);
     void this.onFacetsChanged.call(this);
   }
 
