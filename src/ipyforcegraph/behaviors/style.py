@@ -48,10 +48,10 @@ class LinkStyle(Behavior):
 
 
 @W.register
-class LinkArrow(Behavior):
+class LinkArrows(Behavior):
     """Customize the size, position, and color of arrows on directional ``links``."""
 
-    _model_name: str = T.Unicode("LinkArrowModel").tag(sync=True)
+    _model_name: str = T.Unicode("LinkArrowsModel").tag(sync=True)
 
     color: TFeature = _make_trait("the color of the arrow")
     length: TNumFeature = _make_trait("the length of the arrow", numeric=True)

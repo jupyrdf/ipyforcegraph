@@ -39,7 +39,7 @@ JupyterLab
 JupyterLite
 kwargs
 labextension
-LinkArrow
+LinkArrows
 LinkColor
 LinkColors
 LinkDirectionalArrowColor

@@ -18,16 +18,16 @@ const LINK_ARROW_FACETS = ['color', 'length', 'relative_position'];
 
 const BOOL_FACETS = [];
 
-export type TLinkArrowFacet = (typeof LINK_ARROW_FACETS)[number];
+export type TLinkArrowsFacet = (typeof LINK_ARROW_FACETS)[number];
 
-export class LinkArrowModel extends BehaviorModel {
-  static model_name = 'LinkArrowModel';
+export class LinkArrowsModel extends BehaviorModel {
+  static model_name = 'LinkArrowsModel';
 
   defaults() {
-    return { ...super.defaults(), _model_name: LinkArrowModel.model_name };
+    return { ...super.defaults(), _model_name: LinkArrowsModel.model_name };
   }
 
-  protected facets: Record<TLinkArrowFacet, Function> = JSONExt.emptyObject as any;
+  protected facets: Record<TLinkArrowsFacet, Function> = JSONExt.emptyObject as any;
 
   static serializers = {
     ...BehaviorModel.serializers,
