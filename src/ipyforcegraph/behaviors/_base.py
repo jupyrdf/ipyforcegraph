@@ -77,13 +77,12 @@ class DataType(enum.Enum):
     @property
     def coerce(self) -> Callable:
         """A callable that converts a value to the type specified."""
-        name = self._name_
-        if name == "BOOLEAN":
-            return self._to_boolean
-        if name == "NUMBER":
-            return self._to_number
-        converter: Callable = self._value_
-        return converter
+        self: DataType
+        coercion_map = {
+            self.BOOLEAN: self._to_boolean,
+            self.NUMBER: self._to_number,
+        }
+        return coercion_map.get(self, self._value_)
 
 
 class DynamicValue(ForceBase):
