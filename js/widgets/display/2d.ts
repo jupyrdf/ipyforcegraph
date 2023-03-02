@@ -464,11 +464,14 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
         ? this.wrapFunction(this.getNodeLabel)
         : null
     );
-    graph.nodeCanvasObject(
-      this.model.nodeBehaviorsForMethod('getNodeCanvasObject').length
-        ? this.wrapFunction(this.getNodeCanvasObject)
-        : null
-    );
+
+    if (graph.nodeCanvasObject) {
+      graph.nodeCanvasObject(
+        this.model.nodeBehaviorsForMethod('getNodeCanvasObject').length
+          ? this.wrapFunction(this.getNodeCanvasObject)
+          : null
+      );
+    }
 
     // evented
     graph.onNodeClick(
