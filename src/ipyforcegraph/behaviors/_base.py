@@ -77,7 +77,6 @@ class DataType(enum.Enum):
     @property
     def coerce(self) -> Callable:
         """A callable that converts a value to the type specified."""
-        self: DataType
         coercion_map = {
             self.BOOLEAN: self._to_boolean,
             self.NUMBER: self._to_number,

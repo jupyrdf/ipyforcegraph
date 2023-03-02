@@ -8,8 +8,8 @@ from typing import Any
 import ipywidgets as W
 import traitlets as T
 
-from ._base import ShapeBase, TBoolFeature, TFeature, TNumFeature, _make_trait
 from ..trait_utils import JSON_TYPES, coerce
+from ._base import ShapeBase, TBoolFeature, TFeature, TNumFeature, _make_trait
 
 
 class HasFillAndStroke(ShapeBase):

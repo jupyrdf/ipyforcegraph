@@ -8,7 +8,7 @@ from typing import Any, Sequence, Tuple, Union
 import ipywidgets as W
 import traitlets as T
 
-from ._base import Behavior, ShapeBase, TFeature, TNumFeature, _make_trait
+from ._base import Behavior, ShapeBase, TBoolFeature, TFeature, TNumFeature, _make_trait
 
 
 @W.register
@@ -18,6 +18,7 @@ class NodeStyle(Behavior):
     _model_name: str = T.Unicode("NodeStyleModel").tag(sync=True)
     color: TFeature = _make_trait("the color of the node")
     size: TFeature = _make_trait("the size of the node", numeric=True)
+    visible: TBoolFeature = _make_trait("is the node visible", boolish=True)
 
 
 @W.register
@@ -44,7 +45,13 @@ class LinkStyle(Behavior):
 
     _model_name: str = T.Unicode("LinkStyleModel").tag(sync=True)
     color: TFeature = _make_trait("the color of the link")
-    width: TFeature = _make_trait("the width of the link", numeric=True)
+    curvature: TNumFeature = _make_trait(
+        "the curvature of the link, 0: straight, 1: circular", numeric=True
+    )
+    # TODO: `line_dash` as defined in https://github.com/vasturiano/force-graph#link-styling
+    # line_dash: TFeature = _make_trait("the color of the link")
+    visible: TBoolFeature = _make_trait("is the link visible", boolish=True)
+    width: TNumFeature = _make_trait("the width of the link", numeric=True)
 
 
 @W.register
