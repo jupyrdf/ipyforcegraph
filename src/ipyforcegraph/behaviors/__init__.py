@@ -8,7 +8,7 @@ from .forces import GraphForces
 from .particles import Particles
 from .recording import GraphData, GraphImage
 from .selection import LinkSelection, NodeSelection
-from .style import LinkArrows, LinkStyle, NodeShapes, NodeStyle
+from .style import LinkArrows, LinkShapes, NodeShapes
 from .tooltip import LinkTooltip, NodeTooltip
 
 __all__ = [
@@ -21,11 +21,10 @@ __all__ = [
     "GraphImage",
     "LinkArrows",
     "LinkSelection",
-    "LinkStyle",
+    "LinkShapes",
     "LinkTooltip",
     "NodeSelection",
     "NodeShapes",
-    "NodeStyle",
     "NodeTooltip",
     "Nunjucks",
     "Particles",
