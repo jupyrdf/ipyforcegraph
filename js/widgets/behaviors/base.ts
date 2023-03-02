@@ -3,6 +3,7 @@
  * Distributed under the terms of the Modified BSD License.
  */
 import type { Template } from 'nunjucks';
+import type { Sprite } from 'three';
 
 import { ISignal, Signal } from '@lumino/signaling';
 
@@ -16,6 +17,7 @@ import {
   ILinkBehaveOptions,
   INodeBehaveOptions,
   INodeCanvasBehaveOptions,
+  INodeThreeBehaveOptions,
   TUpdateKind,
   WIDGET_DEFAULTS,
 } from '../../tokens';
@@ -209,11 +211,11 @@ export class ShapeBaseModel extends BehaviorModel {
     // nothing to see here
   }
 
-  drawNode(options: INodeCanvasBehaveOptions): void {
+  drawNode2D(options: INodeCanvasBehaveOptions): void {
     return;
   }
 
-  drawLink(options: INodeCanvasBehaveOptions): void {
+  drawNode3D(options: INodeThreeBehaveOptions): Sprite | null {
     return;
   }
 }

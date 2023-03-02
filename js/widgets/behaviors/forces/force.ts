@@ -171,7 +171,7 @@ export class GraphForcesModel extends LinkColumnOrTemplateModel {
       links.forEach((link) => {
         let source = link.source as any;
         if (source !== nodes[source.index]) {
-          console.log('mismatch', source, nodes[source.index]);
+          console.warn('link source mismatch', source, nodes[source.index]);
         }
       });
     }

@@ -7,6 +7,7 @@ export interface IBaseOptions {
   x: number;
   y: number;
   globalScale: number;
+  iframeClasses?: Record<string, any>;
 }
 
 export interface ITextOptions {

@@ -3,9 +3,10 @@
  * Distributed under the terms of the Modified BSD License.
  */
 import type { ForceGraph3DGenericInstance, ForceGraph3DInstance } from '3d-force-graph';
-import type { WebGLRenderer } from 'three';
+import type { NodeObject } from 'force-graph';
+import type { Sprite, WebGLRenderer } from 'three';
 
-import { IRenderOptions } from '../../tokens';
+import { INodeThreeBehaveOptions, IRenderOptions } from '../../tokens';
 
 import { ForceGraphModel, ForceGraphView } from './2d';
 
@@ -35,12 +36,25 @@ export class ForceGraph3DView extends ForceGraphView<
     return 'ForceGraph3D';
   }
 
-  protected async getJsUrl(): Promise<string> {
-    return (
-      await import(
-        '!!file-loader!../../../node_modules/3d-force-graph/dist/3d-force-graph.js'
-      )
-    ).default as any;
+  protected get extraJsClasses(): string {
+    return '{SpriteText: window.SpriteText}';
+  }
+
+  protected async getJsUrls(): Promise<string[]> {
+    return [
+      (await import('!!file-loader!../../../node_modules/three/build/three.js'))
+        .default as any,
+      (
+        await import(
+          '!!file-loader!../../../node_modules/3d-force-graph/dist/3d-force-graph.js'
+        )
+      ).default as any,
+      (
+        await import(
+          '!!file-loader!../../../node_modules/three-spritetext/dist/three-spritetext.js'
+        )
+      ).default as any,
+    ];
   }
 
   protected get threeRenderer(): WebGLRenderer {
@@ -49,12 +63,39 @@ export class ForceGraph3DView extends ForceGraphView<
   }
 
   protected getOnRenderPostUpdate() {
+    const graph = this.graph as ForceGraph3DInstance;
+
+    graph.nodeThreeObject(
+      this.model.nodeBehaviorsForMethod('getNodeThreeObject').length
+        ? this.wrapFunction(this.getNodeThreeObject)
+        : null
+    );
+
     this.threeRenderer.setAnimationLoop(
       this.model.graphBehaviorsForMethod('onRender').length
         ? this.wrapFunction(this.onRender)
         : null
     );
   }
+
+  protected getNodeThreeObject = (node: NodeObject): Sprite | null => {
+    let value: Sprite | null;
+    const graphData = (this.graph as ForceGraph3DInstance).graphData();
+    const options: INodeThreeBehaveOptions = {
+      view: this,
+      graphData,
+      node,
+      iframeClasses: this._iframeClasses,
+    };
+
+    for (const behavior of this.model.nodeBehaviorsForMethod('getNodeThreeObject')) {
+      let method = behavior.getNodeThreeObject;
+      value = method.call(behavior, options);
+      if (value != null) {
+        return value;
+      }
+    }
+  };
 
   protected updateRenderOptions(options: IRenderOptions): IRenderOptions {
     delete options.context2d;

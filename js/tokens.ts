@@ -4,7 +4,7 @@
  */
 import d3Force3d from 'd3-force-3d';
 import type { GraphData, LinkObject, NodeObject } from 'force-graph';
-import type { WebGLRenderer } from 'three';
+import type { Sprite, WebGLRenderer } from 'three';
 
 import type { ISignal } from '@lumino/signaling';
 
@@ -78,7 +78,8 @@ export interface IBehave {
   getNodeColor?(options: INodeBehaveOptions): string | null;
   getNodeLabel?(options: INodeBehaveOptions): string | null;
   getNodeSize?(options: INodeBehaveOptions): string | null;
-  getNodeCanvasObject?(options: INodeBehaveOptions): any;
+  getNodeCanvasObject?(options: INodeCanvasBehaveOptions): any;
+  getNodeThreeObject?(options: INodeThreeBehaveOptions): Sprite | null;
   // evented
   onNodeClick?(options: INodeEventBehaveOptions): boolean;
   onLinkClick?(options: ILinkEventBehaveOptions): boolean;
@@ -105,6 +106,7 @@ export const ALL_NODE_METHODS = [
   'getNodeColor',
   'getNodeSize',
   'getNodeCanvasObject',
+  'getNodeThreeObject',
   'onNodeClick',
 ];
 export type TNodeBehaveMethod = (typeof ALL_NODE_METHODS)[number];
@@ -128,6 +130,10 @@ export interface INodeBehaveOptions extends IBehaveOptions {
 export interface INodeCanvasBehaveOptions extends INodeBehaveOptions {
   context: CanvasRenderingContext2D;
   globalScale: number;
+}
+
+export interface INodeThreeBehaveOptions extends INodeBehaveOptions {
+  iframeClasses: Record<string, any>;
 }
 
 export interface INodeEventBehaveOptions extends INodeBehaveOptions {
