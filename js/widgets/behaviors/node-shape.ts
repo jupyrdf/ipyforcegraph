@@ -45,4 +45,6 @@ export class NodeShapeModel extends BehaviorModel implements IBehave {
       shape.drawNode(options);
     }
   }
+
+  // getNodeThreeGeometry
 }

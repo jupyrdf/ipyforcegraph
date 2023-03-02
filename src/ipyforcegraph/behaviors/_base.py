@@ -98,6 +98,10 @@ class DynamicValue(ForceBase):
     data_type: DataType = T.Enum(
         DataType, allow_none=True, help="the data type to coerce the value to"
     ).tag(sync=True)
+    coerce: str = T.Unicode(
+        help="name of a JSON Schema ``type`` into which to coerce the final value",
+        allow_none=True,
+    ).tag(sync=True)
 
     def __init__(self, value: Optional[str], **kwargs: Any):
         if value is not None:

@@ -9,32 +9,35 @@ import ipywidgets as W
 import traitlets as T
 
 from ._base import ShapeBase, TBoolFeature, TFeature, TNumFeature, _make_trait
+from ..trait_utils import JSON_TYPES, coerce
+
+
+class HasFillAndStroke(ShapeBase):
+    """A shape with fill color and stroke."""
+
+    _model_name: str = T.Unicode("HasFillModel").tag(sync=True)
+    fill: TFeature = _make_trait("the fill color of a shape")
+    stroke: TFeature = _make_trait("the stroke color of a shape")
+    stroke_width: TNumFeature = _make_trait("the stroke width of a shape", numeric=True)
+
+    @T.validate("stroke_width")
+    def _validate_has_fill_and_stroke_numerics(self, proposal: T.Bunch) -> Any:
+        return coerce(proposal, JSON_TYPES.number)
 
 
 @W.register
-class TextShape(ShapeBase):
-    """Draw a text shape."""
+class Text(HasFillAndStroke):
+    """Draw a text shape, with an optional background."""
 
     _model_name: str = T.Unicode("TextShapeModel").tag(sync=True)
 
     text: TFeature = _make_trait("the text of a shape")
-
     font: TFeature = _make_trait("the font face of a shape")
-
     size: TNumFeature = _make_trait("the font size of a shape in ``px``", numeric=True)
-
-    fill: TFeature = _make_trait("the fill color of a shape")
-
-    stroke: TFeature = _make_trait("the stroke color of a shape")
-
-    stroke_width: TNumFeature = _make_trait("the stroke width of a shape", numeric=True)
-
-    background: TFeature = _make_trait("the background of a shape")
-
+    background: TFeature = _make_trait("the background fill color of a shape")
     padding: TNumFeature = _make_trait(
         "the padding around the shape in ``px``", numeric=True
     )
-
     scale_on_zoom: TBoolFeature = _make_trait(
         "whether font size/stroke respects the global scale", boolish=True
     )
@@ -43,3 +46,24 @@ class TextShape(ShapeBase):
         if text is not None:
             kwargs["text"] = text
         super().__init__(**kwargs)
+
+    @T.validate("size", "padding")
+    def _validate_text_numerics(self, proposal: T.Bunch) -> Any:
+        return coerce(proposal, JSON_TYPES.number)
+
+    @T.validate("scale_on_zoom")
+    def _validate_text_bools(self, proposal: T.Bunch) -> Any:
+        return coerce(proposal, JSON_TYPES.boolean)
+
+
+@W.register
+class Rectangle(HasFillAndStroke):
+    """Draw a rectangle shape."""
+
+    _model_name: str = T.Unicode("RectangleShapeModel").tag(sync=True)
+    width: TNumFeature = _make_trait("the width of a shape in ``px``", numeric=True)
+    height: TNumFeature = _make_trait("the height of a shape in ``px``", numeric=True)
+
+    @T.validate("width", "height")
+    def _validate_rect_numerics(self, proposal: T.Bunch) -> Any:
+        return coerce(proposal, JSON_TYPES.number)
