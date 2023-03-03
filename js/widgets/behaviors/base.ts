@@ -293,6 +293,23 @@ export class ShapeBaseModel extends BehaviorModel {
     this._facets = facets;
   }
 
+  /** Evaluate all facets with the runtime shape*/
+  protected _resolveFacets(
+    options: INodeCanvasBehaveOptions | INodeThreeBehaveOptions
+  ): Record<string, any> {
+    const draw: Record<string, any> = {};
+    for (const facetName of this._facetNames) {
+      if (this._facets[facetName]) {
+        try {
+          draw[facetName] = this._facets[facetName](options);
+        } catch (err) {
+          console.warn(`${EMOJI} encountered error for ${facetName}`, options, err);
+        }
+      }
+    }
+    return draw;
+  }
+
   /** Handle the fact changing. */
   protected async _onFacetsChanged() {
     this._facets = JSONExt.emptyObject as any;

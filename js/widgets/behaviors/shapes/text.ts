@@ -2,7 +2,6 @@
  * Copyright (c) 2023 ipyforcegraph contributors.
  * Distributed under the terms of the Modified BSD License.
  */
-import type { Sprite } from 'three';
 import type SpriteText from 'three-spritetext';
 
 import { unpack_models as deserialize } from '@jupyter-widgets/base';
@@ -36,38 +35,29 @@ export class TextShapeModel extends ShapeBaseModel {
     const { context, node, globalScale } = options;
     const { x, y } = node;
 
-    let draw = { ...TEXT_DEFAULTS, context, node, globalScale, x, y };
-
-    for (const facetName of this._facetNames) {
-      if (this._facets[facetName]) {
-        draw[facetName] = this._facets[facetName](options);
-      }
-    }
-
-    this._drawCanvas(draw);
+    this._drawCanvas({
+      ...TEXT_DEFAULTS,
+      context,
+      globalScale,
+      x,
+      y,
+      ...this._resolveFacets(options),
+    });
   }
 
-  drawNode3D(options: INodeThreeBehaveOptions): Sprite {
+  drawNode3D(options: INodeThreeBehaveOptions): SpriteText {
     const { node, iframeClasses } = options;
     const { x, y } = node;
 
-    let draw = {
+    return this._drawThree({
       ...TEXT_DEFAULTS,
       context: null,
       globalScale: null,
-      node,
       x,
       y,
       iframeClasses,
-    };
-
-    for (const facetName of this._facetNames) {
-      if (this._facets[facetName]) {
-        draw[facetName] = this._facets[facetName](options);
-      }
-    }
-
-    return this._drawThree(draw);
+      ...this._resolveFacets(options),
+    });
   }
 
   protected _drawThree(options: ITextOptions & IBaseOptions): SpriteText {
