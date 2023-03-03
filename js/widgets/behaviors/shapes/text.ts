@@ -5,43 +5,19 @@
 import type { Sprite } from 'three';
 import type SpriteText from 'three-spritetext';
 
-import { JSONExt } from '@lumino/coreutils';
-
-import {
-  IBackboneModelOptions,
-  unpack_models as deserialize,
-} from '@jupyter-widgets/base';
+import { unpack_models as deserialize } from '@jupyter-widgets/base';
 
 import { INodeCanvasBehaveOptions, INodeThreeBehaveOptions } from '../../../tokens';
-import { functor } from '../../../utils';
-import { DynamicModel, ShapeBaseModel } from '../base';
+import { ShapeBaseModel } from '../base';
 
 import { IBaseOptions, ITextOptions, TBoundingBox, TEXT_DEFAULTS } from './base';
-
-const FACETS = [
-  'text',
-  'font',
-  'size',
-  'fill',
-  'padding',
-  'background',
-  'scale_on_zoom',
-  'stroke',
-  'stroke_width',
-];
-
-const BOOL_FACETS = ['scale_on_zoom'];
-
-export type TFacet = (typeof FACETS)[number];
 
 export class TextShapeModel extends ShapeBaseModel {
   static model_name = 'TextShapeModel';
 
-  defaults() {
-    return { ...super.defaults(), _model_name: TextShapeModel.model_name };
+  protected get _modelClass(): typeof TextShapeModel {
+    return TextShapeModel;
   }
-
-  protected facets: Record<TFacet, Function> = JSONExt.emptyObject as any;
 
   static serializers = {
     ...ShapeBaseModel.serializers,
@@ -56,52 +32,15 @@ export class TextShapeModel extends ShapeBaseModel {
     scale_on_zoom: { deserialize },
   };
 
-  initialize(attributes: Backbone.ObjectHash, options: IBackboneModelOptions) {
-    super.initialize(attributes, options);
-    let events = '';
-    for (const facet of FACETS) {
-      events += `change:${facet} `;
-    }
-    this.on(events, this.onFacetsChanged, this);
-    void this.onFacetsChanged.call(this);
-  }
-
-  async onFacetsChanged() {
-    this.facets = JSONExt.emptyObject as any;
-    this._updateRequested.emit(void 0);
-  }
-
-  async ensureFacets() {
-    const facets: Record<string, Function> = {};
-    for (const facetName of FACETS) {
-      let facet = this.get(facetName);
-      if (facet instanceof DynamicModel) {
-        await facet.ensureHandlers();
-        facets[facetName] = facet.nodeHandler;
-        facet.updateRequested.connect(this.onFacetsChanged, this);
-        continue;
-      }
-
-      if (BOOL_FACETS.includes(facetName) && typeof facet === 'string') {
-        facet = !!JSON.parse(facet.toLowerCase());
-      }
-
-      if (facet != null) {
-        facets[facetName] = functor(facet);
-      }
-    }
-    this.facets = facets;
-  }
-
   drawNode2D(options: INodeCanvasBehaveOptions): void {
     const { context, node, globalScale } = options;
     const { x, y } = node;
 
     let draw = { ...TEXT_DEFAULTS, context, node, globalScale, x, y };
 
-    for (const facetName of FACETS) {
-      if (this.facets[facetName]) {
-        draw[facetName] = this.facets[facetName](options);
+    for (const facetName of this._facetNames) {
+      if (this._facets[facetName]) {
+        draw[facetName] = this._facets[facetName](options);
       }
     }
 
@@ -122,9 +61,9 @@ export class TextShapeModel extends ShapeBaseModel {
       iframeClasses,
     };
 
-    for (const facetName of FACETS) {
-      if (this.facets[facetName]) {
-        draw[facetName] = this.facets[facetName](options);
+    for (const facetName of this._facetNames) {
+      if (this._facets[facetName]) {
+        draw[facetName] = this._facets[facetName](options);
       }
     }
 
