@@ -1,3 +1,7 @@
+{% set shapes = {
+    "Text": ["fill", "background", "stroke"],
+    "Ellipse": ["fill", "stroke"],
+} %}
 *** Settings ***
 Resource        ../_resources/keywords/Server.robot
 Resource        ../_resources/keywords/Browser.robot
@@ -15,21 +19,23 @@ Force Tags      suite:shapes
 ${SCREENS}      ${SCREENS ROOT}${/}api${/}shapes
 
 *** Test Cases ***
-{% for klass in ["ForceGraph", "ForceGraph3D"] %}
-{% for feature in ["fill", "background", "stroke"] %}
-{{ klass }} Can Update {{ feature }}
-    Shape Feature Works As Expected  {{ klass }}  {{ feature}}
-{%- endfor %}
+{% for graph_class in ["ForceGraph", "ForceGraph3D"] %}
+    {% for shape_class, features in shapes.items() %}
+        {% for feature in features %}
+{{ graph_class }} Can Update {{ shape_class }} {{ feature.title() }}
+    Shape Feature Works As Expected  {{ graph_class }}  {{ shape_class }}  {{ feature}}
+        {%- endfor %}
+    {%- endfor %}
 {%- endfor %}
 
 
 *** Keywords ***
 Shape Feature Works As Expected
-    [Arguments]    ${widget_class}    ${feature}
-    ${screens} =    Set Variable    ${SCREENS}${/}${widget_class.lower()}_${feature}
+    [Arguments]    ${widget_class}  ${shape_class}  ${feature}
+    ${screens} =    Set Variable    ${SCREENS}${/}${widget_class.lower()}${/}${shape_class.lower()}${/}${feature}
     Maybe Skip A Test    widget_class=${widget_class}   feature=${feature}
     Set Screenshot Directory    ${screens}
-    Set Up Shape Example    ${feature}    ${widget_class}
+    Set Up Shape Example    ${widget_class}  ${shape_class}  ${feature}
     ${frame} =   Set Variable   css:${IPYFORCEGRAPH FRAME}
     ${transparent} =    Get Element Screenshot Size    ${frame}  ${screens}    01-transparent.png
     Add And Run JupyterLab Code Cell
@@ -41,10 +47,11 @@ Shape Feature Works As Expected
     [Teardown]    Clean Up Shape Example
 
 Set Up Shape Example
-    [Arguments]    ${feature}    ${widget_class}
-    Set Tags    feature:${feature}    widget:${widget_class.lower()}
+    [Arguments]    ${widget_class}  ${shape_class}   ${feature}
+    Set Tags    feature:${feature}    widget:${widget_class.lower()}  shape:${shape_class.lower()}
     ${text} =    Get File    ${IPYFORCEGRAPH_FIXTURES}${/}api${/}NodeShapes.py
     ${text} =    Set Variable    ${text.replace("WIDGET_CLASS", "${widget_class}")}
+    ${text} =    Set Variable    ${text.replace("SHAPE_CLASS", "${shape_class}")}
     ${text} =    Set Variable    ${text.replace("FEATURE", "${feature}")}
     Launch A New JupyterLab Document
     Set CodeMirror Value    .jp-CodeCell .CodeMirror    ${text.strip()}

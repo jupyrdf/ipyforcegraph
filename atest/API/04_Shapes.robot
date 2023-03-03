@@ -16,32 +16,44 @@ ${SCREENS}      ${SCREENS ROOT}${/}api${/}shapes
 
 
 *** Test Cases ***
-ForceGraph Can Update fill
-    Shape Feature Works As Expected    ForceGraph    fill
+ForceGraph Can Update Text Fill
+    Shape Feature Works As Expected    ForceGraph    Text    fill
 
-ForceGraph Can Update background
-    Shape Feature Works As Expected    ForceGraph    background
+ForceGraph Can Update Text Background
+    Shape Feature Works As Expected    ForceGraph    Text    background
 
-ForceGraph Can Update stroke
-    Shape Feature Works As Expected    ForceGraph    stroke
+ForceGraph Can Update Text Stroke
+    Shape Feature Works As Expected    ForceGraph    Text    stroke
 
-ForceGraph3D Can Update fill
-    Shape Feature Works As Expected    ForceGraph3D    fill
+ForceGraph Can Update Ellipse Fill
+    Shape Feature Works As Expected    ForceGraph    Ellipse    fill
 
-ForceGraph3D Can Update background
-    Shape Feature Works As Expected    ForceGraph3D    background
+ForceGraph Can Update Ellipse Stroke
+    Shape Feature Works As Expected    ForceGraph    Ellipse    stroke
 
-ForceGraph3D Can Update stroke
-    Shape Feature Works As Expected    ForceGraph3D    stroke
+ForceGraph3D Can Update Text Fill
+    Shape Feature Works As Expected    ForceGraph3D    Text    fill
+
+ForceGraph3D Can Update Text Background
+    Shape Feature Works As Expected    ForceGraph3D    Text    background
+
+ForceGraph3D Can Update Text Stroke
+    Shape Feature Works As Expected    ForceGraph3D    Text    stroke
+
+ForceGraph3D Can Update Ellipse Fill
+    Shape Feature Works As Expected    ForceGraph3D    Ellipse    fill
+
+ForceGraph3D Can Update Ellipse Stroke
+    Shape Feature Works As Expected    ForceGraph3D    Ellipse    stroke
 
 
 *** Keywords ***
 Shape Feature Works As Expected
-    [Arguments]    ${widget_class}    ${feature}
-    ${screens} =    Set Variable    ${SCREENS}${/}${widget_class.lower()}_${feature}
+    [Arguments]    ${widget_class}    ${shape_class}    ${feature}
+    ${screens} =    Set Variable    ${SCREENS}${/}${widget_class.lower()}${/}${shape_class.lower()}${/}${feature}
     Maybe Skip A Test    widget_class=${widget_class}    feature=${feature}
     Set Screenshot Directory    ${screens}
-    Set Up Shape Example    ${feature}    ${widget_class}
+    Set Up Shape Example    ${widget_class}    ${shape_class}    ${feature}
     ${frame} =    Set Variable    css:${IPYFORCEGRAPH FRAME}
     ${transparent} =    Get Element Screenshot Size    ${frame}    ${screens}    01-transparent.png
     Add And Run JupyterLab Code Cell
@@ -53,10 +65,11 @@ Shape Feature Works As Expected
     [Teardown]    Clean Up Shape Example
 
 Set Up Shape Example
-    [Arguments]    ${feature}    ${widget_class}
-    Set Tags    feature:${feature}    widget:${widget_class.lower()}
+    [Arguments]    ${widget_class}    ${shape_class}    ${feature}
+    Set Tags    feature:${feature}    widget:${widget_class.lower()}    shape:${shape_class.lower()}
     ${text} =    Get File    ${IPYFORCEGRAPH_FIXTURES}${/}api${/}NodeShapes.py
     ${text} =    Set Variable    ${text.replace("WIDGET_CLASS", "${widget_class}")}
+    ${text} =    Set Variable    ${text.replace("SHAPE_CLASS", "${shape_class}")}
     ${text} =    Set Variable    ${text.replace("FEATURE", "${feature}")}
     Launch A New JupyterLab Document
     Set CodeMirror Value    .jp-CodeCell .CodeMirror    ${text.strip()}

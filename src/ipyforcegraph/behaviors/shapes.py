@@ -76,13 +76,24 @@ class Text(HasFillAndStroke):
 
 
 @W.register
-class Rectangle(HasFillAndStroke):
-    """Draw a rectangle shape."""
+class Ellipse(HasFillAndStroke):
+    """Draw an ellipse shape."""
 
-    _model_name: str = T.Unicode("RectangleShapeModel").tag(sync=True)
+    _model_name: str = T.Unicode("EllipseShapeModel").tag(sync=True)
+
     width: TNumFeature = _make_trait("the width of a shape in ``px``", numeric=True)
     height: TNumFeature = _make_trait("the height of a shape in ``px``", numeric=True)
+    depth: TNumFeature = _make_trait("the depth of a shape in ``px``", numeric=True)
+    opacity: TNumFeature = _make_trait("the opacity of a shape", numeric=True)
 
-    @T.validate("width", "height")
-    def _validate_rect_numerics(self, proposal: T.Bunch) -> Any:
+    scale_on_zoom: TBoolFeature = _make_trait(
+        "whether font size/stroke respects the global scale", boolish=True
+    )
+
+    @T.validate("width", "height", "depth", "opacity")
+    def _validate_ellipse_numerics(self, proposal: T.Bunch) -> Any:
         return coerce(proposal, JSON_TYPES.number)
+
+    @T.validate("scale_on_zoom")
+    def _validate_ellipse_bools(self, proposal: T.Bunch) -> Any:
+        return coerce(proposal, JSON_TYPES.boolean)

@@ -9,7 +9,7 @@ import { unpack_models as deserialize } from '@jupyter-widgets/base';
 import { INodeCanvasBehaveOptions, INodeThreeBehaveOptions } from '../../../tokens';
 import { ShapeBaseModel } from '../base';
 
-import { IBaseOptions, ITextOptions, TBoundingBox, TEXT_DEFAULTS } from './base';
+import { IBaseOptions, ITextOptions, TEXT_DEFAULTS } from './base';
 
 export class TextShapeModel extends ShapeBaseModel {
   static model_name = 'TextShapeModel';
@@ -101,7 +101,7 @@ export class TextShapeModel extends ShapeBaseModel {
     return sprite;
   }
 
-  protected _drawCanvas(options: ITextOptions & IBaseOptions): TBoundingBox {
+  protected _drawCanvas(options: ITextOptions & IBaseOptions): void {
     const {
       context,
       text,
@@ -141,6 +141,5 @@ export class TextShapeModel extends ShapeBaseModel {
 
     context.fillStyle = fill;
     context.fillText(text, x, y);
-    return bb;
   }
 }

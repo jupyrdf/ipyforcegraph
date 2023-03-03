@@ -4,3 +4,4 @@
  */
 
 export * from './text';
+export * from './ellipse';

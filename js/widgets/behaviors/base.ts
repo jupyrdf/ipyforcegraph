@@ -3,7 +3,7 @@
  * Distributed under the terms of the Modified BSD License.
  */
 import type { Template } from 'nunjucks';
-import { Sprite } from 'three';
+import type THREE from 'three';
 
 import { JSONExt } from '@lumino/coreutils';
 import { ISignal, Signal } from '@lumino/signaling';
@@ -237,7 +237,7 @@ export class ShapeBaseModel extends BehaviorModel {
   }
 
   /** Required in subclass. Draw a shape in Three.js. */
-  drawNode3D(options: INodeThreeBehaveOptions): Sprite | null {
+  drawNode3D(options: INodeThreeBehaveOptions): THREE.Object3D | null {
     return;
   }
 

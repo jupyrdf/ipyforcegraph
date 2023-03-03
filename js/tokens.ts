@@ -4,7 +4,7 @@
  */
 import d3Force3d from 'd3-force-3d';
 import type { GraphData, LinkObject, NodeObject } from 'force-graph';
-import type { Sprite, WebGLRenderer } from 'three';
+import type THREE from 'three';
 
 import type { ISignal } from '@lumino/signaling';
 
@@ -79,7 +79,7 @@ export interface IBehave {
   getNodeLabel?(options: INodeBehaveOptions): string | null;
   getNodeSize?(options: INodeBehaveOptions): string | null;
   getNodeCanvasObject?(options: INodeCanvasBehaveOptions): any;
-  getNodeThreeObject?(options: INodeThreeBehaveOptions): Sprite | null;
+  getNodeThreeObject?(options: INodeThreeBehaveOptions): THREE.Object3D | null;
   // evented
   onNodeClick?(options: INodeEventBehaveOptions): boolean;
   onLinkClick?(options: ILinkEventBehaveOptions): boolean;
@@ -151,7 +151,7 @@ export interface ILinkEventBehaveOptions extends ILinkBehaveOptions {
 
 export interface IRenderOptions extends IBehaveOptions {
   context2d?: CanvasRenderingContext2D;
-  renderer3d?: WebGLRenderer;
+  renderer3d?: THREE.WebGLRenderer;
   globalScale?: number;
   time?: number;
 }
