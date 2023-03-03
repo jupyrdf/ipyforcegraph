@@ -14,30 +14,33 @@ Force Tags      suite:colors
 *** Variables ***
 ${SCREENS}      ${SCREENS ROOT}${/}api
 
+
 *** Test Cases ***
-{% for klass in ["ForceGraph", "ForceGraph3D"] %}
-{% for feature in ["background_color", "default_link_color", "default_node_color"] %}
-{{ klass }} Can Update {{ feature }}
-    Color Feature Works As Expected  {{ klass }}  {{ feature}}
-{%- endfor %}
-{%- endfor %}
+ForceGraph Can Update background_color
+    Color Feature Works As Expected    ForceGraph    background_color
+
+ForceGraph Can Update default_link_color
+    Color Feature Works As Expected    ForceGraph    default_link_color
+
+ForceGraph Can Update default_node_color
+    Color Feature Works As Expected    ForceGraph    default_node_color
 
 
 *** Keywords ***
 Color Feature Works As Expected
     [Arguments]    ${widget_class}    ${feature}
     ${screens} =    Set Variable    ${SCREENS}${/}${widget_class.lower()}_${feature}
-    Maybe Skip A Test    widget_class=${widget_class}   feature=${feature}
+    Maybe Skip A Test    widget_class=${widget_class}    feature=${feature}
     Set Screenshot Directory    ${screens}
     Set Up Color Example    ${feature}    ${widget_class}
-    ${frame} =   Set Variable   css:${IPYFORCEGRAPH FRAME}
-    ${transparent} =    Get Element Screenshot Size    ${frame}  ${screens}    01-transparent.png
+    ${frame} =    Set Variable    css:${IPYFORCEGRAPH FRAME}
+    ${transparent} =    Get Element Screenshot Size    ${frame}    ${screens}    01-transparent.png
     Add And Run JupyterLab Code Cell
     ...    fg.${feature} = "rgba(255, 0, 0, 1.0)"
     Wait For All Cells To Run
     Sleep    1s
-    ${color} =   Get Element Screenshot Size    ${frame}    ${screens}    02-color.png
-    Should Be True Or Screenshot    ${color} > ${transparent}  03-color-bigger-than-transparent.png
+    ${color} =    Get Element Screenshot Size    ${frame}    ${screens}    02-color.png
+    Should Be True Or Screenshot    ${color} > ${transparent}    03-color-bigger-than-transparent.png
     [Teardown]    Clean Up Color Example
 
 Set Up Color Example

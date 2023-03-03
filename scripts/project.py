@@ -159,6 +159,7 @@ JUPYTERLAB_EXE = [*IN_ENV, "jupyter-lab", "--no-browser", "--debug"]
 PY_SRC = ROOT / "src" / PY_PKG
 PY_EXT = ROOT / "src/_d/share/jupyter/labextensions/@jupyrdf/jupyter-forcegraph/"
 PY_PACKAGE_JSON = PY_EXT / "package.json"
+PY_GRAPH_CLASSES = ["ForceGraph", "ForceGraph3D"]
 
 # docs
 LITE_JSON = [*LITE.glob("*.json")]

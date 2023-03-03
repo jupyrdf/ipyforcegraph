@@ -473,13 +473,20 @@ def task_test():
         yield _nb_test(nb)
 
     for robot_template in P.ATEST.rglob("*.j2"):
-        robot_out = robot_template.parent / robot_template.name.replace(".j2", "")
-        yield dict(
-            name=f"atest:template:{robot_template.relative_to(P.ATEST)}",
-            actions=[(U.template_one, [robot_template, robot_out])],
-            file_dep=[robot_template],
-            targets=[robot_out],
-        )
+        for graph_class in P.PY_GRAPH_CLASSES:
+            name = robot_template.name.replace(".j2", "").replace("GRAPH", graph_class)
+            robot_out = robot_template.parent / name
+            yield dict(
+                name=f"atest:template:{robot_out.relative_to(P.ATEST)}",
+                actions=[
+                    (
+                        U.template_one,
+                        [robot_template, robot_out, {"graph_class": graph_class}],
+                    )
+                ],
+                file_dep=[robot_template],
+                targets=[robot_out],
+            )
 
     def _pabot_logs():
         for robot_out in sorted(P.ATEST_OUT.rglob("robot_*.out")):

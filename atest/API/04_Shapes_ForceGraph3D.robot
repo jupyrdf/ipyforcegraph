@@ -16,21 +16,6 @@ ${SCREENS}      ${SCREENS ROOT}${/}api${/}shapes
 
 
 *** Test Cases ***
-ForceGraph Can Update Text Fill
-    Shape Feature Works As Expected    ForceGraph    Text    fill
-
-ForceGraph Can Update Text Background
-    Shape Feature Works As Expected    ForceGraph    Text    background
-
-ForceGraph Can Update Text Stroke
-    Shape Feature Works As Expected    ForceGraph    Text    stroke
-
-ForceGraph Can Update Ellipse Fill
-    Shape Feature Works As Expected    ForceGraph    Ellipse    fill
-
-ForceGraph Can Update Ellipse Stroke
-    Shape Feature Works As Expected    ForceGraph    Ellipse    stroke
-
 ForceGraph3D Can Update Text Fill
     Shape Feature Works As Expected    ForceGraph3D    Text    fill
 

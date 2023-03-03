@@ -8,55 +8,53 @@ Library         Collections
 Library         JupyterLibrary
 Library         OperatingSystem
 
-Force Tags      suite:colors
+Force Tags      suite:shapes
 
 
 *** Variables ***
-${SCREENS}      ${SCREENS ROOT}${/}api
+${SCREENS}      ${SCREENS ROOT}${/}api${/}shapes
 
 
 *** Test Cases ***
-ForceGraph Can Update background_color
-    Color Feature Works As Expected    ForceGraph    background_color
+ForceGraph Can Update Text Fill
+    Shape Feature Works As Expected    ForceGraph    Text    fill
 
-ForceGraph Can Update default_link_color
-    Color Feature Works As Expected    ForceGraph    default_link_color
+ForceGraph Can Update Text Background
+    Shape Feature Works As Expected    ForceGraph    Text    background
 
-ForceGraph Can Update default_node_color
-    Color Feature Works As Expected    ForceGraph    default_node_color
+ForceGraph Can Update Text Stroke
+    Shape Feature Works As Expected    ForceGraph    Text    stroke
 
-ForceGraph3D Can Update background_color
-    Color Feature Works As Expected    ForceGraph3D    background_color
+ForceGraph Can Update Ellipse Fill
+    Shape Feature Works As Expected    ForceGraph    Ellipse    fill
 
-ForceGraph3D Can Update default_link_color
-    Color Feature Works As Expected    ForceGraph3D    default_link_color
-
-ForceGraph3D Can Update default_node_color
-    Color Feature Works As Expected    ForceGraph3D    default_node_color
+ForceGraph Can Update Ellipse Stroke
+    Shape Feature Works As Expected    ForceGraph    Ellipse    stroke
 
 
 *** Keywords ***
-Color Feature Works As Expected
-    [Arguments]    ${widget_class}    ${feature}
-    ${screens} =    Set Variable    ${SCREENS}${/}${widget_class.lower()}_${feature}
-    Maybe Skip A Test    widget_class=${widget_class}    feature=${feature}
+Shape Feature Works As Expected
+    [Arguments]    ${widget_class}    ${shape_class}    ${feature}
+    ${screens} =    Set Variable    ${SCREENS}${/}${widget_class.lower()}${/}${shape_class.lower()}${/}${feature}
+    Maybe Skip A Test    widget_class=${widget_class}    feature=${feature}    shape_class=${shape_class}
     Set Screenshot Directory    ${screens}
-    Set Up Color Example    ${feature}    ${widget_class}
+    Set Up Shape Example    ${widget_class}    ${shape_class}    ${feature}
     ${frame} =    Set Variable    css:${IPYFORCEGRAPH FRAME}
     ${transparent} =    Get Element Screenshot Size    ${frame}    ${screens}    01-transparent.png
     Add And Run JupyterLab Code Cell
-    ...    fg.${feature} = "rgba(255, 0, 0, 1.0)"
+    ...    shape.${feature} = "rgba(255, 0, 0, 1.0)"
     Wait For All Cells To Run
     Sleep    1s
     ${color} =    Get Element Screenshot Size    ${frame}    ${screens}    02-color.png
     Should Be True Or Screenshot    ${color} > ${transparent}    03-color-bigger-than-transparent.png
-    [Teardown]    Clean Up Color Example
+    [Teardown]    Clean Up Shape Example
 
-Set Up Color Example
-    [Arguments]    ${feature}    ${widget_class}
-    Set Tags    feature:${feature}    widget:${widget_class.lower()}
-    ${text} =    Get File    ${IPYFORCEGRAPH_FIXTURES}${/}api${/}Colors.py
+Set Up Shape Example
+    [Arguments]    ${widget_class}    ${shape_class}    ${feature}
+    Set Tags    feature:${feature}    widget:${widget_class.lower()}    shape:${shape_class.lower()}
+    ${text} =    Get File    ${IPYFORCEGRAPH_FIXTURES}${/}api${/}NodeShapes.py
     ${text} =    Set Variable    ${text.replace("WIDGET_CLASS", "${widget_class}")}
+    ${text} =    Set Variable    ${text.replace("SHAPE_CLASS", "${shape_class}")}
     ${text} =    Set Variable    ${text.replace("FEATURE", "${feature}")}
     Launch A New JupyterLab Document
     Set CodeMirror Value    .jp-CodeCell .CodeMirror    ${text.strip()}
@@ -65,7 +63,7 @@ Set Up Color Example
     Wait Until Force Graph Is Visible
     Capture Page Screenshot    00-start.png
 
-Clean Up Color Example
+Clean Up Shape Example
     Capture Page Screenshot    99-fin.png
     ${nb_dir} =    Get Jupyter Directory
     Remove File    ${nb_dir}${/}Untitled.ipynb

@@ -1,7 +1,3 @@
-{% set shapes = {
-    "Text": ["fill", "background", "stroke"],
-    "Ellipse": ["fill", "stroke"],
-} %}
 *** Settings ***
 Resource        ../_resources/keywords/Server.robot
 Resource        ../_resources/keywords/Browser.robot
@@ -12,46 +8,41 @@ Library         Collections
 Library         JupyterLibrary
 Library         OperatingSystem
 
-Force Tags      suite:shapes
+Force Tags      suite:colors
 
 
 *** Variables ***
-${SCREENS}      ${SCREENS ROOT}${/}api${/}shapes
+${SCREENS}      ${SCREENS ROOT}${/}api
 
 *** Test Cases ***
-{% for graph_class in ["ForceGraph", "ForceGraph3D"] %}
-    {% for shape_class, features in shapes.items() %}
-        {% for feature in features %}
-{{ graph_class }} Can Update {{ shape_class }} {{ feature.title() }}
-    Shape Feature Works As Expected  {{ graph_class }}  {{ shape_class }}  {{ feature}}
-        {%- endfor %}
-    {%- endfor %}
-{%- endfor %}
+{% for feature in ["background_color", "default_link_color", "default_node_color"] %}
+{{ graph_class }} Can Update {{ feature }}
+    Color Feature Works As Expected  {{ graph_class }}  {{ feature}}
+{% endfor %}
 
 
 *** Keywords ***
-Shape Feature Works As Expected
-    [Arguments]    ${widget_class}  ${shape_class}  ${feature}
-    ${screens} =    Set Variable    ${SCREENS}${/}${widget_class.lower()}${/}${shape_class.lower()}${/}${feature}
-    Maybe Skip A Test    widget_class=${widget_class}   feature=${feature}  shape_class=${shape_class}
+Color Feature Works As Expected
+    [Arguments]    ${widget_class}    ${feature}
+    ${screens} =    Set Variable    ${SCREENS}${/}${widget_class.lower()}_${feature}
+    Maybe Skip A Test    widget_class=${widget_class}   feature=${feature}
     Set Screenshot Directory    ${screens}
-    Set Up Shape Example    ${widget_class}  ${shape_class}  ${feature}
+    Set Up Color Example    ${feature}    ${widget_class}
     ${frame} =   Set Variable   css:${IPYFORCEGRAPH FRAME}
     ${transparent} =    Get Element Screenshot Size    ${frame}  ${screens}    01-transparent.png
     Add And Run JupyterLab Code Cell
-    ...    shape.${feature} = "rgba(255, 0, 0, 1.0)"
+    ...    fg.${feature} = "rgba(255, 0, 0, 1.0)"
     Wait For All Cells To Run
     Sleep    1s
     ${color} =   Get Element Screenshot Size    ${frame}    ${screens}    02-color.png
     Should Be True Or Screenshot    ${color} > ${transparent}  03-color-bigger-than-transparent.png
-    [Teardown]    Clean Up Shape Example
+    [Teardown]    Clean Up Color Example
 
-Set Up Shape Example
-    [Arguments]    ${widget_class}  ${shape_class}   ${feature}
-    Set Tags    feature:${feature}    widget:${widget_class.lower()}  shape:${shape_class.lower()}
-    ${text} =    Get File    ${IPYFORCEGRAPH_FIXTURES}${/}api${/}NodeShapes.py
+Set Up Color Example
+    [Arguments]    ${feature}    ${widget_class}
+    Set Tags    feature:${feature}    widget:${widget_class.lower()}
+    ${text} =    Get File    ${IPYFORCEGRAPH_FIXTURES}${/}api${/}Colors.py
     ${text} =    Set Variable    ${text.replace("WIDGET_CLASS", "${widget_class}")}
-    ${text} =    Set Variable    ${text.replace("SHAPE_CLASS", "${shape_class}")}
     ${text} =    Set Variable    ${text.replace("FEATURE", "${feature}")}
     Launch A New JupyterLab Document
     Set CodeMirror Value    .jp-CodeCell .CodeMirror    ${text.strip()}
@@ -60,7 +51,7 @@ Set Up Shape Example
     Wait Until Force Graph Is Visible
     Capture Page Screenshot    00-start.png
 
-Clean Up Shape Example
+Clean Up Color Example
     Capture Page Screenshot    99-fin.png
     ${nb_dir} =    Get Jupyter Directory
     Remove File    ${nb_dir}${/}Untitled.ipynb
