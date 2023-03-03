@@ -91,22 +91,10 @@
         "bundled": false,
         "singleton": true
       },
-      "@bokuweb/zstd-wasm": {
-        "bundled": true
-      },
       "buffer": {
         "bundled": true
       },
       "nunjucks": {
-        "bundled": true
-      },
-      "d3-force-3d": {
-        "bundled": true
-      },
-      "d3-force-cluster-3d": {
-        "bundled": true
-      },
-      "three-spritetext": {
         "bundled": true
       }
     }
