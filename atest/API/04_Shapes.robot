@@ -51,7 +51,7 @@ ForceGraph3D Can Update Ellipse Stroke
 Shape Feature Works As Expected
     [Arguments]    ${widget_class}    ${shape_class}    ${feature}
     ${screens} =    Set Variable    ${SCREENS}${/}${widget_class.lower()}${/}${shape_class.lower()}${/}${feature}
-    Maybe Skip A Test    widget_class=${widget_class}    feature=${feature}
+    Maybe Skip A Test    widget_class=${widget_class}    feature=${feature}    shape_class=${shape_class}
     Set Screenshot Directory    ${screens}
     Set Up Shape Example    ${widget_class}    ${shape_class}    ${feature}
     ${frame} =    Set Variable    css:${IPYFORCEGRAPH FRAME}
