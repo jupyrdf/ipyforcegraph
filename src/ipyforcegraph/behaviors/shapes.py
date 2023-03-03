@@ -61,7 +61,7 @@ class Text(HasFillAndStroke):
         "whether font size/stroke respects the global scale", boolish=True
     )
 
-    def __init__(self, text: TFeature, **kwargs: Any):
+    def __init__(self, text: Optional[TFeature] = None, **kwargs: Any):
         if text is not None:
             kwargs["text"] = text
         super().__init__(**kwargs)

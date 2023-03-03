@@ -104,7 +104,10 @@ export class EllipseShapeModel extends ShapeBaseModel {
 
     const _THREE: typeof THREE = iframeClasses.THREE;
 
-    const geometry = new _THREE.SphereGeometry(width, height, depth);
+    const geometry = new _THREE.SphereGeometry(width);
+    geometry.applyMatrix4(
+      new _THREE.Matrix4().makeScale(1.0, height / width, depth / width)
+    );
     const material = new _THREE.MeshLambertMaterial({
       color: fill,
       transparent: true,
