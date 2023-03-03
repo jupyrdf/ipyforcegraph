@@ -31,6 +31,12 @@ ForceGraph Can Update Ellipse Fill
 ForceGraph Can Update Ellipse Stroke
     Shape Feature Works As Expected    ForceGraph    Ellipse    stroke
 
+ForceGraph Can Update Rectangle Fill
+    Shape Feature Works As Expected    ForceGraph    Rectangle    fill
+
+ForceGraph Can Update Rectangle Stroke
+    Shape Feature Works As Expected    ForceGraph    Rectangle    stroke
+
 
 *** Keywords ***
 Shape Feature Works As Expected

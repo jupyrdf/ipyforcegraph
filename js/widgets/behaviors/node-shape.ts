@@ -15,7 +15,8 @@ import {
   INodeThreeBehaveOptions,
 } from '../../tokens';
 
-import { BehaviorModel, ShapeBaseModel } from './base';
+import { BehaviorModel } from './base';
+import type { ShapeBaseModel } from './shapes/base';
 
 export class NodeShapeModel extends BehaviorModel implements IBehave {
   static model_name = 'NodeShapeModel';

@@ -5,3 +5,4 @@
 
 export * from './text';
 export * from './ellipse';
+export * from './rectangle';

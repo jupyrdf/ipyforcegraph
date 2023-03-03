@@ -7,9 +7,8 @@ import type SpriteText from 'three-spritetext';
 import { unpack_models as deserialize } from '@jupyter-widgets/base';
 
 import { INodeCanvasBehaveOptions, INodeThreeBehaveOptions } from '../../../tokens';
-import { ShapeBaseModel } from '../base';
 
-import { IBaseOptions, ITextOptions, TEXT_DEFAULTS } from './base';
+import { IBaseOptions, ITextOptions, ShapeBaseModel, TEXT_DEFAULTS } from './base';
 
 export class TextShapeModel extends ShapeBaseModel {
   static model_name = 'TextShapeModel';

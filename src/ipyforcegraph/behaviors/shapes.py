@@ -33,7 +33,23 @@ def _make_trait(
     ).tag(sync=True, **W.widget_serialization)
 
 
-class HasFillAndStroke(ShapeBase):
+class HasScale(ShapeBase):
+    """A shape that has ``scale_on_zoom``."""
+
+    _model_name: str = T.Unicode("HasScaleModel").tag(sync=True)
+
+    scale_on_zoom: TBoolFeature = _make_trait(
+        "whether font size/stroke respects the global scale", boolish=True
+    )
+
+    @T.validate("scale_on_zoom")
+    def _validate_scale_bools(self, proposal: T.Bunch) -> Any:
+        return coerce(proposal, JSON_TYPES.boolean)
+
+
+class HasFillAndStroke(HasScale):
+    """A shape that has ``fill`` and ``stroke``."""
+
     _model_name: str = T.Unicode("HasFillModel").tag(sync=True)
     fill: TFeature = _make_trait("the fill color of a shape")
     stroke: TFeature = _make_trait("the stroke color of a shape")
@@ -41,6 +57,21 @@ class HasFillAndStroke(ShapeBase):
 
     @T.validate("stroke_width")
     def _validate_has_fill_and_stroke_numerics(self, proposal: T.Bunch) -> Any:
+        return coerce(proposal, JSON_TYPES.number)
+
+
+class HasDimensions(HasFillAndStroke):
+    """A shape that has ``width``, ``height`` and ``depth``."""
+
+    _model_name: str = T.Unicode("HasDimensionsModel").tag(sync=True)
+
+    width: TNumFeature = _make_trait("the width of a shape in ``px``", numeric=True)
+    height: TNumFeature = _make_trait("the height of a shape in ``px``", numeric=True)
+    depth: TNumFeature = _make_trait("the depth of a shape in ``px``", numeric=True)
+    opacity: TNumFeature = _make_trait("the opacity of a shape", numeric=True)
+
+    @T.validate("width", "height", "depth", "opacity")
+    def _validate_dimension_numerics(self, proposal: T.Bunch) -> Any:
         return coerce(proposal, JSON_TYPES.number)
 
 
@@ -57,9 +88,6 @@ class Text(HasFillAndStroke):
     padding: TNumFeature = _make_trait(
         "the padding around the shape in ``px``", numeric=True
     )
-    scale_on_zoom: TBoolFeature = _make_trait(
-        "whether font size/stroke respects the global scale", boolish=True
-    )
 
     def __init__(self, text: Optional[TFeature] = None, **kwargs: Any):
         if text is not None:
@@ -70,30 +98,16 @@ class Text(HasFillAndStroke):
     def _validate_text_numerics(self, proposal: T.Bunch) -> Any:
         return coerce(proposal, JSON_TYPES.number)
 
-    @T.validate("scale_on_zoom")
-    def _validate_text_bools(self, proposal: T.Bunch) -> Any:
-        return coerce(proposal, JSON_TYPES.boolean)
-
 
 @W.register
-class Ellipse(HasFillAndStroke):
+class Ellipse(HasDimensions):
     """Draw an ellipse shape."""
 
     _model_name: str = T.Unicode("EllipseShapeModel").tag(sync=True)
 
-    width: TNumFeature = _make_trait("the width of a shape in ``px``", numeric=True)
-    height: TNumFeature = _make_trait("the height of a shape in ``px``", numeric=True)
-    depth: TNumFeature = _make_trait("the depth of a shape in ``px``", numeric=True)
-    opacity: TNumFeature = _make_trait("the opacity of a shape", numeric=True)
 
-    scale_on_zoom: TBoolFeature = _make_trait(
-        "whether font size/stroke respects the global scale", boolish=True
-    )
+@W.register
+class Rectangle(HasDimensions):
+    """Draw a rectangle shape."""
 
-    @T.validate("width", "height", "depth", "opacity")
-    def _validate_ellipse_numerics(self, proposal: T.Bunch) -> Any:
-        return coerce(proposal, JSON_TYPES.number)
-
-    @T.validate("scale_on_zoom")
-    def _validate_ellipse_bools(self, proposal: T.Bunch) -> Any:
-        return coerce(proposal, JSON_TYPES.boolean)
+    _model_name: str = T.Unicode("RectangleShapeModel").tag(sync=True)
