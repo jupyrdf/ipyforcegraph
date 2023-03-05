@@ -1,7 +1,3 @@
-/*
- * Copyright (c) 2023 ipyforcegraph contributors.
- * Distributed under the terms of the Modified BSD License.
- */
 import type THREE from 'three';
 
 import { JSONExt } from '@lumino/coreutils';
@@ -19,6 +15,10 @@ import {
 import { functor } from '../../../utils';
 import { BehaviorModel, DynamicModel } from '../base';
 
+/*
+ * Copyright (c) 2023 ipyforcegraph contributors.
+ * Distributed under the terms of the Modified BSD License.
+ */
 export interface IBaseOptions {
   context: CanvasRenderingContext2D;
   x: number;

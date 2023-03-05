@@ -61,4 +61,6 @@ export class NodeShapeModel extends BehaviorModel implements IBehave {
       }
     }
   }
+
+  // getNodeThreeGeometry
 }
