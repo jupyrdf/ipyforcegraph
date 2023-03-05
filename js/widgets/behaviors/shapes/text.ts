@@ -2,46 +2,20 @@
  * Copyright (c) 2023 ipyforcegraph contributors.
  * Distributed under the terms of the Modified BSD License.
  */
-import type { Sprite } from 'three';
 import type SpriteText from 'three-spritetext';
 
-import { JSONExt } from '@lumino/coreutils';
-
-import {
-  IBackboneModelOptions,
-  unpack_models as deserialize,
-} from '@jupyter-widgets/base';
+import { unpack_models as deserialize } from '@jupyter-widgets/base';
 
 import { INodeCanvasBehaveOptions, INodeThreeBehaveOptions } from '../../../tokens';
-import { functor } from '../../../utils';
-import { DynamicModel, ShapeBaseModel } from '../base';
 
-import { IBaseOptions, ITextOptions, TBoundingBox, TEXT_DEFAULTS } from './base';
-
-const FACETS = [
-  'text',
-  'font',
-  'size',
-  'fill',
-  'padding',
-  'background',
-  'scale_on_zoom',
-  'stroke',
-  'stroke_width',
-];
-
-const BOOL_FACETS = ['scale_on_zoom'];
-
-export type TFacet = (typeof FACETS)[number];
+import { IBaseOptions, ITextOptions, ShapeBaseModel, TEXT_DEFAULTS } from './base';
 
 export class TextShapeModel extends ShapeBaseModel {
   static model_name = 'TextShapeModel';
 
-  defaults() {
-    return { ...super.defaults(), _model_name: TextShapeModel.model_name };
+  protected get _modelClass(): typeof TextShapeModel {
+    return TextShapeModel;
   }
-
-  protected facets: Record<TFacet, Function> = JSONExt.emptyObject as any;
 
   static serializers = {
     ...ShapeBaseModel.serializers,
@@ -56,79 +30,33 @@ export class TextShapeModel extends ShapeBaseModel {
     scale_on_zoom: { deserialize },
   };
 
-  initialize(attributes: Backbone.ObjectHash, options: IBackboneModelOptions) {
-    super.initialize(attributes, options);
-    let events = '';
-    for (const facet of FACETS) {
-      events += `change:${facet} `;
-    }
-    this.on(events, this.onFacetsChanged, this);
-    void this.onFacetsChanged.call(this);
-  }
-
-  async onFacetsChanged() {
-    this.facets = JSONExt.emptyObject as any;
-    this._updateRequested.emit(void 0);
-  }
-
-  async ensureFacets() {
-    const facets: Record<string, Function> = {};
-    for (const facetName of FACETS) {
-      let facet = this.get(facetName);
-      if (facet instanceof DynamicModel) {
-        await facet.ensureHandlers();
-        facets[facetName] = facet.nodeHandler;
-        facet.updateRequested.connect(this.onFacetsChanged, this);
-        continue;
-      }
-
-      if (BOOL_FACETS.includes(facetName) && typeof facet === 'string') {
-        facet = !!JSON.parse(facet.toLowerCase());
-      }
-
-      if (facet != null) {
-        facets[facetName] = functor(facet);
-      }
-    }
-    this.facets = facets;
-  }
-
   drawNode2D(options: INodeCanvasBehaveOptions): void {
     const { context, node, globalScale } = options;
     const { x, y } = node;
 
-    let draw = { ...TEXT_DEFAULTS, context, node, globalScale, x, y };
-
-    for (const facetName of FACETS) {
-      if (this.facets[facetName]) {
-        draw[facetName] = this.facets[facetName](options);
-      }
-    }
-
-    this._drawCanvas(draw);
+    this._drawCanvas({
+      ...TEXT_DEFAULTS,
+      context,
+      globalScale,
+      x,
+      y,
+      ...this._resolveFacets(options),
+    });
   }
 
-  drawNode3D(options: INodeThreeBehaveOptions): Sprite {
+  drawNode3D(options: INodeThreeBehaveOptions): SpriteText {
     const { node, iframeClasses } = options;
     const { x, y } = node;
 
-    let draw = {
+    return this._drawThree({
       ...TEXT_DEFAULTS,
       context: null,
       globalScale: null,
-      node,
       x,
       y,
       iframeClasses,
-    };
-
-    for (const facetName of FACETS) {
-      if (this.facets[facetName]) {
-        draw[facetName] = this.facets[facetName](options);
-      }
-    }
-
-    return this._drawThree(draw);
+      ...this._resolveFacets(options),
+    });
   }
 
   protected _drawThree(options: ITextOptions & IBaseOptions): SpriteText {
@@ -172,7 +100,7 @@ export class TextShapeModel extends ShapeBaseModel {
     return sprite;
   }
 
-  protected _drawCanvas(options: ITextOptions & IBaseOptions): TBoundingBox {
+  protected _drawCanvas(options: ITextOptions & IBaseOptions): void {
     const {
       context,
       text,
@@ -212,6 +140,5 @@ export class TextShapeModel extends ShapeBaseModel {
 
     context.fillStyle = fill;
     context.fillText(text, x, y);
-    return bb;
   }
 }

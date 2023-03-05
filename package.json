@@ -91,9 +91,6 @@
         "bundled": false,
         "singleton": true
       },
-      "@bokuweb/zstd-wasm": {
-        "bundled": true
-      },
       "buffer": {
         "bundled": true
       },

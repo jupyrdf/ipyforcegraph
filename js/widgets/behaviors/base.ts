@@ -16,8 +16,6 @@ import {
   IHasGraph,
   ILinkBehaveOptions,
   INodeBehaveOptions,
-  INodeCanvasBehaveOptions,
-  INodeThreeBehaveOptions,
   TUpdateKind,
   WIDGET_DEFAULTS,
 } from '../../tokens';
@@ -203,19 +201,5 @@ export class LinkColumnOrTemplateModel
     }
 
     return value || null;
-  }
-}
-
-export class ShapeBaseModel extends BehaviorModel {
-  async ensureFacets() {
-    // nothing to see here
-  }
-
-  drawNode2D(options: INodeCanvasBehaveOptions): void {
-    return;
-  }
-
-  drawNode3D(options: INodeThreeBehaveOptions): Sprite | null {
-    return;
   }
 }

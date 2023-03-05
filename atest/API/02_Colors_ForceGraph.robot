@@ -25,15 +25,6 @@ ForceGraph Can Update default_link_color
 ForceGraph Can Update default_node_color
     Color Feature Works As Expected    ForceGraph    default_node_color
 
-ForceGraph3D Can Update background_color
-    Color Feature Works As Expected    ForceGraph3D    background_color
-
-ForceGraph3D Can Update default_link_color
-    Color Feature Works As Expected    ForceGraph3D    default_link_color
-
-ForceGraph3D Can Update default_node_color
-    Color Feature Works As Expected    ForceGraph3D    default_node_color
-
 
 *** Keywords ***
 Color Feature Works As Expected

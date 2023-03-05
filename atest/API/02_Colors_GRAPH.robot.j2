@@ -15,12 +15,10 @@ Force Tags      suite:colors
 ${SCREENS}      ${SCREENS ROOT}${/}api
 
 *** Test Cases ***
-{% for klass in ["ForceGraph", "ForceGraph3D"] %}
 {% for feature in ["background_color", "default_link_color", "default_node_color"] %}
-{{ klass }} Can Update {{ feature }}
-    Color Feature Works As Expected  {{ klass }}  {{ feature}}
-{%- endfor %}
-{%- endfor %}
+{{ graph_class }} Can Update {{ feature }}
+    Color Feature Works As Expected  {{ graph_class }}  {{ feature}}
+{% endfor %}
 
 
 *** Keywords ***

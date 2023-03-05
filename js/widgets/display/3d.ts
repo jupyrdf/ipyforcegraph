@@ -4,7 +4,7 @@
  */
 import type { ForceGraph3DGenericInstance, ForceGraph3DInstance } from '3d-force-graph';
 import type { NodeObject } from 'force-graph';
-import type { Sprite, WebGLRenderer } from 'three';
+import type THREE from 'three';
 
 import { INodeThreeBehaveOptions, IRenderOptions } from '../../tokens';
 
@@ -37,7 +37,10 @@ export class ForceGraph3DView extends ForceGraphView<
   }
 
   protected get extraJsClasses(): string {
-    return '{SpriteText: window.SpriteText}';
+    return `{
+      SpriteText: window.SpriteText,
+      THREE: window.THREE,
+    }`;
   }
 
   protected async getJsUrls(): Promise<string[]> {
@@ -57,9 +60,9 @@ export class ForceGraph3DView extends ForceGraphView<
     ];
   }
 
-  protected get threeRenderer(): WebGLRenderer {
+  protected get threeRenderer(): THREE.WebGLRenderer {
     const graph = this.graph as ForceGraph3DInstance;
-    return graph.renderer() as WebGLRenderer;
+    return graph.renderer() as THREE.WebGLRenderer;
   }
 
   protected getOnRenderPostUpdate() {
@@ -78,8 +81,8 @@ export class ForceGraph3DView extends ForceGraphView<
     );
   }
 
-  protected getNodeThreeObject = (node: NodeObject): Sprite | null => {
-    let value: Sprite | null;
+  protected getNodeThreeObject = (node: NodeObject): THREE.Object3D | null => {
+    let value: THREE.Object3D | null;
     const graphData = (this.graph as ForceGraph3DInstance).graphData();
     const options: INodeThreeBehaveOptions = {
       view: this,

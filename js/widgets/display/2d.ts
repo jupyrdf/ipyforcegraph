@@ -378,9 +378,9 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
     (this.graph as any).graphData(graphData);
   }
 
-  wrapFunction(fn: Function) {
+  wrapFunction = (fn: Function) => {
     return (this._iframe.contentWindow as any).wrapFunction(fn);
-  }
+  };
 
   onSourceChange(change?: any) {
     const { source, previousSource } = this;

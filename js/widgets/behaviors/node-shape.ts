@@ -2,7 +2,7 @@
  * Copyright (c) 2023 ipyforcegraph contributors.
  * Distributed under the terms of the Modified BSD License.
  */
-import type { Sprite } from 'three';
+import type THREE from 'three';
 
 import {
   IBackboneModelOptions,
@@ -15,7 +15,8 @@ import {
   INodeThreeBehaveOptions,
 } from '../../tokens';
 
-import { BehaviorModel, ShapeBaseModel } from './base';
+import { BehaviorModel } from './base';
+import type { ShapeBaseModel } from './shapes/base';
 
 export class NodeShapeModel extends BehaviorModel implements IBehave {
   static model_name = 'NodeShapeModel';
@@ -52,7 +53,7 @@ export class NodeShapeModel extends BehaviorModel implements IBehave {
     }
   }
 
-  getNodeThreeObject(options: INodeThreeBehaveOptions): Sprite | null {
+  getNodeThreeObject(options: INodeThreeBehaveOptions): THREE.Object3D | null {
     for (const shape of this.shapes) {
       const obj = shape.drawNode3D(options);
       if (obj) {
