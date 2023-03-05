@@ -8,7 +8,7 @@ from .forces import GraphForces
 from .particles import Particles
 from .recording import GraphData, GraphImage
 from .selection import LinkSelection, NodeSelection
-from .style import LinkArrows, LinkShapes, NodeShapes
+from .shapes import LinkArrows, LinkShapes, NodeShapes
 from .tooltip import LinkTooltip, NodeTooltip
 
 __all__ = [
