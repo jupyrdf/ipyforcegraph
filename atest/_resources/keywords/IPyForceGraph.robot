@@ -108,7 +108,7 @@ Wait Until No Tag Widgets Exist
 
 Maybe Skip A Test
     [Documentation]    Capture common reasons for skipping tests
-    [Arguments]    ${widget_class}=${EMPTY}    ${example}=${EMPTY}    ${feature}=${EMPTY}
+    [Arguments]    ${widget_class}=${EMPTY}    ${example}=${EMPTY}    ${feature}=${EMPTY}    ${shape_class}=${EMPTY}
     IF    "${OS}" == "Darwin"
         IF    "${feature}" in ["default_link_color", "default_node_color", "reheat"]
             Pass Execution    Can't test canvas feature on MacOS
@@ -118,9 +118,20 @@ Maybe Skip A Test
             Pass Execution    Can't test 3d canvas on MacOS
             ...    skip:darwin:3d
         END
+        IF    "${shape_class}"
+            Pass Execution    Can't test shapes on MacOS
+            ...    skip:darwin:shapes
+        END
     ELSE IF    "${OS}" == "Windows"
         IF    "${example}" == "${FORCES_TEST}"
             Pass Execution    Windows asyncio issues
             ...    skip:windows:asyncio
+        END
+    END
+
+    IF    "${widget_class}" == "${IPYFORCEGRAPH CLASS 3D}"
+        IF    "${feature}" == "stroke" and "${shape_class}" != "Text"
+            Pass Execution    Don't yet support Three.js stroke on non-text geometry
+            ...    skip:3d:stroke
         END
     END

@@ -9,6 +9,7 @@ import { Environment, Template } from 'nunjucks';
 import { PromiseDelegate } from '@lumino/coreutils';
 
 import { DEBUG, EMOJI } from './tokens';
+import { noop } from './utils';
 
 export const MATH_CONST = {
   E: Math.E,
@@ -49,14 +50,6 @@ export const MATH_UNARY = [
 export const MATH_BINARY = [Math.imul, Math.atan2];
 
 export const MATH_N_ARY = [Math.min, Math.max];
-
-export function isNumeric(val: string): boolean {
-  return !isNaN(Number(val));
-}
-
-function noop() {
-  return null;
-}
 
 namespace Private {
   export let env: Environment | null = null;

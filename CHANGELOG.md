@@ -1,5 +1,44 @@
 # Changelog
 
+## `0.3.0` (unreleased)
+
+### `ipyforcegraph 0.3.0`
+
+- Adds a configurable `NodeShape`, compatible with both `ForceGraph` and `ForceGraph3D`
+
+#### Breaking Changes
+
+- the `column_name` and `template` features of `Behaviors` are consolidated into the
+  `Nunjucks` and `Column` classes
+  - each has a single `value`,
+  - and may be `coerce`d into a specific JS-compatible type (e.g. `boolean` or `number`)
+- most dynamic behaviors have been merged to use this pattern, diverging from the
+  upstream JS API in favor of more idiomatic, compact descriptions. For example, for
+  link arrows:
+
+  - `0.2.x`
+    ```py
+    graph.behaviors = [
+        LinkDirectionalArrowColor(column="color"),
+        LinkDirectionalArrowLength(template="10"),
+        LinkDirectionalArrowRelPos(template="{{ link.value / 10 }}"),
+    ]
+    ```
+  - `0.3.x`
+    ```py
+    graph.behaviors = [
+        LinkArrows(
+            color=Column("color"),
+            length=1.0,
+            relative_position=Nunjucks("{{ link.value / 10 }}")
+        ),
+    ]
+    ```
+
+### `@jupyrdf/jupyter-forcegraph 0.3.0`
+
+> TBD
+
 ## `0.2.1` (unreleased)
 
 ### `ipyforcegraph 0.2.1`

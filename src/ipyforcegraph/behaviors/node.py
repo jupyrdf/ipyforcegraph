@@ -3,12 +3,12 @@
 # Copyright (c) 2023 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.
 
-from typing import Optional, Tuple, Union
+from typing import Any, Optional, Sequence, Tuple, Union
 
 import ipywidgets as W
 import traitlets as T
 
-from ._base import Behavior
+from ._base import Behavior, ShapeBase
 
 
 @W.register
@@ -92,3 +92,21 @@ class NodeColors(Behavior):
         allow_none=True,
         help="a nunjucks template to use to calculate colors",
     ).tag(sync=True)
+
+
+@W.register
+class NodeShapes(Behavior):
+    """Change the shape of nodes using declarative statements."""
+
+    _model_name: str = T.Unicode("NodeShapeModel").tag(sync=True)
+
+    shapes: Tuple[ShapeBase] = W.TypedTuple(
+        T.Instance(ShapeBase),
+        help="the shapes to draw for each ``node``",
+    ).tag(sync=True, **W.widget_serialization)
+
+    def __init__(self, *shapes: Union[Sequence[ShapeBase], ShapeBase], **kwargs: Any):
+        if len(shapes) == 1 and isinstance(shapes, list):
+            shapes = shapes[0]
+        kwargs["shapes"] = shapes
+        super().__init__(**kwargs)

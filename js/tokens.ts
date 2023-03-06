@@ -4,7 +4,7 @@
  */
 import d3Force3d from 'd3-force-3d';
 import type { GraphData, LinkObject, NodeObject } from 'force-graph';
-import type { WebGLRenderer } from 'three';
+import type THREE from 'three';
 
 import type { ISignal } from '@lumino/signaling';
 
@@ -78,6 +78,8 @@ export interface IBehave {
   getNodeColor?(options: INodeBehaveOptions): string | null;
   getNodeLabel?(options: INodeBehaveOptions): string | null;
   getNodeSize?(options: INodeBehaveOptions): string | null;
+  getNodeCanvasObject?(options: INodeCanvasBehaveOptions): any;
+  getNodeThreeObject?(options: INodeThreeBehaveOptions): THREE.Object3D | null;
   // evented
   onNodeClick?(options: INodeEventBehaveOptions): boolean;
   onLinkClick?(options: ILinkEventBehaveOptions): boolean;
@@ -103,6 +105,8 @@ export const ALL_NODE_METHODS = [
   'getNodeLabel',
   'getNodeColor',
   'getNodeSize',
+  'getNodeCanvasObject',
+  'getNodeThreeObject',
   'onNodeClick',
 ];
 export type TNodeBehaveMethod = (typeof ALL_NODE_METHODS)[number];
@@ -123,6 +127,15 @@ export interface INodeBehaveOptions extends IBehaveOptions {
   node: NodeObject;
 }
 
+export interface INodeCanvasBehaveOptions extends INodeBehaveOptions {
+  context: CanvasRenderingContext2D;
+  globalScale: number;
+}
+
+export interface INodeThreeBehaveOptions extends INodeBehaveOptions {
+  iframeClasses: Record<string, any>;
+}
+
 export interface INodeEventBehaveOptions extends INodeBehaveOptions {
   event: MouseEvent;
 }
@@ -138,7 +151,7 @@ export interface ILinkEventBehaveOptions extends ILinkBehaveOptions {
 
 export interface IRenderOptions extends IBehaveOptions {
   context2d?: CanvasRenderingContext2D;
-  renderer3d?: WebGLRenderer;
+  renderer3d?: THREE.WebGLRenderer;
   globalScale?: number;
   time?: number;
 }
@@ -174,8 +187,32 @@ export type TSelectedSet = Set<string | number>;
 
 export const emptyArray = Object.freeze([]);
 
+export interface IDynamicCallable {
+  (...args: any): string;
+}
+
 export type TCustomAction = 'reheat';
 
 export interface IActionMessage {
   action: TCustomAction;
+}
+
+/**
+ * Strings that should be interpreted as `false` after being lowercased and trimmed.
+ */
+export const FALSEY = Object.freeze([
+  '',
+  '0',
+  'false',
+  'nan',
+  '[]',
+  '{}',
+  'none',
+  'null',
+  '()',
+]);
+
+export enum ECoerce {
+  boolish = 'boolean',
+  numeric = 'number',
 }

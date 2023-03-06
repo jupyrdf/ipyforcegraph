@@ -8,8 +8,9 @@ import { NodeObject } from 'force-graph/dist/force-graph';
 
 import { IBackboneModelOptions } from '@jupyter-widgets/base';
 
-import { isNumeric, makeForceNodeTemplate } from '../../../template-utils';
+import { makeForceNodeTemplate } from '../../../template-utils';
 import { IBehave, IForce, TAnyForce } from '../../../tokens';
+import { isNumeric } from '../../../utils';
 
 import { ForceBehaviorModel } from './force';
 

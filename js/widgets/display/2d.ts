@@ -39,6 +39,7 @@ import {
   ILinkBehaveOptions,
   ILinkEventBehaveOptions,
   INodeBehaveOptions,
+  INodeCanvasBehaveOptions,
   INodeEventBehaveOptions,
   IRenderOptions,
   ISource,
@@ -203,6 +204,7 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
 
   protected _rendered: PromiseDelegate<void>;
   protected _iframe: HTMLIFrameElement | null;
+  protected _iframeClasses: Record<string, any>;
 
   get source(): ISource {
     return this.model.get('source');
@@ -284,7 +286,10 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
     const iframe = event.currentTarget as HTMLIFrameElement;
     const { contentWindow } = iframe;
 
-    const graph: ForceGraphInstance = (contentWindow as any).init();
+    const initResult = (contentWindow as any).init();
+
+    const graph: ForceGraphInstance = initResult.graph;
+    this._iframeClasses = initResult.iframeClasses;
     this.graph = graph as any;
     contentWindow.addEventListener('resize', this.onWindowResize);
     this._rendered.resolve(void 0);
@@ -298,24 +303,36 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
     graph.height(contentWindow.innerHeight);
   };
 
-  protected async getJsUrl(): Promise<string> {
-    return (
-      await import(
-        '!!file-loader!../../../node_modules/force-graph/dist/force-graph.js'
-      )
-    ).default as any;
+  protected async getJsUrls(): Promise<string[]> {
+    return [
+      (
+        await import(
+          '!!file-loader!../../../node_modules/force-graph/dist/force-graph.js'
+        )
+      ).default as any,
+    ];
   }
 
   protected get graphJsClass(): string {
     return 'ForceGraph';
   }
 
+  protected get extraJsClasses(): string {
+    return '{}';
+  }
+
   protected async getIframeSource(): Promise<string> {
-    let url = await this.getJsUrl();
+    let urls = await this.getJsUrls();
+
+    let scripts = '';
+
+    for (const url of urls) {
+      scripts += `<script src="${url}"></script>\n`;
+    }
 
     let src = `
       <head>
-        <script src="${url}"></script>
+        ${scripts}
         <style>
           body, #main {
             overflow: hidden;
@@ -339,7 +356,10 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
           window.init = (args) => {
             const div = document.createElement('div');
             document.body.appendChild(div);
-            return ${this.graphJsClass}(args || {})(div);
+            return {
+              graph: ${this.graphJsClass}(args || {})(div),
+              iframeClasses: ${this.extraJsClasses}
+            };
           }
           window.wrapFunction = (fn) => {
             return (...args) => fn(...args);
@@ -358,9 +378,9 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
     (this.graph as any).graphData(graphData);
   }
 
-  wrapFunction(fn: Function) {
+  wrapFunction = (fn: Function) => {
     return (this._iframe.contentWindow as any).wrapFunction(fn);
-  }
+  };
 
   onSourceChange(change?: any) {
     const { source, previousSource } = this;
@@ -545,6 +565,13 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
 
   protected getOnRenderPostUpdate() {
     const graph = this.graph as ForceGraphInstance;
+
+    graph.nodeCanvasObject(
+      this.model.nodeBehaviorsForMethod('getNodeCanvasObject').length
+        ? this.wrapFunction(this.getNodeCanvasObject)
+        : null
+    );
+
     graph.onRenderFramePost(
       this.model.graphBehaviorsForMethod('onRender').length
         ? this.wrapFunction(this.onRender)
@@ -662,6 +689,30 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
 
   protected getNodeSize = (node: NodeObject): string => {
     return this.getComposedNodeAttr(node, 'getNodeSize', this.model.defaultNodeSize);
+  };
+
+  protected getNodeCanvasObject = (
+    node: NodeObject,
+    context: CanvasRenderingContext2D,
+    globalScale: number
+  ): void => {
+    let value: string | null;
+    const graphData = (this.graph as ForceGraphInstance).graphData();
+    const options: INodeCanvasBehaveOptions = {
+      view: this,
+      context,
+      graphData,
+      node,
+      globalScale,
+    };
+
+    for (const behavior of this.model.nodeBehaviorsForMethod('getNodeCanvasObject')) {
+      let method = behavior.getNodeCanvasObject;
+      value = method.call(behavior, options);
+      if (value != null) {
+        break;
+      }
+    }
   };
 
   getComposedNodeAttr(
