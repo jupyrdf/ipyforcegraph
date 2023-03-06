@@ -118,6 +118,10 @@ Maybe Skip A Test
             Pass Execution    Can't test 3d canvas on MacOS
             ...    skip:darwin:3d
         END
+        IF    "${shape_class}"
+            Pass Execution    Can't test shapes on MacOS
+            ...    skip:darwin:shapes
+        END
     ELSE IF    "${OS}" == "Windows"
         IF    "${example}" == "${FORCES_TEST}"
             Pass Execution    Windows asyncio issues
