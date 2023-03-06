@@ -197,10 +197,22 @@ export interface IActionMessage {
   action: TCustomAction;
 }
 
-export const FALSEY = ['', '0', 'false'];
+/**
+ * Strings that should be interpreted as `false` after being lowercased and trimmed.
+ */
+export const FALSEY = Object.freeze([
+  '',
+  '0',
+  'false',
+  'nan',
+  '[]',
+  '{}',
+  'none',
+  'null',
+  '()',
+]);
 
 export enum ECoerce {
   boolish = 'boolean',
   numeric = 'number',
-  nullish = 'null',
 }
