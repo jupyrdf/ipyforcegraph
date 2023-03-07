@@ -91,6 +91,7 @@ class Rectangle(HasDimensions):
 
     _model_name: str = T.Unicode("RectangleShapeModel").tag(sync=True)
 
+
 @W.register
 class NodeShapes(Behavior):
     """Change the shape of nodes using declarative statements."""
