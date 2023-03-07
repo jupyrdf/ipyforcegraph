@@ -8,15 +8,14 @@ from .forces import GraphForces
 from .particles import Particles
 from .recording import GraphData, GraphImage
 from .selection import LinkSelection, NodeSelection
-from .shapes import LinkArrows, LinkShapes, NodeShapes
+from .shapes import Ellipse, LinkArrows, LinkShapes, NodeShapes, Rectangle, Text
 from .tooltip import LinkTooltip, NodeTooltip
 
-__all__ = [
-    "Column",
-    "Nunjucks",
+__all__ = (
     "Behavior",
     "Column",
     "DynamicValue",
+    "Ellipse",
     "GraphData",
     "GraphForces",
     "GraphImage",
@@ -29,4 +28,6 @@ __all__ = [
     "NodeTooltip",
     "Nunjucks",
     "Particles",
-]
+    "Rectangle",
+    "Text",
+)
