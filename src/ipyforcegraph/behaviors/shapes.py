@@ -91,19 +91,16 @@ class Rectangle(HasDimensions):
 
     _model_name: str = T.Unicode("RectangleShapeModel").tag(sync=True)
 
-
 @W.register
 class NodeShapes(Behavior):
-    """Change the shape of ``nodes`` using declarative statements."""
+    """Change the shape of nodes using declarative statements."""
 
     _model_name: str = T.Unicode("NodeShapeModel").tag(sync=True)
 
-    color: TFeature = _make_trait("the color of the node")
     shapes: Tuple[ShapeBase] = W.TypedTuple(
         T.Instance(ShapeBase),
         help="the shapes to draw for each ``node``",
     ).tag(sync=True, **W.widget_serialization)
-    size: TFeature = _make_trait("the size of the node", numeric=True)
 
     def __init__(self, *shapes: Union[Sequence[ShapeBase], ShapeBase], **kwargs: Any):
         if len(shapes) == 1 and isinstance(shapes, list):

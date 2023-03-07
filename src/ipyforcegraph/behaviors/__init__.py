@@ -11,7 +11,10 @@ from .selection import LinkSelection, NodeSelection
 from .shapes import LinkArrows, LinkShapes, NodeShapes
 from .tooltip import LinkTooltip, NodeTooltip
 
+
 __all__ = [
+    "Column",
+    "Nunjucks",
     "Behavior",
     "Column",
     "DataType",

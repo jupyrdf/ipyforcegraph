@@ -50,7 +50,6 @@ class ShapeBase(ForceBase):
 
     _model_name: str = T.Unicode("ShapeBaseModel").tag(sync=True)
 
-
 class DataType(enum.Enum):
     """Data types for the ``DynamicValue`` Widget."""
 
