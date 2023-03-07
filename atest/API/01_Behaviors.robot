@@ -32,7 +32,7 @@ ${SCREENS}      ${SCREENS ROOT}${/}api
     Wait Until No Tag Widgets Exist
 
 2D Node Labels
-    [Setup]    Set Up Behavior Example    NodeLabels    ${IPYFORCEGRAPH CLASS}
+    [Setup]    Set Up Behavior Example    NodeTooltip    ${IPYFORCEGRAPH CLASS}
     Click IPyForceGraph Canvas    text=hello world
 
 3D Node Select
@@ -50,7 +50,7 @@ ${SCREENS}      ${SCREENS ROOT}${/}api
     Wait Until No Tag Widgets Exist
 
 3D Node Labels
-    [Setup]    Set Up Behavior Example    NodeLabels    ${IPYFORCEGRAPH CLASS 3D}
+    [Setup]    Set Up Behavior Example    NodeTooltip    ${IPYFORCEGRAPH CLASS 3D}
     Click IPyForceGraph Canvas    text=hello world
 
 2D Graph Data
