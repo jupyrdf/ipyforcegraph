@@ -1,13 +1,19 @@
 import type THREE from 'three';
 
-import { unpack_models as deserialize } from '@jupyter-widgets/base';
+import { JSONExt } from '@lumino/coreutils';
+
+import {
+  IBackboneModelOptions,
+  unpack_models as deserialize,
+} from '@jupyter-widgets/base';
 
 import {
   EMOJI,
   INodeCanvasBehaveOptions,
   INodeThreeBehaveOptions,
 } from '../../../tokens';
-import { BehaviorModel } from '../base';
+import { functor } from '../../../utils';
+import { BehaviorModel, DynamicModel } from '../base';
 
 /*
  * Copyright (c) 2023 ipyforcegraph contributors.
@@ -100,12 +106,17 @@ export const TEXT_DEFAULTS: ITextOptions = Object.freeze({
 
 export class ShapeBaseModel extends BehaviorModel {
   /** Required in subclass. The model name should be unique between shapes.  */
-  static model_name = 'ShapeBaseModel';
+  static model_name = 'TextShapeModel';
 
   /** Required in subclass. All new traits of a shape might be dynamic  */
   static serializers = {
     ...BehaviorModel.serializers,
   };
+
+  /** Required in subclass. Provides acesss to active `__class__`. */
+  protected get _modelClass(): typeof ShapeBaseModel {
+    return ShapeBaseModel;
+  }
 
   /** Required in subclass. Draw a shape on a canvas. */
   drawNode2D(options: INodeCanvasBehaveOptions): void {
@@ -115,6 +126,58 @@ export class ShapeBaseModel extends BehaviorModel {
   /** Required in subclass. Draw a shape in Three.js. */
   drawNode3D(options: INodeThreeBehaveOptions): THREE.Object3D | null {
     return;
+  }
+
+  /** Facets are cached as handlers for a specific entity. */
+  protected _facets: Record<string, Function> = JSONExt.emptyObject as any;
+
+  /** Names of facets are calculated once, on initialization. */
+  protected _facetNames: string[] | null = null;
+
+  /** Lazily calculate asset names. */
+  protected get facetNames() {
+    if (this._facetNames == null) {
+      const baseKeys = [...Object.keys(ShapeBaseModel.serializers)];
+      const facetNames: string[] = [];
+      for (const key of Object.keys(this._modelClass.serializers)) {
+        if (baseKeys.includes(key)) {
+          continue;
+        }
+        facetNames.push(key);
+      }
+      this._facetNames = facetNames;
+    }
+    return this._facetNames;
+  }
+
+  /** Initialize the model and wire up listeners.  */
+  initialize(attributes: Backbone.ObjectHash, options: IBackboneModelOptions) {
+    super.initialize(attributes, options);
+    let events = '';
+    for (const facet of this.facetNames) {
+      events += `change:${facet} `;
+    }
+    this.on(events, this._onFacetsChanged, this);
+    void this._onFacetsChanged.call(this);
+  }
+
+  /** Populate facet handlers. */
+  async ensureFacets() {
+    const facets: Record<string, Function> = {};
+    for (const facetName of this.facetNames) {
+      let facet = this.get(facetName);
+      if (facet instanceof DynamicModel) {
+        await facet.ensureHandlers();
+        facets[facetName] = facet.nodeHandler;
+        facet.updateRequested.connect(this._onFacetsChanged, this);
+        continue;
+      }
+
+      if (facet != null) {
+        facets[facetName] = functor(facet);
+      }
+    }
+    this._facets = facets;
   }
 
   /** Evaluate all facets with the runtime shape*/
@@ -132,6 +195,12 @@ export class ShapeBaseModel extends BehaviorModel {
       }
     }
     return draw;
+  }
+
+  /** Handle the fact changing. */
+  protected async _onFacetsChanged() {
+    this._facets = JSONExt.emptyObject as any;
+    this._updateRequested.emit(void 0);
   }
 
   defaults() {
