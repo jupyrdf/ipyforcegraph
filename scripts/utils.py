@@ -135,12 +135,6 @@ def notebook_lint(ipynb: Path):
 
 def fix_windows_line_endings(max_chunk_size: int = 8000):
     """Break filelist into chunks for dos2unix call that converts CRLF to LF."""
-    if not P.WIN:
-        return dict(
-            name="dos2unix",
-            actions=[lambda: print(f"DOS2UNIX not needed on {P.PLATFORM}")],
-            targets=[P.OK_DOS2UNIX],
-        )
     num_files = len(P.ALL_DOS2UNIX)
     _chunks = [P.ALL_DOS2UNIX]
     while any(

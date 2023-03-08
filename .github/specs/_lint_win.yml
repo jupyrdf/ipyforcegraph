@@ -1,0 +1,5 @@
+_platforms:
+  - win-64
+
+dependencies:
+  - m2-dos2unix

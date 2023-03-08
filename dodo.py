@@ -605,9 +605,9 @@ def task_lint():
 
     yield _ok(
         dict(
-            name="fix-windows-line-endings",
+            name="dos2unix",
             file_dep=[*P.ALL_DOS2UNIX, *[*P.OK_NBLINT.values()]],
-            actions=[(U.fix_windows_line_endings)],
+            actions=[U.fix_windows_line_endings],
         ),
         P.OK_DOS2UNIX,
     )
