@@ -101,14 +101,11 @@ export class ForceGraphModel extends DOMWidgetModel {
     }
     const { behaviors } = this;
 
-    const activeBehaviors = new Set<IBehave>();
-
     for (let linkMethod of ALL_LINK_METHODS) {
       let methodBehaviors: IBehave[] = [];
       for (const behavior of behaviors) {
         if (behavior[linkMethod]) {
           methodBehaviors.push(behavior);
-          activeBehaviors.add(behavior);
         }
       }
       this._linkBehaviorsByMethod.set(linkMethod, methodBehaviors);
@@ -119,7 +116,6 @@ export class ForceGraphModel extends DOMWidgetModel {
       for (const behavior of behaviors) {
         if (behavior[nodeMethod]) {
           methodBehaviors.push(behavior);
-          activeBehaviors.add(behavior);
         }
       }
       this._nodeBehaviorsByMethod.set(nodeMethod, methodBehaviors);
@@ -130,7 +126,6 @@ export class ForceGraphModel extends DOMWidgetModel {
       for (const behavior of behaviors) {
         if (behavior[graphMethod]) {
           graphBehaviors.push(behavior);
-          activeBehaviors.add(behavior);
         }
       }
       this._graphBehaviorsByMethod.set(graphMethod, graphBehaviors);
@@ -140,21 +135,7 @@ export class ForceGraphModel extends DOMWidgetModel {
     for (const behavior of behaviors) {
       if (behavior instanceof GraphForcesModel) {
         this._forceBehaviors.push(behavior);
-        activeBehaviors.add(behavior);
       }
-    }
-
-    let facetPromises: Promise<void>[] = [];
-
-    for (const behavior of activeBehaviors) {
-      // TOOD: remove the any
-      if ((behavior as any).ensureFacets) {
-        facetPromises.push((behavior as any).ensureFacets());
-      }
-    }
-
-    if (facetPromises.length) {
-      await Promise.all(facetPromises);
     }
 
     this._behaviorsChanged.emit(void 0);
@@ -415,6 +396,21 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
     }
   }
 
+  protected async ensureAllFacets() {
+    let facetPromises: Promise<void>[] = [];
+
+    for (const behavior of this.model.behaviors) {
+      // TOOD: remove the any
+      if ((behavior as any).ensureFacets) {
+        facetPromises.push((behavior as any).ensureFacets());
+      }
+    }
+
+    if (facetPromises.length) {
+      await Promise.all(facetPromises);
+    }
+  }
+
   protected async postUpdate(caller?: any, kind?: TUpdateKind): Promise<void> {
     await this.rendered;
     const graph = this.graph as ForceGraphInstance;
@@ -422,6 +418,13 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
       console.warn(`${EMOJI} no graph to postUpdate`);
       return;
     }
+
+    if (kind && EUpdate.Behavior === (kind & EUpdate.Behavior)) {
+      await this.model.onBehaviorsChange();
+      return;
+    }
+
+    await this.ensureAllFacets();
 
     const {
       backgroundColor,

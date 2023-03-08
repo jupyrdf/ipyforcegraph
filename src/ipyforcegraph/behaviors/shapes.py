@@ -94,10 +94,15 @@ class Rectangle(HasDimensions):
 
 @W.register
 class NodeShapes(Behavior):
-    """Change the shape of nodes using declarative statements."""
+    """Change the shape of nodes using declarative statements.
+
+    If non-empty, custom ``shapes`` will override the simple ``size`` and ``color``.
+    """
 
     _model_name: str = T.Unicode("NodeShapeModel").tag(sync=True)
 
+    size: TFeature = _make_trait("the size of the default circle shape", numeric=True)
+    color: TFeature = _make_trait("the color of the default circle shape")
     shapes: Tuple[ShapeBase] = W.TypedTuple(
         T.Instance(ShapeBase),
         help="the shapes to draw for each ``node``",

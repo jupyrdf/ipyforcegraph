@@ -10,23 +10,51 @@ import {
 } from '@jupyter-widgets/base';
 
 import {
+  EUpdate,
   IBehave,
+  INodeBehaveOptions,
   INodeCanvasBehaveOptions,
   INodeThreeBehaveOptions,
+  emptyArray,
 } from '../../tokens';
 
-import { BehaviorModel } from './base';
+import { BehaviorModel, FacetedModel } from './base';
 import type { ShapeBaseModel } from './shapes/base';
 
-export class NodeShapeModel extends BehaviorModel implements IBehave {
-  static model_name = 'NodeShapeModel';
+export class NodeShapeFacetsModel extends FacetedModel implements IBehave {
+  static model_name = 'NodeShapeFacetsModel';
   static serializers = {
     ...BehaviorModel.serializers,
+    size: { deserialize },
+    color: { deserialize },
+  };
+
+  get _facetClass(): typeof NodeShapeFacetsModel {
+    return NodeShapeFacetsModel;
+  }
+
+  getNodeSize(options: INodeBehaveOptions): string | null {
+    return this._facets.size ? this._facets.size(options) : null;
+  }
+
+  getNodeColor(options: INodeBehaveOptions): string | null {
+    return this._facets.color ? this._facets.color(options) : null;
+  }
+}
+
+export class NodeShapeModel extends NodeShapeFacetsModel implements IBehave {
+  static model_name = 'NodeShapeModel';
+  static serializers = {
+    ...NodeShapeFacetsModel.serializers,
     shapes: { deserialize },
   };
 
   defaults() {
     return { ...super.defaults(), _model_name: NodeShapeModel.model_name, shapes: [] };
+  }
+
+  get _modelClass(): typeof NodeShapeModel {
+    return NodeShapeModel;
   }
 
   initialize(attributes: Backbone.ObjectHash, options: IBackboneModelOptions) {
@@ -40,20 +68,33 @@ export class NodeShapeModel extends BehaviorModel implements IBehave {
       await shape.ensureFacets();
       shape.updateRequested.connect(this.onShapesChanged, this);
     }
-    this._updateRequested.emit(void 0);
+
+    const anyThis = this as any;
+
+    if (this.shapes.length && !anyThis.getNodeCanvasObject) {
+      anyThis.getNodeCanvasObject = this._getNodeCanvasObject;
+      anyThis.getNodeThreeObject = this._getNodeThreeObject;
+      this._updateRequested.emit(EUpdate.Behavior);
+    } else if (this.shapes.length && !anyThis.getNodeCanvasObject) {
+      delete anyThis.getNodeCanvasObject;
+      delete anyThis.getNodeThreeObject;
+      this._updateRequested.emit(EUpdate.Behavior);
+    } else {
+      this._updateRequested.emit(void 0);
+    }
   }
 
   get shapes(): ShapeBaseModel[] {
-    return this.get('shapes') || [];
+    return this.get('shapes') || emptyArray;
   }
 
-  getNodeCanvasObject(options: INodeCanvasBehaveOptions): void {
+  _getNodeCanvasObject(options: INodeCanvasBehaveOptions): void {
     for (const shape of this.shapes) {
       shape.drawNode2D(options);
     }
   }
 
-  getNodeThreeObject(options: INodeThreeBehaveOptions): THREE.Object3D | null {
+  _getNodeThreeObject(options: INodeThreeBehaveOptions): THREE.Object3D | null {
     for (const shape of this.shapes) {
       const obj = shape.drawNode3D(options);
       if (obj) {
@@ -61,6 +102,4 @@ export class NodeShapeModel extends BehaviorModel implements IBehave {
       }
     }
   }
-
-  // getNodeThreeGeometry
 }

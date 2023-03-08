@@ -58,6 +58,7 @@ export enum EUpdate {
   Reheat = 1 << 0,
   Cosmetic = 1 << 1,
   Render = 1 << 2,
+  Behavior = 1 << 3,
 }
 export type TUpdateKind = void | number;
 

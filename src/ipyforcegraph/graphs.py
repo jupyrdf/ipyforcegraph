@@ -21,7 +21,7 @@ class ForceGraph(W.DOMWidget, ForceBase):
     _view_name: str = T.Unicode("ForceGraphView").tag(sync=True)
 
     source: DataFrameSource = T.Instance(
-        DataFrameSource, kw={}, help="the source of `nodes` and `link` data"
+        DataFrameSource, kw={}, help="the source of ``node`` and ``link`` data"
     ).tag(sync=True, **W.widget_serialization)
 
     behaviors: Tuple[Behavior, ...] = W.TypedTuple(
@@ -30,8 +30,7 @@ class ForceGraph(W.DOMWidget, ForceBase):
         help=(
             "the behaviors that provide functionality for "
             ":mod:`~ipyforcegraph.behaviors.selection`, "
-            "changing the node and link :mod:`~ipyforcegraph.behaviors.style`, "
-            "changing the node :mod:`~ipyforcegraph.behaviors.shapes`, "
+            "changing the node and link :mod:`~ipyforcegraph.behaviors.shapes`, "
             "changing the on-hover :mod:`~ipyforcegraph.behaviors.tooltips` for nodes and links, "
             "the :mod:`~ipyforcegraph.behaviors.force` graph layout, "
             ":mod:`~ipyforcegraph.behaviors.recording` of the graph state, and the "
@@ -41,12 +40,12 @@ class ForceGraph(W.DOMWidget, ForceBase):
 
     default_node_color: str = T.Unicode(
         "rgba(31, 120, 179, 1.0)",
-        help="a default node color, which can be overridden by :class:`~ipyforcegraph.behaviors.node.NodeColors`.",
+        help="a default node color, which can be overridden by :class:`~ipyforcegraph.behaviors.shapes.NodeShapes`.",
     ).tag(sync=True)
 
     default_node_size: float = T.Float(
         1,
-        help="a default node size, which can be overridden by :class:`~ipyforcegraph.behaviors.node.NodeSizes`.",
+        help="a default node size, which can be overridden by :class:`~ipyforcegraph.behaviors.shapes.NodeShapes`.",
     ).tag(sync=True)
 
     default_link_color: str = T.Unicode(
