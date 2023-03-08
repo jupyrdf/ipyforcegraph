@@ -3,12 +3,13 @@
 # Copyright (c) 2023 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.
 
-from typing import Any, List, Optional, Union
+from typing import Any, Optional, Union
 
 import ipywidgets as W
 import traitlets as T
 
 from .._base import ForceBase
+from ..trait_utils import JSON_TYPES
 
 __all__ = (
     "_make_trait",
@@ -51,16 +52,37 @@ class ShapeBase(ForceBase):
 class DynamicValue(ForceBase):
     """An abstract class to describe what a Dynamic Widget Trait is and does."""
 
-    _model_name: str = T.Unicode("DynamicValueModel").tag(sync=True)
+    _model_name: str = T.Unicode("DynamicModel").tag(sync=True)
+
+    JSON_DATA_TYPES = JSON_TYPES.get_supported_types()
 
     value: str = T.Unicode(
         "", help="The source used to compute the value for the trait."
+    ).tag(sync=True)
+
+    coerce: str = T.Unicode(
+        help="Name of a JSON Schema ``type`` into which to coerce the final value",
+        allow_none=True,
     ).tag(sync=True)
 
     def __init__(self, value: Optional[str], **kwargs: Any):
         if value is not None:
             kwargs["value"] = value
         super().__init__(**kwargs)
+
+    @T.validate("coerce")
+    def _validate_coercer(self, proposal: T.Bunch) -> Optional[str]:
+        coerce: Optional[str] = proposal.value
+        if coerce is None:
+            return None
+        if not isinstance(coerce, str):
+            raise T.TraitError(f"'coerce' must be a string, not {type(coerce)}")
+        coerce = coerce.lower()
+        if coerce not in self.JSON_DATA_TYPES:
+            raise T.TraitError(
+                f"'coerce' must be one of {self.JSON_DATA_TYPES}, not '{coerce}'"
+            )
+        return coerce
 
 
 class Column(DynamicValue):
@@ -74,11 +96,6 @@ class Nunjucks(DynamicValue):
 
     _model_name: str = T.Unicode("NunjucksModel").tag(sync=True)
 
-    coerce: str = T.Unicode(
-        help="Name of a JSON Schema ``type`` into which to coerce the final value",
-        allow_none=True,
-    ).tag(sync=True)
-
 
 def _make_trait(
     help: str,
@@ -91,15 +108,13 @@ def _make_trait(
     stringy: bool = True,
 ) -> Any:
     """Makes a Trait that can accept a Column, a Nunjuck Template, and a literal."""
-    types: List[Any] = ([T.Instance(Column)] if by_column else []) + (
-        [T.Instance(Nunjucks)] if by_nunjuck else []
+    types = (
+        ([T.Bool()] if boolish else [])
+        + ([T.Unicode()] if stringy else [])
+        + ([T.Int(), T.Float()] if numeric else [])
+        + ([T.Instance(Column)] if by_column else [])
+        + ([T.Instance(Nunjucks)] if by_nunjuck else [])
     )
-    if stringy:
-        types += [T.Unicode()]
-    if numeric:
-        types += [T.Int(), T.Float()]
-    if boolish:
-        types += [T.Bool()]
 
     return T.Union(types, help=help, allow_none=allow_none).tag(
         sync=True, **W.widget_serialization
