@@ -4,23 +4,23 @@
  */
 import { unpack_models as deserialize } from '@jupyter-widgets/base';
 
-import { IBehave, INodeBehaveOptions } from '../../tokens';
+import { IBehave, ILinkBehaveOptions } from '../../tokens';
 
 import { FacetedModel } from './base';
 
-export class NodeTooltipModel extends FacetedModel implements IBehave {
-  static model_name = 'NodeTooltipModel';
+export class LinkTooltipModel extends FacetedModel implements IBehave {
+  static model_name = 'LinkTooltipModel';
 
   static serializers = {
     ...FacetedModel.serializers,
     label: { deserialize },
   };
 
-  protected get _modelClass(): typeof NodeTooltipModel {
-    return NodeTooltipModel;
+  protected get _modelClass(): typeof LinkTooltipModel {
+    return LinkTooltipModel;
   }
 
-  getNodeLabel(options: INodeBehaveOptions): string | null {
+  getLinkLabel(options: ILinkBehaveOptions): string | null {
     return this._facets['label'](options);
   }
 }

@@ -5,7 +5,6 @@
 
 export * from './base';
 export * from './forces';
-export * from './shapes';
 export * from './graph-data';
 export * from './graph-image';
 export * from './link-color';
@@ -16,11 +15,12 @@ export * from './link-directional-particle-color';
 export * from './link-directional-particle-speed';
 export * from './link-directional-particle-width';
 export * from './link-directional-particles';
-export * from './link-label';
 export * from './link-selection';
+export * from './link-tooltip';
 export * from './link-width';
 export * from './node-color';
 export * from './node-selection';
 export * from './node-shape';
 export * from './node-size';
 export * from './node-tooltip';
+export * from './shapes';
