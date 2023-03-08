@@ -67,13 +67,6 @@ export interface IBehave {
   getLinkColor?(options: ILinkBehaveOptions): string | null;
   getLinkWidth?(options: ILinkBehaveOptions): string | null;
   getLinkLabel?(options: ILinkBehaveOptions): string | null;
-  getLinkDirectionalArrowColor?(options: ILinkBehaveOptions): string | null;
-  getLinkDirectionalArrowLength?(options: ILinkBehaveOptions): string | null;
-  getLinkDirectionalArrowRelPos?(options: ILinkBehaveOptions): string | null;
-  getLinkDirectionalParticleColor?(options: ILinkBehaveOptions): string | null;
-  getLinkDirectionalParticleSpeed?(options: ILinkBehaveOptions): string | null;
-  getLinkDirectionalParticleWidth?(options: ILinkBehaveOptions): string | null;
-  getLinkDirectionalParticles?(options: ILinkBehaveOptions): string | null;
   // node
   getNodeColor?(options: INodeBehaveOptions): string | null;
   getNodeLabel?(options: INodeBehaveOptions): string | null;
