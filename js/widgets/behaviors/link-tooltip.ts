@@ -4,13 +4,13 @@
  */
 import { IBehave, ILinkBehaveOptions } from '../../tokens';
 
-import { LinkColumnOrTemplateModel } from './base';
+// import { LinkColumnOrTemplateModel } from './base';
 
-export class LinkLabelModel extends LinkColumnOrTemplateModel implements IBehave {
-  static model_name = 'LinkLabelModel';
+export class LinkTooltipModel extends LinkColumnOrTemplateModel implements IBehave {
+  static model_name = 'LinkTooltipModel';
 
   defaults() {
-    return { ...super.defaults(), _model_name: LinkLabelModel.model_name };
+    return { ...super.defaults(), _model_name: LinkTooltipModel.model_name };
   }
 
   getLinkLabel(options: ILinkBehaveOptions): string | null {

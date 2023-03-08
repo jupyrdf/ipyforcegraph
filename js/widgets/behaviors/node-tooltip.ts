@@ -43,20 +43,4 @@ export class NodeTooltipModel extends BehaviorModel implements IBehave {
   get label(): String {
     return this.get('label') || 'id';
   }
-
-  // columnName(hasGraph: IHasGraph): string | null {
-  //   let columnName = super.getColumnName(hasGraph);
-  //   if (columnName == null) {
-  //     try {
-  //       columnName = (hasGraph.source as any).get('node_id_column');
-  //     } catch (err) {
-  //       console.error('failed to fetch id column', err);
-  //     }
-  //   }
-  //   return columnName || null;
-  // }
-
-  // getNodeLabel(options: INodeBehaveOptions): string | null {
-  //   return super.getNodeAttr(options);
-  // }
 }
