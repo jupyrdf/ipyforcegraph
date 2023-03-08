@@ -603,45 +603,14 @@ def task_lint():
             P.OK_NBLINT[nb.name],
         )
 
-    def _dos2unix(max_chunk_size: int = 8000):
-        """Break filelist into chunks for dos2unix call.
-
-        TODO how to get print statement to only occur when linting
-        """
-        if not P.WIN:
-            return dict(
-                name="dos2unix",
-                actions=[lambda: print(f"DOS2UNIX not needed on {P.PLATFORM}")],
-                targets=[P.OK_DOS2UNIX],
-            )
-        num_files = len(P.ALL_DOS2UNIX)
-        _chunks = [P.ALL_DOS2UNIX]
-        while any(
-            len(" ".join([str(c) for c in chunk])) > max_chunk_size for chunk in _chunks
-        ):
-            num_files = int(num_files / 2)
-            if num_files < 1:
-                raise ValueError("Error finding dos2unix file chunk size.")
-            _chunks = [
-                P.ALL_DOS2UNIX[i : i + num_files]
-                for i in range(0, len(P.ALL_DOS2UNIX), num_files)
-            ]
-        print(
-            f"Split {len(P.ALL_DOS2UNIX)} files into chunks of {num_files} for linting command."
-        )
-
-        yield _ok(
-            dict(
-                name="dos2unix",
-                file_dep=[*P.ALL_DOS2UNIX, *[*P.OK_NBLINT.values()]],
-                actions=[
-                    [*P.IN_ENV, "dos2unix", "--quiet", *chunk] for chunk in _chunks
-                ],
-            ),
-            P.OK_DOS2UNIX,
-        )
-
-    yield _dos2unix()
+    yield _ok(
+        dict(
+            name="fix-windows-line-endings",
+            file_dep=[*P.ALL_DOS2UNIX, *[*P.OK_NBLINT.values()]],
+            actions=[(U.fix_windows_line_endings)],
+        ),
+        P.OK_DOS2UNIX,
+    )
 
     yield _ok(
         dict(
