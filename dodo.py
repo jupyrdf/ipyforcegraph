@@ -269,7 +269,6 @@ def task_setup():
     py_task = _ok(
         dict(
             name="py",
-            uptodate=[config_changed({"artifact": P.INSTALL_ARTIFACT})],
             file_dep=file_dep,
             actions=py_actions,
         ),

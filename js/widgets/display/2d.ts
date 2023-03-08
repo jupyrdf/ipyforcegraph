@@ -89,10 +89,10 @@ export class ForceGraphModel extends DOMWidgetModel {
   initialize(attributes: ObjectHash, options: IBackboneModelOptions): void {
     super.initialize(attributes, options);
     this.on('change:behaviors', this.onBehaviorsChange, this);
-    this.onBehaviorsChange();
+    void this.onBehaviorsChange();
   }
 
-  onBehaviorsChange(): void {
+  async onBehaviorsChange(): Promise<void> {
     if (!this._behaviorsChanged) {
       this._behaviorsChanged = new Signal(this);
       this._linkBehaviorsByMethod = new Map();
@@ -101,11 +101,14 @@ export class ForceGraphModel extends DOMWidgetModel {
     }
     const { behaviors } = this;
 
+    const activeBehaviors = new Set<IBehave>();
+
     for (let linkMethod of ALL_LINK_METHODS) {
       let methodBehaviors: IBehave[] = [];
       for (const behavior of behaviors) {
         if (behavior[linkMethod]) {
           methodBehaviors.push(behavior);
+          activeBehaviors.add(behavior);
         }
       }
       this._linkBehaviorsByMethod.set(linkMethod, methodBehaviors);
@@ -116,6 +119,7 @@ export class ForceGraphModel extends DOMWidgetModel {
       for (const behavior of behaviors) {
         if (behavior[nodeMethod]) {
           methodBehaviors.push(behavior);
+          activeBehaviors.add(behavior);
         }
       }
       this._nodeBehaviorsByMethod.set(nodeMethod, methodBehaviors);
@@ -126,6 +130,7 @@ export class ForceGraphModel extends DOMWidgetModel {
       for (const behavior of behaviors) {
         if (behavior[graphMethod]) {
           graphBehaviors.push(behavior);
+          activeBehaviors.add(behavior);
         }
       }
       this._graphBehaviorsByMethod.set(graphMethod, graphBehaviors);
@@ -135,8 +140,23 @@ export class ForceGraphModel extends DOMWidgetModel {
     for (const behavior of behaviors) {
       if (behavior instanceof GraphForcesModel) {
         this._forceBehaviors.push(behavior);
+        activeBehaviors.add(behavior);
       }
     }
+
+    let facetPromises: Promise<void>[] = [];
+
+    for (const behavior of activeBehaviors) {
+      // TOOD: remove the any
+      if ((behavior as any).ensureFacets) {
+        facetPromises.push((behavior as any).ensureFacets());
+      }
+    }
+
+    if (facetPromises.length) {
+      await Promise.all(facetPromises);
+    }
+
     this._behaviorsChanged.emit(void 0);
   }
 
@@ -234,7 +254,7 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
     this.luminoWidget.disposed.connect(this.onDisposed, this);
     this.model.on('msg:custom', this.handleMessage, this);
     this.onSourceChange();
-    this.onBehaviorsChange();
+    void this.onBehaviorsChange();
   }
 
   handleMessage(message: IActionMessage): void {

@@ -4,6 +4,7 @@
  */
 import type { Template } from 'nunjucks';
 
+import { JSONExt } from '@lumino/coreutils';
 import { ISignal, Signal } from '@lumino/signaling';
 
 import { IBackboneModelOptions, WidgetModel } from '@jupyter-widgets/base';
@@ -19,7 +20,102 @@ import {
   TUpdateKind,
   WIDGET_DEFAULTS,
 } from '../../tokens';
-import { getCoercer, noop } from '../../utils';
+import { functor, getCoercer, noop } from '../../utils';
+
+export class FacetedModel extends WidgetModel {
+  static model_name = 'FacetedModel';
+
+  /** A signal emitted when any facet is added, remoed, or changed. */
+  protected _updateRequested: Signal<IBehave, TUpdateKind>;
+
+  /** Required in subclass. All novel traits of a faceted model might be dynamic  */
+  static serializers = {
+    ...WidgetModel.serializers,
+  };
+
+  /** Facets are cached as handlers for a specific entity. */
+  protected _facets: Record<string, Function> = JSONExt.emptyObject as any;
+
+  /** Names of facets are calculated once, on initialization. */
+  protected _facetNames: string[] | null = null;
+
+  /** Required in subclass. Provides acesss to class (for names) and usually facets. */
+  protected get _modelClass(): typeof FacetedModel {
+    return FacetedModel;
+  }
+
+  /** Required in subclass.
+   * Provides acesss to the class which has facet serlializers, if different from the model class.
+   */
+  protected get _facetClass(): typeof FacetedModel {
+    return this._modelClass;
+  }
+
+  defaults() {
+    return {
+      ...super.defaults(),
+      ...WIDGET_DEFAULTS,
+      _model_name: this._modelClass.model_name,
+    };
+  }
+
+  get updateRequested(): ISignal<IBehave, TUpdateKind> {
+    return this._updateRequested;
+  }
+
+  /** Initialize the model and wire up listeners.  */
+  initialize(attributes: Backbone.ObjectHash, options: IBackboneModelOptions) {
+    super.initialize(attributes, options);
+    this._updateRequested = new Signal(this);
+    let events = '';
+    for (const facet of this.facetNames) {
+      events += `change:${facet} `;
+    }
+    this.on(events, this._onFacetsChanged, this);
+    void this._onFacetsChanged.call(this);
+  }
+
+  /** Handle the facets changing. */
+  protected async _onFacetsChanged() {
+    this._facets = JSONExt.emptyObject as any;
+    this._updateRequested.emit(void 0);
+  }
+
+  /** Populate facet handlers. */
+  async ensureFacets() {
+    const facets: Record<string, Function> = {};
+    for (const facetName of this.facetNames) {
+      let facet = this.get(facetName);
+      if (facet instanceof DynamicModel) {
+        await facet.ensureHandlers();
+        facets[facetName] = facet.nodeHandler;
+        facet.updateRequested.connect(this._onFacetsChanged, this);
+        continue;
+      }
+
+      if (facet != null) {
+        facets[facetName] = functor(facet);
+      }
+    }
+    this._facets = facets;
+  }
+
+  /** Lazily calculate asset names. */
+  protected get facetNames() {
+    if (this._facetNames == null) {
+      const baseKeys = [...Object.keys(FacetedModel.serializers)];
+      const facetNames: string[] = [];
+      for (const key of Object.keys(this._facetClass.serializers)) {
+        if (baseKeys.includes(key)) {
+          continue;
+        }
+        facetNames.push(key);
+      }
+      this._facetNames = facetNames;
+    }
+    return this._facetNames;
+  }
+}
 
 export class BehaviorModel extends WidgetModel implements IBehave {
   protected _updateRequested: Signal<IBehave, TUpdateKind>;

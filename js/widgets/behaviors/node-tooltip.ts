@@ -1,5 +1,22 @@
-import { IBehave } from '../../tokens';
+import { unpack_models as deserialize } from '@jupyter-widgets/base';
 
-import { BehaviorModel } from './base';
+import { IBehave, INodeBehaveOptions } from '../../tokens';
 
-export class NodeTooltipModel extends BehaviorModel implements IBehave {}
+import { FacetedModel } from './base';
+
+export class NodeTooltipModel extends FacetedModel implements IBehave {
+  static model_name = 'NodeTooltipModel';
+
+  static serializers = {
+    ...FacetedModel.serializers,
+    label: { deserialize },
+  };
+
+  protected get _modelClass(): typeof NodeTooltipModel {
+    return NodeTooltipModel;
+  }
+
+  getNodeLabel(options: INodeBehaveOptions): string | null {
+    return this._facets['label'](options);
+  }
+}

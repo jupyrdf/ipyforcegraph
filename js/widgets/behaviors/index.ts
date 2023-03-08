@@ -20,7 +20,6 @@ export * from './link-label';
 export * from './link-selection';
 export * from './link-width';
 export * from './node-color';
-export * from './node-label';
 export * from './node-selection';
 export * from './node-shape';
 export * from './node-size';
