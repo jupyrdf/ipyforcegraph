@@ -24,3 +24,4 @@ export * from './node-label';
 export * from './node-selection';
 export * from './node-shape';
 export * from './node-size';
+export * from './node-tooltip';
