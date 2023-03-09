@@ -270,25 +270,16 @@ class CollisionForce(BaseD3Force):
     """
 
     _model_name: str = T.Unicode("CollisionForceModel").tag(sync=True)
-    radius: Optional[str] = T.Unicode(
-        None,
-        allow_none=True,
-        help="a nunjucks template to use to calculate node radius",
-    ).tag(sync=True)
 
-    strength: Optional[float] = T.Float(
-        None,
-        allow_none=True,
-        min=0,
-        max=1,
-        help="sets the strength of the force.",
-    ).tag(sync=True)
+    radius: TNumFeature = _make_trait(
+        "The radius of collision by node. Context takes ``node``",
+        numeric=True,
+    )
 
-    iterations: Optional[int] = T.Unicode(
-        None,
-        allow_none=True,
-        help="the number of iterations per application to the specified number and returns this force.",
-    ).tag(sync=True)
+    strength: TNumFeature = _make_trait(
+        "sets the strength of the force.",
+        numeric=True,
+    )
 
 
 @W.register

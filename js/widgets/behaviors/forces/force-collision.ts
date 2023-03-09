@@ -4,25 +4,25 @@
  */
 import { forceCollide as d3ForceCollision } from 'd3-force-3d';
 
-import { makeForceNodeTemplate } from '../../../template-utils';
+import { unpack_models as deserialize } from '@jupyter-widgets/base';
+
 import { IBehave, IForce } from '../../../tokens';
-import { isNumeric } from '../../../utils';
 
-import { ForceBehaviorModel } from './force';
+import { FacetedForceModel } from './force';
 
-export class CollisionForceModel extends ForceBehaviorModel implements IBehave, IForce {
+export class CollisionForceModel extends FacetedForceModel implements IBehave, IForce {
   static model_name = 'CollisionForceModel';
-  _force: d3ForceCollision;
-  radius: CallableFunction | Number | null;
-  strength: CallableFunction | Number | null;
 
-  defaults() {
-    return {
-      ...super.defaults(),
-      _model_name: CollisionForceModel.model_name,
-      strength: null,
-      radius: null,
-    };
+  static serializers = {
+    ...FacetedForceModel.serializers,
+    radius: { deserialize },
+    strength: { deserialize },
+  };
+
+  _force: d3ForceCollision;
+
+  protected get _modelClass(): typeof CollisionForceModel {
+    return CollisionForceModel;
   }
 
   forceFactory(): d3ForceCollision {
@@ -30,38 +30,11 @@ export class CollisionForceModel extends ForceBehaviorModel implements IBehave, 
   }
 
   get force(): d3ForceCollision {
-    const { radius, strength } = this;
+    const { radius, strength } = this._facets;
 
     let force = this._force;
-    force = radius == null ? force : force.radius(radius);
-    force = strength == null ? force : force.strength(strength);
+    force = radius == null ? force : force.radius(this.wrapForNode(radius));
+    force = strength == null ? force : force.strength(strength());
     return force;
-  }
-
-  get triggerChanges(): string {
-    return 'change:radius change:strength change:active';
-  }
-
-  async update() {
-    await this.update_radius();
-    await this.update_strength();
-  }
-
-  async update_strength() {
-    let value = this.get('strength');
-    if (isNumeric(value)) {
-      this.strength = Number(value);
-    } else {
-      this.strength = await makeForceNodeTemplate(value);
-    }
-  }
-
-  async update_radius() {
-    let value = this.get('radius');
-    if (isNumeric(value)) {
-      this.radius = Number(value);
-    } else {
-      this.radius = await makeForceNodeTemplate(value);
-    }
   }
 }
