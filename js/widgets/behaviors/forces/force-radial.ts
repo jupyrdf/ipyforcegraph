@@ -13,8 +13,6 @@ import { FacetedForceModel } from './force';
 export class RadialForceModel extends FacetedForceModel implements IBehave, IForce {
   static model_name = 'RadialForceModel';
 
-  _force: d3ForceRadial;
-
   static serializers = {
     ...FacetedForceModel.serializers,
     x: { deserialize },
@@ -23,6 +21,8 @@ export class RadialForceModel extends FacetedForceModel implements IBehave, IFor
     radius: { deserialize },
     strength: { deserialize },
   };
+
+  _force: d3ForceRadial;
 
   protected get _modelClass(): typeof RadialForceModel {
     return RadialForceModel;

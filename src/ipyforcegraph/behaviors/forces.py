@@ -212,29 +212,26 @@ class ManyBodyForce(BaseD3Force):
     """
 
     _model_name: str = T.Unicode("ManyBodyForceModel").tag(sync=True)
-    strength: Optional[str] = T.Unicode(
-        None,
-        allow_none=True,
-        help="a nunjucks template to use to calculate strength. Context takes ``node``",
-    ).tag(sync=True)
 
-    theta: Optional[float] = T.Float(
-        None,
-        allow_none=True,
-        help="sets the Barnes–Hut approximation criterion to the specified number and returns this force.",
-    ).tag(sync=True)
+    strength: TNumFeature = _make_trait(
+        "a nunjucks template to use to calculate strength. Context takes ``node``",
+        numeric=True,
+    )
 
-    distance_min: Optional[float] = T.Float(
-        None,
-        allow_none=True,
-        help="sets the minimum distance between nodes over which this force is considered.",
-    ).tag(sync=True)
+    theta: TNumFeature = _make_trait(
+        "sets the Barnes-Hut approximation criterion to the specified number.",
+        numeric=True,
+    )
 
-    distance_max: Optional[float] = T.Float(
-        None,
-        allow_none=True,
-        help="sets the maximum distance between nodes over which this force is considered.",
-    ).tag(sync=True)
+    distance_min: TNumFeature = _make_trait(
+        "sets the minimum distance between nodes over which this force is considered.",
+        numeric=True,
+    )
+
+    distance_max: TNumFeature = _make_trait(
+        "sets the maximum distance between nodes over which this force is considered.",
+        numeric=True,
+    )
 
 
 @W.register
