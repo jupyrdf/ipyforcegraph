@@ -21,7 +21,7 @@ export class LinkShapeModel extends FacetedModel implements IBehave {
     return LinkShapeModel;
   }
 
-  getLinkWidth(options: ILinkBehaveOptions): string | null {
+  getLinkWidth(options: ILinkBehaveOptions): number | null {
     return this._facets.width ? this._facets.width(options) : null;
   }
 

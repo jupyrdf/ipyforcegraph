@@ -5,7 +5,7 @@
 
 from ._base import Behavior, Column, DynamicValue, Nunjucks
 from .forces import GraphForces
-from .particles import Particles
+from .particles import LinkParticles
 from .recording import GraphData, GraphImage
 from .selection import LinkSelection, NodeSelection
 from .shapes import Ellipse, LinkArrows, LinkShapes, NodeShapes, Rectangle, Text
@@ -20,6 +20,7 @@ __all__ = (
     "GraphForces",
     "GraphImage",
     "LinkArrows",
+    "LinkParticles",
     "LinkSelection",
     "LinkShapes",
     "LinkTooltip",
@@ -27,7 +28,6 @@ __all__ = (
     "NodeShapes",
     "NodeTooltip",
     "Nunjucks",
-    "Particles",
     "Rectangle",
     "Text",
 )

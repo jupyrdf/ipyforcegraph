@@ -26,11 +26,11 @@ export class LinkArrowModel extends FacetedModel implements IBehave {
     return this._facets.color ? this._facets.color(options) : null;
   }
 
-  getLinkDirectionalArrowLength(options: ILinkBehaveOptions): string | null {
+  getLinkDirectionalArrowLength(options: ILinkBehaveOptions): number | null {
     return this._facets.length ? this._facets.length(options) : null;
   }
 
-  getLinkDirectionalArrowRelPos(options: ILinkBehaveOptions): string | null {
+  getLinkDirectionalArrowRelPos(options: ILinkBehaveOptions): number | null {
     return this._facets.relative_position
       ? this._facets.relative_position(options)
       : null;

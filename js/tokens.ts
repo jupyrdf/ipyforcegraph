@@ -66,19 +66,19 @@ export interface IBehave {
   updateRequested: ISignal<IBehave, TUpdateKind>;
   // link
   getLinkColor?(options: ILinkBehaveOptions): string | null;
-  getLinkWidth?(options: ILinkBehaveOptions): string | null;
+  getLinkWidth?(options: ILinkBehaveOptions): number | null;
   getLinkLabel?(options: ILinkBehaveOptions): string | null;
   getLinkDirectionalArrowColor?(options: ILinkBehaveOptions): string | null;
-  getLinkDirectionalArrowLength?(options: ILinkBehaveOptions): string | null;
-  getLinkDirectionalArrowRelPos?(options: ILinkBehaveOptions): string | null;
+  getLinkDirectionalArrowLength?(options: ILinkBehaveOptions): number | null;
+  getLinkDirectionalArrowRelPos?(options: ILinkBehaveOptions): number | null;
   getLinkDirectionalParticleColor?(options: ILinkBehaveOptions): string | null;
-  getLinkDirectionalParticleSpeed?(options: ILinkBehaveOptions): string | null;
-  getLinkDirectionalParticleWidth?(options: ILinkBehaveOptions): string | null;
-  getLinkDirectionalParticles?(options: ILinkBehaveOptions): string | null;
+  getLinkDirectionalParticleSpeed?(options: ILinkBehaveOptions): number | null;
+  getLinkDirectionalParticleWidth?(options: ILinkBehaveOptions): number | null;
+  getLinkDirectionalParticles?(options: ILinkBehaveOptions): number | null;
   // node
   getNodeColor?(options: INodeBehaveOptions): string | null;
   getNodeLabel?(options: INodeBehaveOptions): string | null;
-  getNodeSize?(options: INodeBehaveOptions): string | null;
+  getNodeSize?(options: INodeBehaveOptions): number | null;
   getNodeCanvasObject?(options: INodeCanvasBehaveOptions): any;
   getNodeThreeObject?(options: INodeThreeBehaveOptions): THREE.Object3D | null;
   // evented
