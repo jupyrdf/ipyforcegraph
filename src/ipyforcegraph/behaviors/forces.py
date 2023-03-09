@@ -84,23 +84,14 @@ class LinkForce(BaseD3Force):
 
     _model_name: str = T.Unicode("LinkForceModel").tag(sync=True)
 
-    distance: Optional[str] = T.Unicode(
-        None,
-        allow_none=True,
-        help="a nunjucks template to use to calculate link distance. Context takes ``link``",
-    ).tag(sync=True)
-
-    strength: Optional[str] = T.Unicode(
-        None,
-        allow_none=True,
-        help="a nunjucks template to use to calculate link strength. Context takes ``link``",
-    ).tag(sync=True)
-
-    iterations: Optional[int] = T.Unicode(
-        None,
-        allow_none=True,
-        help="the number of iterations per application to the specified number and returns this force.",
-    ).tag(sync=True)
+    distance: TNumFeature = _make_trait(
+        "the 'desired' distance of a link. Context takes ``link``", numeric=True
+    )
+    strength: TNumFeature = _make_trait(
+        "the strength of a link in reaching its desired length. Context takes "
+        "``link``",
+        numeric=True,
+    )
 
 
 @W.register
