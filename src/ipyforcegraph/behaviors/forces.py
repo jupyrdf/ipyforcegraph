@@ -10,12 +10,14 @@ Using documentation from:
 # Distributed under the terms of the Modified BSD License.
 
 import enum
-from typing import Dict, Optional
+from typing import Any, Dict, Optional
 
 import ipywidgets as W
 import traitlets as T
 
 from ._base import BaseD3Force, Behavior
+
+TForceDict = Dict[str, BaseD3Force]
 
 
 @W.register
@@ -29,7 +31,7 @@ class GraphForces(Behavior):
 
     _model_name: str = T.Unicode("GraphForcesModel").tag(sync=True)
 
-    forces: Dict[str, BaseD3Force] = T.Dict(
+    forces: TForceDict = T.Dict(
         value_trait=T.Instance(BaseD3Force, allow_none=True),
         help="named forces. Set a name `None` to remove a force: By default, ForceGraph has `link`, `charge`, and `center`.",
     ).tag(sync=True, **W.widget_serialization)
@@ -62,6 +64,10 @@ class GraphForces(Behavior):
         max=1.0,
         help="nodes' velocity decay that simulates the medium resistance",
     ).tag(sync=True)
+
+    def __init__(self, forces: Optional[TForceDict] = None, *args: Any, **kwargs: Any):
+        kwargs["forces"] = forces
+        super().__init__(*args, **kwargs)
 
 
 @W.register

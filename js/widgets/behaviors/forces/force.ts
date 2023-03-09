@@ -12,11 +12,11 @@ import {
 } from '@jupyter-widgets/base';
 
 import { EUpdate, IForce, TAnyForce } from '../../../tokens';
-import { LinkColumnOrTemplateModel } from '../base';
+import { BehaviorModel } from '../base';
 
 export type TForceRecord = Record<string, ForceBehaviorModel | null>;
 
-export class ForceBehaviorModel extends LinkColumnOrTemplateModel implements IForce {
+export class ForceBehaviorModel extends BehaviorModel implements IForce {
   static model_name = 'ForceBehaviorModel';
   _force: TAnyForce;
 
@@ -67,7 +67,7 @@ export class ForceBehaviorModel extends LinkColumnOrTemplateModel implements IFo
   }
 }
 
-export class GraphForcesModel extends LinkColumnOrTemplateModel {
+export class GraphForcesModel extends BehaviorModel {
   static model_name = 'GraphForcesModel';
   static serializers = {
     ...WidgetModel.serializers,
