@@ -3,7 +3,11 @@
  * Distributed under the terms of the Modified BSD License.
  */
 import { ObjectHash } from 'backbone';
-import type { ForceGraphInstance, NodeObject } from 'force-graph/dist/force-graph';
+import type {
+  ForceGraphInstance,
+  LinkObject,
+  NodeObject,
+} from 'force-graph/dist/force-graph';
 
 import {
   IBackboneModelOptions,
@@ -11,10 +15,61 @@ import {
   unpack_models as deserialize,
 } from '@jupyter-widgets/base';
 
-import { EUpdate, IForce, TAnyForce } from '../../../tokens';
-import { BehaviorModel } from '../base';
+import { DEBUG, EMOJI, EUpdate, IForce, TAnyForce } from '../../../tokens';
+import { BehaviorModel, FacetedModel } from '../base';
 
 export type TForceRecord = Record<string, ForceBehaviorModel | null>;
+
+export class FacetedForceModel extends FacetedModel implements IForce {
+  static model_name = 'FacetedForceModel';
+  _force: TAnyForce;
+
+  forceFactory(): TAnyForce {
+    throw new Error('Not implemented');
+  }
+
+  initialize(attributes: ObjectHash, options: IBackboneModelOptions): void {
+    super.initialize(attributes, options);
+    this._force = this.forceFactory();
+  }
+
+  get active(): boolean {
+    return this.get('active');
+  }
+
+  wrapForContext<T>(fn: Function, contextName: string, contextAllName: string) {
+    function wrapped(context: T, i: number, contextAll: T[]) {
+      let value: number | boolean | null;
+      try {
+        let rendered = fn({
+          [contextName]: context,
+          i,
+          [contextAllName]: contextAll,
+        });
+        value = rendered == null ? null : rendered;
+        if (typeof value != 'boolean') {
+          if (value == null || isNaN(value)) {
+            value = null;
+          }
+        }
+      } catch (err) {
+        DEBUG && console.warn(EMOJI, err);
+        value = null;
+      }
+      return value;
+    }
+
+    return wrapped;
+  }
+
+  protected wrapForNode(handler: CallableFunction): CallableFunction {
+    return this.wrapForContext<NodeObject>(handler, 'node', 'nodes');
+  }
+
+  protected wrapForLink(handler: CallableFunction): CallableFunction {
+    return this.wrapForContext<LinkObject>(handler, 'link', 'links');
+  }
+}
 
 export class ForceBehaviorModel extends BehaviorModel implements IForce {
   static model_name = 'ForceBehaviorModel';
@@ -115,14 +170,24 @@ export class GraphForcesModel extends BehaviorModel {
         force.updateRequested.connect(this.onForceUpdated, this);
       }
     }
-    this.onForceUpdated();
+    void this.onForceUpdated();
   }
 
   get previousForces(): TForceRecord {
     return (this.previous && this.previous('forces')) || {};
   }
 
-  protected onForceUpdated(change?: any) {
+  protected async onForceUpdated(change?: any): Promise<void> {
+    const facetPromises: Promise<void>[] = [];
+    for (const force of Object.values(this.forces)) {
+      if (force instanceof FacetedModel) {
+        facetPromises.push(force.ensureFacets());
+      }
+    }
+    if (facetPromises) {
+      await Promise.all(facetPromises);
+    }
+
     this._updateRequested.emit(EUpdate.Reheat);
   }
 

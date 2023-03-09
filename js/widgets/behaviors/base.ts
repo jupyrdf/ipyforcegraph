@@ -167,9 +167,14 @@ export class NunjucksModel extends DynamicModel {
     if (this._nodeHandler) {
       return;
     }
+
+    function handler(opts: any) {
+      return coercer(tmpl.render(opts));
+    }
+
     const tmpl = await newTemplate(this.value);
     const coercer = getCoercer(this.coerce);
-    this._nodeHandler = (opts: any) => coercer(tmpl.render(opts));
+    this._nodeHandler = handler;
     this._linkHandler = this._nodeHandler;
   }
 }

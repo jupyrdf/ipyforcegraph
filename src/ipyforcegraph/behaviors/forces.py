@@ -15,7 +15,12 @@ from typing import Any, Dict, Optional
 import ipywidgets as W
 import traitlets as T
 
-from ._base import BaseD3Force, Behavior
+from ._base import (  # TBoolFeature,; TFeature,
+    BaseD3Force,
+    Behavior,
+    TNumFeature,
+    _make_trait,
+)
 
 TForceDict = Dict[str, BaseD3Force]
 
@@ -137,17 +142,16 @@ class XForce(BaseD3Force):
     """
 
     _model_name: str = T.Unicode("XForceModel").tag(sync=True)
-    x: Optional[str] = T.Unicode(
-        None,
-        allow_none=True,
-        help="nunjucks template sets the x-coordinate of the centering position to the specified number and returns this force. Context takes ``node``.",
-    ).tag(sync=True)
+    x: TNumFeature = _make_trait(
+        "nunjucks template sets the x-coordinate of the centering position to "
+        "the specified number and returns this force. Context takes ``node``.",
+        numeric=True,
+    )
 
-    strength: Optional[str] = T.Unicode(
-        None,
-        allow_none=True,
-        help="a nunjucks template to use to calculate strength. Context takes ``node```",
-    ).tag(sync=True)
+    strength: TNumFeature = _make_trait(
+        "a nunjucks template to use to calculate strength. Context takes ``node```",
+        numeric=True,
+    )
 
 
 @W.register
