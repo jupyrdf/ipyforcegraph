@@ -31,6 +31,7 @@ export class FacetedForceModel extends FacetedModel implements IForce {
   initialize(attributes: ObjectHash, options: IBackboneModelOptions): void {
     super.initialize(attributes, options);
     this._force = this.forceFactory();
+    this.on('change:active', this._onFacetsChanged);
   }
 
   get active(): boolean {

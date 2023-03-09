@@ -71,7 +71,7 @@ class GraphForces(Behavior):
     ).tag(sync=True)
 
     def __init__(self, forces: Optional[TForceDict] = None, *args: Any, **kwargs: Any):
-        kwargs["forces"] = forces
+        kwargs["forces"] = forces or {}
         super().__init__(*args, **kwargs)
 
 
@@ -83,7 +83,7 @@ class LinkForce(BaseD3Force):
     """
 
     _model_name: str = T.Unicode("LinkForceModel").tag(sync=True)
-    # id_accessor
+
     distance: Optional[str] = T.Unicode(
         None,
         allow_none=True,
@@ -113,7 +113,7 @@ class CenterForce(BaseD3Force):
     """
 
     _model_name: str = T.Unicode("CenterForceModel").tag(sync=True)
-    key: str = T.Unicode("center").tag(sync=True)
+
     x: Optional[float] = T.Float(
         None,
         allow_none=True,
@@ -142,6 +142,7 @@ class XForce(BaseD3Force):
     """
 
     _model_name: str = T.Unicode("XForceModel").tag(sync=True)
+
     x: TNumFeature = _make_trait(
         "nunjucks template sets the x-coordinate of the centering position to "
         "the specified number and returns this force. Context takes ``node``.",
@@ -164,17 +165,16 @@ class YForce(BaseD3Force):
 
     _model_name: str = T.Unicode("YForceModel").tag(sync=True)
 
-    y: Optional[str] = T.Unicode(
-        None,
-        allow_none=True,
-        help="nunjucks template sets the y-coordinate of the centering position to the specified number and returns this force. Context takes ``node``.",
-    ).tag(sync=True)
+    y: TNumFeature = _make_trait(
+        "sets the y-coordinate of the centering position to the specified number "
+        "and returns this force. Context takes ``node``.",
+        numeric=True,
+    )
 
-    strength: Optional[str] = T.Unicode(
-        None,
-        allow_none=True,
-        help="a nunjucks template to use to calculate strength. Context takes ``node``",
-    ).tag(sync=True)
+    strength: TNumFeature = _make_trait(
+        "the strength of the force. Context takes ``node```",
+        numeric=True,
+    )
 
 
 @W.register
@@ -187,17 +187,16 @@ class ZForce(BaseD3Force):
 
     _model_name: str = T.Unicode("ZForceModel").tag(sync=True)
 
-    z: Optional[str] = T.Unicode(
-        None,
-        allow_none=True,
-        help="nunjucks template sets the z-coordinate of the centering position to the specified number and returns this force. Context takes ``node``.",
-    ).tag(sync=True)
+    z: TNumFeature = _make_trait(
+        "sets the z-coordinate of the centering position to the specified number "
+        "and returns this force. Context takes ``node``.",
+        numeric=True,
+    )
 
-    strength: Optional[str] = T.Unicode(
-        None,
-        allow_none=True,
-        help="a nunjucks template to use to calculate strength. Context takes `node`",
-    ).tag(sync=True)
+    strength: TNumFeature = _make_trait(
+        "the strength of the force. Context takes ``node```",
+        numeric=True,
+    )
 
 
 @W.register

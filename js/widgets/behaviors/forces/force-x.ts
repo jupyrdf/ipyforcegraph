@@ -12,17 +12,18 @@ import { FacetedForceModel } from './force';
 
 export class XForceModel extends FacetedForceModel implements IBehave, IForce {
   static model_name = 'XForceModel';
-  _force: d3XForce;
-
-  protected get _modelClass(): typeof XForceModel {
-    return XForceModel;
-  }
 
   static serializers = {
     ...FacetedForceModel.serializers,
     x: { deserialize },
     strength: { deserialize },
   };
+
+  _force: d3XForce;
+
+  protected get _modelClass(): typeof XForceModel {
+    return XForceModel;
+  }
 
   forceFactory(): d3XForce {
     return d3XForce();
