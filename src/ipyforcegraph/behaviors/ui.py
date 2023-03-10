@@ -221,7 +221,7 @@ class GraphBehaviorsUI(W.Accordion):
             context = "nodes"
         else:
             raise NotImplementedError(
-                "Cannot determine if behavior operates on `nodes` or `links`."
+                f"Cannot determine if '{behavior.__class__.__name__}' operates on `nodes` or `links`."
             )
         ignored_columns: List[str] = self.IGNORED_COLUMNS[context]
 
