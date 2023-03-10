@@ -79,7 +79,7 @@ class GraphForces(Behavior):
 
 
 @W.register
-class LinkForce(BaseD3Force):
+class Link(BaseD3Force):
     """This Link Force is between two nodes that share an edge.
 
     https://github.com/d3/d3-force#links
@@ -102,7 +102,7 @@ class LinkForce(BaseD3Force):
 
 
 @W.register
-class CenterForce(BaseD3Force):
+class Center(BaseD3Force):
     """The centering force translates nodes uniformly so that the mean position
     of all nodes (center of mass if all nodes have equal weight) is at the given
     position (x, y, z).
@@ -132,7 +132,7 @@ class CenterForce(BaseD3Force):
 
 
 @W.register
-class XForce(BaseD3Force):
+class X(BaseD3Force):
     """The X position force push nodes towards a desired position along the
     given dimension with a configurable strength.
 
@@ -158,7 +158,7 @@ class XForce(BaseD3Force):
 
 
 @W.register
-class YForce(BaseD3Force):
+class Y(BaseD3Force):
     """The Y position force push nodes towards a desired position along the
     given dimension with a configurable strength.
 
@@ -183,7 +183,7 @@ class YForce(BaseD3Force):
 
 
 @W.register
-class ZForce(BaseD3Force):
+class Z(BaseD3Force):
     """The Z position force push nodes towards a desired position along the
     given dimension with a configurable strength.
 
@@ -208,7 +208,7 @@ class ZForce(BaseD3Force):
 
 
 @W.register
-class ManyBodyForce(BaseD3Force):
+class ManyBody(BaseD3Force):
     """The many-body (or n-body) force applies mutually amongst all nodes. It
     can be used to simulate gravity (attraction) if the strength is positive, or
     electrostatic charge (repulsion) if the strength is negative. This
@@ -250,7 +250,7 @@ class ManyBodyForce(BaseD3Force):
 
 
 @W.register
-class RadialForce(BaseD3Force):
+class Radial(BaseD3Force):
     """The radial positioning force create a force towards a circle of the
     specified radius centered at (x, y).
 
@@ -293,7 +293,7 @@ class RadialForce(BaseD3Force):
 
 
 @W.register
-class CollisionForce(BaseD3Force):
+class Collision(BaseD3Force):
     """The collision force treats nodes as circles with a given ``radius``, rather
     than points and prevents nodes from overlapping.
 
@@ -321,7 +321,7 @@ class CollisionForce(BaseD3Force):
 
 
 @W.register
-class ClusterForce(BaseD3Force):
+class Cluster(BaseD3Force):
     """A force type that attracts nodes toward a set of cluster centers.
 
     https://github.com/vasturiano/d3-force-cluster-3d
@@ -398,7 +398,7 @@ class DAGMode(enum.Enum):
 
 
 @W.register
-class DAGForce(BaseD3Force):
+class DAG(BaseD3Force):
     """This behavior enforces constraints for displaying Directed Acyclic
     Graphs.
 
