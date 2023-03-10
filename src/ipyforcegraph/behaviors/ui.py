@@ -3,14 +3,16 @@
 # Copyright (c) 2023 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.
 
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import TYPE_CHECKING, Any, Dict, List, Optional, Tuple, Union
 from warnings import warn
 
 import ipywidgets as W
 import traitlets as T
 
-from ..graphs import ForceGraph
 from ._base import Behavior, Column, DynamicValue, Nunjucks
+
+if TYPE_CHECKING:
+    from ..graphs import ForceGraph
 
 DEFAULT_LAYOUT = {"width": "auto"}
 
@@ -205,7 +207,7 @@ class BehaviorAttributeUI(W.Accordion):
 class GraphBehaviorsUI(W.Accordion):
     """An auto-generated UI for a ForceGraph Behavior."""
 
-    graph: ForceGraph = T.Instance(ForceGraph).tag()
+    graph: "ForceGraph" = T.Instance("ipyforcegraph.graphs.ForceGraph").tag()
 
     IGNORED_COLUMNS: Dict[str, List[str]] = {
         "nodes": [],
@@ -266,13 +268,15 @@ class GraphBehaviorsUI(W.Accordion):
 
     @T.observe("graph")
     def _on_new_graph(self, change: T.Bunch) -> None:
+        from ..graphs import ForceGraph
+
         if isinstance(change.old, ForceGraph):
             change.old.unobserve(self._on_new_behaviors)
         if isinstance(change.new, ForceGraph):
             change.new.observe(self._on_new_behaviors, "behaviors")
             self._on_new_behaviors()
 
-    def __init__(self, *args: ForceGraph, **kwargs: ForceGraph):
+    def __init__(self, *args: Any, **kwargs: Any):
         self._cached_widgets: Dict[Behavior, W.DOMWidget] = {}
         self._cached_titles: Dict[Behavior, str] = {}
 
