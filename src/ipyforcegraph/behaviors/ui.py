@@ -12,10 +12,12 @@ import traitlets as T
 from ..graphs import ForceGraph
 from ._base import Behavior, Column, DynamicValue, Nunjucks
 
+DEFAULT_LAYOUT = {"width": "auto"}
+
 
 @W.register
-class TextNunjucks(W.VBox):
-    """A UI for specifying Behavior attributes using Nunjucks"""
+class NunjucksUI(W.VBox):
+    """A UI for specifying ``Behavior`` attributes using Nunjucks."""
 
     PLACEHOLDER = """`Nunjucks` take the form of nunjucks templates, this allows
 for calculating dynamic values on the client. One can use:
@@ -53,7 +55,7 @@ For the example data above, try these color templates:
         W.ToggleButton,
         kw=dict(
             description="Active",
-            layout=dict(width="auto"),
+            layout=DEFAULT_LAYOUT,
             value=True,
         ),
     ).tag()
@@ -61,7 +63,7 @@ For the example data above, try these color templates:
         W.Textarea,
         kw=dict(
             placeholder=PLACEHOLDER,
-            layout=dict(width="auto"),
+            layout=DEFAULT_LAYOUT,
             rows=ROWS,
         ),
     ).tag()
@@ -87,7 +89,7 @@ For the example data above, try these color templates:
 
 
 @W.register
-class BehaviorAttribute(W.Accordion):
+class BehaviorAttributeUI(W.Accordion):
     """A set of controls for setting the value of a Behavior Attribute."""
 
     BASE_TRAIT_NAMES = tuple(Behavior.class_traits())
@@ -98,7 +100,7 @@ class BehaviorAttribute(W.Accordion):
         T.Int: W.IntText,
         T.Unicode: W.Text,
         Column: W.Dropdown,
-        Nunjucks: TextNunjucks,
+        Nunjucks: NunjucksUI,
     }
 
     attribute_name: str = T.Unicode().tag()
@@ -126,7 +128,7 @@ class BehaviorAttribute(W.Accordion):
         if hasattr(active_child, "options") and value in active_child.options:
             self.value = Column(value)
             return
-        if isinstance(active_child, TextNunjucks):
+        if isinstance(active_child, NunjucksUI):
             self.value = Nunjucks(value)
             return
         self.value = value
@@ -180,7 +182,7 @@ class BehaviorAttribute(W.Accordion):
             children = [
                 # This is where the UI controls get instantiated
                 child(
-                    layout=dict(width="auto"),
+                    layout=DEFAULT_LAYOUT,
                     **kwargs,
                 )
                 for child, kwargs in zip(children, additional_kwargs)
@@ -210,7 +212,7 @@ class GraphBehaviorsUI(W.Accordion):
         "links": ["source", "target"],
     }
 
-    def _make_ui_for_behavior(self, behavior: Behavior) -> Optional[W.Accordion]:
+    def _make_ui_for_behavior(self, behavior: Behavior) -> W.Accordion:
         """Make the ui for a single behavior"""
         behavior_name = behavior.__class__.__name__.lower()
         if "node" in behavior_name:
@@ -223,7 +225,7 @@ class GraphBehaviorsUI(W.Accordion):
             )
         ignored_columns: List[str] = self.IGNORED_COLUMNS[context]
 
-        return BehaviorAttribute.make_behavior_controls(
+        return BehaviorAttributeUI.make_behavior_controls(
             behavior,
             options=tuple(
                 sorted(
@@ -238,20 +240,29 @@ class GraphBehaviorsUI(W.Accordion):
 
     def _on_new_behaviors(self, *_: T.Bunch) -> None:
         """Run when graph receives new behaviors."""
-        children = []
+        children, titles = [], []
         for behavior in self.graph.behaviors:
-            behavior_ui = self._cached_widgets.get(behavior, None)
-
+            behavior_ui = self._cached_widgets.get(behavior)
+            title = self._cached_titles.get(behavior)
             if behavior_ui is None:
+                title = behavior.__class__.__name__
                 try:
                     behavior_ui = self._make_ui_for_behavior(behavior)
                 except NotImplementedError as exc:
                     warn(str(exc))
                     continue
+                if len(behavior_ui.children) == 1:
+                    # Remove unnecessary nesting for single attribute behaviors
+                    child = behavior_ui.children[0]
+                    title += f" ({behavior_ui.titles[0]})"
+                    behavior_ui.children = child.children
+                    behavior_ui.titles = child.titles
                 self._cached_widgets[behavior] = behavior_ui
+                self._cached_titles[behavior] = title
             children += [behavior_ui]
+            titles += [title]
         self.children = children
-        self.titles = [b.__class__.__name__ for b in self.graph.behaviors]
+        self.titles = titles
 
     @T.observe("graph")
     def _on_new_graph(self, change: T.Bunch) -> None:
@@ -263,6 +274,7 @@ class GraphBehaviorsUI(W.Accordion):
 
     def __init__(self, *args: ForceGraph, **kwargs: ForceGraph):
         self._cached_widgets: Dict[Behavior, W.DOMWidget] = {}
+        self._cached_titles: Dict[Behavior, str] = {}
 
         super().__init__(*args, **kwargs)
         self._on_new_graph(T.Bunch(old=None, new=self.graph))
