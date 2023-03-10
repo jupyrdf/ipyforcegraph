@@ -770,6 +770,7 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
       graphData,
       event,
       node,
+      index: node['index'] != null ? node['index'] : graphData.nodes.indexOf(node),
     };
     for (const behavior of this.model.nodeBehaviorsForMethod('onNodeClick')) {
       shouldContinue = behavior.onNodeClick(options);
@@ -787,7 +788,7 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
       graphData,
       event,
       link,
-      index: graphData.links.indexOf(link),
+      index: link['index'] != null ? link['index'] : graphData.links.indexOf(link),
     };
     for (const behavior of this.model.linkBehaviorsForMethod('onLinkClick')) {
       shouldContinue = behavior.onLinkClick(options);

@@ -139,6 +139,7 @@ export interface INodeThreeBehaveOptions extends INodeBehaveOptions {
 
 export interface INodeEventBehaveOptions extends INodeBehaveOptions {
   event: MouseEvent;
+  index: number;
 }
 
 export interface ILinkBehaveOptions extends IBehaveOptions {

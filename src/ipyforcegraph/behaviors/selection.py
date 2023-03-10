@@ -3,7 +3,7 @@
 # Copyright (c) 2023 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.
 
-from typing import Tuple, Union
+from typing import Optional, Tuple, Union
 
 import ipywidgets as W
 import traitlets as T
@@ -13,14 +13,20 @@ from ._base import Behavior
 
 @W.register
 class NodeSelection(Behavior):
-    """Enable node selection with synced ids of selected nodes."""
+    """Enable node selection with synced row indices of selected nodes."""
 
     _model_name: str = T.Unicode("NodeSelectionModel").tag(sync=True)
 
     selected: Tuple[Union[int, str], ...] = W.TypedTuple(
         T.Union((T.Int(), T.Unicode())),
         allow_none=True,
-        help="the ids of any selected nodes",
+        help="the row indices of any selected nodes",
+    ).tag(sync=True)
+
+    column_name: Optional[str] = T.Unicode(
+        None,
+        help="an optional name of a ``node``'s column to update when selected",
+        allow_none=True,
     ).tag(sync=True)
 
     multiple: bool = T.Bool(True).tag(sync=True)
@@ -41,6 +47,12 @@ class LinkSelection(Behavior):
         T.Union((T.Int(), T.Unicode())),
         allow_none=True,
         help="the 0-based indices of any selected links",
+    ).tag(sync=True)
+
+    column_name: Optional[str] = T.Unicode(
+        None,
+        help="an optional name of ``node``'s column to update when selected",
+        allow_none=True,
     ).tag(sync=True)
 
     multiple: bool = T.Bool(True).tag(sync=True)
