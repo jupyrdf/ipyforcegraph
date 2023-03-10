@@ -104,7 +104,7 @@ def _make_trait(
     allow_none: bool = True,
     boolish: bool = False,
     by_column: bool = True,
-    by_nunjuck: bool = True,
+    by_template: bool = True,
     numeric: bool = False,
     stringy: bool = True,
 ) -> Any:
@@ -114,7 +114,7 @@ def _make_trait(
         + ([T.Unicode()] if stringy else [])
         + ([T.Int(), T.Float()] if numeric else [])
         + ([T.Instance(Column)] if by_column else [])
-        + ([T.Instance(Nunjucks)] if by_nunjuck else [])
+        + ([T.Instance(Nunjucks)] if by_template else [])
     )
 
     return T.Union(
