@@ -3,7 +3,7 @@
 # Copyright (c) 2023 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.
 
-from typing import Dict, List, NoReturn, Optional, Tuple
+from typing import Dict, List, NoReturn, Optional, Tuple, Type
 
 import ipywidgets as W
 import traitlets as T
@@ -78,6 +78,7 @@ For the example data above, try these color templates:
         super().__init__(*args, **kwargs)
         for widget in (self.active, self.textarea):
             widget.observe(self._update_value, "value")
+
         if not self.children:
             self.children = (self.textarea, self.active)
         self._update_value()
@@ -137,8 +138,8 @@ class BehaviorAttribute(W.Accordion):
 
     @classmethod
     def _get_trait_classes(
-        cls, trait: T.TraitType, classes: list = None
-    ) -> List[T.HasTraits]:
+        cls, trait: T.TraitType, classes: Optional[List[Type]] = None
+    ) -> List[Type]:
         """Recursive method to find all the trait classes allowed."""
         classes = classes or []
         if isinstance(trait, T.Instance):
@@ -228,7 +229,7 @@ class GraphBehaviorsUI(W.Accordion):
         self.titles = [b.__class__.__name__ for b in self.graph.behaviors]
 
     @T.observe("graph")
-    def _on_new_graph(self, change: T.Bunch = None):
+    def _on_new_graph(self, change: T.Bunch):
         if isinstance(change.old, ForceGraph):
             change.old.unobserve(self._on_new_behaviors)
         if isinstance(change.new, ForceGraph):
