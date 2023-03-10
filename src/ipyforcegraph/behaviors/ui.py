@@ -3,7 +3,8 @@
 # Copyright (c) 2023 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.
 
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple, Union
+from warnings import warn
 
 import ipywidgets as W
 import traitlets as T
@@ -47,23 +48,23 @@ For the example data above, try these color templates:
 
     ROWS = 10
 
-    value: str = T.Unicode("").tag(sync=True)
-    active = T.Instance(
+    value: str = T.Unicode("").tag()
+    active: W.ToggleButton = T.Instance(
         W.ToggleButton,
         kw=dict(
             description="Active",
             layout=dict(width="auto"),
             value=True,
         ),
-    )
-    textarea = T.Instance(
+    ).tag()
+    textarea: W.Textarea = T.Instance(
         W.Textarea,
         kw=dict(
             placeholder=PLACEHOLDER,
             layout=dict(width="auto"),
             rows=ROWS,
         ),
-    )
+    ).tag()
 
     def _update_value(self, _: Optional[T.Bunch] = None) -> None:
         """Update the overall value based on the state of the textarea and activation control."""
@@ -100,10 +101,9 @@ class BehaviorAttribute(W.Accordion):
         Nunjucks: TextNunjucks,
     }
 
-    attribute_name: str = T.Unicode().tag(sync=True)
+    attribute_name: str = T.Unicode().tag()
 
-    # Optional[Union[T.TraitType, DynamicValue]]
-    value = T.Union(
+    value: Optional[Union[T.TraitType, DynamicValue]] = T.Union(
         trait_types=[
             T.Unicode(),
             T.Float(),
@@ -112,7 +112,7 @@ class BehaviorAttribute(W.Accordion):
             T.Bool(),
         ],
         allow_none=True,
-    )
+    ).tag()
 
     @T.observe("selected_index")
     def _update_value(self, *_: T.Bunch) -> None:
@@ -157,7 +157,7 @@ class BehaviorAttribute(W.Accordion):
     @classmethod
     def make_behavior_controls(
         cls, behavior: Behavior, options: Tuple[str, ...]
-    ) -> W.DOMWidget:
+    ) -> W.Accordion:
         """Make UI controls for a given behavior."""
         behavior_trait_classes = {
             name: cls._get_trait_classes(trait)
@@ -203,41 +203,51 @@ class BehaviorAttribute(W.Accordion):
 class GraphBehaviorsUI(W.Accordion):
     """An auto-generated UI for a ForceGraph Behavior."""
 
-    graph = T.Instance(ForceGraph)
+    graph: ForceGraph = T.Instance(ForceGraph).tag()
 
     IGNORED_COLUMNS: Dict[str, List[str]] = {
         "nodes": [],
         "links": ["source", "target"],
     }
 
+    def _make_ui_for_behavior(self, behavior: Behavior) -> Optional[W.Accordion]:
+        """Make the ui for a single behavior"""
+        behavior_name = behavior.__class__.__name__.lower()
+        if "node" in behavior_name:
+            context = "nodes"
+        elif "link" in behavior_name:
+            context = "nodes"
+        else:
+            raise NotImplementedError(
+                "Cannot determine if behavior operates on `nodes` or `links`."
+            )
+        ignored_columns: List[str] = self.IGNORED_COLUMNS[context]
+
+        return BehaviorAttribute.make_behavior_controls(
+            behavior,
+            options=tuple(
+                sorted(
+                    [
+                        column
+                        for column in getattr(self.graph.source, context).columns
+                        if column not in ignored_columns
+                    ]
+                )
+            ),
+        )
+
     def _on_new_behaviors(self, *_: T.Bunch) -> None:
+        """Run when graph receives new behaviors."""
         children = []
         for behavior in self.graph.behaviors:
             behavior_ui = self._cached_widgets.get(behavior, None)
 
             if behavior_ui is None:
-                # TODO: Make this more explicit, maybe add an attribute to the Behavior to indicate if it operates on nodes or links
-                context = (
-                    "nodes"
-                    if "node" in behavior.__class__.__name__.lower()
-                    else "links"
-                )
-                ignored_columns: List[str] = self.IGNORED_COLUMNS[context]
-
-                behavior_ui = BehaviorAttribute.make_behavior_controls(
-                    behavior,
-                    options=tuple(
-                        sorted(
-                            [
-                                column
-                                for column in getattr(
-                                    self.graph.source, context
-                                ).columns
-                                if column not in ignored_columns
-                            ]
-                        )
-                    ),
-                )
+                try:
+                    behavior_ui = self._make_ui_for_behavior(behavior)
+                except NotImplementedError as exc:
+                    warn(str(exc))
+                    continue
                 self._cached_widgets[behavior] = behavior_ui
             children += [behavior_ui]
         self.children = children
