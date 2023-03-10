@@ -3,7 +3,7 @@
 # Copyright (c) 2023 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.
 
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, List, Optional, Tuple
 
 import ipywidgets as W
 import traitlets as T
@@ -47,30 +47,30 @@ For the example data above, try these color templates:
 
     ROWS = 10
 
-    value: Optional[str] = T.Unicode(allow_none=True).tag(sync=True)
-    active: W.ToggleButton = T.Instance(
+    value: str = T.Unicode("").tag(sync=True)
+    active = T.Instance(
         W.ToggleButton,
         kw=dict(
             description="Active",
             layout=dict(width="auto"),
             value=True,
         ),
-    ).tag(sync=True)
-    textarea: W.Textarea = T.Instance(
+    )
+    textarea = T.Instance(
         W.Textarea,
         kw=dict(
             placeholder=PLACEHOLDER,
             layout=dict(width="auto"),
             rows=ROWS,
         ),
-    ).tag(sync=True)
+    )
 
     def _update_value(self, _: Optional[T.Bunch] = None) -> None:
         """Update the overall value based on the state of the textarea and activation control."""
         if self.active.value and self.textarea.value:
             self.value = self.textarea.value
         else:
-            self.value = None
+            self.value = ""
         # self.value = self.textarea.value if self.active.value else None
         self.textarea.disabled = not self.active.value
 
@@ -102,7 +102,8 @@ class BehaviorAttribute(W.Accordion):
 
     attribute_name: str = T.Unicode().tag(sync=True)
 
-    value: Optional[Union[T.TraitType, DynamicValue]] = T.Union(
+    # Optional[Union[T.TraitType, DynamicValue]]
+    value = T.Union(
         trait_types=[
             T.Unicode(),
             T.Float(),
@@ -111,7 +112,7 @@ class BehaviorAttribute(W.Accordion):
             T.Bool(),
         ],
         allow_none=True,
-    ).tag(sync=True)
+    )
 
     @T.observe("selected_index")
     def _update_value(self, *_: T.Bunch) -> None:
@@ -202,8 +203,12 @@ class BehaviorAttribute(W.Accordion):
 class GraphBehaviorsUI(W.Accordion):
     """An auto-generated UI for a ForceGraph Behavior."""
 
-    graph: ForceGraph = T.Instance(ForceGraph).tag(sync=True)
-    _cached_widgets: Dict[Behavior, W.DOMWidget] = T.Dict().tag(sync=True)
+    graph = T.Instance(ForceGraph)
+
+    IGNORED_COLUMNS: Dict[str, List[str]] = {
+        "nodes": [],
+        "links": ["source", "target"],
+    }
 
     def _on_new_behaviors(self, *_: T.Bunch) -> None:
         children = []
@@ -217,10 +222,21 @@ class GraphBehaviorsUI(W.Accordion):
                     if "node" in behavior.__class__.__name__.lower()
                     else "links"
                 )
+                ignored_columns: List[str] = self.IGNORED_COLUMNS[context]
 
                 behavior_ui = BehaviorAttribute.make_behavior_controls(
                     behavior,
-                    options=tuple(sorted(getattr(self.graph.source, context).columns)),
+                    options=tuple(
+                        sorted(
+                            [
+                                column
+                                for column in getattr(
+                                    self.graph.source, context
+                                ).columns
+                                if column not in ignored_columns
+                            ]
+                        )
+                    ),
                 )
                 self._cached_widgets[behavior] = behavior_ui
             children += [behavior_ui]
@@ -235,6 +251,8 @@ class GraphBehaviorsUI(W.Accordion):
             change.new.observe(self._on_new_behaviors, "behaviors")
             self._on_new_behaviors()
 
-    def __init__(self, *args: str, **kwargs: str):
+    def __init__(self, *args: ForceGraph, **kwargs: ForceGraph):
+        self._cached_widgets: Dict[Behavior, W.DOMWidget] = {}
+
         super().__init__(*args, **kwargs)
         self._on_new_graph(T.Bunch(old=None, new=self.graph))
