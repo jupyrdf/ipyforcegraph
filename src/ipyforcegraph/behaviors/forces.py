@@ -16,7 +16,14 @@ import ipywidgets as W
 import traitlets as T
 
 from ..trait_utils import JSON_TYPES, coerce
-from ._base import BaseD3Force, Behavior, TFeature, TNumFeature, _make_trait
+from ._base import (
+    BaseD3Force,
+    Behavior,
+    TBoolFeature,
+    TFeature,
+    TNumFeature,
+    _make_trait,
+)
 
 TForceDict = Dict[str, BaseD3Force]
 
@@ -375,7 +382,7 @@ class ClusterForce(BaseD3Force):
         kwargs["key"] = key
         super().__init__(*args, **kwargs)
 
-    @T.validate("x", "y", "z", "radius", "strength", "inertia")
+    @T.validate("x", "y", "z", "radius")
     def _validate_cluster_numerics(self, proposal: T.Bunch) -> Any:
         return coerce(proposal, JSON_TYPES.number)
 
@@ -399,17 +406,40 @@ class DAGForce(BaseD3Force):
     """
 
     _model_name: str = T.Unicode("DAGBehaviorModel").tag(sync=True)
-    mode: str = T.Enum(
-        values=[m.value for m in DAGMode],
+
+    mode: Optional[str] = T.Enum(
+        values=[*[m.value for m in DAGMode], *DAGMode],
         help="DAG constraint layout mode/direction",
         default_value=None,
-    ).tag(sync=True)
-    level_distance: float = T.Float(
-        default_value=None,
-        help="Distance between DAG levels",
         allow_none=True,
     ).tag(sync=True)
-    node_filter: str = T.Unicode(
-        "",
-        help="a nunjucks template to use to calculate if node is part of the DAG layout",
+
+    level_distance: Optional[float] = T.Float(
+        default_value=None,
+        help="distance between DAG levels",
+        allow_none=True,
     ).tag(sync=True)
+
+    node_filter: TBoolFeature = _make_trait(
+        "whether node is part of the DAG layout",
+        boolish=True,
+    )
+
+    def __init__(self, mode: Optional[Any] = None, *args: Any, **kwargs: Any):
+        kwargs["mode"] = mode
+        super().__init__(*args, **kwargs)
+
+    @T.validate("node_filter")
+    def _validate_scale_bools(self, proposal: T.Bunch) -> Any:
+        return coerce(proposal, JSON_TYPES.boolean)
+
+    @T.validate("mode")
+    def _validate_enum(self, proposal: T.Bunch) -> Any:
+        mode = proposal.value
+        if isinstance(mode, DAGMode):
+            return mode.value
+
+        if any(mode == m.value for m in DAGMode):
+            return mode
+
+        raise T.TraitError(f"{mode} is not one of {[*DAGMode]}")
