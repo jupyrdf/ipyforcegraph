@@ -5,26 +5,25 @@
 // import type d3Force from 'd3-force';
 import { forceLink as d3ForceLink } from 'd3-force-3d';
 
-import { makeForceLinkTemplate } from '../../../template-utils';
+import { unpack_models as deserialize } from '@jupyter-widgets/base';
+
 import { IBehave, IForce } from '../../../tokens';
-import { isNumeric } from '../../../utils';
 
-import { ForceBehaviorModel } from './force';
+import { FacetedForceModel } from './force';
 
-export class LinkForceModel extends ForceBehaviorModel implements IBehave, IForce {
+export class LinkForceModel extends FacetedForceModel implements IBehave, IForce {
   static model_name = 'LinkForceModel';
+
+  static serializers = {
+    ...FacetedForceModel.serializers,
+    strength: { deserialize },
+    distance: { deserialize },
+  };
+
   _force: d3ForceLink;
 
-  protected strength: CallableFunction | Number | null;
-  protected distance: CallableFunction | Number | null;
-
-  defaults() {
-    return {
-      ...super.defaults(),
-      _model_name: LinkForceModel.model_name,
-      strength: null,
-      distance: null,
-    };
+  protected get _modelClass(): typeof LinkForceModel {
+    return LinkForceModel;
   }
 
   forceFactory(): d3ForceLink {
@@ -32,38 +31,11 @@ export class LinkForceModel extends ForceBehaviorModel implements IBehave, IForc
   }
 
   get force(): d3ForceLink {
-    const { strength, distance } = this;
+    const { strength, distance } = this._facets;
 
     let force = this._force;
-    force = strength == null ? force : force.strength(strength);
-    force = distance == null ? force : force.distance(distance);
+    force = strength == null ? force : force.strength(this.wrapForLink(strength));
+    force = distance == null ? force : force.distance(this.wrapForLink(distance));
     return force;
-  }
-
-  get triggerChanges(): string {
-    return 'change:strength change:distance change:active';
-  }
-
-  async update() {
-    await this.update_distance();
-    await this.update_strength();
-  }
-
-  async update_strength() {
-    let value = this.get('strength');
-    if (isNumeric(value)) {
-      this.strength = Number(value);
-    } else {
-      this.strength = await makeForceLinkTemplate(value);
-    }
-  }
-
-  async update_distance() {
-    let value = this.get('distance');
-    if (isNumeric(value)) {
-      this.distance = Number(value);
-    } else {
-      this.distance = await makeForceLinkTemplate(value);
-    }
   }
 }

@@ -10,7 +10,7 @@ from ._base import Behavior, TFeature, TNumFeature, _make_trait
 
 
 @W.register
-class Particles(Behavior):
+class LinkParticles(Behavior):
     """Customize the animated particles on links.
 
     ..note::
@@ -18,10 +18,10 @@ class Particles(Behavior):
         or they will exceed the frame rate of the animation.
     """
 
-    _model_name: str = T.Unicode("ParticlesModel").tag(sync=True)
+    _model_name: str = T.Unicode("LinkParticleModel").tag(sync=True)
     color: TFeature = _make_trait("the color of the particles")
     density: TNumFeature = _make_trait(
-        "the number particles, ideally 0.0 < ``value``", numeric=True
+        "the number of particles, ideally 0.0 < ``value``", numeric=True
     )
     speed: TNumFeature = _make_trait(
         "the speed of the particles, ideally 0.0 < ``value`` < ~0.1", numeric=True

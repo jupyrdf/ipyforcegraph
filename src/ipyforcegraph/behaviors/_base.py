@@ -100,6 +100,7 @@ class Nunjucks(DynamicValue):
 def _make_trait(
     help: str,
     *,
+    default_value: Optional[Any] = None,
     allow_none: bool = True,
     boolish: bool = False,
     by_column: bool = True,
@@ -116,6 +117,6 @@ def _make_trait(
         + ([T.Instance(Nunjucks)] if by_nunjuck else [])
     )
 
-    return T.Union(types, help=help, allow_none=allow_none).tag(
-        sync=True, **W.widget_serialization
-    )
+    return T.Union(
+        types, help=help, allow_none=allow_none, default_value=default_value
+    ).tag(sync=True, **W.widget_serialization)

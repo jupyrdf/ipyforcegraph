@@ -62,9 +62,12 @@ export class LinkSelectionModel extends BehaviorModel implements IBehave {
     return this.get('multiple');
   }
 
-  getLinkWidth({ index }: ILinkBehaveOptions): string | null {
+  getLinkWidth({ index }: ILinkBehaveOptions): number | null {
     const width = this.selected.has(index) ? this.selectedWidth : null;
-    return width;
+    if (width != null) {
+      return parseFloat(width);
+    }
+    return null;
   }
 
   getLinkColor({ index }: ILinkBehaveOptions): string | null {

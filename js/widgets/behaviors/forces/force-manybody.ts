@@ -4,65 +4,42 @@
  */
 import { forceManyBody as d3ForceManyBody } from 'd3-force-3d';
 
-import { makeForceNodeTemplate } from '../../../template-utils';
+import { unpack_models as deserialize } from '@jupyter-widgets/base';
+
 import { IBehave, IForce } from '../../../tokens';
-import { isNumeric } from '../../../utils';
 
-import { ForceBehaviorModel } from './force';
+import { FacetedForceModel } from './force';
 
-export class ManyBodyForceModel extends ForceBehaviorModel implements IBehave, IForce {
+export class ManyBodyForceModel extends FacetedForceModel implements IBehave, IForce {
   static model_name = 'ManyBodyForceModel';
-  _force: d3ForceManyBody;
-  strength: CallableFunction | Number | null;
 
-  defaults() {
-    return {
-      ...super.defaults(),
-      _model_name: ManyBodyForceModel.model_name,
-    };
-  }
+  static serializers = {
+    ...FacetedForceModel.serializers,
+    strength: { deserialize },
+    theta: { deserialize },
+    distance_max: { deserialize },
+    distance_min: { deserialize },
+  };
+
+  _force: d3ForceManyBody;
 
   forceFactory(): d3ForceManyBody {
     return d3ForceManyBody();
   }
 
+  protected get _modelClass(): typeof ManyBodyForceModel {
+    return ManyBodyForceModel;
+  }
+
   get force(): d3ForceManyBody {
-    const { strength, theta, distanceMax, distanceMin } = this;
+    const { strength, theta, distance_max, distance_min } = this._facets;
 
     let force = this._force;
-    force = strength == null ? force : force.strength(strength);
-    force = theta == null ? force : force.theta(theta);
-    force = distanceMax == null ? force : force.distanceMax(distanceMax);
-    force = distanceMin == null ? force : force.distanceMin(distanceMin);
+    force = strength == null ? force : force.strength(this.wrapForNode(strength));
+
+    force = theta == null ? force : force.theta(theta());
+    force = distance_max == null ? force : force.distanceMax(distance_max());
+    force = distance_min == null ? force : force.distanceMin(distance_min());
     return force;
-  }
-
-  get triggerChanges(): string {
-    return 'change:strength change:theta change:distance_min change:distance_max change:active';
-  }
-
-  async update() {
-    await this.update_strength();
-  }
-
-  async update_strength() {
-    let value = this.get('strength');
-    if (isNumeric(value)) {
-      this.strength = Number(value);
-    } else {
-      this.strength = await makeForceNodeTemplate(value);
-    }
-  }
-
-  get theta() {
-    return this.get('theta');
-  }
-
-  get distanceMin() {
-    return this.get('distance_min');
-  }
-
-  get distanceMax() {
-    return this.get('distance_max');
   }
 }
