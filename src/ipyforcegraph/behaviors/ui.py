@@ -3,17 +3,18 @@
 # Copyright (c) 2023 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.
 
-from typing import List, Dict, Tuple
+from typing import Dict, List, NoReturn, Optional, Tuple
+
 import ipywidgets as W
 import traitlets as T
 
 from ..graphs import ForceGraph
-from ._base import Behavior, Column, Nunjucks
+from ._base import Behavior, Column, DynamicValue, Nunjucks
 
 
 @W.register
 class TextNunjucks(W.VBox):
-    """A UI for specifying Behavior attributes using Nunjucks """
+    """A UI for specifying Behavior attributes using Nunjucks"""
 
     PLACEHOLDER = """`Nunjucks` take the form of nunjucks templates, this allows
 for calculating dynamic values on the client. One can use:
@@ -32,7 +33,7 @@ template functions are provided.
 With these, and basic template tools, one can generate all kinds of interesting effects.
 For the example data above, try these color templates:
 
-- color by group, e.g.,  
+- color by group, e.g.,
   {{ ["red", "yellow", "blue", "orange", "purple", "magenta"][node.group] }}
 
 - color by out-degree, e.g.,
@@ -46,35 +47,26 @@ For the example data above, try these color templates:
 
     ROWS = 10
 
-    value: str = T.Unicode(allow_none=True)
-    active: W.ToggleButton = T.Instance(W.ToggleButton, kw=dict(
-        description="Active",
-        layout=dict(width="auto"),
-        value=True,
-    ))
-    textarea: W.Textarea = T.Instance(W.Textarea, kw=dict(
-        placeholder=PLACEHOLDER,
-        layout=dict(width="auto"),
-        rows=ROWS,
-    ))
+    value = T.Unicode(allow_none=True)
+    active = T.Instance(
+        W.ToggleButton,
+        kw=dict(
+            description="Active",
+            layout=dict(width="auto"),
+            value=True,
+        ),
+    )
+    textarea = T.Instance(
+        W.Textarea,
+        kw=dict(
+            placeholder=PLACEHOLDER,
+            layout=dict(width="auto"),
+            rows=ROWS,
+        ),
+    )
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        for widget in (self.active, self.textarea):
-            widget.observe(self._update_value, "value")
-        self._update_value()
-
-    @T.validate("children")
-    def _validate_children(self, proposal) -> Tuple[W.DOMWidget]:
-        children = proposal.value
-        if not children:
-            children = [
-                self.textarea,
-                self.active,
-            ]
-        return tuple(children)
-
-    def _update_value(self, *_):
+    def _update_value(self, _: Optional[T.Bunch] = None) -> NoReturn:
+        """Update the overall value based on the state of the textarea and activation control."""
         if self.active.value and self.textarea.value:
             self.value = self.textarea.value
         else:
@@ -82,31 +74,126 @@ For the example data above, try these color templates:
         # self.value = self.textarea.value if self.active.value else None
         self.textarea.disabled = not self.active.value
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for widget in (self.active, self.textarea):
+            widget.observe(self._update_value, "value")
+        if not self.children:
+            self.children = (self.textarea, self.active)
+        self._update_value()
+
 
 @W.register
 class BehaviorAttribute(W.Accordion):
     """A set of controls for setting the value of a Behavior Attribute."""
 
-    attribute_name: str = T.Unicode()
-    value: str = T.Unicode(allow_none=True)
+    BASE_TRAIT_NAMES = tuple(Behavior.class_traits())
 
-    @T.validate("children")
-    def _validate_children(self, proposal):
-        children = proposal.value or []
-        for child in children:
-            child.observe(self._update_value, "value")
-        return children
+    WIDGET_BY_TRAIT = {
+        T.Bool: W.Checkbox,
+        T.Float: W.FloatText,
+        T.Int: W.IntText,
+        T.Unicode: W.Text,
+        Column: W.Dropdown,
+        Nunjucks: TextNunjucks,
+    }
+
+    attribute_name: str = T.Unicode()
+
+    value = T.Union(
+        trait_types=[
+            T.Unicode(),
+            T.Float(),
+            T.Int(),
+            T.Instance(DynamicValue),
+            T.Bool(),
+        ],
+        allow_none=True,
+    )
 
     @T.observe("selected_index")
     def _update_value(self, *_):
         if self.selected_index is None:
             return
-        value = self.children[self.selected_index].value
+        active_child = self.children[self.selected_index]
+        value = active_child.value
         if value in (None, False, [], {}, set()):
-            value = ""
-        if not isinstance(value, str):
-            value = str(value)
+            self.value = None
+            return
+        if hasattr(active_child, "options") and value in active_child.options:
+            self.value = Column(value)
+            return
+        if isinstance(active_child, TextNunjucks):
+            self.value = Nunjucks(value)
+            return
         self.value = value
+
+    @T.validate("children")
+    def _validate_children(self, proposal: T.Bunch) -> List[W.DOMWidget]:
+        children = proposal.value or []
+        for child in children:
+            child.observe(self._update_value, "value")
+        return children
+
+    @classmethod
+    def _get_trait_classes(
+        cls, trait: T.TraitType, classes: list = None
+    ) -> List[T.HasTraits]:
+        """Recursive method to find all the trait classes allowed."""
+        classes = classes or []
+        if isinstance(trait, T.Instance):
+            return classes + [trait.klass]
+
+        if isinstance(trait, T.Union):
+            for trait_type in trait.trait_types:
+                classes += cls._get_trait_classes(trait_type)
+            return classes
+
+        return classes + [trait.__class__]
+
+    @classmethod
+    def make_behavior_controls(
+        cls, behavior: Behavior, options: Tuple[str, ...]
+    ) -> W.DOMWidget:
+        """Make UI controls for a given behavior."""
+        behavior_trait_classes = {
+            name: cls._get_trait_classes(trait)
+            for name, trait in behavior.traits().items()
+            if name not in cls.BASE_TRAIT_NAMES
+        }
+
+        widgets = {
+            label: {f"From {t.__name__}": cls.WIDGET_BY_TRAIT[t] for t in traits}
+            for label, traits in behavior_trait_classes.items()
+        }
+
+        trait_controls, trait_labels = [], []
+        for label, controls in widgets.items():
+            titles, children = zip(*controls.items())
+            additional_kwargs = [
+                dict(options=options) if hasattr(child, "options") else {}
+                for child in children
+            ]
+            children = [
+                # This is where the UI controls get instantiated
+                child(
+                    layout=dict(width="auto"),
+                    **kwargs,
+                )
+                for child, kwargs in zip(children, additional_kwargs)
+            ]
+            attribute_ui = cls(
+                attribute_name=label,
+                children=children,
+                titles=titles,
+            )
+            T.dlink((attribute_ui, "value"), (behavior, label))
+            trait_controls.append(attribute_ui)
+            trait_labels.append(label.title())
+        return W.Accordion(
+            children=trait_controls,
+            titles=trait_labels,
+        )
 
 
 @W.register
@@ -118,19 +205,27 @@ class GraphBehaviorsUI(W.Accordion):
 
     _cached_widgets: Dict[Behavior, W.DOMWidget] = T.Dict()
 
-    BASE_TRAIT_NAMES = tuple(Behavior.class_traits())
-    WIDGET_BY_TRAIT = {
-        T.Bool: W.Checkbox,
-        T.Float: W.FloatText,
-        T.Int: W.IntText,
-        T.Unicode: W.Text,
-        Column: W.Dropdown,
-        Nunjucks: TextNunjucks,
-    }
+    def _on_new_behaviors(self, *_):
+        children = []
+        for behavior in self.graph.behaviors:
+            behavior_ui = self._cached_widgets.get(behavior, None)
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self._on_new_graph(T.Bunch(old=None, new=self.graph))
+            if behavior_ui is None:
+                # TODO: Make this more explicit, maybe add an attribute to the Behavior to indicate if it operates on nodes or links
+                context = (
+                    "nodes"
+                    if "node" in behavior.__class__.__name__.lower()
+                    else "links"
+                )
+
+                behavior_ui = BehaviorAttribute.make_behavior_controls(
+                    behavior,
+                    options=tuple(sorted(getattr(self.graph.source, context).columns)),
+                )
+                self._cached_widgets[behavior] = behavior_ui
+            children += [behavior_ui]
+        self.children = children
+        self.titles = [b.__class__.__name__ for b in self.graph.behaviors]
 
     @T.observe("graph")
     def _on_new_graph(self, change: T.Bunch = None):
@@ -140,67 +235,6 @@ class GraphBehaviorsUI(W.Accordion):
             change.new.observe(self._on_new_behaviors, "behaviors")
             self._on_new_behaviors()
 
-    def _on_new_behaviors(self, *_):
-        children = []
-        for behavior in self.graph.behaviors:
-            behavior_ui = self._cached_widgets.get(behavior, None)
-            if behavior_ui is None:
-                behavior_ui = self._make_behavior_controls(behavior)
-                self._cached_widgets[behavior] = behavior_ui
-            children += [behavior_ui]
-        self.children = children
-        self.titles = [b.__class__.__name__ for b in self.graph.behaviors]
-
-    def _make_behavior_controls(self, behavior: Behavior) -> W.DOMWidget:
-        behavior_ui = W.Accordion()
-
-        context = "nodes" if "node" in behavior.__class__.__name__.lower() else "links"
-        columns = tuple(sorted(getattr(self.graph.source, context).columns))
-
-        behavior_trait_classes = {
-            name: [t for t in self.get_trait_classes(trait)]
-            for name, trait in behavior.traits().items()
-            if name not in self.BASE_TRAIT_NAMES
-        }
-
-        widgets = {
-            label: {f"From {t.__name__}": self.WIDGET_BY_TRAIT[t] for t in traits}
-            for label, traits in behavior_trait_classes.items()
-        }
-
-        for idx, (label, controls) in enumerate(widgets.items()):
-            titles, children = zip(*controls.items())
-            additional_kwargs = [
-                dict(options=columns) if isinstance(child, Column) else {}
-                for child in children
-            ]
-            children = [
-                # This is where the UI controls get instantiated
-                child(
-                    layout=dict(width="auto"),
-                    **kwargs,
-                )
-                for child, kwargs in zip(children, additional_kwargs)
-            ]
-            attribute_ui = BehaviorAttribute(
-                attribute_name=label,
-                children=children,
-                titles=titles,
-            )
-            T.dlink((attribute_ui, "value"), (behavior, label))
-            behavior_ui.children += (attribute_ui,)
-            behavior_ui.set_title(idx, label.title())
-        return behavior_ui
-
-    def get_trait_classes(self, trait: T.TraitType, classes: list = None) -> List[T.HasTraits]:
-        """Recursive method to find all the trait classes allowed."""
-        classes = classes or []
-        if isinstance(trait, T.Instance):
-            return classes + [trait.klass]
-
-        if isinstance(trait, T.Union):
-            for trait_type in trait.trait_types:
-                classes += self.get_trait_classes(trait_type)
-            return classes
-
-        return classes + [trait.__class__]
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._on_new_graph(T.Bunch(old=None, new=self.graph))
