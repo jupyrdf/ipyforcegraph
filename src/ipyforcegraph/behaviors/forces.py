@@ -105,23 +105,26 @@ class CenterForce(BaseD3Force):
 
     _model_name: str = T.Unicode("CenterForceModel").tag(sync=True)
 
-    x: Optional[float] = T.Float(
-        None,
-        allow_none=True,
-        help="sets the x-coordinate of the centering position to the specified number and returns this force.",
-    ).tag(sync=True)
+    x: TNumFeature = _make_trait(
+        "the x-coordinate of the centering position to the specified number",
+        by_column=False,
+        by_template=False,
+        numeric=True,
+    )
 
-    y: Optional[float] = T.Float(
-        None,
-        allow_none=True,
-        help="sets the y-coordinate of the centering position to the specified number and returns this force.",
-    ).tag(sync=True)
+    y: TNumFeature = _make_trait(
+        "the y-coordinate of the centering position to the specified number",
+        by_column=False,
+        by_template=False,
+        numeric=True,
+    )
 
-    z: Optional[float] = T.Float(
-        None,
-        allow_none=True,
-        help="sets the z-coordinate of the centering position to the specified number and returns this force.",
-    ).tag(sync=True)
+    z: TNumFeature = _make_trait(
+        "the z-coordinate of the centering position to the specified number",
+        by_column=False,
+        by_template=False,
+        numeric=True,
+    )
 
 
 @W.register
@@ -135,13 +138,13 @@ class XForce(BaseD3Force):
     _model_name: str = T.Unicode("XForceModel").tag(sync=True)
 
     x: TNumFeature = _make_trait(
-        "nunjucks template sets the x-coordinate of the centering position to "
-        "the specified number and returns this force. Context takes ``node``.",
+        "the x-coordinate of the centering position to the specified number. "
+        "Context takes ``node``.",
         numeric=True,
     )
 
     strength: TNumFeature = _make_trait(
-        "a nunjucks template to use to calculate strength. Context takes ``node```",
+        "the strength of the force. Context takes ``node```",
         numeric=True,
     )
 
@@ -157,8 +160,7 @@ class YForce(BaseD3Force):
     _model_name: str = T.Unicode("YForceModel").tag(sync=True)
 
     y: TNumFeature = _make_trait(
-        "sets the y-coordinate of the centering position to the specified number "
-        "and returns this force. Context takes ``node``.",
+        "the y-coordinate of the centering position. " "Context takes ``node``.",
         numeric=True,
     )
 
@@ -179,8 +181,7 @@ class ZForce(BaseD3Force):
     _model_name: str = T.Unicode("ZForceModel").tag(sync=True)
 
     z: TNumFeature = _make_trait(
-        "sets the z-coordinate of the centering position to the specified number "
-        "and returns this force. Context takes ``node``.",
+        "the z-coordinate of the centering position. " "Context takes ``node``.",
         numeric=True,
     )
 
@@ -210,17 +211,17 @@ class ManyBodyForce(BaseD3Force):
     )
 
     theta: TNumFeature = _make_trait(
-        "sets the Barnes-Hut approximation criterion to the specified number.",
+        "the Barnes-Hut approximation criterion.",
         numeric=True,
     )
 
     distance_min: TNumFeature = _make_trait(
-        "sets the minimum distance between nodes over which this force is considered.",
+        "the minimum distance between nodes over which this force is considered.",
         numeric=True,
     )
 
     distance_max: TNumFeature = _make_trait(
-        "sets the maximum distance between nodes over which this force is considered.",
+        "the maximum distance between nodes over which this force is considered.",
         numeric=True,
     )
 
@@ -246,18 +247,24 @@ class RadialForce(BaseD3Force):
     )
 
     x: TNumFeature = _make_trait(
-        "sets the x-coordinate of the centering position to the specified number",
+        "the x-coordinate of the centering position",
         numeric=True,
+        by_column=False,
+        by_template=False,
     )
 
     y: TNumFeature = _make_trait(
-        "sets the y-coordinate of the centering position to the specified number",
+        "the y-coordinate of the centering position",
         numeric=True,
+        by_column=False,
+        by_template=False,
     )
 
     z: TNumFeature = _make_trait(
-        "sets the z-coordinate of the centering position to the specified number",
+        "the z-coordinate of the centering position",
         numeric=True,
+        by_column=False,
+        by_template=False,
     )
 
 
@@ -270,25 +277,18 @@ class CollisionForce(BaseD3Force):
     """
 
     _model_name: str = T.Unicode("CollisionForceModel").tag(sync=True)
-    radius: Optional[str] = T.Unicode(
-        None,
-        allow_none=True,
-        help="a nunjucks template to use to calculate node radius",
-    ).tag(sync=True)
 
-    strength: Optional[float] = T.Float(
-        None,
-        allow_none=True,
-        min=0,
-        max=1,
-        help="sets the strength of the force.",
-    ).tag(sync=True)
+    radius: TNumFeature = _make_trait(
+        "The radius of collision by node. Context takes ``node``",
+        numeric=True,
+    )
 
-    iterations: Optional[int] = T.Unicode(
-        None,
-        allow_none=True,
-        help="the number of iterations per application to the specified number and returns this force.",
-    ).tag(sync=True)
+    strength: TNumFeature = _make_trait(
+        "the strength of the force.",
+        numeric=True,
+        by_column=False,
+        by_template=False,
+    )
 
 
 @W.register
@@ -309,7 +309,7 @@ class ClusterForce(BaseD3Force):
         allow_none=True,
         min=0,
         max=1,
-        help="sets the strength of the force.",
+        help="the strength of the force.",
     ).tag(sync=True)
     center_inertia: Optional[float] = T.Float(
         None,
