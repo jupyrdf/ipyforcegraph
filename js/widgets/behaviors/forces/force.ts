@@ -18,7 +18,7 @@ import {
 import { DEBUG, EMOJI, EUpdate, IForce, TAnyForce } from '../../../tokens';
 import { BehaviorModel, FacetedModel } from '../base';
 
-export type TForceRecord = Record<string, ForceBehaviorModel | null>;
+export type TForceRecord = Record<string, FacetedForceModel | null>;
 
 export class FacetedForceModel extends FacetedModel implements IForce {
   static model_name = 'FacetedForceModel';
@@ -36,6 +36,10 @@ export class FacetedForceModel extends FacetedModel implements IForce {
 
   get active(): boolean {
     return this.get('active');
+  }
+
+  get force(): TAnyForce {
+    return this._force;
   }
 
   wrapForContext<T>(fn: Function, contextName: string, contextAllName: string) {
@@ -69,57 +73,6 @@ export class FacetedForceModel extends FacetedModel implements IForce {
 
   protected wrapForLink(handler: CallableFunction): CallableFunction {
     return this.wrapForContext<LinkObject>(handler, 'link', 'links');
-  }
-}
-
-export class ForceBehaviorModel extends BehaviorModel implements IForce {
-  static model_name = 'ForceBehaviorModel';
-  _force: TAnyForce;
-
-  defaults() {
-    return {
-      ...super.defaults(),
-      _model_name: ForceBehaviorModel.model_name,
-      active: true,
-    };
-  }
-
-  initialize(attributes: ObjectHash, options: IBackboneModelOptions): void {
-    super.initialize(attributes, options);
-
-    if (this.forceFactory) {
-      this._force = this.forceFactory();
-    }
-    this.on(this.triggerChanges, this.onChanged, this);
-  }
-
-  async onChanged(model) {
-    if (this.active) {
-      await this.update();
-      this._updateRequested.emit(void 0);
-    } else if ('active' in model.changed) {
-      this._updateRequested.emit(void 0);
-    }
-  }
-
-  async update() {
-    // method for subclasses to implement addition state updates
-  }
-
-  forceFactory(): TAnyForce {
-    throw new Error('Not implemented');
-  }
-
-  get triggerChanges(): string {
-    throw new Error('Not implemented');
-  }
-
-  get force(): TAnyForce {
-    return this._force;
-  }
-
-  get active(): boolean {
-    return this.get('active');
   }
 }
 

@@ -54,7 +54,7 @@ import {
   WIDGET_DEFAULTS,
   emptyArray,
 } from '../../tokens';
-import { DAGBehaviorModel, ForceBehaviorModel, GraphForcesModel } from '../behaviors';
+import { DAGBehaviorModel, FacetedForceModel, GraphForcesModel } from '../behaviors';
 
 export class ForceGraphModel extends DOMWidgetModel {
   static model_name = 'ForceGraphModel';
@@ -545,7 +545,7 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
       graph.d3VelocityDecay(velocityDecay);
 
       for (let key in simBehavior.forces) {
-        let behavior: ForceBehaviorModel | null = simBehavior.forces[key];
+        let behavior: FacetedForceModel | null = simBehavior.forces[key];
         let force = behavior?.force || null;
         if (force && !behavior?.active) {
           force = null;

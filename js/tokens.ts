@@ -203,14 +203,15 @@ export interface IActionMessage {
  */
 export const FALSEY = Object.freeze([
   '',
+  '()',
+  '[]',
+  '{}',
+  '0.0',
   '0',
   'false',
   'nan',
-  '[]',
-  '{}',
   'none',
   'null',
-  '()',
 ]);
 
 export enum ECoerce {
