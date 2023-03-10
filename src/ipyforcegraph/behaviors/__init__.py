@@ -10,14 +10,12 @@ from .recording import GraphData, GraphImage
 from .selection import LinkSelection, NodeSelection
 from .shapes import Ellipse, LinkArrows, LinkShapes, NodeShapes, Rectangle, Text
 from .tooltip import LinkTooltip, NodeTooltip
-from .ui import GraphBehaviorsUI
 
 __all__ = (
     "Behavior",
     "Column",
     "DynamicValue",
     "Ellipse",
-    "GraphBehaviorsUI",
     "GraphData",
     "GraphForces",
     "GraphImage",
