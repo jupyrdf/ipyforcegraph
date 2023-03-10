@@ -387,16 +387,6 @@ class Cluster(BaseD3Force):
         return coerce(proposal, JSON_TYPES.number)
 
 
-class DAGMode(enum.Enum):
-    off = None
-    top_down = "td"
-    button_up = "bu"
-    left_right = "lr"
-    right_left = "rl"
-    radial_out = "radialout"
-    radial_in = "radialin"
-
-
 @W.register
 class DAG(BaseD3Force):
     """This behavior enforces constraints for displaying Directed Acyclic
@@ -405,10 +395,21 @@ class DAG(BaseD3Force):
     https://github.com/vasturiano/force-graph#force-engine-d3-force-configuration
     """
 
+    class Mode(enum.Enum):
+        """A list o"""
+
+        off = None
+        top_down = "td"
+        button_up = "bu"
+        left_right = "lr"
+        right_left = "rl"
+        radial_out = "radialout"
+        radial_in = "radialin"
+
     _model_name: str = T.Unicode("DAGBehaviorModel").tag(sync=True)
 
     mode: Optional[str] = T.Enum(
-        values=[*[m.value for m in DAGMode], *DAGMode],
+        values=[*[m.value for m in Mode], *Mode],
         help="DAG constraint layout mode/direction",
         default_value=None,
         allow_none=True,
@@ -436,10 +437,10 @@ class DAG(BaseD3Force):
     @T.validate("mode")
     def _validate_enum(self, proposal: T.Bunch) -> Any:
         mode = proposal.value
-        if isinstance(mode, DAGMode):
+        if isinstance(mode, DAG.Mode):
             return mode.value
 
-        if any(mode == m.value for m in DAGMode):
+        if any(mode == m.value for m in DAG.Mode):
             return mode
 
-        raise T.TraitError(f"{mode} is not one of {[*DAGMode]}")
+        raise T.TraitError(f"{mode} is not one of {[*DAG.Mode]}")
