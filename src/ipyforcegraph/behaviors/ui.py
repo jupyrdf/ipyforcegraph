@@ -1,9 +1,9 @@
-"""User Interface Helper Widgets."""
+"""Automatically make UI controls for ``Behaviors``."""
 
 # Copyright (c) 2023 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.
 
-from typing import Dict, List, NoReturn, Optional, Tuple, Type
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 import ipywidgets as W
 import traitlets as T
@@ -47,25 +47,25 @@ For the example data above, try these color templates:
 
     ROWS = 10
 
-    value = T.Unicode(allow_none=True)
-    active = T.Instance(
+    value: Optional[str] = T.Unicode(allow_none=True).tag(sync=True)
+    active: W.ToggleButton = T.Instance(
         W.ToggleButton,
         kw=dict(
             description="Active",
             layout=dict(width="auto"),
             value=True,
         ),
-    )
-    textarea = T.Instance(
+    ).tag(sync=True)
+    textarea: W.Textarea = T.Instance(
         W.Textarea,
         kw=dict(
             placeholder=PLACEHOLDER,
             layout=dict(width="auto"),
             rows=ROWS,
         ),
-    )
+    ).tag(sync=True)
 
-    def _update_value(self, _: Optional[T.Bunch] = None) -> NoReturn:
+    def _update_value(self, _: Optional[T.Bunch] = None) -> None:
         """Update the overall value based on the state of the textarea and activation control."""
         if self.active.value and self.textarea.value:
             self.value = self.textarea.value
@@ -74,11 +74,12 @@ For the example data above, try these color templates:
         # self.value = self.textarea.value if self.active.value else None
         self.textarea.disabled = not self.active.value
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: str, **kwargs: str):
         super().__init__(*args, **kwargs)
         for widget in (self.active, self.textarea):
             widget.observe(self._update_value, "value")
 
+        self.children: tuple = tuple(self.children)
         if not self.children:
             self.children = (self.textarea, self.active)
         self._update_value()
@@ -99,9 +100,9 @@ class BehaviorAttribute(W.Accordion):
         Nunjucks: TextNunjucks,
     }
 
-    attribute_name: str = T.Unicode()
+    attribute_name: str = T.Unicode().tag(sync=True)
 
-    value = T.Union(
+    value: Optional[Union[T.TraitType, DynamicValue]] = T.Union(
         trait_types=[
             T.Unicode(),
             T.Float(),
@@ -110,10 +111,10 @@ class BehaviorAttribute(W.Accordion):
             T.Bool(),
         ],
         allow_none=True,
-    )
+    ).tag(sync=True)
 
     @T.observe("selected_index")
-    def _update_value(self, *_):
+    def _update_value(self, *_: T.Bunch) -> None:
         if self.selected_index is None:
             return
         active_child = self.children[self.selected_index]
@@ -138,8 +139,8 @@ class BehaviorAttribute(W.Accordion):
 
     @classmethod
     def _get_trait_classes(
-        cls, trait: T.TraitType, classes: Optional[List[Type]] = None
-    ) -> List[Type]:
+        cls, trait: T.TraitType, classes: Optional[List[Any]] = None
+    ) -> List[Any]:
         """Recursive method to find all the trait classes allowed."""
         classes = classes or []
         if isinstance(trait, T.Instance):
@@ -201,12 +202,10 @@ class BehaviorAttribute(W.Accordion):
 class GraphBehaviorsUI(W.Accordion):
     """An auto-generated UI for a ForceGraph Behavior."""
 
-    graph: ForceGraph = T.Instance(ForceGraph)
-    title: str = T.Unicode()
+    graph: ForceGraph = T.Instance(ForceGraph).tag(sync=True)
+    _cached_widgets: Dict[Behavior, W.DOMWidget] = T.Dict().tag(sync=True)
 
-    _cached_widgets: Dict[Behavior, W.DOMWidget] = T.Dict()
-
-    def _on_new_behaviors(self, *_):
+    def _on_new_behaviors(self, *_: T.Bunch) -> None:
         children = []
         for behavior in self.graph.behaviors:
             behavior_ui = self._cached_widgets.get(behavior, None)
@@ -229,13 +228,13 @@ class GraphBehaviorsUI(W.Accordion):
         self.titles = [b.__class__.__name__ for b in self.graph.behaviors]
 
     @T.observe("graph")
-    def _on_new_graph(self, change: T.Bunch):
+    def _on_new_graph(self, change: T.Bunch) -> None:
         if isinstance(change.old, ForceGraph):
             change.old.unobserve(self._on_new_behaviors)
         if isinstance(change.new, ForceGraph):
             change.new.observe(self._on_new_behaviors, "behaviors")
             self._on_new_behaviors()
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: str, **kwargs: str):
         super().__init__(*args, **kwargs)
         self._on_new_graph(T.Bunch(old=None, new=self.graph))
