@@ -15,12 +15,8 @@ from typing import Any, Dict, Optional
 import ipywidgets as W
 import traitlets as T
 
-from ._base import (  # TBoolFeature,; TFeature,
-    BaseD3Force,
-    Behavior,
-    TNumFeature,
-    _make_trait,
-)
+from ..trait_utils import JSON_TYPES, coerce
+from ._base import BaseD3Force, Behavior, TFeature, TNumFeature, _make_trait
 
 TForceDict = Dict[str, BaseD3Force]
 
@@ -93,6 +89,10 @@ class LinkForce(BaseD3Force):
         numeric=True,
     )
 
+    @T.validate("distance", "strength")
+    def _validate_link_numerics(self, proposal: T.Bunch) -> Any:
+        return coerce(proposal, JSON_TYPES.number)
+
 
 @W.register
 class CenterForce(BaseD3Force):
@@ -105,26 +105,23 @@ class CenterForce(BaseD3Force):
 
     _model_name: str = T.Unicode("CenterForceModel").tag(sync=True)
 
-    x: TNumFeature = _make_trait(
-        "the x-coordinate of the centering position to the specified number",
-        by_column=False,
-        by_template=False,
-        numeric=True,
-    )
+    x: Optional[float] = T.Float(
+        None,
+        allow_none=True,
+        help="the x-coordinate of the centering position to the specified number",
+    ).tag(sync=True)
 
-    y: TNumFeature = _make_trait(
-        "the y-coordinate of the centering position to the specified number",
-        by_column=False,
-        by_template=False,
-        numeric=True,
-    )
+    y: Optional[float] = T.Float(
+        None,
+        allow_none=True,
+        help="the y-coordinate of the centering position to the specified number",
+    ).tag(sync=True)
 
-    z: TNumFeature = _make_trait(
-        "the z-coordinate of the centering position to the specified number",
-        by_column=False,
-        by_template=False,
-        numeric=True,
-    )
+    z: Optional[float] = T.Float(
+        None,
+        allow_none=True,
+        help="the z-coordinate of the centering position to the specified number",
+    ).tag(sync=True)
 
 
 @W.register
@@ -148,6 +145,10 @@ class XForce(BaseD3Force):
         numeric=True,
     )
 
+    @T.validate("strength", "x")
+    def _validate_x_numerics(self, proposal: T.Bunch) -> Any:
+        return coerce(proposal, JSON_TYPES.number)
+
 
 @W.register
 class YForce(BaseD3Force):
@@ -169,6 +170,10 @@ class YForce(BaseD3Force):
         numeric=True,
     )
 
+    @T.validate("strength", "y")
+    def _validate_y_numerics(self, proposal: T.Bunch) -> Any:
+        return coerce(proposal, JSON_TYPES.number)
+
 
 @W.register
 class ZForce(BaseD3Force):
@@ -181,7 +186,7 @@ class ZForce(BaseD3Force):
     _model_name: str = T.Unicode("ZForceModel").tag(sync=True)
 
     z: TNumFeature = _make_trait(
-        "the z-coordinate of the centering position. " "Context takes ``node``.",
+        "the z-coordinate of the centering position. Context takes ``node``.",
         numeric=True,
     )
 
@@ -189,6 +194,10 @@ class ZForce(BaseD3Force):
         "the strength of the force. Context takes ``node```",
         numeric=True,
     )
+
+    @T.validate("strength", "z")
+    def _validate_z_numerics(self, proposal: T.Bunch) -> Any:
+        return coerce(proposal, JSON_TYPES.number)
 
 
 @W.register
@@ -210,20 +219,27 @@ class ManyBodyForce(BaseD3Force):
         numeric=True,
     )
 
-    theta: TNumFeature = _make_trait(
-        "the Barnes-Hut approximation criterion.",
-        numeric=True,
-    )
+    theta: Optional[float] = T.Float(
+        None,
+        allow_none=True,
+        help="the Barnes-Hut approximation criterion.",
+    ).tag(sync=True)
 
-    distance_min: TNumFeature = _make_trait(
-        "the minimum distance between nodes over which this force is considered.",
-        numeric=True,
-    )
+    distance_min: Optional[float] = T.Float(
+        None,
+        allow_none=True,
+        help="the minimum distance between nodes over which this force is considered.",
+    ).tag(sync=True)
 
-    distance_max: TNumFeature = _make_trait(
-        "the maximum distance between nodes over which this force is considered.",
-        numeric=True,
-    )
+    distance_max: Optional[float] = T.Float(
+        None,
+        allow_none=True,
+        help="the maximum distance between nodes over which this force is considered.",
+    ).tag(sync=True)
+
+    @T.validate("strength")
+    def _validate_manybody_numerics(self, proposal: T.Bunch) -> Any:
+        return coerce(proposal, JSON_TYPES.number)
 
 
 @W.register
@@ -246,26 +262,27 @@ class RadialForce(BaseD3Force):
         numeric=True,
     )
 
-    x: TNumFeature = _make_trait(
-        "the x-coordinate of the centering position",
-        numeric=True,
-        by_column=False,
-        by_template=False,
-    )
+    x: Optional[float] = T.Float(
+        None,
+        allow_none=True,
+        help="the x-coordinate of the centering position",
+    ).tag(sync=True)
 
-    y: TNumFeature = _make_trait(
-        "the y-coordinate of the centering position",
-        numeric=True,
-        by_column=False,
-        by_template=False,
-    )
+    y: Optional[float] = T.Float(
+        None,
+        allow_none=True,
+        help="the y-coordinate of the centering position",
+    ).tag(sync=True)
 
-    z: TNumFeature = _make_trait(
-        "the z-coordinate of the centering position",
-        numeric=True,
-        by_column=False,
-        by_template=False,
-    )
+    z: Optional[float] = T.Float(
+        None,
+        allow_none=True,
+        help="the z-coordinate of the centering position",
+    ).tag(sync=True)
+
+    @T.validate("strength", "radius")
+    def _validate_radial_numerics(self, proposal: T.Bunch) -> Any:
+        return coerce(proposal, JSON_TYPES.number)
 
 
 @W.register
@@ -283,12 +300,17 @@ class CollisionForce(BaseD3Force):
         numeric=True,
     )
 
-    strength: TNumFeature = _make_trait(
-        "the strength of the force.",
-        numeric=True,
-        by_column=False,
-        by_template=False,
-    )
+    strength: Optional[float] = T.Float(
+        None,
+        allow_none=True,
+        min=0.0,
+        max=1.0,
+        help="the strength of the force.",
+    ).tag(sync=True)
+
+    @T.validate("radius")
+    def _validate_collision_numerics(self, proposal: T.Bunch) -> Any:
+        return coerce(proposal, JSON_TYPES.number)
 
 
 @W.register
@@ -299,25 +321,63 @@ class ClusterForce(BaseD3Force):
     """
 
     _model_name: str = T.Unicode("ClusterForceModel").tag(sync=True)
-    centers: Optional[str] = T.Unicode(
-        None,
-        allow_none=True,
-        help="Defines each node's cluster center. All cluster centers should be defined as a radius and set of coordinates { radius, x, y, z }, according to the number of spatial dimensions in the simulation.",
-    ).tag(sync=True)
+
     strength: Optional[float] = T.Float(
         None,
         allow_none=True,
-        min=0,
-        max=1,
+        min=0.0,
+        max=1.0,
         help="the strength of the force.",
     ).tag(sync=True)
-    center_inertia: Optional[float] = T.Float(
+
+    inertia: Optional[float] = T.Float(
         None,
         allow_none=True,
-        min=0,
-        max=1,
-        help="Lower values (close to 0) result in cluster center nodes with lower inertia: they are easily pulled around by other nodes in the cluster.",
+        min=0.0,
+        max=1.0,
+        help=(
+            "Lower values result in cluster center nodes more easily pulled "
+            "around by other nodes in the cluster."
+        ),
     ).tag(sync=True)
+
+    # node context
+    key: TFeature = _make_trait(
+        "a cluster key to which a node belongs. Context takes ``node``.",
+    )
+
+    # cluster context
+    radius: TNumFeature = _make_trait(
+        "the radius of a cluster. Context takes ``cluster``, ``node``, ``key``, and ``nodes``.",
+        numeric=True,
+        by_column=False,
+    )
+
+    x: TNumFeature = _make_trait(
+        "the x-coordinate of a cluster. Context takes ``cluster``, ``node``, ``key``, and ``nodes``.",
+        numeric=True,
+        by_column=False,
+    )
+
+    y: TNumFeature = _make_trait(
+        "the y-coordinate of a cluster. Context takes ``cluster``, ``node``, ``key``, and ``nodes``.",
+        numeric=True,
+        by_column=False,
+    )
+
+    z: TNumFeature = _make_trait(
+        "the z-coordinate of a cluster. Context takes ``cluster``, ``node``, ``key``, and ``nodes``.",
+        numeric=True,
+        by_column=False,
+    )
+
+    def __init__(self, key: Optional[TFeature] = None, *args: Any, **kwargs: Any):
+        kwargs["key"] = key
+        super().__init__(*args, **kwargs)
+
+    @T.validate("x", "y", "z", "radius", "strength", "inertia")
+    def _validate_cluster_numerics(self, proposal: T.Bunch) -> Any:
+        return coerce(proposal, JSON_TYPES.number)
 
 
 class DAGMode(enum.Enum):

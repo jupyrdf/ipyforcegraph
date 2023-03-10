@@ -114,6 +114,10 @@ class NodeShapes(Behavior):
         kwargs["shapes"] = shapes
         super().__init__(**kwargs)
 
+    @T.validate("size")
+    def _validate_node_shape_numerics(self, proposal: T.Bunch) -> Any:
+        return coerce(proposal, JSON_TYPES.number)
+
 
 @W.register
 class LinkShapes(Behavior):
@@ -122,6 +126,10 @@ class LinkShapes(Behavior):
     _model_name: str = T.Unicode("LinkShapeModel").tag(sync=True)
     color: TFeature = _make_trait("the color of the link")
     width: TNumFeature = _make_trait("the width of the link", numeric=True)
+
+    @T.validate("width")
+    def _validate_link_shape_numerics(self, proposal: T.Bunch) -> Any:
+        return coerce(proposal, JSON_TYPES.number)
 
 
 @W.register
@@ -136,3 +144,7 @@ class LinkArrows(Behavior):
         "the relative position of the arrow along the link, 0.0: ``source`` end, 1.0: ``target`` end",
         numeric=True,
     )
+
+    @T.validate("length", "relative_position")
+    def _validate_arrow_numerics(self, proposal: T.Bunch) -> Any:
+        return coerce(proposal, JSON_TYPES.number)

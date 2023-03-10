@@ -3,9 +3,12 @@
 # Copyright (c) 2023 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.
 
+from typing import Any
+
 import ipywidgets as W
 import traitlets as T
 
+from ..trait_utils import JSON_TYPES, coerce
 from ._base import Behavior, TFeature, TNumFeature, _make_trait
 
 
@@ -14,6 +17,7 @@ class LinkParticles(Behavior):
     """Customize the animated particles on links.
 
     ..note::
+
         The ``speed`` should be between ``0.0``, stationary, and ``~0.1``,
         or they will exceed the frame rate of the animation.
     """
@@ -29,3 +33,7 @@ class LinkParticles(Behavior):
     width: TNumFeature = _make_trait(
         "the size of the particles, ideally 0.0 < ``value`` < ~5", numeric=True
     )
+
+    @T.validate("density", "speed", "width")
+    def _validate_particle_numerics(self, proposal: T.Bunch) -> Any:
+        return coerce(proposal, JSON_TYPES.number)
