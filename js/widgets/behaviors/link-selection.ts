@@ -7,7 +7,7 @@ import { IBackboneModelOptions } from '@jupyter-widgets/base';
 import {
   DEFAULT_COLORS,
   DEFAULT_CURVATURES,
-  DEFAULT_LINE_DASH,
+  DEFAULT_LINE_DASHES,
   DEFAULT_WIDTHS,
   IBehave,
   ILinkBehaveOptions,
@@ -61,7 +61,7 @@ export class LinkSelectionModel extends BehaviorModel implements IBehave {
   }
 
   get selectedLineDash(): string {
-    return this.get('selected_line_dash') || DEFAULT_LINE_DASH.selected;
+    return this.get('selected_line_dash') || DEFAULT_LINE_DASHES.selected;
   }
 
   get selectedWidth(): string {
@@ -92,7 +92,10 @@ export class LinkSelectionModel extends BehaviorModel implements IBehave {
   getLinkLineDash({ index }: ILinkBehaveOptions): number[] | null {
     const line_dash = this.selected.has(index) ? this.selectedLineDash : null;
     if (line_dash != null) {
-      return JSON.parse(line_dash);
+      if (typeof line_dash === 'string') {
+        return JSON.parse(line_dash);
+      }
+      return line_dash;
     }
     return null;
   }

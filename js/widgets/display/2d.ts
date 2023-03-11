@@ -30,7 +30,7 @@ import {
   DEBUG,
   DEFAULT_COLORS,
   DEFAULT_CURVATURES,
-  DEFAULT_LINE_DASH,
+  DEFAULT_LINE_DASHES,
   DEFAULT_WIDTHS,
   EMOJI,
   EMPTY_GRAPH_DATA,
@@ -83,7 +83,7 @@ export class ForceGraphModel extends DOMWidgetModel {
       background_color: DEFAULT_COLORS.background,
       default_link_color: DEFAULT_COLORS.link,
       default_link_curvature: DEFAULT_CURVATURES.link,
-      default_link_line_dash: DEFAULT_LINE_DASH.link,
+      default_link_line_dash: DEFAULT_LINE_DASHES.link,
       default_link_width: DEFAULT_WIDTHS.link,
       default_node_color: DEFAULT_COLORS.node,
       default_node_size: DEFAULT_WIDTHS.node,
@@ -195,7 +195,7 @@ export class ForceGraphModel extends DOMWidgetModel {
   }
 
   get defaultLinkLineDash(): string {
-    return this.get('default_link_line_dash') || DEFAULT_LINE_DASH.link;
+    return this.get('default_link_line_dash') || DEFAULT_LINE_DASHES.link;
   }
 
   get defaultLinkWidth(): string {
@@ -238,7 +238,7 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
     this._rendered = new PromiseDelegate();
     this.model.on('change:source', this.onSourceChange, this);
     this.model.on(
-      'change:default_node_color change:default_link_color change:background_color change:default_node_size change:default_link_width change:default_link_curvature',
+      'change:default_node_color change:default_link_color change:background_color change:default_node_size change:default_link_width change:default_link_curvature change:default_link_line_dash',
       this.postUpdate,
       this
     );

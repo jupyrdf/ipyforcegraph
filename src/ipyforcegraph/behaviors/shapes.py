@@ -3,7 +3,6 @@
 # Copyright (c) 2023 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.
 
-import json
 from typing import Any, Optional, Sequence, Tuple, Union
 
 import ipywidgets as W
@@ -139,11 +138,9 @@ class LinkShapes(Behavior):
         "the curvature of the link, 0: straight, 1: circular", numeric=True
     )
     line_dash: TListNumFeature = _make_trait(
-        "the dash pattern, e.g., [5, 15] to draw a repeating pattern of a 5 pixel segment followed by a 15 pixel blank",
-        is_array=True,
+        "the dash pattern, e.g., [5, 15] to draw a repeating pattern of a 5-units-long segment followed by a 15-units-long blank",
         by_column=False,
-        by_template=False,
-        numeric=True,
+        by_template=True,
         stringy=False,
     )
     width: TNumFeature = _make_trait("the width of the link", numeric=True)
@@ -154,13 +151,7 @@ class LinkShapes(Behavior):
 
     @T.validate("line_dash")
     def _validate_link_line_dash(self, proposal: T.Bunch) -> Any:
-        value = proposal.value
-        if isinstance(value, tuple):
-            return value
-        try:
-            return json.loads(value)
-        except json.JSONDecodeError:
-            return tuple()
+        return coerce(proposal, JSON_TYPES.array)
 
 
 @W.register

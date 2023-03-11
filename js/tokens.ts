@@ -50,9 +50,9 @@ export const DEFAULT_CURVATURES = {
   selected: 0,
 };
 
-export const DEFAULT_LINE_DASH = {
-  link: null,
-  selected: null,
+export const DEFAULT_LINE_DASHES = {
+  link: [],
+  selected: [],
 };
 
 export const WIDGET_DEFAULTS = {
@@ -232,4 +232,5 @@ export const FALSEY = Object.freeze([
 export enum ECoerce {
   boolish = 'boolean',
   numeric = 'number',
+  array = 'array',
 }

@@ -32,12 +32,27 @@ export function coerceNumber(value: string): number {
   return Number(value);
 }
 
+export function coerceArray(value: string): any[] {
+  try {
+    value = JSON.parse(value);
+  } catch (e) {
+    console.debug('could not parse ', value, ' as JSON');
+    value = null;
+  }
+  if (Array.isArray(value)) {
+    return value;
+  }
+  return [];
+}
+
 export function getCoercer(coerce: ECoerce): (value: any) => any {
   switch (coerce) {
     case ECoerce.boolish:
       return coerceBoolish;
     case ECoerce.numeric:
       return coerceNumber;
+    case ECoerce.array:
+      return coerceArray;
     default:
       return identity;
   }

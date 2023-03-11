@@ -106,7 +106,6 @@ def _make_trait(
     boolish: bool = False,
     by_column: bool = True,
     by_template: bool = True,
-    is_array: bool = False,
     numeric: bool = False,
     stringy: bool = True,
 ) -> Any:
@@ -118,12 +117,6 @@ def _make_trait(
         + ([T.Instance(Column)] if by_column else [])
         + ([T.Instance(Nunjucks)] if by_template else [])
     )
-
-    if not allow_none and stringy:
-        default_value = ""
-
-    if is_array:
-        return W.TypedTuple(T.Union(types), help=help)
 
     return T.Union(
         types, help=help, allow_none=allow_none, default_value=default_value
