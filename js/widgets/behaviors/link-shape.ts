@@ -15,7 +15,6 @@ export class LinkShapeModel extends FacetedModel implements IBehave {
     ...FacetedModel.serializers,
     color: { deserialize },
     curvature: { deserialize },
-    link_shape: { deserialize },
     line_dash: { deserialize },
     width: { deserialize },
   };
