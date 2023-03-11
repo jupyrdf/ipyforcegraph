@@ -467,11 +467,13 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
         ? this.wrapFunction(this.getLinkCurvature)
         : this.wrapFunction(() => defaultLinkCurvature)
     );
-    graph.linkLineDash(
-      this.model.linkBehaviorsForMethod('getLinkLineDash').length
-        ? this.wrapFunction(this.getLinkLineDash)
-        : this.wrapFunction(() => defaultLinkLineDash)
-    );
+    if ( typeof graph['linkLineDash'] === 'function') {
+      graph.linkLineDash(
+        this.model.linkBehaviorsForMethod('getLinkLineDash').length
+          ? this.wrapFunction(this.getLinkLineDash)
+          : this.wrapFunction(() => defaultLinkLineDash)
+      );
+    }
     graph.linkLabel(
       this.model.linkBehaviorsForMethod('getLinkLabel').length
         ? this.wrapFunction(this.getLinkLabel)
