@@ -13,8 +13,10 @@ export class LinkShapeModel extends FacetedModel implements IBehave {
 
   static serializers = {
     ...FacetedModel.serializers,
-    width: { deserialize },
     color: { deserialize },
+    curvature: { deserialize },
+    link_shape: { deserialize },
+    width: { deserialize },
   };
 
   protected get _modelClass(): typeof LinkShapeModel {
@@ -23,6 +25,10 @@ export class LinkShapeModel extends FacetedModel implements IBehave {
 
   getLinkWidth(options: ILinkBehaveOptions): number | null {
     return this._facets.width ? this._facets.width(options) : null;
+  }
+
+  getLinkCurvature(options: ILinkBehaveOptions): number | null {
+    return this._facets.width ? this._facets.curvature(options) : null;
   }
 
   getLinkColor(options: ILinkBehaveOptions): string | null {

@@ -6,6 +6,7 @@ import { IBackboneModelOptions } from '@jupyter-widgets/base';
 
 import {
   DEFAULT_COLORS,
+  DEFAULT_CURVATURES,
   DEFAULT_WIDTHS,
   IBehave,
   ILinkBehaveOptions,
@@ -54,6 +55,10 @@ export class LinkSelectionModel extends BehaviorModel implements IBehave {
     return this.get('selected_color') || DEFAULT_COLORS.selected;
   }
 
+  get selectedCurvature(): string {
+    return this.get('selected_curvature') || DEFAULT_CURVATURES.selected;
+  }
+
   get selectedWidth(): string {
     return this.get('selected_width') || DEFAULT_WIDTHS.selected;
   }
@@ -70,6 +75,14 @@ export class LinkSelectionModel extends BehaviorModel implements IBehave {
     const width = this.selected.has(index) ? this.selectedWidth : null;
     if (width != null) {
       return parseFloat(width);
+    }
+    return null;
+  }
+
+  getLinkCurvature({ index }: ILinkBehaveOptions): number | null {
+    const curvature = this.selected.has(index) ? this.selectedCurvature : null;
+    if (curvature != null) {
+      return parseFloat(curvature);
     }
     return null;
   }

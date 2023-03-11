@@ -45,6 +45,11 @@ export const DEFAULT_WIDTHS = {
   node: 1,
 };
 
+export const DEFAULT_CURVATURES = {
+  link: 0,
+  selected: 0,
+};
+
 export const WIDGET_DEFAULTS = {
   _model_module: NAME,
   _model_module_version: VERSION,
@@ -66,6 +71,7 @@ export interface IBehave {
   updateRequested: ISignal<IBehave, TUpdateKind>;
   // link
   getLinkColor?(options: ILinkBehaveOptions): string | null;
+  getLinkCurvature?(options: ILinkBehaveOptions): number | null;
   getLinkWidth?(options: ILinkBehaveOptions): number | null;
   getLinkLabel?(options: ILinkBehaveOptions): string | null;
   getLinkDirectionalArrowColor?(options: ILinkBehaveOptions): string | null;
@@ -90,6 +96,7 @@ export interface IBehave {
 export const ALL_LINK_METHODS = [
   'getLinkLabel',
   'getLinkColor',
+  'getLinkCurvature',
   'getLinkWidth',
   'getLinkDirectionalArrowColor',
   'getLinkDirectionalArrowLength',

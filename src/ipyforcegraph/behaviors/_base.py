@@ -26,6 +26,7 @@ __all__ = (
 TFeature = Optional[Union["Column", "Nunjucks", str]]
 TNumFeature = Optional[Union["Column", "Nunjucks", str, int, float]]
 TBoolFeature = Optional[Union["Column", "Nunjucks", str, bool]]
+TListNumFeature = Optional[Union["Column", "Nunjucks", str, int, float, list]]
 
 
 class Behavior(ForceBase):
@@ -107,8 +108,10 @@ def _make_trait(
     by_template: bool = True,
     numeric: bool = False,
     stringy: bool = True,
+    is_array: bool = False,
 ) -> Any:
     """Makes a Trait that can accept a Column, a Nunjuck Template, and a literal."""
+    TraitClass = T.Union
     types = (
         ([T.Bool()] if boolish else [])
         + ([T.Unicode()] if stringy else [])
@@ -116,7 +119,10 @@ def _make_trait(
         + ([T.Instance(Column)] if by_column else [])
         + ([T.Instance(Nunjucks)] if by_template else [])
     )
+    if is_array:
+        TraitClass = W.TypedTuple
+        types = T.Union(types)
 
-    return T.Union(
+    return TraitClass(
         types, help=help, allow_none=allow_none, default_value=default_value
     ).tag(sync=True, **W.widget_serialization)
