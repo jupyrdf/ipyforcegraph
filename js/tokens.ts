@@ -230,7 +230,7 @@ export const FALSEY = Object.freeze([
 ]);
 
 export enum ECoerce {
+  array = 'array',
   boolish = 'boolean',
   numeric = 'number',
-  array = 'array',
 }

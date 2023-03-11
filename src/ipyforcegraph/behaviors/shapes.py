@@ -9,15 +9,7 @@ import ipywidgets as W
 import traitlets as T
 
 from ..trait_utils import JSON_TYPES, coerce
-from ._base import (
-    Behavior,
-    ShapeBase,
-    TBoolFeature,
-    TFeature,
-    TListNumFeature,
-    TNumFeature,
-    _make_trait,
-)
+from ._base import Behavior, ShapeBase, TBoolFeature, TFeature, TNumFeature, _make_trait
 
 
 class HasScale(ShapeBase):
@@ -137,11 +129,10 @@ class LinkShapes(Behavior):
     curvature: TNumFeature = _make_trait(
         "the curvature of the link, 0: straight, 1: circular", numeric=True
     )
-    line_dash: TListNumFeature = _make_trait(
-        "the dash pattern, e.g., [5, 15] to draw a repeating pattern of a 5-units-long segment followed by a 15-units-long blank",
-        by_column=False,
-        by_template=True,
+    line_dash: TFeature = _make_trait(
+        "the dash line pattern of the link, e.g., [2, 1] for '-- -- --'",
         stringy=False,
+        by_column=False,
     )
     width: TNumFeature = _make_trait("the width of the link", numeric=True)
 

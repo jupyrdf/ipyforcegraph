@@ -26,7 +26,6 @@ __all__ = (
 TFeature = Optional[Union["Column", "Nunjucks", str]]
 TNumFeature = Optional[Union["Column", "Nunjucks", str, int, float]]
 TBoolFeature = Optional[Union["Column", "Nunjucks", str, bool]]
-TListNumFeature = Optional[Union["Column", "Nunjucks", str, int, float, list]]
 
 
 class Behavior(ForceBase):
