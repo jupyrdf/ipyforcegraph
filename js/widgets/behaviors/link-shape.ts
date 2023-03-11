@@ -16,6 +16,7 @@ export class LinkShapeModel extends FacetedModel implements IBehave {
     color: { deserialize },
     curvature: { deserialize },
     link_shape: { deserialize },
+    line_dash: { deserialize },
     width: { deserialize },
   };
 
@@ -23,15 +24,19 @@ export class LinkShapeModel extends FacetedModel implements IBehave {
     return LinkShapeModel;
   }
 
-  getLinkWidth(options: ILinkBehaveOptions): number | null {
-    return this._facets.width ? this._facets.width(options) : null;
+  getLinkColor(options: ILinkBehaveOptions): string | null {
+    return this._facets.color ? this._facets.color(options) : null;
   }
 
   getLinkCurvature(options: ILinkBehaveOptions): number | null {
-    return this._facets.width ? this._facets.curvature(options) : null;
+    return this._facets.curvature ? this._facets.curvature(options) : null;
   }
 
-  getLinkColor(options: ILinkBehaveOptions): string | null {
-    return this._facets.color ? this._facets.color(options) : null;
+  getLinkLineDash(options: ILinkBehaveOptions): number[] | null {
+    return this._facets.line_dash ? this._facets.line_dash(options) : null;
+  }
+
+  getLinkWidth(options: ILinkBehaveOptions): number | null {
+    return this._facets.width ? this._facets.width(options) : null;
   }
 }

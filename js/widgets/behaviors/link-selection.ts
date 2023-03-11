@@ -7,6 +7,7 @@ import { IBackboneModelOptions } from '@jupyter-widgets/base';
 import {
   DEFAULT_COLORS,
   DEFAULT_CURVATURES,
+  DEFAULT_LINE_DASH,
   DEFAULT_WIDTHS,
   IBehave,
   ILinkBehaveOptions,
@@ -59,6 +60,10 @@ export class LinkSelectionModel extends BehaviorModel implements IBehave {
     return this.get('selected_curvature') || DEFAULT_CURVATURES.selected;
   }
 
+  get selectedLineDash(): string {
+    return this.get('selected_line_dash') || DEFAULT_LINE_DASH.selected;
+  }
+
   get selectedWidth(): string {
     return this.get('selected_width') || DEFAULT_WIDTHS.selected;
   }
@@ -71,12 +76,9 @@ export class LinkSelectionModel extends BehaviorModel implements IBehave {
     return this.get('multiple');
   }
 
-  getLinkWidth({ index }: ILinkBehaveOptions): number | null {
-    const width = this.selected.has(index) ? this.selectedWidth : null;
-    if (width != null) {
-      return parseFloat(width);
-    }
-    return null;
+  getLinkColor({ index }: ILinkBehaveOptions): string | null {
+    const color = this.selected.has(index) ? this.selectedColor : null;
+    return color;
   }
 
   getLinkCurvature({ index }: ILinkBehaveOptions): number | null {
@@ -87,9 +89,20 @@ export class LinkSelectionModel extends BehaviorModel implements IBehave {
     return null;
   }
 
-  getLinkColor({ index }: ILinkBehaveOptions): string | null {
-    const color = this.selected.has(index) ? this.selectedColor : null;
-    return color;
+  getLinkLineDash({ index }: ILinkBehaveOptions): number[] | null {
+    const line_dash = this.selected.has(index) ? this.selectedLineDash : null;
+    if (line_dash != null) {
+      return JSON.parse(line_dash);
+    }
+    return null;
+  }
+
+  getLinkWidth({ index }: ILinkBehaveOptions): number | null {
+    const width = this.selected.has(index) ? this.selectedWidth : null;
+    if (width != null) {
+      return parseFloat(width);
+    }
+    return null;
   }
 
   onLinkClick = ({

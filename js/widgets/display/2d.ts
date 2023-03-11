@@ -30,6 +30,7 @@ import {
   DEBUG,
   DEFAULT_COLORS,
   DEFAULT_CURVATURES,
+  DEFAULT_LINE_DASH,
   DEFAULT_WIDTHS,
   EMOJI,
   EMPTY_GRAPH_DATA,
@@ -82,6 +83,7 @@ export class ForceGraphModel extends DOMWidgetModel {
       background_color: DEFAULT_COLORS.background,
       default_link_color: DEFAULT_COLORS.link,
       default_link_curvature: DEFAULT_CURVATURES.link,
+      default_link_line_dash: DEFAULT_LINE_DASH.link,
       default_link_width: DEFAULT_WIDTHS.link,
       default_node_color: DEFAULT_COLORS.node,
       default_node_size: DEFAULT_WIDTHS.node,
@@ -190,6 +192,10 @@ export class ForceGraphModel extends DOMWidgetModel {
 
   get defaultLinkCurvature(): string {
     return this.get('default_link_curvature') || DEFAULT_CURVATURES.link;
+  }
+
+  get defaultLinkLineDash(): string {
+    return this.get('default_link_line_dash') || DEFAULT_LINE_DASH.link;
   }
 
   get defaultLinkWidth(): string {
@@ -438,6 +444,7 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
       defaultNodeColor,
       defaultLinkWidth,
       defaultLinkCurvature,
+      defaultLinkLineDash,
       defaultNodeSize,
     } = this.model;
 
@@ -459,6 +466,11 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
       this.model.linkBehaviorsForMethod('getLinkCurvature').length
         ? this.wrapFunction(this.getLinkCurvature)
         : this.wrapFunction(() => defaultLinkCurvature)
+    );
+    graph.linkLineDash(
+      this.model.linkBehaviorsForMethod('getLinkLineDash').length
+        ? this.wrapFunction(this.getLinkLineDash)
+        : this.wrapFunction(() => defaultLinkLineDash)
     );
     graph.linkLabel(
       this.model.linkBehaviorsForMethod('getLinkLabel').length
@@ -638,6 +650,13 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
       link,
       'getLinkCurvature',
       this.model.defaultLinkCurvature
+    );
+  };
+  protected getLinkLineDash = (link: LinkObject): string => {
+    return this.getComposedLinkAttr(
+      link,
+      'getLinkLineDash',
+      this.model.defaultLinkLineDash
     );
   };
   protected getLinkWidth = (link: LinkObject): string => {

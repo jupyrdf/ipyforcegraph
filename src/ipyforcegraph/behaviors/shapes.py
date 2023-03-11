@@ -3,17 +3,19 @@
 # Copyright (c) 2023 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.
 
+import json
 from typing import Any, Optional, Sequence, Tuple, Union
 
 import ipywidgets as W
 import traitlets as T
 
 from ..trait_utils import JSON_TYPES, coerce
-from ._base import (  # TListNumFeature,
+from ._base import (
     Behavior,
     ShapeBase,
     TBoolFeature,
     TFeature,
+    TListNumFeature,
     TNumFeature,
     _make_trait,
 )
@@ -136,16 +138,29 @@ class LinkShapes(Behavior):
     curvature: TNumFeature = _make_trait(
         "the curvature of the link, 0: straight, 1: circular", numeric=True
     )
-    # line_dash: TListNumFeature = _make_trait(
-    #     "the dash pattern, e.g., [5, 15] to draw a repeating pattern of a 5 pixel segment followed by a 15 pixel blank",
-    #     numeric=True,
-    #     is_array=True,
-    # )
+    line_dash: TListNumFeature = _make_trait(
+        "the dash pattern, e.g., [5, 15] to draw a repeating pattern of a 5 pixel segment followed by a 15 pixel blank",
+        is_array=True,
+        by_column=False,
+        by_template=False,
+        numeric=True,
+        stringy=False,
+    )
     width: TNumFeature = _make_trait("the width of the link", numeric=True)
 
-    @T.validate("width")
+    @T.validate("curvature", "width")
     def _validate_link_shape_numerics(self, proposal: T.Bunch) -> Any:
         return coerce(proposal, JSON_TYPES.number)
+
+    @T.validate("line_dash")
+    def _validate_link_line_dash(self, proposal: T.Bunch) -> Any:
+        value = proposal.value
+        if isinstance(value, tuple):
+            return value
+        try:
+            return json.loads(value)
+        except json.JSONDecodeError:
+            return tuple()
 
 
 @W.register

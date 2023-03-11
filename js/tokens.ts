@@ -50,6 +50,11 @@ export const DEFAULT_CURVATURES = {
   selected: 0,
 };
 
+export const DEFAULT_LINE_DASH = {
+  link: null,
+  selected: null,
+};
+
 export const WIDGET_DEFAULTS = {
   _model_module: NAME,
   _model_module_version: VERSION,
@@ -72,6 +77,7 @@ export interface IBehave {
   // link
   getLinkColor?(options: ILinkBehaveOptions): string | null;
   getLinkCurvature?(options: ILinkBehaveOptions): number | null;
+  getLinkLineDash?(options: ILinkBehaveOptions): number[] | null;
   getLinkWidth?(options: ILinkBehaveOptions): number | null;
   getLinkLabel?(options: ILinkBehaveOptions): string | null;
   getLinkDirectionalArrowColor?(options: ILinkBehaveOptions): string | null;
@@ -97,6 +103,7 @@ export const ALL_LINK_METHODS = [
   'getLinkLabel',
   'getLinkColor',
   'getLinkCurvature',
+  'getLinkLineDash',
   'getLinkWidth',
   'getLinkDirectionalArrowColor',
   'getLinkDirectionalArrowLength',

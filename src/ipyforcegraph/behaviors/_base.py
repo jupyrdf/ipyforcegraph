@@ -106,12 +106,11 @@ def _make_trait(
     boolish: bool = False,
     by_column: bool = True,
     by_template: bool = True,
+    is_array: bool = False,
     numeric: bool = False,
     stringy: bool = True,
-    is_array: bool = False,
 ) -> Any:
     """Makes a Trait that can accept a Column, a Nunjuck Template, and a literal."""
-    TraitClass = T.Union
     types = (
         ([T.Bool()] if boolish else [])
         + ([T.Unicode()] if stringy else [])
@@ -119,10 +118,13 @@ def _make_trait(
         + ([T.Instance(Column)] if by_column else [])
         + ([T.Instance(Nunjucks)] if by_template else [])
     )
-    if is_array:
-        TraitClass = W.TypedTuple
-        types = T.Union(types)
 
-    return TraitClass(
+    if not allow_none and stringy:
+        default_value = ""
+
+    if is_array:
+        return W.TypedTuple(T.Union(types), help=help)
+
+    return T.Union(
         types, help=help, allow_none=allow_none, default_value=default_value
     ).tag(sync=True, **W.widget_serialization)
