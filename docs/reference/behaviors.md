@@ -14,9 +14,23 @@
 .. automodule:: ipyforcegraph.behaviors.selection
 ```
 
-## Style Behaviors
+## Shape Behaviors
 
 ```{eval-rst}
 .. currentmodule:: ipyforcegraph
-.. automodule:: ipyforcegraph.behaviors.style
+.. automodule:: ipyforcegraph.behaviors.shape
+```
+
+## Shape Behaviors
+
+```{eval-rst}
+.. currentmodule:: ipyforcegraph
+.. automodule:: ipyforcegraph.behaviors.particles
+```
+
+## Tooltip Behaviors
+
+```{eval-rst}
+.. currentmodule:: ipyforcegraph
+.. automodule:: ipyforcegraph.behaviors.tooltip
 ```
