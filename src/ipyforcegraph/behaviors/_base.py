@@ -57,11 +57,11 @@ class DynamicValue(ForceBase):
     JSON_DATA_TYPES = JSON_TYPES.get_supported_types()
 
     value: str = T.Unicode(
-        "", help="The source used to compute the value for the trait."
+        "", help="the source used to compute the value for the trait"
     ).tag(sync=True)
 
     coerce: str = T.Unicode(
-        help="Name of a JSON Schema ``type`` into which to coerce the final value",
+        help="name of a JSON Schema ``type`` into which to coerce the final value",
         allow_none=True,
     ).tag(sync=True)
 
@@ -92,7 +92,45 @@ class Column(DynamicValue):
 
 
 class Nunjucks(DynamicValue):
-    """A ``nunjucks`` template for customizing a feature."""
+    """A `nunjucks template <https://mozilla.github.io/nunjucks/templating.html>`_ for calculating
+    dynamic values on the client.
+
+    The syntax is intentionally very similar to
+    `jinja2 <https://jinja.palletsprojects.com/en/3.1.x/templates>`_, and a number of extra
+    template functions are provided, including the methods and properties in
+    `JS Math <https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math>`_.
+
+
+    All the data in the ``source`` is available as ``graphData``, which has ``nodes`` and ``links``.
+
+    Depending on the context, inside of a template, one can use ``node`` or ``link``, which will have
+    all their available columns available using the dot notation, e.g., ``node.id``.  In addition,
+    ``link`` will have ``source`` and ``target`` as realized ``nodes``.
+
+    For example, to dynamically set the ``attribute`` property of a ``behavior`` in the front-end
+    based on the ``id`` property of the source ``node`` of a given ``link``, you would:
+
+    .. code-block:: python
+
+        behavior.attribute = Nunjucks("{{ link.source.id }}")
+
+    With these, and basic template tools, one can generate all kinds of interesting effects.
+
+    .. code-block:: js+jinja
+        :caption: color by group
+
+        {{ ["red", "yellow", "blue", "orange", "purple", "magenta"][node.group] }}
+
+    .. code-block:: js+jinja
+        :caption: color by out-degree
+
+        {% set n = 0 %}
+        {% for link in graphData.links %}
+        {% if link.source.id == node.id %}{% set n = n + 1 %}{% endif %}
+        {% endfor %}
+        {% set c = 256 * (7-n) / 7 %}
+        rgb({{ c }},0,0)
+    """
 
     _model_name: str = T.Unicode("NunjucksModel").tag(sync=True)
 

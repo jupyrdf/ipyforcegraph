@@ -41,18 +41,18 @@ class GraphForces(Behavior):
 
     forces: TForceDict = T.Dict(
         value_trait=T.Instance(BaseD3Force, allow_none=True),
-        help="named forces. Set a name `None` to remove a force: By default, ForceGraph has `link`, `charge`, and `center`.",
+        help="named forces. Set a name `None` to remove a force: By default, ForceGraph has `link`, `charge`, and `center`",
     ).tag(sync=True, **W.widget_serialization)
 
     warmup_ticks: Optional[int] = T.Int(
         0,
         min=0,
-        help="layout engine cycles to dry-run at ignition before starting to render.",
+        help="layout engine cycles to dry-run at ignition before starting to render",
     ).tag(sync=True)
 
     cooldown_ticks: Optional[int] = T.Int(
         -1,
-        help="frames to render before stopping and freezing the layout engine. Values less than zero will be translated to `Infinity`.",
+        help="frames to render before stopping and freezing the layout engine. Values less than zero will be translated to `Infinity`",
     ).tag(sync=True)
 
     alpha_min: Optional[float] = T.Float(
@@ -115,19 +115,19 @@ class Center(BaseD3Force):
     x: Optional[float] = T.Float(
         None,
         allow_none=True,
-        help="the x-coordinate of the centering position to the specified number",
+        help="the x-coordinate of the position to center the nodes on",
     ).tag(sync=True)
 
     y: Optional[float] = T.Float(
         None,
         allow_none=True,
-        help="the y-coordinate of the centering position to the specified number",
+        help="the y-coordinate of the position to center the nodes on",
     ).tag(sync=True)
 
     z: Optional[float] = T.Float(
         None,
         allow_none=True,
-        help="the z-coordinate of the centering position to the specified number",
+        help="the z-coordinate of the position to center the nodes on (only applies to ``ForceGraph3D``)",
     ).tag(sync=True)
 
 
@@ -187,6 +187,9 @@ class Z(BaseD3Force):
     """The Z position force push nodes towards a desired position along the
     given dimension with a configurable strength.
 
+    .. note::
+       Only affects :class:`~ipyforcegraph.graphs.ForceGraph3D`.
+
     https://github.com/d3/d3-force#positioning
     """
 
@@ -229,19 +232,19 @@ class ManyBody(BaseD3Force):
     theta: Optional[float] = T.Float(
         None,
         allow_none=True,
-        help="the Barnes-Hut approximation criterion.",
+        help="the Barnes-Hut approximation criterion",
     ).tag(sync=True)
 
     distance_min: Optional[float] = T.Float(
         None,
         allow_none=True,
-        help="the minimum distance between nodes over which this force is considered.",
+        help="the minimum distance between nodes over which this force is considered",
     ).tag(sync=True)
 
     distance_max: Optional[float] = T.Float(
         None,
         allow_none=True,
-        help="the maximum distance between nodes over which this force is considered.",
+        help="the maximum distance between nodes over which this force is considered",
     ).tag(sync=True)
 
     @T.validate("strength")
@@ -312,7 +315,7 @@ class Collision(BaseD3Force):
         allow_none=True,
         min=0.0,
         max=1.0,
-        help="the strength of the force.",
+        help="the strength of the force",
     ).tag(sync=True)
 
     @T.validate("radius")
@@ -334,7 +337,7 @@ class Cluster(BaseD3Force):
         allow_none=True,
         min=0.0,
         max=1.0,
-        help="the strength of the force.",
+        help="the strength of the force",
     ).tag(sync=True)
 
     inertia: Optional[float] = T.Float(
@@ -343,7 +346,7 @@ class Cluster(BaseD3Force):
         min=0.0,
         max=1.0,
         help=(
-            "Lower values result in cluster center nodes more easily pulled "
+            "lower values result in cluster center nodes more easily pulled "
             "around by other nodes in the cluster."
         ),
     ).tag(sync=True)
@@ -396,7 +399,7 @@ class DAG(BaseD3Force):
     """
 
     class Mode(enum.Enum):
-        """A list o"""
+        """The layout orientation options for the DAG."""
 
         off = None
         top_down = "td"

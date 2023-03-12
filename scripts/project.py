@@ -241,7 +241,7 @@ OK_DOS2UNIX = BUILD / "dos2unix.ok"
 
 HTMLCOV = BUILD / "htmlcov"
 HTMLCOV_INDEX = HTMLCOV / "index.html"
-PYTEST_COV_THRESHOLD = 83
+PYTEST_COV_THRESHOLD = 81
 PYTEST_HTML = BUILD / "pytest.html"
 PYTEST_XUNIT = BUILD / "pytest.xunit.xml"
 

@@ -31,8 +31,8 @@ class ForceGraph(W.DOMWidget, ForceBase):
             "the behaviors that provide functionality for "
             ":mod:`~ipyforcegraph.behaviors.selection`, "
             "changing the node and link :mod:`~ipyforcegraph.behaviors.shapes`, "
-            "changing the on-hover :mod:`~ipyforcegraph.behaviors.tooltips` for nodes and links, "
-            "the :mod:`~ipyforcegraph.behaviors.force` graph layout, "
+            "changing the on-hover :mod:`~ipyforcegraph.behaviors.tooltip` for nodes and links, "
+            "the :mod:`~ipyforcegraph.behaviors.forces` graph layout, "
             ":mod:`~ipyforcegraph.behaviors.recording` of the graph state, and the "
             ":mod:`~ipyforcegraph.behaviors.particles` on the links."
         ),
@@ -40,22 +40,22 @@ class ForceGraph(W.DOMWidget, ForceBase):
 
     default_node_color: str = T.Unicode(
         "rgba(31, 120, 179, 1.0)",
-        help="a default node color, which can be overridden by :class:`~ipyforcegraph.behaviors.shapes.NodeShapes`.",
+        help="a default ``node`` color, which can be overridden by :class:`~ipyforcegraph.behaviors.shapes.NodeShapes`",
     ).tag(sync=True)
 
     default_node_size: float = T.Float(
         1,
-        help="a default node size, which can be overridden by :class:`~ipyforcegraph.behaviors.shapes.NodeShapes`.",
+        help="a default ``node`` size, which can be overridden by :class:`~ipyforcegraph.behaviors.shapes.NodeShapes`",
     ).tag(sync=True)
 
     default_link_color: str = T.Unicode(
         "rgba(66, 66, 66, 0.5)",
-        help="a default link color, which can be overridden by :class:`~ipyforcegraph.behaviors.link.LinkShapes`",
+        help="a default ``link`` color, which can be overridden by :class:`~ipyforcegraph.behaviors.link.LinkShapes`",
     ).tag(sync=True)
 
     default_link_width: str = T.Float(
         1.0,
-        help="a default link width, which can be overridden by :class:`~ipyforcegraph.behaviors.link.LinkShapes`",
+        help="a default ``link`` width, which can be overridden by :class:`~ipyforcegraph.behaviors.link.LinkShapes`",
     ).tag(sync=True)
 
     background_color: str = T.Unicode(
