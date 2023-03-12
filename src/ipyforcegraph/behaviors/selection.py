@@ -30,8 +30,7 @@ class NodeSelection(Behavior):
     ).tag(sync=True)
 
     multiple: bool = T.Bool(
-        True,
-        help="if `False`, only one ``node`` can be selected at a time"
+        True, help="if ``False``, only one ``node`` can be selected at a time"
     ).tag(sync=True)
 
     selected_color: str = T.Unicode(
@@ -59,8 +58,7 @@ class LinkSelection(Behavior):
     ).tag(sync=True)
 
     multiple: bool = T.Bool(
-        True,
-        help="if `False`, only one ``link`` can be selected at a time"
+        True, help="if ``False``, only one ``link`` can be selected at a time"
     ).tag(sync=True)
 
     selected_color: str = T.Unicode(
