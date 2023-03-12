@@ -5,6 +5,9 @@ from ipyforcegraph import behaviors as B
 b = B.NodeSelection()
 fg = WIDGET_CLASS(behaviors=[b])
 fg.source.nodes = [{"id": "hello world"}]
-t = W.TagsInput(allowed_tags=sorted(fg.source.nodes.id))
+t = W.IntsInput(
+    placeholder="select some node indices",
+    allowed_tags=[*range(len(fg.source.nodes))],
+)
 T.link((b, "selected"), (t, "value"))
 W.VBox([t, fg])
