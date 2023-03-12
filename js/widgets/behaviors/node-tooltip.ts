@@ -21,6 +21,6 @@ export class NodeTooltipModel extends FacetedModel implements IBehave {
   }
 
   getNodeLabel(options: INodeBehaveOptions): string | null {
-    return this._facets['label'](options);
+    return this._facets.label ? this._facets.label(options) : null;
   }
 }
