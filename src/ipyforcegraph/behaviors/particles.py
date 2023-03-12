@@ -16,10 +16,9 @@ from ._base import Behavior, TFeature, TNumFeature, _make_trait
 class LinkParticles(Behavior):
     """Customize the animated particles on links.
 
-    ..note::
-
-        The ``speed`` should be between ``0.0``, stationary, and ``~0.1``,
-        or they will exceed the frame rate of the animation.
+    .. note::
+       The ``speed`` should be between ``0.0``, stationary, and ``~0.1``,
+       or they will exceed the frame rate of the animation.
     """
 
     _model_name: str = T.Unicode("LinkParticleModel").tag(sync=True)

@@ -187,8 +187,8 @@ class Z(BaseD3Force):
     """The Z position force push nodes towards a desired position along the
     given dimension with a configurable strength.
 
-    ..note::
-        Only affects :class:`~ipyforcegraph.graphs.ForceGraph3D`.
+    .. note::
+       Only affects :class:`~ipyforcegraph.graphs.ForceGraph3D`.
 
     https://github.com/d3/d3-force#positioning
     """
