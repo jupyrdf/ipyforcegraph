@@ -31,8 +31,8 @@ class ForceGraph(W.DOMWidget, ForceBase):
             "the behaviors that provide functionality for "
             ":mod:`~ipyforcegraph.behaviors.selection`, "
             "changing the node and link :mod:`~ipyforcegraph.behaviors.shapes`, "
-            "changing the on-hover :mod:`~ipyforcegraph.behaviors.tooltips` for nodes and links, "
-            "the :mod:`~ipyforcegraph.behaviors.force` graph layout, "
+            "changing the on-hover :mod:`~ipyforcegraph.behaviors.tooltip` for nodes and links, "
+            "the :mod:`~ipyforcegraph.behaviors.forces` graph layout, "
             ":mod:`~ipyforcegraph.behaviors.recording` of the graph state, and the "
             ":mod:`~ipyforcegraph.behaviors.particles` on the links."
         ),

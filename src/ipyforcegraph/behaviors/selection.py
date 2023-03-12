@@ -29,7 +29,10 @@ class NodeSelection(Behavior):
         allow_none=True,
     ).tag(sync=True)
 
-    multiple: bool = T.Bool(True).tag(sync=True)
+    multiple: bool = T.Bool(
+        True,
+        help="if `False`, only one ``node`` can be selected at a time"
+    ).tag(sync=True)
 
     selected_color: str = T.Unicode(
         "rgba(179, 163, 105, 1.0)",
@@ -55,7 +58,10 @@ class LinkSelection(Behavior):
         allow_none=True,
     ).tag(sync=True)
 
-    multiple: bool = T.Bool(True).tag(sync=True)
+    multiple: bool = T.Bool(
+        True,
+        help="if `False`, only one ``link`` can be selected at a time"
+    ).tag(sync=True)
 
     selected_color: str = T.Unicode(
         "rgba(31, 120, 179, 1.0)", help="the color of selected links"
