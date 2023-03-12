@@ -18,15 +18,15 @@ class GraphImage(Behavior):
 
     _model_name: str = T.Unicode("GraphImageModel").tag(sync=True)
 
-    capturing = T.Bool(False, help="Whether the frame capture is currently active").tag(
+    capturing = T.Bool(False, help="whether the frame capture is currently active").tag(
         sync=True
     )
 
-    frame_count = T.Int(1, help="The number of frames to capture").tag(sync=True)
+    frame_count = T.Int(1, help="the number of frames to capture").tag(sync=True)
 
     frames: Tuple[W.Image, ...] = W.TypedTuple(
         T.Instance(W.Image),
-        help="A tuple of :class:`~ipywidgets.widgets.widget_media.Image` to populate with frames of the graph.",
+        help="a tuple of :class:`~ipywidgets.widgets.widget_media.Image` to populate with frames of the graph.",
     ).tag(sync=True, **W.widget_serialization)
 
     def _get_frames(self) -> Tuple[W.Image, ...]:
@@ -57,14 +57,14 @@ class GraphData(Behavior):
     _model_name: str = T.Unicode("GraphDataModel").tag(sync=True)
 
     capturing: bool = T.Bool(
-        False, help="Whether the dataframe capture is currently active"
+        False, help="whether the dataframe capture is currently active"
     ).tag(sync=True)
 
-    source_count = T.Int(1, help="The number of sources to capture").tag(sync=True)
+    source_count = T.Int(1, help="the number of sources to capture").tag(sync=True)
 
     sources: Tuple[DataFrameSource, ...] = W.TypedTuple(
         T.Instance(DataFrameSource),
-        help="A tuple of :class:`~ipyforcegraph.sources.dataframe.DataFrameSource` to be populated with data of the graph.",
+        help="a tuple of :class:`~ipyforcegraph.sources.dataframe.DataFrameSource` to be populated with data of the graph.",
     ).tag(sync=True, **W.widget_serialization)
 
     def _get_sources(self) -> Tuple[DataFrameSource, ...]:

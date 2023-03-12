@@ -57,11 +57,11 @@ class DynamicValue(ForceBase):
     JSON_DATA_TYPES = JSON_TYPES.get_supported_types()
 
     value: str = T.Unicode(
-        "", help="The source used to compute the value for the trait."
+        "", help="the source used to compute the value for the trait."
     ).tag(sync=True)
 
     coerce: str = T.Unicode(
-        help="Name of a JSON Schema ``type`` into which to coerce the final value",
+        help="name of a JSON Schema ``type`` into which to coerce the final value",
         allow_none=True,
     ).tag(sync=True)
 

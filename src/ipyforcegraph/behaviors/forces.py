@@ -115,19 +115,19 @@ class Center(BaseD3Force):
     x: Optional[float] = T.Float(
         None,
         allow_none=True,
-        help="the x-coordinate of the centering position to the specified number",
+        help="the x-coordinate of the position to center the nodes on",
     ).tag(sync=True)
 
     y: Optional[float] = T.Float(
         None,
         allow_none=True,
-        help="the y-coordinate of the centering position to the specified number",
+        help="the y-coordinate of the position to center the nodes on",
     ).tag(sync=True)
 
     z: Optional[float] = T.Float(
         None,
         allow_none=True,
-        help="the z-coordinate of the centering position to the specified number",
+        help="the z-coordinate of the position to center the nodes on (only applies to ``ForceGraph3D``)",
     ).tag(sync=True)
 
 
@@ -186,6 +186,9 @@ class Y(BaseD3Force):
 class Z(BaseD3Force):
     """The Z position force push nodes towards a desired position along the
     given dimension with a configurable strength.
+
+    ..note::
+        Only affects :class:`~ipyforcegraph.graphs.ForceGraph3D`.
 
     https://github.com/d3/d3-force#positioning
     """
@@ -343,7 +346,7 @@ class Cluster(BaseD3Force):
         min=0.0,
         max=1.0,
         help=(
-            "Lower values result in cluster center nodes more easily pulled "
+            "lower values result in cluster center nodes more easily pulled "
             "around by other nodes in the cluster."
         ),
     ).tag(sync=True)
@@ -396,7 +399,7 @@ class DAG(BaseD3Force):
     """
 
     class Mode(enum.Enum):
-        """A list o"""
+        """The layout orientation options for the DAG."""
 
         off = None
         top_down = "td"
