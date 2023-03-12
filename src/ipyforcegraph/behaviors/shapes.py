@@ -124,12 +124,25 @@ class LinkShapes(Behavior):
     """Customize the shape of the ``links``."""
 
     _model_name: str = T.Unicode("LinkShapeModel").tag(sync=True)
+
     color: TFeature = _make_trait("the color of the link")
+    curvature: TNumFeature = _make_trait(
+        "the curvature of the link, 0: straight, 1: circular", numeric=True
+    )
+    line_dash: TFeature = _make_trait(
+        "the dash line pattern of the link, e.g., [2, 1] for '-- -- --'",
+        stringy=False,
+        by_column=False,
+    )
     width: TNumFeature = _make_trait("the width of the link", numeric=True)
 
-    @T.validate("width")
+    @T.validate("curvature", "width")
     def _validate_link_shape_numerics(self, proposal: T.Bunch) -> Any:
         return coerce(proposal, JSON_TYPES.number)
+
+    @T.validate("line_dash")
+    def _validate_link_line_dash(self, proposal: T.Bunch) -> Any:
+        return coerce(proposal, JSON_TYPES.array)
 
 
 @W.register
