@@ -18,7 +18,7 @@
 
 ```{eval-rst}
 .. currentmodule:: ipyforcegraph
-.. automodule:: ipyforcegraph.behaviors.shape
+.. automodule:: ipyforcegraph.behaviors.shapes
 ```
 
 ## Particles Behaviors
