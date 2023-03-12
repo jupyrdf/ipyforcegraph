@@ -57,7 +57,7 @@ class DynamicValue(ForceBase):
     JSON_DATA_TYPES = JSON_TYPES.get_supported_types()
 
     value: str = T.Unicode(
-        "", help="the source used to compute the value for the trait."
+        "", help="the source used to compute the value for the trait"
     ).tag(sync=True)
 
     coerce: str = T.Unicode(

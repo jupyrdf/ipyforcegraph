@@ -26,7 +26,7 @@ class GraphImage(Behavior):
 
     frames: Tuple[W.Image, ...] = W.TypedTuple(
         T.Instance(W.Image),
-        help="a tuple of :class:`~ipywidgets.widgets.widget_media.Image` to populate with frames of the graph.",
+        help="a tuple of :class:`~ipywidgets.widgets.widget_media.Image` to populate with frames of the graph",
     ).tag(sync=True, **W.widget_serialization)
 
     def _get_frames(self) -> Tuple[W.Image, ...]:
@@ -64,7 +64,7 @@ class GraphData(Behavior):
 
     sources: Tuple[DataFrameSource, ...] = W.TypedTuple(
         T.Instance(DataFrameSource),
-        help="a tuple of :class:`~ipyforcegraph.sources.dataframe.DataFrameSource` to be populated with data of the graph.",
+        help="a tuple of :class:`~ipyforcegraph.sources.dataframe.DataFrameSource` to be populated with data of the graph",
     ).tag(sync=True, **W.widget_serialization)
 
     def _get_sources(self) -> Tuple[DataFrameSource, ...]:
