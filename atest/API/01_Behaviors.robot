@@ -20,7 +20,7 @@ ${SCREENS}      ${SCREENS ROOT}${/}api
 2D Node Select
     [Setup]    Set Up Behavior Example    NodeSelection    ${IPYFORCEGRAPH CLASS}
     Click IPyForceGraph Canvas
-    Wait Until Tag Widget Exists    hello world
+    Wait Until Tag Widget Exists    0
     Remove Widget Tag
     Wait Until No Tag Widgets Exist
 
@@ -38,7 +38,7 @@ ${SCREENS}      ${SCREENS ROOT}${/}api
 3D Node Select
     [Setup]    Set Up Behavior Example    NodeSelection    ${IPYFORCEGRAPH CLASS 3D}
     Click IPyForceGraph Canvas
-    Wait Until Tag Widget Exists    hello world
+    Wait Until Tag Widget Exists    0
     Remove Widget Tag
     Wait Until No Tag Widgets Exist
 
