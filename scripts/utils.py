@@ -42,7 +42,7 @@ def strip_timestamps(*paths, slug="TIMESTAMP"):
             text = re.sub(pattern, slug, text)
 
         if text != original_text:
-            path.write_text(**file_writing)
+            path.write_text(text, **file_writing)
 
 
 def replace_between_patterns(src: Path, dest: Path, pattern: str):
