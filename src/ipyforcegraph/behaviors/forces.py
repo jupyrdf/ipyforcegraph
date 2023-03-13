@@ -426,6 +426,7 @@ class DAG(BaseD3Force):
 
     node_filter: TBoolFeature = _make_trait(
         "whether node is part of the DAG layout",
+        default_value=True,
         boolish=True,
     )
 
