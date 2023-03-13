@@ -878,7 +878,8 @@ def task_checkdocs():
                         "--check-links-cache",
                         *["--check-links-cache-name", P.DOCS_LINKS],
                         # TODO: relax these once published
-                        *["-k", "not (edit or rtfd or pypi)"],
+                        "--check-links-ignore",
+                        "https://",
                         "--links-ext=html",
                         *file_dep,
                     ],

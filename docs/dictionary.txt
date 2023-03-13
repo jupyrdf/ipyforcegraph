@@ -35,6 +35,7 @@ ipyforcegraph
 IPyForceGraph
 IPython
 ipywidgets
+jinja2
 js
 jupyrdf
 jupyter
