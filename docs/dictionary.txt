@@ -28,6 +28,9 @@ ForceGraph3D
 GraphData
 GraphForces
 GraphImage
+HasDimensions
+HasFillAndStroke
+HasScale
 ipyforcegraph
 IPyForceGraph
 IPython
@@ -43,6 +46,7 @@ labextension
 LinkArrows
 LinkColor
 LinkForce
+LinkParticles
 LinkSelection
 LinkShapes
 LinkTooltip
