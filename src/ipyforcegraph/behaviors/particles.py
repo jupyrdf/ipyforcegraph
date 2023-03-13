@@ -36,3 +36,22 @@ class LinkParticles(Behavior):
     @T.validate("density", "speed", "width")
     def _validate_particle_numerics(self, proposal: T.Bunch) -> Any:
         return coerce(proposal, JSON_TYPES.number)
+    
+
+@W.register
+class EmitParticles(Behavior):
+    """Emit particles over a set of links.
+
+    .. note::
+       The ``speed`` should be between ``0.0``, stationary, and ``~0.1``,
+       or they will exceed the frame rate of the animation.
+    """
+
+    _model_name: str = T.Unicode("LinkEmitParticleModel").tag(sync=True)
+    links: tuple = W.TypedTuple(T.Int, help="the indices over which to emit a particle")
+
+    @T.validate("density", "speed", "width")
+    def _validate_particle_numerics(self, proposal: T.Bunch) -> Any:
+        return coerce(proposal, JSON_TYPES.number)
+
+
