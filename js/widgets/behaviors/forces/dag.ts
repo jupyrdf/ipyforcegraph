@@ -33,7 +33,7 @@ export class DAGBehaviorModel extends FacetedForceModel implements IBehave, IFor
   refreshBehavior(graph: ForceGraphInstance) {
     const { mode, level_distance, node_filter } = this._facets;
 
-    const activeMode = this.active ? mode() : null;
+    const activeMode = this.active && mode ? mode() : null;
     graph.dagMode(activeMode || null);
     graph.dagLevelDistance(level_distance ? level_distance() : null);
 

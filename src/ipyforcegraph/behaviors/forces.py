@@ -403,7 +403,7 @@ class DAG(BaseD3Force):
 
         off = None
         top_down = "td"
-        button_up = "bu"
+        bottom_up = "bu"
         left_right = "lr"
         right_left = "rl"
         radial_out = "radialout"
