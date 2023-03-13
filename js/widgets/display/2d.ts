@@ -495,6 +495,11 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
         ? this.wrapFunction(this.onLinkClick)
         : null
     );
+    graph.emitParticle(
+      this.model.linkBehaviorsForMethod('emitParticle').length
+        ? this.wrapFunction(this.emitParticle)
+        : null
+    );
 
     // forces
     this.getForceUpdate();
@@ -768,6 +773,23 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
     };
     for (const behavior of this.model.linkBehaviorsForMethod('onLinkClick')) {
       shouldContinue = behavior.onLinkClick(options);
+      if (!shouldContinue) {
+        return;
+      }
+    }
+  };
+
+  protected emitParticle = (link: LinkObject) => {
+    const graphData = (this.graph as ForceGraphInstance).graphData();
+    let shouldContinue = true;
+    const options: ILinkBehaveOptions = {
+      view: this,
+      graphData,
+      link,
+      index: graphData.links.indexOf(link),
+    };
+    for (const behavior of this.model.linkBehaviorsForMethod('emitParticle')) {
+      shouldContinue = behavior.emitParticle(options);
       if (!shouldContinue) {
         return;
       }
