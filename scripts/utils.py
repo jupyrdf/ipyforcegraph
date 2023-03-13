@@ -28,7 +28,7 @@ RE_PYTEST_TIMESTAMP = r"on \d{2}-[^\-]+-\d{4} at \d{2}:\d{2}:\d{2}"
 PATTERNS = [RE_TIMESTAMP, RE_PYTEST_TIMESTAMP]
 XP_JUPYTER_STDERR = """//*[@data-mime-type="application/vnd.jupyter.stderr"]"""
 
-file_writing = dict(encoding="utf-8", newline="\n")
+file_writing = dict(encoding="utf-8")
 
 
 def strip_timestamps(*paths, slug="TIMESTAMP"):
@@ -264,7 +264,9 @@ def lock_one(platform: str, lockfile: Path, stack: Paths) -> None:
     with tempfile.TemporaryDirectory() as td:
         tdp = Path(td)
         tmp_lock = tdp / f"conda-{platform}.lock"
-        subprocess.check_call(list(map(str, lock_args)), cwd=td)
+        str_args = list(map(str, lock_args))
+        print(">>>", " ".join(str_args), "\n")
+        subprocess.check_call(str_args, cwd=td)
         raw = tmp_lock.read_text(encoding="utf-8").split(P.EXPLICIT)[1].strip()
 
     lockfile.parent.mkdir(exist_ok=True, parents=True)
