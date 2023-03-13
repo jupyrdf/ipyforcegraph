@@ -451,6 +451,8 @@ def task_test():
             ]
             return CmdAction(args, env=env, shell=False)
 
+        html = P.BUILD_NBHTML / nb.name.replace(".ipynb", ".html")
+
         file_dep = [
             *P.ALL_PY_SRC,
             *P.EXAMPLE_IPYNB,
@@ -464,8 +466,12 @@ def task_test():
         return dict(
             name=f"nb:{nb.name}".replace(" ", "_").replace(".ipynb", ""),
             file_dep=file_dep,
-            actions=[_test()],
-            targets=[P.BUILD_NBHTML / nb.name.replace(".ipynb", ".html")],
+            actions=[
+                (U.clean_some, [html]),
+                _test(),
+                (U.html_expect_xpath_matches, [html]),
+            ],
+            targets=[html],
         )
 
     for nb in P.EXAMPLE_IPYNB:

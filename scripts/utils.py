@@ -6,6 +6,7 @@
 import difflib
 import json
 import re
+import shutil
 import subprocess
 import tempfile
 import textwrap
@@ -25,6 +26,7 @@ RE_TIMESTAMP = r"\d{4}-\d{2}-\d{2} \d{2}:\d{2} -\d*"
 RE_PYTEST_TIMESTAMP = r"on \d{2}-[^\-]+-\d{4} at \d{2}:\d{2}:\d{2}"
 
 PATTERNS = [RE_TIMESTAMP, RE_PYTEST_TIMESTAMP]
+XP_JUPYTER_STDERR = """//*[@data-mime-type="application/vnd.jupyter.stderr"]"""
 
 file_writing = dict(encoding="utf-8", newline="\n")
 
@@ -286,3 +288,26 @@ def sort_unique(path: Path):
         print("\n".join(diff))
         path.write_text(new_text, encoding="utf-8")
         print(f"sorted and deduplicated {path}")
+
+
+def html_expect_xpath_matches(
+    html: Path, xpath: Optional[str] = XP_JUPYTER_STDERR, expected: Optional[int] = 0
+):
+    import lxml.html
+
+    tree = lxml.html.fromstring(html.read_text(encoding="utf-8"))
+    stderrs = tree.xpath(xpath)
+
+    for stderr in stderrs:
+        print(f"{html} contains stderr:")
+        print(stderr.text_content(), "\n")
+
+    assert len(stderrs) == expected
+
+
+def clean_some(*paths: Path):
+    for path in paths:
+        if path.is_dir():
+            shutil.rmtree(path)
+        elif path.exists():
+            path.unlink()
