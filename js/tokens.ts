@@ -75,7 +75,6 @@ export interface IBehave {
   getLinkDirectionalParticleSpeed?(options: ILinkBehaveOptions): number | null;
   getLinkDirectionalParticleWidth?(options: ILinkBehaveOptions): number | null;
   getLinkDirectionalParticles?(options: ILinkBehaveOptions): number | null;
-  emitParticle?(options: ILinkBehaveOptions): boolean;
   // node
   getNodeColor?(options: INodeBehaveOptions): string | null;
   getNodeLabel?(options: INodeBehaveOptions): string | null;
@@ -100,7 +99,6 @@ export const ALL_LINK_METHODS = [
   'getLinkDirectionalParticleWidth',
   'getLinkDirectionalParticles',
   'onLinkClick',
-  'emitParticle',
 ];
 export type TLinkBehaveMethod = (typeof ALL_LINK_METHODS)[number];
 

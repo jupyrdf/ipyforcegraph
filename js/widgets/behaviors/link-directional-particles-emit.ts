@@ -4,10 +4,7 @@
  */
 import { IBackboneModelOptions } from '@jupyter-widgets/base';
 
-import {
-  IBehave,
-  WIDGET_DEFAULTS,
-} from '../../tokens';
+import { IBehave, WIDGET_DEFAULTS } from '../../tokens';
 
 import { BehaviorModel } from './base';
 
