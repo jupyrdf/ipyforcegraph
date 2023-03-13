@@ -28,8 +28,6 @@ RE_PYTEST_TIMESTAMP = r"on \d{2}-[^\-]+-\d{4} at \d{2}:\d{2}:\d{2}"
 PATTERNS = [RE_TIMESTAMP, RE_PYTEST_TIMESTAMP]
 XP_JUPYTER_STDERR = """//*[@data-mime-type="application/vnd.jupyter.stderr"]"""
 
-file_writing = dict(encoding="utf-8")
-
 
 def strip_timestamps(*paths, slug="TIMESTAMP"):
     """replace timestamps with a less churn-y value"""
@@ -37,7 +35,7 @@ def strip_timestamps(*paths, slug="TIMESTAMP"):
         if not path.exists():
             continue
 
-        text = original_text = path.read_text(encoding="utf-8")
+        text = original_text = path.read_text(**P.UTF8)
 
         for pattern in PATTERNS:
             if not re.findall(pattern, text):
@@ -45,17 +43,17 @@ def strip_timestamps(*paths, slug="TIMESTAMP"):
             text = re.sub(pattern, slug, text)
 
         if text != original_text:
-            path.write_text(text, **file_writing)
+            path.write_text(text, **P.UTF8)
 
 
 def replace_between_patterns(src: Path, dest: Path, pattern: str):
     """replace the dest file between patterns"""
     print(src, dest)
-    src_chunks = src.read_text(encoding="utf-8").split(pattern)
-    dest_chunks = dest.read_text(encoding="utf-8").split(pattern)
+    src_chunks = src.read_text(**P.UTF8).split(pattern)
+    dest_chunks = dest.read_text(**P.UTF8).split(pattern)
     dest.write_text(
         "".join([dest_chunks[0], pattern, src_chunks[1], pattern, dest_chunks[2]]),
-        **file_writing,
+        **P.UTF8,
     )
 
 
@@ -69,9 +67,9 @@ def template_one(src: Path, dest: Path, context=None):
 
     context = context or {}
 
-    tmpl = jinja2.Template(src.read_text(encoding="utf-8"))
+    tmpl = jinja2.Template(src.read_text(**P.UTF8))
     text = tmpl.render(**context)
-    dest.write_text(text, **file_writing)
+    dest.write_text(text, **P.UTF8)
 
 
 def clean_notebook_metadata(nb_json):
@@ -99,7 +97,7 @@ def pretty_markdown_cells(ipynb, nb_json):
 
         for i, cell in enumerate(cells):
             files[i] = tdp / f"{ipynb.stem}-{i:03d}.md"
-            files[i].write_text("".join([*cell["source"], "\n"]), **file_writing)
+            files[i].write_text("".join([*cell["source"], "\n"]), **P.UTF8)
 
         args = [
             *P.IN_ENV,
@@ -115,19 +113,17 @@ def pretty_markdown_cells(ipynb, nb_json):
         subprocess.call([*args, tdp])
 
         for i, cell in enumerate(cells):
-            cells[i]["source"] = (
-                files[i].read_text(encoding="utf-8").rstrip().splitlines(True)
-            )
+            cells[i]["source"] = files[i].read_text(**P.UTF8).rstrip().splitlines(True)
 
 
 def notebook_lint(ipynb: Path):
-    nb_text = ipynb.read_text(encoding="utf-8")
+    nb_text = ipynb.read_text(**P.UTF8)
     nb_json = json.loads(nb_text)
 
     pretty_markdown_cells(ipynb, nb_json)
     clean_notebook_metadata(nb_json)
 
-    ipynb.write_text(json.dumps(nb_json), **file_writing)
+    ipynb.write_text(json.dumps(nb_json), **P.UTF8)
 
     print(f"... blackening {ipynb.stem}")
     black_args = []
@@ -222,7 +218,7 @@ def merge_envs(env_path: Optional[Path], stack: List[Path]) -> Optional[str]:
     env_str = yaml.dump(env, Dumper=IndentDumper)
 
     if env_path:
-        env_path.write_text(env_str, **file_writing)
+        env_path.write_text(env_str, **P.UTF8)
         return
 
     return env_str
@@ -235,7 +231,7 @@ def lock_comment(stack: Paths) -> str:
 def needs_lock(lockfile: Path, stack: Paths) -> bool:
     if not lockfile.exists():
         return True
-    lock_text = lockfile.read_text(encoding="utf-8")
+    lock_text = lockfile.read_text(**P.UTF8)
     comment = lock_comment(stack)
     return comment not in lock_text
 
@@ -267,10 +263,10 @@ def lock_one(platform: str, lockfile: Path, stack: Paths) -> None:
         str_args = list(map(str, lock_args))
         print(">>>", " ".join(str_args), "\n")
         subprocess.check_call(str_args, cwd=td)
-        raw = tmp_lock.read_text(encoding="utf-8").split(P.EXPLICIT)[1].strip()
+        raw = tmp_lock.read_text(**P.UTF8).split(P.EXPLICIT)[1].strip()
 
     lockfile.parent.mkdir(exist_ok=True, parents=True)
-    lockfile.write_text("\n".join([comment, P.EXPLICIT, raw, ""]), **file_writing)
+    lockfile.write_text("\n".join([comment, P.EXPLICIT, raw, ""]), **P.UTF8)
 
 
 def naive_string_sort_key(value: str):
@@ -280,7 +276,7 @@ def naive_string_sort_key(value: str):
 
 def sort_unique(path: Path):
     """ensure a file contains only unique, sorted lines"""
-    old_text = path.read_text(encoding="utf-8")
+    old_text = path.read_text(**P.UTF8)
     old_lines = old_text.strip().splitlines()
     stripped_lines = {line.strip() for line in old_lines if line.strip()}
     new_lines = sorted(stripped_lines, key=naive_string_sort_key)
@@ -288,7 +284,7 @@ def sort_unique(path: Path):
     if new_text != old_text:
         diff = difflib.unified_diff(old_lines, new_lines, "BEFORE", "AFTER")
         print("\n".join(diff))
-        path.write_text(new_text, encoding="utf-8")
+        path.write_text(new_text, **P.UTF8)
         print(f"sorted and deduplicated {path}")
 
 
@@ -297,7 +293,7 @@ def html_expect_xpath_matches(
 ):
     import lxml.html
 
-    tree = lxml.html.fromstring(html.read_text(encoding="utf-8"))
+    tree = lxml.html.fromstring(html.read_text(**P.UTF8))
     stderrs = tree.xpath(xpath)
 
     for stderr in stderrs:

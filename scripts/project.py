@@ -33,6 +33,7 @@ OSX = PLATFORM == "Darwin"
 LINUX = PLATFORM == "Linux"
 UNIX = not WIN
 HAS_CONDA_LOCK = shutil.which("conda-lock")
+UTF8 = dict(encoding="utf-8")
 
 
 def _get_boolish(name, default="false"):

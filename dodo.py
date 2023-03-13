@@ -81,7 +81,7 @@ def _ok(task, ok):
         *task["actions"],
         lambda: [
             ok.parent.mkdir(exist_ok=True, parents=True),
-            ok.write_text("ok", encoding="utf-8"),
+            ok.write_text("ok", **P.UTF8),
             True,
         ][-1],
     ]
@@ -388,7 +388,7 @@ def task_build():
 
         output = "\n".join(lines)
         print(output)
-        P.SHA256SUMS.write_text(output)
+        P.SHA256SUMS.write_text(output, **P.UTF8)
 
     yield dict(
         name="hash",
@@ -496,7 +496,7 @@ def task_test():
     def _pabot_logs():
         for robot_out in sorted(P.ATEST_OUT.rglob("robot_*.out")):
             print(f"\n[{robot_out.relative_to(P.ROOT)}]")
-            print(robot_out.read_text() or "<EMPTY>")
+            print(robot_out.read_text(**P.UTF8) or "<EMPTY>")
 
     yield dict(
         name="atest",
@@ -636,7 +636,7 @@ def task_lint():
         P.OK_ROBOT_LINT,
     )
 
-    index_src = P.EXAMPLE_INDEX.read_text(encoding="utf-8")
+    index_src = P.EXAMPLE_INDEX.read_text(**P.UTF8)
 
     def _make_index_check(ex):
         def _check():
@@ -824,7 +824,7 @@ def _make_spellcheck(dep, html):
             print("Unrecognized words in", dep)
             print(fail_str)
             fail_path.parent.mkdir(exist_ok=True, parents=True)
-            fail_path.write_text(fail_str, encoding="utf-8")
+            fail_path.write_text(fail_str, **P.UTF8)
 
     return _ok(
         dict(
@@ -842,7 +842,7 @@ def _all_spell():
     for path in sorted(P.ALL_SPELL.parent.rglob("*.fail")):
         if path == P.ALL_SPELL:
             continue
-        all_fail += path.read_text(encoding="utf-8").strip().splitlines()
+        all_fail += path.read_text(**P.UTF8).strip().splitlines()
 
     all_fail_str = "\n".join(sorted(set(all_fail)))
 
@@ -850,7 +850,7 @@ def _all_spell():
         print("ALL Unrecognized words")
         print(all_fail_str)
 
-    P.ALL_SPELL.write_text(all_fail_str, encoding="utf-8")
+    P.ALL_SPELL.write_text(all_fail_str, **P.UTF8)
 
     return len(all_fail) == 0
 
