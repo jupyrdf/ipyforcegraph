@@ -237,6 +237,7 @@ OK_PRETTIER = BUILD / "prettier.ok"
 OK_INDEX = BUILD / "index.ok"
 OK_LABEXT = BUILD / "labext.ok"
 OK_LINKS = BUILD / "links.ok"
+OK_DICTIONARY = BUILD / "dictionary.ok"
 OK_DOS2UNIX = BUILD / "dos2unix.ok"
 
 HTMLCOV = BUILD / "htmlcov"

@@ -3,6 +3,7 @@
 # Copyright (c) 2023 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.
 
+import difflib
 import json
 import re
 import subprocess
@@ -266,3 +267,22 @@ def lock_one(platform: str, lockfile: Path, stack: Paths) -> None:
 
     lockfile.parent.mkdir(exist_ok=True, parents=True)
     lockfile.write_text("\n".join([comment, P.EXPLICIT, raw, ""]), **file_writing)
+
+
+def naive_string_sort_key(value: str):
+    """provide a best-effort string sort key that matches some other tools."""
+    return (value.lower(), value[0] != value[0].lower(), value[1] != value[1].lower())
+
+
+def sort_unique(path: Path):
+    """ensure a file contains only unique, sorted lines"""
+    old_text = path.read_text(encoding="utf-8")
+    old_lines = old_text.strip().splitlines()
+    stripped_lines = {line.strip() for line in old_lines if line.strip()}
+    new_lines = sorted(stripped_lines, key=naive_string_sort_key)
+    new_text = "\n".join(new_lines + [""])
+    if new_text != old_text:
+        diff = difflib.unified_diff(old_lines, new_lines, "BEFORE", "AFTER")
+        print("\n".join(diff))
+        path.write_text(new_text, encoding="utf-8")
+        print(f"sorted and deduplicated {path}")

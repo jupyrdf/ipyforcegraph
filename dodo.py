@@ -893,8 +893,19 @@ def task_checkdocs():
 
     spell_tasks = []
 
+    yield _ok(
+        dict(
+            name="dictionary",
+            doc="ensure dictionary is unique and sorted",
+            file_dep=[P.DICTIONARY],
+            actions=[(U.sort_unique, [P.DICTIONARY])],
+        ),
+        P.OK_DICTIONARY,
+    )
+
     for dep in file_dep:
         task = _make_spellcheck(dep, html)
+        task["file_dep"] += [P.OK_DICTIONARY]
         spell_tasks += [f"""checkdocs:{task["name"]}"""]
         yield task
 
