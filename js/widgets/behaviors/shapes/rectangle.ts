@@ -10,6 +10,10 @@ import { IBaseOptions, IRectangleOptions, RECTANGLE_DEFAULTS } from './base';
 export class RectangleShapeModel extends GeometryShapeModel {
   static model_name = 'RectangleShapeModel';
 
+  protected get _modelClass() {
+    return RectangleShapeModel;
+  }
+
   protected get shapeDefaults() {
     return RECTANGLE_DEFAULTS;
   }

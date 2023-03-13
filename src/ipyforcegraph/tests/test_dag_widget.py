@@ -1,13 +1,15 @@
 # Copyright (c) 2023 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.
 
-from ..behaviors.forces import DAGForce
+from ..behaviors.forces import DAG
 
 
-def test_widget_source() -> None:
-    behavior = DAGForce(active=False)
+def test_dag() -> None:
+    """Basic test for DAG force behavior."""
+    behavior = DAG(active=False)
 
     assert not behavior.active
-    assert behavior.node_filter == ""
-    assert behavior.mode == None
-    assert behavior.level_distance == None
+    assert behavior.node_filter is None
+    assert behavior.mode is None
+    assert behavior.mode is DAG.Mode.off.value
+    assert behavior.level_distance is None

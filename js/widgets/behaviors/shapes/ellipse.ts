@@ -10,6 +10,10 @@ import { ELLIPSE_DEFAULTS, FULL_CIRCLE, IBaseOptions, IEllipseOptions } from './
 export class EllipseShapeModel extends GeometryShapeModel {
   static model_name = 'EllipseShapeModel';
 
+  protected get _modelClass() {
+    return EllipseShapeModel;
+  }
+
   protected get shapeDefaults() {
     return ELLIPSE_DEFAULTS;
   }

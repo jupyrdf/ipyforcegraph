@@ -4,22 +4,28 @@
  */
 import { forceRadial as d3ForceRadial } from 'd3-force-3d';
 
-import { makeForceNodeTemplate } from '../../../template-utils';
+import { unpack_models as deserialize } from '@jupyter-widgets/base';
+
 import { IBehave, IForce } from '../../../tokens';
-import { isNumeric } from '../../../utils';
 
-import { ForceBehaviorModel } from './force';
+import { FacetedForceModel } from './force';
 
-export class RadialForceModel extends ForceBehaviorModel implements IBehave, IForce {
+export class RadialForceModel extends FacetedForceModel implements IBehave, IForce {
   static model_name = 'RadialForceModel';
-  _force: d3ForceRadial;
-  radius: CallableFunction | Number | null;
 
-  defaults() {
-    return {
-      ...super.defaults(),
-      _model_name: RadialForceModel.model_name,
-    };
+  static serializers = {
+    ...FacetedForceModel.serializers,
+    x: { deserialize },
+    y: { deserialize },
+    z: { deserialize },
+    radius: { deserialize },
+    strength: { deserialize },
+  };
+
+  _force: d3ForceRadial;
+
+  protected get _modelClass(): typeof RadialForceModel {
+    return RadialForceModel;
   }
 
   forceFactory(): d3ForceRadial {
@@ -27,47 +33,14 @@ export class RadialForceModel extends ForceBehaviorModel implements IBehave, IFo
   }
 
   get force(): d3ForceRadial {
-    const { strength, radius, x, y, z } = this;
+    const { strength, radius, x, y, z } = this._facets;
 
     let force = this._force;
-    force = strength == null ? force : force.strength(strength);
-    force = radius == null ? force : force.radius(this.radius);
-    force = x == null ? force : force.x(x);
-    force = y == null ? force : force.y(y);
-    force = z == null ? force : force.z(z);
+    force = strength == null ? force : force.strength(this.wrapForNode(strength));
+    force = radius == null ? force : force.radius(this.wrapForNode(radius));
+    force = x == null ? force : force.x(x());
+    force = y == null ? force : force.y(y());
+    force = z == null ? force : force.z(z());
     return force;
-  }
-
-  get triggerChanges(): string {
-    return 'change:strength change:radius change:x change:y change:z change:active';
-  }
-
-  async update() {
-    await this.update_radius();
-  }
-
-  get strength() {
-    return this.get('strength');
-  }
-
-  async update_radius() {
-    let value = this.get('radius');
-    if (isNumeric(value)) {
-      this.radius = Number(value);
-    } else {
-      this.radius = await makeForceNodeTemplate(value);
-    }
-  }
-
-  get x() {
-    return this.get('x');
-  }
-
-  get y() {
-    return this.get('y');
-  }
-
-  get z() {
-    return this.get('z');
   }
 }

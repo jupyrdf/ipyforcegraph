@@ -269,7 +269,6 @@ def task_setup():
     py_task = _ok(
         dict(
             name="py",
-            uptodate=[config_changed({"artifact": P.INSTALL_ARTIFACT})],
             file_dep=file_dep,
             actions=py_actions,
         ),
@@ -602,6 +601,15 @@ def task_lint():
             ),
             P.OK_NBLINT[nb.name],
         )
+
+    yield _ok(
+        dict(
+            name="dos2unix",
+            file_dep=[*P.ALL_DOS2UNIX, *[*P.OK_NBLINT.values()]],
+            actions=[U.fix_windows_line_endings],
+        ),
+        P.OK_DOS2UNIX,
+    )
 
     yield _ok(
         dict(

@@ -25,6 +25,8 @@ RE_PYTEST_TIMESTAMP = r"on \d{2}-[^\-]+-\d{4} at \d{2}:\d{2}:\d{2}"
 
 PATTERNS = [RE_TIMESTAMP, RE_PYTEST_TIMESTAMP]
 
+file_writing = dict(encoding="utf-8", newline="\n")
+
 
 def strip_timestamps(*paths, slug="TIMESTAMP"):
     """replace timestamps with a less churn-y value"""
@@ -40,7 +42,7 @@ def strip_timestamps(*paths, slug="TIMESTAMP"):
             text = re.sub(pattern, slug, text)
 
         if text != original_text:
-            path.write_text(text)
+            path.write_text(text, **file_writing)
 
 
 def replace_between_patterns(src: Path, dest: Path, pattern: str):
@@ -50,7 +52,7 @@ def replace_between_patterns(src: Path, dest: Path, pattern: str):
     dest_chunks = dest.read_text(encoding="utf-8").split(pattern)
     dest.write_text(
         "".join([dest_chunks[0], pattern, src_chunks[1], pattern, dest_chunks[2]]),
-        encoding="utf-8",
+        **file_writing,
     )
 
 
@@ -66,7 +68,7 @@ def template_one(src: Path, dest: Path, context=None):
 
     tmpl = jinja2.Template(src.read_text(encoding="utf-8"))
     text = tmpl.render(**context)
-    dest.write_text(text, encoding="utf-8")
+    dest.write_text(text, **file_writing)
 
 
 def clean_notebook_metadata(nb_json):
@@ -94,7 +96,7 @@ def pretty_markdown_cells(ipynb, nb_json):
 
         for i, cell in enumerate(cells):
             files[i] = tdp / f"{ipynb.stem}-{i:03d}.md"
-            files[i].write_text("".join([*cell["source"], "\n"]), encoding="utf-8")
+            files[i].write_text("".join([*cell["source"], "\n"]), **file_writing)
 
         args = [
             *P.IN_ENV,
@@ -122,13 +124,35 @@ def notebook_lint(ipynb: Path):
     pretty_markdown_cells(ipynb, nb_json)
     clean_notebook_metadata(nb_json)
 
-    ipynb.write_text(json.dumps(nb_json), encoding="utf-8")
+    ipynb.write_text(json.dumps(nb_json), **file_writing)
 
     print(f"... blackening {ipynb.stem}")
     black_args = []
     black_args += ["--quiet"]
     if subprocess.call([*P.IN_ENV, "black", *black_args, ipynb]) != 0:
         return False
+
+
+def fix_windows_line_endings(max_chunk_size: int = 8000):
+    """Break filelist into chunks for dos2unix call that converts CRLF to LF."""
+    num_files = len(P.ALL_DOS2UNIX)
+    _chunks = [P.ALL_DOS2UNIX]
+    while any(
+        len(" ".join([str(c) for c in chunk])) > max_chunk_size for chunk in _chunks
+    ):
+        num_files = int(num_files / 2)
+        if num_files < 1:
+            raise ValueError("Error finding dos2unix file chunk size.")
+        _chunks = [
+            P.ALL_DOS2UNIX[i : i + num_files]
+            for i in range(0, len(P.ALL_DOS2UNIX), num_files)
+        ]
+    print(
+        f"Split {len(P.ALL_DOS2UNIX)} files into chunks of {num_files} for linting command."
+    )
+    for chunk in _chunks:
+        if subprocess.call([*P.IN_ENV, "dos2unix", "--quiet", *chunk]) != 0:
+            return False
 
 
 @lru_cache(1000)
@@ -195,7 +219,7 @@ def merge_envs(env_path: Optional[Path], stack: List[Path]) -> Optional[str]:
     env_str = yaml.dump(env, Dumper=IndentDumper)
 
     if env_path:
-        env_path.write_text(env_str, encoding="utf-8")
+        env_path.write_text(env_str, **file_writing)
         return
 
     return env_str
@@ -241,4 +265,4 @@ def lock_one(platform: str, lockfile: Path, stack: Paths) -> None:
         raw = tmp_lock.read_text(encoding="utf-8").split(P.EXPLICIT)[1].strip()
 
     lockfile.parent.mkdir(exist_ok=True, parents=True)
-    lockfile.write_text("\n".join([comment, P.EXPLICIT, raw, ""]), encoding="utf-8")
+    lockfile.write_text("\n".join([comment, P.EXPLICIT, raw, ""]), **file_writing)

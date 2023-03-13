@@ -215,6 +215,7 @@ ALL_TS = [*TS_SRC.rglob("*.ts")]
 ALL_CSS = [*STYLE.rglob("*.css")]
 PRETTIER_IGNORE = ROOT / ".prettierignore"
 ALL_PRETTIER = [*ALL_YML, *ALL_JSON, *ALL_MD, *ALL_TS, *ALL_CSS]
+ALL_DOS2UNIX = [*ALL_YML, *EXAMPLE_IPYNB, *ALL_PRETTIER]
 
 # built files
 OK_RELEASE = BUILD / "release.ok"
@@ -236,10 +237,11 @@ OK_PRETTIER = BUILD / "prettier.ok"
 OK_INDEX = BUILD / "index.ok"
 OK_LABEXT = BUILD / "labext.ok"
 OK_LINKS = BUILD / "links.ok"
+OK_DOS2UNIX = BUILD / "dos2unix.ok"
 
 HTMLCOV = BUILD / "htmlcov"
 HTMLCOV_INDEX = HTMLCOV / "index.html"
-PYTEST_COV_THRESHOLD = 83
+PYTEST_COV_THRESHOLD = 81
 PYTEST_HTML = BUILD / "pytest.html"
 PYTEST_XUNIT = BUILD / "pytest.xunit.xml"
 

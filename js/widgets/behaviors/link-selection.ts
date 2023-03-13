@@ -33,7 +33,7 @@ export class LinkSelectionModel extends BehaviorModel implements IBehave {
 
   initialize(attributes: Backbone.ObjectHash, options: IBackboneModelOptions) {
     super.initialize(attributes, options);
-    this.on('change:selected', this.onValueChange, this);
+    this.on('change:selected change:selected_column', this.onValueChange, this);
     this.onValueChange();
   }
 
@@ -58,13 +58,20 @@ export class LinkSelectionModel extends BehaviorModel implements IBehave {
     return this.get('selected_width') || DEFAULT_WIDTHS.selected;
   }
 
+  get columnName(): string | null {
+    return this.get('column_name') || null;
+  }
+
   get multiple(): boolean {
     return this.get('multiple');
   }
 
-  getLinkWidth({ index }: ILinkBehaveOptions): string | null {
+  getLinkWidth({ index }: ILinkBehaveOptions): number | null {
     const width = this.selected.has(index) ? this.selectedWidth : null;
-    return width;
+    if (width != null) {
+      return parseFloat(width);
+    }
+    return null;
   }
 
   getLinkColor({ index }: ILinkBehaveOptions): string | null {
@@ -72,14 +79,29 @@ export class LinkSelectionModel extends BehaviorModel implements IBehave {
     return color;
   }
 
-  onLinkClick = ({ index, event }: ILinkEventBehaveOptions): boolean => {
-    let { selected, multiple } = this;
-    const indexSelected = selected.has(index);
+  onLinkClick = ({
+    link,
+    index,
+    event,
+    graphData,
+  }: ILinkEventBehaveOptions): boolean => {
+    let { selected, columnName, multiple } = this;
+    const indexWasSelected = selected.has(index);
     if (multiple && (event.ctrlKey || event.shiftKey || event.altKey)) {
-      indexSelected ? selected.delete(index) : selected.add(index);
+      indexWasSelected ? selected.delete(index) : selected.add(index);
     } else {
+      if (columnName) {
+        for (const oldIndex of selected) {
+          const oldLink = graphData.links[oldIndex];
+          oldLink && (oldLink[columnName] = false);
+        }
+      }
       selected.clear();
-      !indexSelected && selected.add(index);
+      !indexWasSelected && selected.add(index);
+    }
+
+    if (columnName) {
+      link[columnName] = !indexWasSelected;
     }
 
     this.selected = selected;

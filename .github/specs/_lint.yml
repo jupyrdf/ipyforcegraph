@@ -1,3 +1,7 @@
+_inherit_from:
+  - _lint_unix.yml
+  - _lint_win.yml
+
 dependencies:
   - black-jupyter
   - isort
