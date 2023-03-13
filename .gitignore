@@ -166,3 +166,5 @@ _d/
 .pabotsuitenames
 *.tsbuildinfo*
 *.isorted
+
+d2u*

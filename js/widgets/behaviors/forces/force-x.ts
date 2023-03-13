@@ -4,64 +4,37 @@
  */
 import { forceX as d3XForce } from 'd3-force-3d';
 
-import { makeForceNodeTemplate } from '../../../template-utils';
+import { unpack_models as deserialize } from '@jupyter-widgets/base';
+
 import { IBehave, IForce, TAnyForce } from '../../../tokens';
-import { isNumeric } from '../../../utils';
 
-import { ForceBehaviorModel } from './force';
+import { FacetedForceModel } from './force';
 
-export class XForceModel extends ForceBehaviorModel implements IBehave, IForce {
+export class XForceModel extends FacetedForceModel implements IBehave, IForce {
   static model_name = 'XForceModel';
-  _force: d3XForce;
-  x: CallableFunction | Number | null;
-  strength: CallableFunction | Number | null;
 
-  defaults() {
-    return {
-      ...super.defaults(),
-      _model_name: XForceModel.model_name,
-      x: null,
-      strength: null,
-    };
+  static serializers = {
+    ...FacetedForceModel.serializers,
+    x: { deserialize },
+    strength: { deserialize },
+  };
+
+  _force: d3XForce;
+
+  protected get _modelClass(): typeof XForceModel {
+    return XForceModel;
   }
 
   forceFactory(): d3XForce {
     return d3XForce();
   }
 
-  get triggerChanges(): string {
-    return 'change:x change:strength change:active';
-  }
-
   get force(): TAnyForce {
-    const { x, strength } = this;
+    const { x, strength } = this._facets;
 
     let force = this._force;
-    force = x == null ? force : force.x(x);
-    force = strength == null ? force : force.strength(strength);
+    force = x == null ? force : force.x(this.wrapForNode(x));
+    force = strength == null ? force : force.strength(this.wrapForNode(strength));
     return force;
-  }
-
-  async update() {
-    await this.update_x();
-    await this.update_strength();
-  }
-
-  async update_x() {
-    let value = this.get('x');
-    if (isNumeric(value)) {
-      this.x = Number(value);
-    } else {
-      this.x = await makeForceNodeTemplate(value);
-    }
-  }
-
-  async update_strength() {
-    let value = this.get('strength');
-    if (isNumeric(value)) {
-      this.strength = Number(value);
-    } else {
-      this.strength = await makeForceNodeTemplate(value);
-    }
   }
 }

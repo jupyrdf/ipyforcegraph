@@ -269,7 +269,6 @@ def task_setup():
     py_task = _ok(
         dict(
             name="py",
-            uptodate=[config_changed({"artifact": P.INSTALL_ARTIFACT})],
             file_dep=file_dep,
             actions=py_actions,
         ),
@@ -605,6 +604,15 @@ def task_lint():
 
     yield _ok(
         dict(
+            name="dos2unix",
+            file_dep=[*P.ALL_DOS2UNIX, *[*P.OK_NBLINT.values()]],
+            actions=[U.fix_windows_line_endings],
+        ),
+        P.OK_DOS2UNIX,
+    )
+
+    yield _ok(
+        dict(
             name="robot",
             file_dep=[
                 *P.ALL_ROBOT,
@@ -870,7 +878,8 @@ def task_checkdocs():
                         "--check-links-cache",
                         *["--check-links-cache-name", P.DOCS_LINKS],
                         # TODO: relax these once published
-                        *["-k", "not (edit or rtfd or pypi)"],
+                        "--check-links-ignore",
+                        "https://",
                         "--links-ext=html",
                         *file_dep,
                     ],
@@ -884,8 +893,19 @@ def task_checkdocs():
 
     spell_tasks = []
 
+    yield _ok(
+        dict(
+            name="dictionary",
+            doc="ensure dictionary is unique and sorted",
+            file_dep=[P.DICTIONARY],
+            actions=[(U.sort_unique, [P.DICTIONARY])],
+        ),
+        P.OK_DICTIONARY,
+    )
+
     for dep in file_dep:
         task = _make_spellcheck(dep, html)
+        task["file_dep"] += [P.OK_DICTIONARY]
         spell_tasks += [f"""checkdocs:{task["name"]}"""]
         yield task
 

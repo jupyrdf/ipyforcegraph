@@ -2,85 +2,109 @@
  * Copyright (c) 2023 ipyforcegraph contributors.
  * Distributed under the terms of the Modified BSD License.
  */
-import { ObjectHash } from 'backbone';
 import { default as d3ClusterForce } from 'd3-force-cluster-3d';
 import { NodeObject } from 'force-graph/dist/force-graph';
 
-import { IBackboneModelOptions } from '@jupyter-widgets/base';
+import { unpack_models as deserialize } from '@jupyter-widgets/base';
 
-import { makeForceNodeTemplate } from '../../../template-utils';
 import { IBehave, IForce, TAnyForce } from '../../../tokens';
-import { isNumeric } from '../../../utils';
 
-import { ForceBehaviorModel } from './force';
+import { FacetedForceModel } from './force';
 
-// interface Cluster{
-//   x: number,
-//   y: number,
-//   z: number,
-// }
+export interface IClusterCenter {
+  radius: number;
+  x: number;
+  y: number;
+  z: number;
+}
 
-export class ClusterForceModel extends ForceBehaviorModel implements IBehave, IForce {
+export interface IClusterFunctions {
+  radius: CallableFunction | null;
+  x: CallableFunction | null;
+  y: CallableFunction | null;
+  z: CallableFunction | null;
+}
+
+export interface INodeObjectWithCluster {
+  radius?: number;
+}
+
+export class ClusterForceModel extends FacetedForceModel implements IBehave, IForce {
   static model_name = 'ClusterForceModel';
+
+  static serializers = {
+    ...FacetedForceModel.serializers,
+    strength: { deserialize },
+    inertia: { deserialize },
+    // node template
+    key: { deserialize },
+    // cluster template
+    radius: { deserialize },
+    y: { deserialize },
+    x: { deserialize },
+    z: { deserialize },
+  };
+
   _force: d3ClusterForce;
-  strength: CallableFunction | Number | null;
-  clusters: object;
-  get_cluster: CallableFunction; // render the cluster template
+  _clusters = new Map<string | number, IClusterCenter>();
 
-  defaults() {
-    return {
-      ...super.defaults(),
-      _model_name: ClusterForceModel.model_name,
-      x: null,
-      strength: null,
-    };
-  }
-
-  initialize(attributes: ObjectHash, options: IBackboneModelOptions): void {
-    super.initialize(attributes, options);
-    this.clusters = {};
-    this.get_cluster = () => 0;
+  protected get _modelClass(): typeof ClusterForceModel {
+    return ClusterForceModel;
   }
 
   forceFactory(): d3ClusterForce {
     return d3ClusterForce();
   }
 
-  get triggerChanges(): string {
-    return 'change:centers change:strength change:center_inertia change:active';
-  }
-
   get force(): TAnyForce {
-    const { centers, strength, centerInertia } = this;
+    const { strength, inertia, key, radius, x, y, z } = this._facets;
 
     let force = this._force;
-    force = centerInertia == null ? force : force.centerInertia(centerInertia);
-    force = centers == null ? force : force.centers(centers);
-    force = strength == null ? force : force.strength(strength);
+    force = inertia == null ? force : force.centerInertia(inertia());
+    force = strength == null ? force : force.strength(strength());
+
+    force =
+      key == null
+        ? force
+        : force.centers(this.makeCenters(this.wrapForNode(key), { radius, x, y, z }));
+
     return force;
   }
 
-  async update() {
-    await this.update_centers();
-    await this.update_strength();
+  makeCenters(clusterKey: CallableFunction, clusterFunctions: IClusterFunctions) {
+    const centers = (node: INodeObjectWithCluster, i: number, nodes: NodeObject[]) => {
+      if (!node.radius) {
+        node.radius = 1;
+      }
+      const key = clusterKey(node, i, nodes);
+      let cluster = this._clusters.get(key);
+      if (cluster == null) {
+        cluster = { x: 0, y: 0, z: 0, radius: 0 };
+        this._clusters.set(key, cluster);
+      }
+
+      const { x, y, z, radius } = clusterFunctions;
+      const ctx = { cluster, node, key, nodes };
+      if (radius != null) {
+        cluster.radius = radius(ctx);
+      }
+      if (x != null) {
+        cluster.x = x(ctx);
+      }
+      if (y != null) {
+        cluster.y = y(ctx);
+      }
+      if (z != null) {
+        cluster.z = z(ctx);
+      }
+      this.fixCenter(cluster);
+      return cluster;
+    };
+
+    return centers;
   }
 
-  async update_centers() {
-    let value = this.get('centers');
-    this.get_cluster = await makeForceNodeTemplate(value);
-  }
-
-  centers = (node: NodeObject, i: number, nodes: NodeObject[]) => {
-    if (!(node as any)?.radius) {
-      (node as any).radius = 1;
-    }
-    let key = this.get_cluster(node, i, nodes);
-
-    // get the cluster center and reset if the position has gone NaN
-    if (!(key in this.clusters)) {
-      this.clusters[key] = { x: 0, y: 0, z: 0, radius: 0 };
-    }
-    let center = this.clusters[key];
+  fixCenter(center: IClusterCenter) {
     if (isNaN(center.x)) {
       center.x = 0;
     }
@@ -90,23 +114,8 @@ export class ClusterForceModel extends ForceBehaviorModel implements IBehave, IF
     if (isNaN(center.z)) {
       center.z = 0;
     }
-    if (isNaN(center.radius) || center.radius == undefined) {
+    if (isNaN(center.radius) || center.radius == null) {
       center.radius = 0;
     }
-
-    return center;
-  };
-
-  async update_strength() {
-    let value = this.get('strength');
-    if (isNumeric(value)) {
-      this.strength = Number(value);
-    } else {
-      this.strength = await makeForceNodeTemplate(value);
-    }
-  }
-
-  get centerInertia() {
-    return this.get('center_inertia');
   }
 }

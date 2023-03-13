@@ -3,11 +3,29 @@
 # Copyright (c) 2023 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.
 
-from typing import Any, Optional
+from typing import Any, Optional, Union
 
+import ipywidgets as W
 import traitlets as T
 
 from .._base import ForceBase
+from ..trait_utils import JSON_TYPES
+
+__all__ = (
+    "_make_trait",
+    "BaseD3Force",
+    "Behavior",
+    "Column",
+    "Nunjucks",
+    "ShapeBase",
+    "TBoolFeature",
+    "TFeature",
+    "TNumFeature",
+)
+
+TFeature = Optional[Union["Column", "Nunjucks", str]]
+TNumFeature = Optional[Union["Column", "Nunjucks", str, int, float]]
+TBoolFeature = Optional[Union["Column", "Nunjucks", str, bool]]
 
 
 class Behavior(ForceBase):
@@ -31,35 +49,112 @@ class ShapeBase(ForceBase):
     _model_name: str = T.Unicode("ShapeBaseModel").tag(sync=True)
 
 
-class Column(ForceBase):
+class DynamicValue(ForceBase):
+    """An abstract class to describe what a Dynamic Widget Trait is and does."""
+
+    _model_name: str = T.Unicode("DynamicModel").tag(sync=True)
+
+    JSON_DATA_TYPES = JSON_TYPES.get_supported_types()
+
+    value: str = T.Unicode(
+        "", help="the source used to compute the value for the trait"
+    ).tag(sync=True)
+
+    coerce: str = T.Unicode(
+        help="name of a JSON Schema ``type`` into which to coerce the final value",
+        allow_none=True,
+    ).tag(sync=True)
+
+    def __init__(self, value: Optional[str], **kwargs: Any):
+        if value is not None:
+            kwargs["value"] = value
+        super().__init__(**kwargs)
+
+    @T.validate("coerce")
+    def _validate_coercer(self, proposal: T.Bunch) -> Optional[str]:
+        coerce: Optional[str] = proposal.value
+        if coerce is None:
+            return None
+        if not isinstance(coerce, str):
+            raise T.TraitError(f"'coerce' must be a string, not {type(coerce)}")
+        coerce = coerce.lower()
+        if coerce not in self.JSON_DATA_TYPES:
+            raise T.TraitError(
+                f"'coerce' must be one of {self.JSON_DATA_TYPES}, not '{coerce}'"
+            )
+        return coerce
+
+
+class Column(DynamicValue):
     """A column from a ``DataFrameSource``."""
 
     _model_name: str = T.Unicode("ColumnModel").tag(sync=True)
-    value: str = T.Unicode(
-        "", help="The name of the column from a ``DataFrameSource``."
-    ).tag(sync=True)
-    coerce: str = T.Unicode(
-        help="name of a JSON Schema ``type`` into which to coerce the final value",
-        allow_none=True,
-    ).tag(sync=True)
-
-    def __init__(self, value: Optional[str], **kwargs: Any):
-        if value is not None:
-            kwargs["value"] = value
-        super().__init__(**kwargs)
 
 
-class Nunjucks(ForceBase):
-    """A ``nunjucks`` template for customizing a feature."""
+class Nunjucks(DynamicValue):
+    """A `nunjucks template <https://mozilla.github.io/nunjucks/templating.html>`_ for calculating
+    dynamic values on the client.
+
+    The syntax is intentionally very similar to
+    `jinja2 <https://jinja.palletsprojects.com/en/3.1.x/templates>`_, and a number of extra
+    template functions are provided, including the methods and properties in
+    `JS Math <https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math>`_.
+
+
+    All the data in the ``source`` is available as ``graphData``, which has ``nodes`` and ``links``.
+
+    Depending on the context, inside of a template, one can use ``node`` or ``link``, which will have
+    all their available columns available using the dot notation, e.g., ``node.id``.  In addition,
+    ``link`` will have ``source`` and ``target`` as realized ``nodes``.
+
+    For example, to dynamically set the ``attribute`` property of a ``behavior`` in the front-end
+    based on the ``id`` property of the source ``node`` of a given ``link``, you would:
+
+    .. code-block:: python
+
+        behavior.attribute = Nunjucks("{{ link.source.id }}")
+
+    With these, and basic template tools, one can generate all kinds of interesting effects.
+
+    .. code-block:: js+jinja
+        :caption: color by group
+
+        {{ ["red", "yellow", "blue", "orange", "purple", "magenta"][node.group] }}
+
+    .. code-block:: js+jinja
+        :caption: color by out-degree
+
+        {% set n = 0 %}
+        {% for link in graphData.links %}
+        {% if link.source.id == node.id %}{% set n = n + 1 %}{% endif %}
+        {% endfor %}
+        {% set c = 256 * (7-n) / 7 %}
+        rgb({{ c }},0,0)
+    """
 
     _model_name: str = T.Unicode("NunjucksModel").tag(sync=True)
-    value: str = T.Unicode("", help="A ``nunjucks`` template string.").tag(sync=True)
-    coerce: str = T.Unicode(
-        help="name of a JSON Schema ``type`` into which to coerce the final value",
-        allow_none=True,
-    ).tag(sync=True)
 
-    def __init__(self, value: Optional[str], **kwargs: Any):
-        if value is not None:
-            kwargs["value"] = value
-        super().__init__(**kwargs)
+
+def _make_trait(
+    help: str,
+    *,
+    default_value: Optional[Any] = None,
+    allow_none: bool = True,
+    boolish: bool = False,
+    by_column: bool = True,
+    by_template: bool = True,
+    numeric: bool = False,
+    stringy: bool = True,
+) -> Any:
+    """Makes a Trait that can accept a Column, a Nunjuck Template, and a literal."""
+    types = (
+        ([T.Bool()] if boolish else [])
+        + ([T.Unicode()] if stringy else [])
+        + ([T.Int(), T.Float()] if numeric else [])
+        + ([T.Instance(Column)] if by_column else [])
+        + ([T.Instance(Nunjucks)] if by_template else [])
+    )
+
+    return T.Union(
+        types, help=help, allow_none=allow_none, default_value=default_value
+    ).tag(sync=True, **W.widget_serialization)

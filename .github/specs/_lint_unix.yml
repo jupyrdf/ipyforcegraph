@@ -1,0 +1,6 @@
+_platforms:
+  - osx-64
+  - linux-64
+
+dependencies:
+  - dos2unix
