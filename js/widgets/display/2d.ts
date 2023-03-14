@@ -470,7 +470,7 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
         ? this.wrapFunction(this.getLinkCurvature)
         : this.wrapFunction(() => defaultLinkCurvature)
     );
-    if ( typeof graph['linkLineDash'] === 'function') {
+    if (typeof graph['linkLineDash'] === 'function') {
       graph.linkLineDash(
         this.model.linkBehaviorsForMethod('getLinkLineDash').length
           ? this.wrapFunction(this.getLinkLineDash)
