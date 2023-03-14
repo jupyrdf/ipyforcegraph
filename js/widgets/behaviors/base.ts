@@ -186,7 +186,7 @@ export class ColumnModel extends DynamicModel {
     }
     const { value } = this;
 
-    if(value == null) {
+    if (value == null) {
       this._nodeHandler = noop;
       this._linkHandler = noop;
       return;
