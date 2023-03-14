@@ -28,10 +28,14 @@ ForceGraph3D
 GraphData
 GraphForces
 GraphImage
+HasDimensions
+HasFillAndStroke
+HasScale
 ipyforcegraph
 IPyForceGraph
 IPython
 ipywidgets
+jinja2
 js
 jupyrdf
 jupyter
@@ -43,6 +47,7 @@ labextension
 LinkArrows
 LinkColor
 LinkForce
+LinkParticles
 LinkSelection
 LinkShapes
 LinkTooltip

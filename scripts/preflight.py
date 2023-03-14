@@ -182,7 +182,7 @@ def preflight_release():
 
     print("Checking copyright/license headers...")
     for any_src in [*P.ALL_PY, *P.ALL_CSS, *P.ALL_TS]:
-        any_text = any_src.read_text()
+        any_text = any_src.read_text(**P.UTF8)
         if COPYRIGHT not in any_text:
             problems += [f"{any_src.relative_to(P.ROOT)} missing copyright info"]
         if LICENSE not in any_text:

@@ -2,7 +2,7 @@
  * Copyright (c) 2023 ipyforcegraph contributors.
  * Distributed under the terms of the Modified BSD License.
  */
-import d3Force3d from 'd3-force-3d';
+import type d3Force3d from 'd3-force-3d';
 import type { GraphData, LinkObject, NodeObject } from 'force-graph';
 import type THREE from 'three';
 
@@ -11,6 +11,8 @@ import type { ISignal } from '@lumino/signaling';
 import type { DOMWidgetView } from '@jupyter-widgets/base';
 
 import PKG from '../package.json';
+
+import type { ForceGraphModel } from './widgets';
 
 export const NAME = PKG.name;
 export const VERSION = PKG.version;
@@ -74,6 +76,7 @@ export type TUpdateKind = void | number;
 
 export interface IBehave {
   updateRequested: ISignal<IBehave, TUpdateKind>;
+  extraColumns?: IExtraColumns;
   // link
   getLinkColor?(options: ILinkBehaveOptions): string | null;
   getLinkCurvature?(options: ILinkBehaveOptions): number | null;
@@ -177,6 +180,7 @@ export interface IHasGraph<T = any> extends DOMWidgetView {
   source: ISource;
   rendered: Promise<void>;
   wrapFunction: (fn: Function) => Function;
+  model: ForceGraphModel;
 }
 
 export interface ISource {
@@ -233,4 +237,9 @@ export enum ECoerce {
   array = 'array',
   boolish = 'boolean',
   numeric = 'number',
+}
+
+export interface IExtraColumns {
+  nodes: string[];
+  links: string[];
 }

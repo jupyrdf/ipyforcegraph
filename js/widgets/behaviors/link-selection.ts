@@ -10,6 +10,7 @@ import {
   DEFAULT_LINE_DASHES,
   DEFAULT_WIDTHS,
   IBehave,
+  IExtraColumns,
   ILinkBehaveOptions,
   ILinkEventBehaveOptions,
   TSelectedSet,
@@ -35,8 +36,12 @@ export class LinkSelectionModel extends BehaviorModel implements IBehave {
 
   initialize(attributes: Backbone.ObjectHash, options: IBackboneModelOptions) {
     super.initialize(attributes, options);
-    this.on('change:selected change:selected_column', this.onValueChange, this);
+    this.on('change:selected change:column_name', this.onValueChange, this);
     this.onValueChange();
+  }
+
+  get extraColumns(): IExtraColumns {
+    return { links: this.columnName ? [this.columnName] : [], nodes: [] };
   }
 
   onValueChange(change?: any) {

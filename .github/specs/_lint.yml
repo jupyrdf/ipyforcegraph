@@ -5,7 +5,6 @@ _inherit_from:
 dependencies:
   - black-jupyter
   - isort
-  - lxml
   - mypy >=1.0.0
   - nbstripout
   - pyflakes

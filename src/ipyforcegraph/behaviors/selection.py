@@ -13,7 +13,8 @@ from ._base import Behavior
 
 @W.register
 class NodeSelection(Behavior):
-    """Enable node selection with synced row indices of selected nodes."""
+    """Enable node selection with synced row `indices` (not ``id``) of selected
+    ``nodes``."""
 
     _model_name: str = T.Unicode("NodeSelectionModel").tag(sync=True)
 
@@ -68,11 +69,3 @@ class LinkSelection(Behavior):
     selected_width: float = T.Float(2, help="the width of selected links").tag(
         sync=True
     )
-
-    selected_curvature: float = T.Float(0, help="the curvature of selected links").tag(
-        sync=True
-    )
-
-    selected_line_dash: Tuple[float, ...] = W.TypedTuple(
-        help="the line dash pattern of selected links"
-    ).tag(sync=True)

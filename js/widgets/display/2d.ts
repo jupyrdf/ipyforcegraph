@@ -375,7 +375,9 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
             };
           }
           window.wrapFunction = (fn) => {
-            return (...args) => fn(...args);
+            return (...args) => {
+              return fn(...args);
+            };
           }
         </script>
       </body>
@@ -424,6 +426,7 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
   }
 
   protected async postUpdate(caller?: any, kind?: TUpdateKind): Promise<void> {
+    await this.displayed;
     await this.rendered;
     const graph = this.graph as ForceGraphInstance;
     if (!graph) {

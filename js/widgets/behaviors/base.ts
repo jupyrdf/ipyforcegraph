@@ -185,8 +185,23 @@ export class ColumnModel extends DynamicModel {
       return;
     }
     const { value } = this;
+
+    if (value == null) {
+      this._nodeHandler = noop;
+      this._linkHandler = noop;
+      return;
+    }
+
     const coercer = getCoercer(this.coerce);
-    this._nodeHandler = (options: any) => coercer(options.node[value]);
-    this._linkHandler = (options: any) => coercer(options.link[value]);
+
+    function _nodeHandler(options: any) {
+      return coercer(options.node ? options.node[value] : null);
+    }
+
+    function _linkHandler(options: any) {
+      return coercer(options.link ? options.link[value] : null);
+    }
+    this._nodeHandler = _nodeHandler;
+    this._linkHandler = _linkHandler;
   }
 }

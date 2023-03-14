@@ -9,7 +9,7 @@ import ipywidgets as W
 import traitlets as T
 
 from .._base import ForceBase
-from ..trait_utils import JSON_TYPES
+from ..trait_utils import JSON_TYPES, coerce
 
 __all__ = (
     "_make_trait",
@@ -100,7 +100,6 @@ class Nunjucks(DynamicValue):
     template functions are provided, including the methods and properties in
     `JS Math <https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math>`_.
 
-
     All the data in the ``source`` is available as ``graphData``, which has ``nodes`` and ``links``.
 
     Depending on the context, inside of a template, one can use ``node`` or ``link``, which will have
@@ -158,3 +157,45 @@ def _make_trait(
     return T.Union(
         types, help=help, allow_none=allow_none, default_value=default_value
     ).tag(sync=True, **W.widget_serialization)
+
+
+class HasScale(ShapeBase):
+    """A shape that has ``scale_on_zoom``."""
+
+    _model_name: str = T.Unicode("HasScaleModel").tag(sync=True)
+
+    scale_on_zoom: TBoolFeature = _make_trait(
+        "whether font size/stroke respects the global scale", boolish=True
+    )
+
+    @T.validate("scale_on_zoom")
+    def _validate_scale_bools(self, proposal: T.Bunch) -> Any:
+        return coerce(proposal, JSON_TYPES.boolean)
+
+
+class HasFillAndStroke(HasScale):
+    """A shape that has ``fill`` and ``stroke``."""
+
+    _model_name: str = T.Unicode("HasFillModel").tag(sync=True)
+    fill: TFeature = _make_trait("the fill color of a shape")
+    stroke: TFeature = _make_trait("the stroke color of a shape")
+    stroke_width: TNumFeature = _make_trait("the stroke width of a shape", numeric=True)
+
+    @T.validate("stroke_width")
+    def _validate_has_fill_and_stroke_numerics(self, proposal: T.Bunch) -> Any:
+        return coerce(proposal, JSON_TYPES.number)
+
+
+class HasDimensions(HasFillAndStroke):
+    """A shape that has ``width``, ``height`` and ``depth``."""
+
+    _model_name: str = T.Unicode("HasDimensionsModel").tag(sync=True)
+
+    width: TNumFeature = _make_trait("the width of a shape in ``px``", numeric=True)
+    height: TNumFeature = _make_trait("the height of a shape in ``px``", numeric=True)
+    depth: TNumFeature = _make_trait("the depth of a shape in ``px``", numeric=True)
+    opacity: TNumFeature = _make_trait("the opacity of a shape", numeric=True)
+
+    @T.validate("width", "height", "depth", "opacity")
+    def _validate_dimension_numerics(self, proposal: T.Bunch) -> Any:
+        return coerce(proposal, JSON_TYPES.number)

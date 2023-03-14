@@ -148,8 +148,10 @@ class X(BaseD3Force):
     )
 
     strength: TNumFeature = _make_trait(
-        "the strength of the force. Context takes ``node```",
+        "the strength of the force. Context takes ``node``",
         numeric=True,
+        default_value=0,
+        allow_none=False,
     )
 
     @T.validate("strength", "x")
@@ -173,8 +175,10 @@ class Y(BaseD3Force):
     )
 
     strength: TNumFeature = _make_trait(
-        "the strength of the force. Context takes ``node```",
+        "the strength of the force. Context takes ``node``",
         numeric=True,
+        default_value=0,
+        allow_none=False,
     )
 
     @T.validate("strength", "y")
@@ -201,8 +205,10 @@ class Z(BaseD3Force):
     )
 
     strength: TNumFeature = _make_trait(
-        "the strength of the force. Context takes ``node```",
+        "the strength of the force. Context takes ``node``",
         numeric=True,
+        default_value=0,
+        allow_none=False,
     )
 
     @T.validate("strength", "z")
@@ -227,6 +233,8 @@ class ManyBody(BaseD3Force):
     strength: TNumFeature = _make_trait(
         "a nunjucks template to use to calculate strength. Context takes ``node``",
         numeric=True,
+        default_value=0,
+        allow_none=False,
     )
 
     theta: Optional[float] = T.Float(
@@ -268,8 +276,10 @@ class Radial(BaseD3Force):
     )
 
     strength: TNumFeature = _make_trait(
-        "the strength of the force. Context takes ``node```",
+        "the strength of the force. Context takes ``node``",
         numeric=True,
+        default_value=0,
+        allow_none=False,
     )
 
     x: Optional[float] = T.Float(
@@ -403,7 +413,7 @@ class DAG(BaseD3Force):
 
         off = None
         top_down = "td"
-        button_up = "bu"
+        bottom_up = "bu"
         left_right = "lr"
         right_left = "rl"
         radial_out = "radialout"
@@ -426,6 +436,7 @@ class DAG(BaseD3Force):
 
     node_filter: TBoolFeature = _make_trait(
         "whether node is part of the DAG layout",
+        default_value=True,
         boolish=True,
     )
 
