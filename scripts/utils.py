@@ -123,7 +123,7 @@ def notebook_lint(ipynb: Path):
     pretty_markdown_cells(ipynb, nb_json)
     clean_notebook_metadata(nb_json)
 
-    ipynb.write_text(json.dumps(nb_json), newline="\n", **P.UTF8)
+    ipynb.write_text(json.dumps(nb_json), **P.UTF8)
 
     print(f"... blackening {ipynb.stem}")
     black_args = []
