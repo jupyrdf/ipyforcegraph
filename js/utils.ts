@@ -8,6 +8,10 @@ export function noop(...args: any[]): null {
   return null;
 }
 
+export function yes(): true {
+  return true;
+}
+
 export function identity<T>(value: T): T {
   return value;
 }

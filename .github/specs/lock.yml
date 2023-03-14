@@ -5,4 +5,5 @@ dependencies:
   - conda-lock >=1.4,<1.5.0
   - mamba >=1.1.0,<1.4
   - python >=3.11,<3.12
-  - conda !=22.11.1
+  - conda <22.11.1
+  - doit-with-toml

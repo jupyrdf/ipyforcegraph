@@ -8,7 +8,13 @@ import {
   unpack_models as deserialize,
 } from '@jupyter-widgets/base';
 
-import { EUpdate, IBehave, IRenderOptions, WIDGET_DEFAULTS } from '../../tokens';
+import {
+  EUpdate,
+  IBehave,
+  IExtraColumns,
+  IRenderOptions,
+  WIDGET_DEFAULTS,
+} from '../../tokens';
 import { DataFrameSourceModel } from '../sources';
 
 import { BehaviorModel } from './base';
@@ -58,6 +64,20 @@ export class GraphDataModel extends BehaviorModel implements IBehave {
     }
   }
 
+  getExtraColumns(behaviors: IBehave[]): IExtraColumns {
+    const nodes = [];
+    const links = [];
+    for (const behavior of behaviors) {
+      const { extraColumns } = behavior;
+      if (!extraColumns) {
+        continue;
+      }
+      nodes.push(...extraColumns.nodes);
+      links.push(...extraColumns.links);
+    }
+    return { nodes, links };
+  }
+
   onRender(options: IRenderOptions): void {
     const { _sourcesToCapture } = this;
 
@@ -73,7 +93,10 @@ export class GraphDataModel extends BehaviorModel implements IBehave {
 
     let source = sources[index];
 
-    source.setFromGraphData(options.graphData);
+    source.setFromGraphData(
+      options.graphData,
+      this.getExtraColumns(options.view.model.behaviors)
+    );
 
     if (this._sourcesToCapture) {
       return;

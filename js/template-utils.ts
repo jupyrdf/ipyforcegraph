@@ -2,14 +2,9 @@
  * Copyright (c) 2023 ipyforcegraph contributors.
  * Distributed under the terms of the Modified BSD License.
  */
-import type { NodeObject } from 'force-graph';
-import { LinkObject } from 'force-graph/dist/force-graph';
 import { Environment, Template } from 'nunjucks';
 
 import { PromiseDelegate } from '@lumino/coreutils';
-
-import { DEBUG, EMOJI } from './tokens';
-import { noop } from './utils';
 
 export const MATH_CONST = {
   E: Math.E,
@@ -127,55 +122,4 @@ function wrapNAry(jsFn: INAryJs): INAryPy {
     return Array.isArray(values) ? jsFn(...values) : jsFn(values, ...rest);
   }
   return pyFn;
-}
-
-async function makeForceTemplate<T = any>(
-  src: string,
-  contextName: string,
-  contextAllName: string,
-  cast: CallableFunction = Number
-): Promise<CallableFunction> {
-  let template: Template;
-  try {
-    template = await newTemplate(src);
-  } catch (err) {
-    DEBUG && console.warn(EMOJI, err);
-    return noop;
-  }
-
-  const renderTemplate = (context: T, i: number, contextAll: T[]) => {
-    let value: number | boolean | null;
-    try {
-      let rendered = template.render({
-        [contextName]: context,
-        i,
-        [contextAllName]: contextAll,
-      });
-      value = rendered == null ? null : cast(rendered);
-      if (typeof value != 'boolean') {
-        if (value == null || isNaN(value)) {
-          value = null;
-        }
-      }
-    } catch (err) {
-      DEBUG && console.warn(EMOJI, err);
-      value = null;
-    }
-    return value;
-  };
-  return renderTemplate;
-}
-
-export async function makeForceNodeTemplate(
-  template: string,
-  cast: CallableFunction = Number
-): Promise<CallableFunction> {
-  return await makeForceTemplate<NodeObject>(template, 'node', 'nodes', (cast = cast));
-}
-
-export async function makeForceLinkTemplate(
-  template: string,
-  cast: CallableFunction = Number
-): Promise<CallableFunction> {
-  return await makeForceTemplate<LinkObject>(template, 'link', 'links', (cast = cast));
 }

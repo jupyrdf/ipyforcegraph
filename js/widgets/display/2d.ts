@@ -54,7 +54,7 @@ import {
   WIDGET_DEFAULTS,
   emptyArray,
 } from '../../tokens';
-import { DAGBehaviorModel, ForceBehaviorModel, GraphForcesModel } from '../behaviors';
+import { DAGBehaviorModel, FacetedForceModel, GraphForcesModel } from '../behaviors';
 
 export class ForceGraphModel extends DOMWidgetModel {
   static model_name = 'ForceGraphModel';
@@ -89,10 +89,10 @@ export class ForceGraphModel extends DOMWidgetModel {
   initialize(attributes: ObjectHash, options: IBackboneModelOptions): void {
     super.initialize(attributes, options);
     this.on('change:behaviors', this.onBehaviorsChange, this);
-    this.onBehaviorsChange();
+    void this.onBehaviorsChange();
   }
 
-  onBehaviorsChange(): void {
+  async onBehaviorsChange(): Promise<void> {
     if (!this._behaviorsChanged) {
       this._behaviorsChanged = new Signal(this);
       this._linkBehaviorsByMethod = new Map();
@@ -137,6 +137,7 @@ export class ForceGraphModel extends DOMWidgetModel {
         this._forceBehaviors.push(behavior);
       }
     }
+
     this._behaviorsChanged.emit(void 0);
   }
 
@@ -234,7 +235,7 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
     this.luminoWidget.disposed.connect(this.onDisposed, this);
     this.model.on('msg:custom', this.handleMessage, this);
     this.onSourceChange();
-    this.onBehaviorsChange();
+    void this.onBehaviorsChange();
   }
 
   handleMessage(message: IActionMessage): void {
@@ -362,7 +363,9 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
             };
           }
           window.wrapFunction = (fn) => {
-            return (...args) => fn(...args);
+            return (...args) => {
+              return fn(...args);
+            };
           }
         </script>
       </body>
@@ -395,13 +398,36 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
     }
   }
 
+  protected async ensureAllFacets() {
+    let facetPromises: Promise<void>[] = [];
+
+    for (const behavior of this.model.behaviors) {
+      // TOOD: remove the any
+      if ((behavior as any).ensureFacets) {
+        facetPromises.push((behavior as any).ensureFacets());
+      }
+    }
+
+    if (facetPromises.length) {
+      await Promise.all(facetPromises);
+    }
+  }
+
   protected async postUpdate(caller?: any, kind?: TUpdateKind): Promise<void> {
+    await this.displayed;
     await this.rendered;
     const graph = this.graph as ForceGraphInstance;
     if (!graph) {
       console.warn(`${EMOJI} no graph to postUpdate`);
       return;
     }
+
+    if (kind && EUpdate.Behavior === (kind & EUpdate.Behavior)) {
+      await this.model.onBehaviorsChange();
+      return;
+    }
+
+    await this.ensureAllFacets();
 
     const {
       backgroundColor,
@@ -522,7 +548,7 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
       graph.d3VelocityDecay(velocityDecay);
 
       for (let key in simBehavior.forces) {
-        let behavior: ForceBehaviorModel | null = simBehavior.forces[key];
+        let behavior: FacetedForceModel | null = simBehavior.forces[key];
         let force = behavior?.force || null;
         if (force && !behavior?.active) {
           force = null;
@@ -747,6 +773,7 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
       graphData,
       event,
       node,
+      index: node['index'] != null ? node['index'] : graphData.nodes.indexOf(node),
     };
     for (const behavior of this.model.nodeBehaviorsForMethod('onNodeClick')) {
       shouldContinue = behavior.onNodeClick(options);
@@ -764,7 +791,7 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
       graphData,
       event,
       link,
-      index: graphData.links.indexOf(link),
+      index: link['index'] != null ? link['index'] : graphData.links.indexOf(link),
     };
     for (const behavior of this.model.linkBehaviorsForMethod('onLinkClick')) {
       shouldContinue = behavior.onLinkClick(options);

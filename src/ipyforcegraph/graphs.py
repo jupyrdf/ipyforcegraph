@@ -21,37 +21,41 @@ class ForceGraph(W.DOMWidget, ForceBase):
     _view_name: str = T.Unicode("ForceGraphView").tag(sync=True)
 
     source: DataFrameSource = T.Instance(
-        DataFrameSource, kw={}, help="the source of `nodes` and `link` data"
+        DataFrameSource, kw={}, help="the source of ``node`` and ``link`` data"
     ).tag(sync=True, **W.widget_serialization)
 
     behaviors: Tuple[Behavior, ...] = W.TypedTuple(
         T.Instance(Behavior),
         kw={},
         help=(
-            "the behaviors that modify the appearance of :mod:`~ipyforcegraph.behaviors.node`, "
-            ":mod:`~ipyforcegraph.behaviors.link`, and the "
-            ":mod:`~ipyforcegraph.behaviors.graph` itself"
+            "the behaviors that provide functionality for "
+            ":mod:`~ipyforcegraph.behaviors.selection`, "
+            "changing the node and link :mod:`~ipyforcegraph.behaviors.shapes`, "
+            "changing the on-hover :mod:`~ipyforcegraph.behaviors.tooltip` for nodes and links, "
+            "the :mod:`~ipyforcegraph.behaviors.forces` graph layout, "
+            ":mod:`~ipyforcegraph.behaviors.recording` of the graph state, and the "
+            ":mod:`~ipyforcegraph.behaviors.particles` on the links."
         ),
     ).tag(sync=True, **W.widget_serialization)
 
     default_node_color: str = T.Unicode(
         "rgba(31, 120, 179, 1.0)",
-        help="a default node color, which can be overridden by :class:`~ipyforcegraph.behaviors.node.NodeColors`.",
+        help="a default ``node`` color, which can be overridden by :class:`~ipyforcegraph.behaviors.shapes.NodeShapes`",
     ).tag(sync=True)
 
     default_node_size: float = T.Float(
         1,
-        help="a default node size, which can be overridden by :class:`~ipyforcegraph.behaviors.node.NodeSizes`.",
+        help="a default ``node`` size, which can be overridden by :class:`~ipyforcegraph.behaviors.shapes.NodeShapes`",
     ).tag(sync=True)
 
     default_link_color: str = T.Unicode(
         "rgba(66, 66, 66, 0.5)",
-        help="a default link color, which can be overridden by :class:`~ipyforcegraph.behaviors.link.LinkColors`",
+        help="a default ``link`` color, which can be overridden by :class:`~ipyforcegraph.behaviors.link.LinkShapes`",
     ).tag(sync=True)
 
     default_link_width: str = T.Float(
         1.0,
-        help="a default link width, which can be overridden by :class:`~ipyforcegraph.behaviors.link.LinkWidths`",
+        help="a default ``link`` width, which can be overridden by :class:`~ipyforcegraph.behaviors.link.LinkShapes`",
     ).tag(sync=True)
 
     background_color: str = T.Unicode(

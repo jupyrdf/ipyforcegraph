@@ -10,7 +10,7 @@ from .constants import EXTENSION_NAME, EXTENSION_SPEC_VERSION
 
 
 class ForceBase(W.Widget):
-    """The base class for all IPyForceGraph widgets."""
+    """The base class for all ``IPyForceGraph`` widgets."""
 
     _model_name: str = T.Unicode("ForceBaseModel").tag(sync=True)
     _model_module: str = T.Unicode(EXTENSION_NAME).tag(sync=True)

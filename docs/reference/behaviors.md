@@ -1,22 +1,36 @@
 # Behaviors
 
-## Graph Behaviors
+## Graph Recording Behaviors
 
 ```{eval-rst}
 .. currentmodule:: ipyforcegraph
-.. automodule:: ipyforcegraph.behaviors.graph
+.. automodule:: ipyforcegraph.behaviors.recording
 ```
 
-## Link Behaviors
+## Selection Behaviors
 
 ```{eval-rst}
 .. currentmodule:: ipyforcegraph
-.. automodule:: ipyforcegraph.behaviors.link
+.. automodule:: ipyforcegraph.behaviors.selection
 ```
 
-## Node Behaviors
+## Shape Behaviors
 
 ```{eval-rst}
 .. currentmodule:: ipyforcegraph
-.. automodule:: ipyforcegraph.behaviors.node
+.. automodule:: ipyforcegraph.behaviors.shapes
+```
+
+## Particles Behaviors
+
+```{eval-rst}
+.. currentmodule:: ipyforcegraph
+.. automodule:: ipyforcegraph.behaviors.particles
+```
+
+## Tooltip Behaviors
+
+```{eval-rst}
+.. currentmodule:: ipyforcegraph
+.. automodule:: ipyforcegraph.behaviors.tooltip
 ```

@@ -1,7 +1,10 @@
+_inherit_from:
+  - _lint_unix.yml
+  - _lint_win.yml
+
 dependencies:
   - black-jupyter
   - isort
-  - lxml
   - mypy >=1.0.0
   - nbstripout
   - pyflakes
