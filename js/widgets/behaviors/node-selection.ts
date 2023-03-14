@@ -66,7 +66,8 @@ export class NodeSelectionModel extends BehaviorModel implements IBehave {
   }
 
   getNodeColor({ node }: INodeBehaveOptions): string | null {
-    const color = this.selected.has(node.id) ? this.selectedColor : null;
+    const index = (node as any).index;
+    const color = index != null && this.selected.has(index) ? this.selectedColor : null;
     return color;
   }
 

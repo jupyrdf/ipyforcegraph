@@ -363,7 +363,9 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
             };
           }
           window.wrapFunction = (fn) => {
-            return (...args) => fn(...args);
+            return (...args) => {
+              return fn(...args);
+            };
           }
         </script>
       </body>
