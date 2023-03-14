@@ -123,13 +123,19 @@ def notebook_lint(ipynb: Path):
     pretty_markdown_cells(ipynb, nb_json)
     clean_notebook_metadata(nb_json)
 
-    ipynb.write_text(json.dumps(nb_json), **P.UTF8)
+    ipynb.write_text(json.dumps(nb_json), newline="\n", **P.UTF8)
 
     print(f"... blackening {ipynb.stem}")
     black_args = []
     black_args += ["--quiet"]
     if subprocess.call([*P.IN_ENV, "black", *black_args, ipynb]) != 0:
         return False
+
+
+def fix_line_endings(filepath: Path):
+    """Convert any CRLF line endings to LF."""
+    print(f"... fixing line endings for {filepath.stem}")
+    filepath.write_bytes(filepath.read_bytes().replace(b"\r\n", b"\n"))
 
 
 def fix_windows_line_endings(max_chunk_size: int = 8000):

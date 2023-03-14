@@ -603,6 +603,7 @@ def task_lint():
                         nb,
                         nb,
                     ],
+                    (U.fix_line_endings, [nb]),
                 ],
             ),
             P.OK_NBLINT[nb.name],
