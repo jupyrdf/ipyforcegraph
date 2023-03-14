@@ -7,6 +7,7 @@ import { IBackboneModelOptions } from '@jupyter-widgets/base';
 import {
   DEFAULT_COLORS,
   IBehave,
+  IExtraColumns,
   INodeBehaveOptions,
   INodeEventBehaveOptions,
   TSelectedSet,
@@ -29,9 +30,13 @@ export class NodeSelectionModel extends BehaviorModel implements IBehave {
     };
   }
 
+  get extraColumns(): IExtraColumns {
+    return { links: [], nodes: this.columnName ? [this.columnName] : [] };
+  }
+
   initialize(attributes: Backbone.ObjectHash, options: IBackboneModelOptions) {
     super.initialize(attributes, options);
-    this.on('change:selected change:selected_column', this.onValueChange, this);
+    this.on('change:selected change:column_name', this.onValueChange, this);
     this.onValueChange();
   }
 

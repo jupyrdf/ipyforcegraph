@@ -148,7 +148,7 @@ class X(BaseD3Force):
     )
 
     strength: TNumFeature = _make_trait(
-        "the strength of the force. Context takes ``node```",
+        "the strength of the force. Context takes ``node``",
         numeric=True,
         default_value=0,
         allow_none=False,
@@ -175,7 +175,7 @@ class Y(BaseD3Force):
     )
 
     strength: TNumFeature = _make_trait(
-        "the strength of the force. Context takes ``node```",
+        "the strength of the force. Context takes ``node``",
         numeric=True,
         default_value=0,
         allow_none=False,
@@ -205,7 +205,7 @@ class Z(BaseD3Force):
     )
 
     strength: TNumFeature = _make_trait(
-        "the strength of the force. Context takes ``node```",
+        "the strength of the force. Context takes ``node``",
         numeric=True,
         default_value=0,
         allow_none=False,
@@ -276,7 +276,7 @@ class Radial(BaseD3Force):
     )
 
     strength: TNumFeature = _make_trait(
-        "the strength of the force. Context takes ``node```",
+        "the strength of the force. Context takes ``node``",
         numeric=True,
         default_value=0,
         allow_none=False,

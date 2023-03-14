@@ -13,7 +13,8 @@ from ._base import Behavior
 
 @W.register
 class NodeSelection(Behavior):
-    """Enable node selection with synced row indices of selected nodes."""
+    """Enable node selection with synced row `indices` (not ``id``) of selected
+    ``nodes``."""
 
     _model_name: str = T.Unicode("NodeSelectionModel").tag(sync=True)
 
