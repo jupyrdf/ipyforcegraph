@@ -33,15 +33,17 @@ export function coerceNumber(value: string): number {
 }
 
 export function coerceArray(value: string): any[] {
+  var new_value: any;
   try {
-    value = JSON.parse(value);
+    new_value = JSON.parse(value);
   } catch (e) {
     console.debug('could not parse ', value, ' as JSON');
-    value = null;
+    new_value = null;
   }
-  if (Array.isArray(value)) {
-    return value;
+  if (Array.isArray(new_value)) {
+    return new_value;
   }
+  console.debug('Could not parse ', value, ' as an array, setting value to []');
   return [];
 }
 
