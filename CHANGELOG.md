@@ -5,6 +5,8 @@
 ### `ipyforcegraph 0.3.0`
 
 - Adds a configurable `NodeShape`, compatible with both `ForceGraph` and `ForceGraph3D`
+- adds `DAG` to `GraphForces`
+- adds manual `ForceGraph.reheat` to restart simulation
 
 #### Breaking Changes
 
@@ -36,17 +38,6 @@
     ```
 
 ### `@jupyrdf/jupyter-forcegraph 0.3.0`
-
-> TBD
-
-## `0.2.1` (unreleased)
-
-### `ipyforcegraph 0.2.1`
-
-- adds `DAGForce` to `GraphForces`
-- adds manual `ForceGraph.reheat` to restart simulation
-
-### `@jupyrdf/jupyter-forcegraph 0.2.1`
 
 - adds connection to `force-graph` DAG configuration
 
