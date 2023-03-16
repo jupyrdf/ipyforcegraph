@@ -16,83 +16,122 @@ ${SCREENS}      ${SCREENS ROOT}${/}api${/}link_shapes
 
 
 *** Test Cases ***
-ForceGraph3D Can Set Link color to str('blue')
-    Shape Link Feature Works As Expected    ForceGraph3D    color    str    blue    1
+ForceGraph3D Can Set Link color using str inputs
+    Shape Link Feature Works As Expected    ForceGraph3D    color    str    blue    red    1
 
-ForceGraph3D Can Set Link color to B.Column('link_color')
-    Shape Link Feature Works As Expected    ForceGraph3D    color    B.Column    link_color    2
+ForceGraph3D Can Set Link color using Column inputs
+    Shape Link Feature Works As Expected    ForceGraph3D    color    Column    a_color    other_color    2
 
-ForceGraph3D Can Set Link color to B.Nunjucks('{{ link.link_color }}')
-    Shape Link Feature Works As Expected    ForceGraph3D    color    B.Nunjucks    {{ link.link_color }}    3
+ForceGraph3D Can Set Link color using Nunjucks inputs
+    Shape Link Feature Works As Expected
+    ...    ForceGraph3D
+    ...    color
+    ...    Nunjucks
+    ...    {{ link.a_color }}
+    ...    {{ link.other_color }}
+    ...    3
 
-ForceGraph3D Can Set Link curvature to int('1')
-    Shape Link Feature Works As Expected    ForceGraph3D    curvature    int    1    1
+ForceGraph3D Can Set Link curvature using int inputs
+    Shape Link Feature Works As Expected    ForceGraph3D    curvature    int    1    2    1
 
-ForceGraph3D Can Set Link curvature to float('2.5')
-    Shape Link Feature Works As Expected    ForceGraph3D    curvature    float    2.5    2
+ForceGraph3D Can Set Link curvature using float inputs
+    Shape Link Feature Works As Expected    ForceGraph3D    curvature    float    1.5    3.0    2
 
-ForceGraph3D Can Set Link curvature to B.Column('value')
-    Shape Link Feature Works As Expected    ForceGraph3D    curvature    B.Column    value    3
+ForceGraph3D Can Set Link curvature using Column inputs
+    Shape Link Feature Works As Expected    ForceGraph3D    curvature    Column    value_small    value_large    3
 
-ForceGraph3D Can Set Link curvature to B.Nunjucks('{{ link.value * 1.5 }}')
-    Shape Link Feature Works As Expected    ForceGraph3D    curvature    B.Nunjucks    {{ link.value * 1.5 }}    4
+ForceGraph3D Can Set Link curvature using Nunjucks inputs
+    Shape Link Feature Works As Expected
+    ...    ForceGraph3D
+    ...    curvature
+    ...    Nunjucks
+    ...    {{ link.value_small * 0.5 }}
+    ...    {{ link.value_large * 1.5 }}
+    ...    4
 
-ForceGraph3D Can Set Link line_dash to B.Nunjucks('{{ [10, 2, 10] }}')
-    Shape Link Feature Works As Expected    ForceGraph3D    line_dash    B.Nunjucks    {{ [10, 2, 10] }}    1
+ForceGraph3D Can Set Link line_dash using Nunjucks inputs
+    Shape Link Feature Works As Expected
+    ...    ForceGraph3D
+    ...    line_dash
+    ...    Nunjucks
+    ...    {{ [10, 2, 10] }}
+    ...    {{ [20, 2, 20] }}
+    ...    1
 
-ForceGraph3D Can Set Link width to int('2')
-    Shape Link Feature Works As Expected    ForceGraph3D    width    int    2    1
+ForceGraph3D Can Set Link width using int inputs
+    Shape Link Feature Works As Expected    ForceGraph3D    width    int    2    5    1
 
-ForceGraph3D Can Set Link width to float('3.5')
-    Shape Link Feature Works As Expected    ForceGraph3D    width    float    3.5    2
+ForceGraph3D Can Set Link width using float inputs
+    Shape Link Feature Works As Expected    ForceGraph3D    width    float    0.5    2.5    2
 
-ForceGraph3D Can Set Link width to B.Column('value')
-    Shape Link Feature Works As Expected    ForceGraph3D    width    B.Column    value    3
+ForceGraph3D Can Set Link width using Column inputs
+    Shape Link Feature Works As Expected    ForceGraph3D    width    Column    value_small    value_large    3
 
-ForceGraph3D Can Set Link width to B.Nunjucks('{{ link.value * 0.5 }}')
-    Shape Link Feature Works As Expected    ForceGraph3D    width    B.Nunjucks    {{ link.value * 0.5 }}    4
+ForceGraph3D Can Set Link width using Nunjucks inputs
+    Shape Link Feature Works As Expected
+    ...    ForceGraph3D
+    ...    width
+    ...    Nunjucks
+    ...    {{ link.value_small * 0.5 }}
+    ...    {{ link.value_large * 1.5 }}
+    ...    4
 
 
 *** Keywords ***
 Shape Link Feature Works As Expected
-    [Arguments]    ${widget_class}    ${feature}    ${input_type}    ${value}    ${idx}
+    [Arguments]    ${widget_class}    ${feature}    ${input_type}    ${initial_value}    ${updated_value}    ${idx}
     ${screens} =    Set Variable
-    ...    ${SCREENS}${/}${widget_class.lower()}${/}${feature.lower()}${/}${input_type.split(".")[-1]}${/}${idx}
+    ...    ${SCREENS}${/}${widget_class.lower()}${/}${feature.lower()}${/}${input_type.lower()}${/}${idx}
     Maybe Skip A Test
     ...    widget_class=${widget_class}
     ...    feature=${feature}
     ...    input_type=${input_type}
-    ...    value=${value}
+    ...    value=${initial_value}
     Set Screenshot Directory    ${screens}
-    Set Up Link Shape Example    ${widget_class}    ${feature}    ${input_type}    ${value}
-    ${frame} =    Set Variable    css:${IPYFORCEGRAPH FRAME}
-    ${transparent} =    Get Element Screenshot Size    ${frame}    ${screens}    01-screenshot.png
-    # Update Link Shape Feature    ${widget_class}    ${shape_class}    ${feature}
-    # ${color} =    Get Element Screenshot Size    ${frame}    ${screens}    02-color.png
-    # Should Be True Or Screenshot    ${color} > ${transparent}    03-color-bigger-than-transparent.png
+
+    Set Up Link Shape Example    ${widget_class}    ${feature}    ${input_type}    ${initial_value}
+
+    Maybe Skip A Test
+    ...    widget_class=${widget_class}
+    ...    feature=${feature}
+    ...    input_type=${input_type}
+    ...    value=${updated_value}
+
+    Add And Run JupyterLab Code Cell    lsb.${feature} = ${input_type}("${updated_value}")
+    Capture Page Screenshot    01-updated-value.png
+
+    Add And Run JupyterLab Code Cell    gd.capturing = True
+    Add And Run JupyterLab Code Cell    await asyncio.sleep(1)
+    Add And Run JupyterLab Code Cell    assert 0 not in gd.sources[0].nodes.shape
+    Add And Run JupyterLab Code Cell    assert 0 not in gd.sources[0].links.shape
+
+    IF    "${feature}" == "color"
+        Link Shape Color As Expected    ${screens}    ${input_type}    ${updated_value}
+    END
+
     [Teardown]    Clean Up Link Shape Example
 
-Update Link Shape Feature
-    [Arguments]    ${widget_class}    ${shape_class}    ${feature}
-    Add And Run JupyterLab Code Cell    shape.${feature} = "rgba(255, 0, 0, 1.0)"
-    IF    "${shape_class}" == "Rectangle"
-        Add And Run JupyterLab Code Cell    shape.opacity = 1
-    END
+Link Shape Color As Expected
+    [Arguments]    ${screens}    ${input_type}    ${value}
+    ${frame} =    Set Variable    css:${IPYFORCEGRAPH FRAME}
+    Add And Run JupyterLab Code Cell    lsb.color = "rba(0,0,0,0)"
+    ${transparent} =    Get Element Screenshot Size    ${frame}    ${screens}    02-transparent.png
+    Add And Run JupyterLab Code Cell    lsb.color = ${input_type}("${value}")
+    ${color} =    Get Element Screenshot Size    ${frame}    ${screens}    03-color.png
+    Should Be True Or Screenshot    ${color} > ${transparent}    03-color-bigger-than-transparent.png
+    Add And Run JupyterLab Code Cell    lb.color = "rgba(255, 0, 0, 1.0)"
     Wait For All Cells To Run
     Sleep    1s
+    Capture Page Screenshot    02-color-updated.png
 
 Set Up Link Shape Example
-    [Arguments]    ${widget_class}    ${feature}    ${input_type}    ${value}
-    Set Tags
-    ...    feature:${feature}
-    ...    widget:${widget_class.lower()}
-    ...    input_type:${input_type.lower()}
-    ...    value:${value.lower()}
+    [Arguments]    ${widget_class}    ${feature}    ${input_type}    ${initial_value}
+    Set Tags    feature:${feature}    widget:${widget_class.lower()}    input_type:${input_type.lower()}
     ${text} =    Get File    ${IPYFORCEGRAPH_FIXTURES}${/}api${/}LinkShapes.py
     ${text} =    Set Variable    ${text.replace("WIDGET_CLASS", "${widget_class}")}
     ${text} =    Set Variable    ${text.replace("FEATURE", "${feature}")}
     ${text} =    Set Variable    ${text.replace("INPUT_TYPE", "${input_type}")}
-    ${text} =    Set Variable    ${text.replace("VALUE", "${value}")}
+    ${text} =    Set Variable    ${text.replace("INITIAL_VALUE", "${initial_value}")}
     Launch A New JupyterLab Document
     Set CodeMirror Value    .jp-CodeCell .CodeMirror    ${text.strip()}
     Execute JupyterLab Command    Show Log Console
@@ -101,7 +140,7 @@ Set Up Link Shape Example
     Capture Page Screenshot    00-start.png
 
 Clean Up Link Shape Example
-    Capture Page Screenshot    99-fin.png
+    Capture Page Screenshot    99-final.png
     ${nb_dir} =    Get Jupyter Directory
     Remove File    ${nb_dir}${/}Untitled.ipynb
     Refresh File List
