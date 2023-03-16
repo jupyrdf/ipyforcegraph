@@ -5,15 +5,22 @@ labels: maintenance
 ---
 
 - [ ] merge all outstanding PRs
-- [ ] ensure the versions have been bumped (check with `doit`)
-- [ ] ensure the CHANGELOG is up-to-date
-  - [ ] move the new release to the top of the stack
+  - [ ] _blocking #PR here_
+- [ ] ensure the versions have been bumped
+  - [ ] `pyproject.toml`
+  - [ ] `package.json`
+- [ ] ensure `CHANGELOG.md` is up-to-date
 - [ ] validate on binder
+  - [ ] _URL of binder_
 - [ ] validate on ReadTheDocs
+  - [ ] _URL of build_
 - [ ] wait for a successful build of `main`
-- [ ] download the `dist` archive and unpack somewhere (maybe a fresh `dist`)
+  - [ ] _URL of build_
+- [ ] download the `dist` archive and unpack somewhere
 - [ ] create a new release through the GitHub UI
-  - [ ] paste in the relevant CHANGELOG entries
+  - [ ] pick a release name from real (or imaginary) [forces]
+    - [ ] _name here_
+  - [ ] paste in the relevant `CHANGELOG.md` entries
   - [ ] upload the artifacts
 - [ ] actually upload to npm.com, pypi.org
   ```bash
@@ -23,13 +30,25 @@ labels: maintenance
   npm publish jupyrdf-jupyter-forcegraph-$VERSION.tgz
   npm logout
   ```
+  - [ ] _URL on npm here_
+  - [ ] _URL on pypi here_
 - [ ] postmortem
-  - [ ] handle `conda-forge` feedstock tasks
+  - [ ] handle `conda-forge` [feedstock] tasks
+    - [ ] _URL on `conda-forge/ipyforcegraph-feedstock` here_
+    - [ ] _URL on `anaconda.org`_
   - [ ] validate on binder via simplest-possible gists
-    - [ ] pip
-    - [ ] conda
-  - [ ] bump to next development version
-  - [ ] bump the `CACHE_EPOCH`
-  - [ ] rebuild `yarn.lock`
-  - [ ] remove `.github/locks` and `doit lock`
-  - [ ] update release procedures with lessons learned
+    - [ ] pip `requirements.txt`
+      - [ ] _URL of pip binder here_
+    - [ ] conda `environment.yml`
+      - [ ] _URL of conda binder here_
+  - [ ] create postmortem PR
+    - [ ] _PR# here_
+    - [ ] bump to next development version
+    - [ ] bump the `CACHE_EPOCH`
+    - [ ] rebuild `yarn.lock`
+    - [ ] remove `.github/locks` and `doit lock`
+    - [ ] update release procedures with lessons learned in
+          `.github/ISSUE_TEMPLATE/release.md`
+
+[forces]: https://en.wikipedia.org/wiki/Category:Force
+[feedstock]: https://github.com/conda-forge/ipyforcegraph-feedstock

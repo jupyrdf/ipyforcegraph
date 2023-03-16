@@ -24,7 +24,7 @@ https://conda.anaconda.org/conda-forge/win-64/libsqlite-3.40.0-hcfcfb64_0.tar.bz
 https://conda.anaconda.org/conda-forge/win-64/libzlib-1.2.13-hcfcfb64_4.tar.bz2#0cc5c5cc64ee1637f37f8540a175854c
 https://conda.anaconda.org/conda-forge/win-64/lz4-c-1.9.4-hcfcfb64_0.conda#e34720eb20a33fc3bfb8451dd837ab7a
 https://conda.anaconda.org/conda-forge/win-64/lzo-2.10-he774522_1000.tar.bz2#d5cf4b7eaa52316f135eed9e8548ad57
-https://conda.anaconda.org/conda-forge/win-64/openssl-3.0.8-hcfcfb64_0.conda#46cd47b2c18522b98c34e5101e583137
+https://conda.anaconda.org/conda-forge/win-64/openssl-3.1.0-hcfcfb64_0.conda#4245a25fae1aaf85bc3fbf6fc29c2d5d
 https://conda.anaconda.org/conda-forge/win-64/reproc-14.2.4-hcfcfb64_0.conda#059e1351c1affff15b16aec51c6967a6
 https://conda.anaconda.org/conda-forge/win-64/tk-8.6.12-h8ffe710_0.tar.bz2#c69a5047cc9291ae40afd4a1ad6f0c0f
 https://conda.anaconda.org/conda-forge/win-64/xz-5.2.6-h8d14728_0.tar.bz2#515d77642eaa3639413c6b1bc3f94219
@@ -33,7 +33,7 @@ https://conda.anaconda.org/conda-forge/win-64/yaml-cpp-0.7.0-h63175ca_2.tar.bz2#
 https://conda.anaconda.org/conda-forge/win-64/krb5-1.20.1-heb0366b_0.conda#a07b05ee8f451ab15698397185efe989
 https://conda.anaconda.org/conda-forge/win-64/libsolv-0.7.23-h12be248_0.conda#4955aac5971a11e1b79c47912645b9e2
 https://conda.anaconda.org/conda-forge/win-64/libssh2-1.10.0-h9a1e1f7_3.tar.bz2#c2b344e960a173c777bb3ed172c38cd8
-https://conda.anaconda.org/conda-forge/win-64/libxml2-2.10.3-hc3477c8_0.tar.bz2#6dcf17bf780618ddb559d992ea3b6961
+https://conda.anaconda.org/conda-forge/win-64/libxml2-2.10.3-hc3477c8_3.conda#1f37656230ab24d79970fe82594440f2
 https://conda.anaconda.org/conda-forge/win-64/python-3.11.0-hcf16a7b_0_cpython.tar.bz2#13ee3577afc291dabd2d9edc59736688
 https://conda.anaconda.org/conda-forge/win-64/reproc-cpp-14.2.4-h63175ca_0.conda#a9ee9bbbbda9b32ec690c4909146770d
 https://conda.anaconda.org/conda-forge/win-64/zstd-1.5.2-h12be248_6.conda#62826565682d013b3e2346aaf7bded0e
@@ -45,7 +45,7 @@ https://conda.anaconda.org/conda-forge/noarch/cloudpickle-2.2.1-pyhd8ed1ab_0.con
 https://conda.anaconda.org/conda-forge/noarch/colorama-0.4.6-pyhd8ed1ab_0.tar.bz2#3faab06a954c2a04039983f2c4a50d99
 https://conda.anaconda.org/conda-forge/noarch/crashtest-0.4.1-pyhd8ed1ab_0.tar.bz2#709a2295dd907bb34afb57d54320642f
 https://conda.anaconda.org/conda-forge/noarch/distlib-0.3.6-pyhd8ed1ab_0.tar.bz2#b65b4d50dbd2d50fa0aeac367ec9eed7
-https://conda.anaconda.org/conda-forge/noarch/filelock-3.9.0-pyhd8ed1ab_0.conda#1addc115923d646ca19ed90edc413506
+https://conda.anaconda.org/conda-forge/noarch/filelock-3.10.0-pyhd8ed1ab_0.conda#6f90f1dc834447823b11d155726fcb37
 https://conda.anaconda.org/conda-forge/noarch/idna-3.4-pyhd8ed1ab_0.tar.bz2#34272b248891bddccc64479f9a7fffed
 https://conda.anaconda.org/conda-forge/win-64/libarchive-3.6.2-h27c7867_0.conda#6e1fc6cfaa26186dd5abd5df8d732193
 https://conda.anaconda.org/conda-forge/win-64/libcurl-7.88.1-h68f0423_0.conda#382f59d4d1e98d89b32402c07e7c5017
