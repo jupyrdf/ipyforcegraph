@@ -4,7 +4,8 @@
 
 ### `ipyforcegraph 0.3.0`
 
-- Adds a configurable `NodeShape`, compatible with both `ForceGraph` and `ForceGraph3D`
+- adds a configurable `NodeShapes`, compatible with both `ForceGraph` and `ForceGraph3D`
+  - adds initial `Text`, `Circle` and `Rectangle` which can be stacked in `.shapes`
 - adds `DAG` to `GraphForces`
 - adds manual `ForceGraph.reheat` to restart simulation
 
