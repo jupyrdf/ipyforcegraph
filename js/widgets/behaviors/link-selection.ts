@@ -29,6 +29,8 @@ export class LinkSelectionModel extends BehaviorModel implements IBehave {
       _model_name: LinkSelectionModel.model_name,
       selected: [],
       selected_color: DEFAULT_COLORS.selected,
+      selected_curvature: DEFAULT_CURVATURES.selected,
+      selected_line_dash: DEFAULT_LINE_DASHES.selected,
       selected_width: DEFAULT_WIDTHS.selected,
       multiple: true,
     };

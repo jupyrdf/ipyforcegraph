@@ -8,7 +8,7 @@ from typing import Optional, Tuple, Union
 import ipywidgets as W
 import traitlets as T
 
-from ._base import Behavior
+from ._base import Behavior, Nunjucks
 
 
 @W.register
@@ -64,6 +64,15 @@ class LinkSelection(Behavior):
 
     selected_color: str = T.Unicode(
         "rgba(31, 120, 179, 1.0)", help="the color of selected links"
+    ).tag(sync=True)
+
+    selected_curvature: float = T.Float(
+        0, help="the curvature of selected links, default: straight links"
+    ).tag(sync=True)
+
+    selected_line_dash: Tuple[float] = W.TypedTuple(
+        T.Float(),
+        help="the line-dash of selected links, default: no dashes",
     ).tag(sync=True)
 
     selected_width: float = T.Float(2, help="the width of selected links").tag(
