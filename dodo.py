@@ -764,6 +764,7 @@ def task_docs():
             *P.ALL_MD,
             P.OK_PIP_INSTALL,
             P.LITE_SHA256SUMS,
+            P.SHA256SUMS,
         ],
         targets=[P.DOCS_BUILDINFO],
         actions=[[*P.IN_ENV, "sphinx-build", "-M", "html", P.DOCS, P.DOCS_BUILD]],

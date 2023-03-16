@@ -70,8 +70,9 @@ html_context = {
     "doc_path": "docs",
 }
 html_static_path = [
-    "_static",
+    "../dist",
     "../build/lite",
+    "_static",
 ]
 html_css_files = [
     "theme.css",

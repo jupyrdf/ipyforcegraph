@@ -7,8 +7,10 @@ labels: maintenance
 - [ ] merge all outstanding PRs
   - [ ] _blocking #PR here_
 - [ ] ensure the versions have been bumped
-  - [ ] `pyproject.toml`
-  - [ ] `package.json`
+  - [ ] run `doit preflight:release`
+    - [ ] `pyproject.toml`
+    - [ ] `package.json`
+  - [ ] `README.md` binder badges (`stable` will be broken until tagged)
 - [ ] ensure `CHANGELOG.md` is up-to-date
 - [ ] validate on binder
   - [ ] _URL of binder_
@@ -46,7 +48,14 @@ labels: maintenance
     - [ ] bump to next development version
     - [ ] bump the `CACHE_EPOCH`
     - [ ] rebuild `yarn.lock`
-    - [ ] remove `.github/locks` and `doit lock`
+    - [ ] rebuild `.github/locks`
+      - [ ] run `doit env:lock`
+      - [ ] run `rm -rf .github/locks`
+      - [ ] from a clean command prompt
+        - [ ] 🐧`source envs/lock/bin/activate`
+        - [ ] 🪟 `call envs/lock/Scripts/activate.bat`)
+      - [ ] run `doit lock`
+      - [ ] commit the new locks
     - [ ] update release procedures with lessons learned in
           `.github/ISSUE_TEMPLATE/release.md`
 

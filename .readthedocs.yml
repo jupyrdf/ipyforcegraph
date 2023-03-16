@@ -9,6 +9,8 @@ build:
       - doit list
       - doit setup
       - doit list
+      - doit build
+      - doit list
       - doit lite
       - doit list
 
