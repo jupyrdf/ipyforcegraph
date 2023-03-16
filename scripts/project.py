@@ -168,7 +168,11 @@ DOCS_BUILD = BUILD / "docs"
 DOCS_CONF = DOCS / "conf.py"
 DICTIONARY = DOCS / "dictionary.txt"
 ALL_SPELL = BUILD / "spell/ALL.fail"
-LITE_SPEC = ["--pre", "jupyterlite==0.1.0b18"]
+LITE_SPEC = [
+    "jupyterlite ==0.1.0b19",
+    "jupyterlite-core ==0.1.0b19",
+    "jupyterlite-pyodide-kernel ==0.0.5",
+]
 LITE_BUILD = BUILD / "lite"
 LITE_SHA256SUMS = LITE_BUILD / "SHA256SUMS"
 

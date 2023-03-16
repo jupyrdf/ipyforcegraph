@@ -1,4 +1,4 @@
-# Contributing to `ipyforcegraph`
+# Contributing
 
 ## Install
 
