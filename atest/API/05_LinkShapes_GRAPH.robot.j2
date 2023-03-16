@@ -74,12 +74,12 @@ Shape Link Feature Works As Expected
 Link Shape Color As Expected
     [Arguments]  ${screens}   ${input_type}  ${value}
     ${frame} =   Set Variable   css:${IPYFORCEGRAPH FRAME}
-    Add And Run JupyterLab Code Cell   lsb.color = "rba(0,0,0,0)"
+    Add And Run JupyterLab Code Cell   lsb.color = "rgba(0,0,0,0)"
     ${transparent} =    Get Element Screenshot Size    ${frame}    ${screens}    02-transparent.png
     Add And Run JupyterLab Code Cell   lsb.color = ${input_type}("${value}")
     ${color} =    Get Element Screenshot Size    ${frame}    ${screens}    03-color.png
     Should Be True Or Screenshot    ${color} > ${transparent}    03-color-bigger-than-transparent.png
-    Add And Run JupyterLab Code Cell   lb.color = "rgba(255, 0, 0, 1.0)"
+    Add And Run JupyterLab Code Cell   lb.color = "rgba(40, 120, 120, 1.0)"
     Wait For All Cells To Run
     Sleep    1s
     Capture Page Screenshot    02-color-updated.png

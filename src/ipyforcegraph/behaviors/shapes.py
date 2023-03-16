@@ -92,7 +92,12 @@ class NodeShapes(Behavior):
 
 @W.register
 class LinkShapes(Behavior):
-    """Customize the shape of the ``links``."""
+    """
+    Customize the shape of the ``links``.
+
+    .. note::
+        ``line_dash`` is not displayed in :class:`~ipyforcegraph.graphs.ForceGraph3D`.
+    """
 
     _model_name: str = T.Unicode("LinkShapeModel").tag(sync=True)
 
@@ -101,7 +106,7 @@ class LinkShapes(Behavior):
         "the curvature of the link, 0: straight, 1: circular", numeric=True
     )
     line_dash: TFeature = _make_trait(
-        "the dash line pattern of the link, e.g., [2, 1] for '-- -- --'",
+        "the dash line pattern of the link, e.g., [2, 1] for ``-- -- --``",
         stringy=False,
         by_column=False,
     )
