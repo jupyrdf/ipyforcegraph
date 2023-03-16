@@ -8,7 +8,7 @@ from typing import Optional, Tuple, Union
 import ipywidgets as W
 import traitlets as T
 
-from ._base import Behavior, Nunjucks
+from ._base import Behavior
 
 
 @W.register
