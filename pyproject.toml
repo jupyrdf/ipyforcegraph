@@ -101,7 +101,7 @@ addopts = [
   "--no-cov-on-fail",
   "--html=build/pytest.html",
   "--self-contained-html",
-  "--junitxml=build/pytest.xunit.xml"
+  "--junitxml=build/pytest.xunit.xml",
 ]
 filterwarnings = [
     "error",
