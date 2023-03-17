@@ -19,6 +19,7 @@ DataFrame
 dataframes
 DataFrameSource
 doit
+DynamicValue
 env
 evented
 ForceBase
