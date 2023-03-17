@@ -595,6 +595,7 @@ def task_lint():
                 actions=[
                     [*P.IN_ENV, "nbstripout", nb],
                     (U.notebook_lint, [nb]),
+                    [*P.IN_ENV, "nbqa", "ruff", "--fix", nb],
                     [
                         *P.IN_ENV,
                         "jupyter-nbconvert",
