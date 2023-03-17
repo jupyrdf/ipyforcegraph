@@ -165,6 +165,5 @@ _d/
 *.doit.db*
 .pabotsuitenames
 *.tsbuildinfo*
-*.isorted
 
 d2u*

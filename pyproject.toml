@@ -61,10 +61,6 @@ include = ["src/_d"]
 [tool.flit.external-data]
 directory = "src/_d"
 
-[tool.isort]
-profile = "black"
-known_first_party = "ipyforcegraph"
-
 [tool.mypy]
 cache_dir = "build/.mypy_cache"
 sqlite_cache = true

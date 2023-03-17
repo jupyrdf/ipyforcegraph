@@ -4,7 +4,6 @@ _inherit_from:
 
 dependencies:
   - black-jupyter
-  - isort
   - mypy >=1.0.0
   - nbqa
   - nbstripout
