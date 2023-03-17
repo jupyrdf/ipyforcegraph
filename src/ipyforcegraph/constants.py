@@ -5,7 +5,7 @@
 
 try:  # pragma: no cover
     from importlib.metadata import version
-except:  # pragma: no cover
+except ImportError:  # pragma: no cover
     from importlib_metadata import version
 
 NAME = "ipyforcegraph"

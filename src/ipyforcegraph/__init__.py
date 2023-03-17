@@ -9,6 +9,7 @@ from .constants import EXTENSION_NAME, __version__
 
 
 def _jupyter_labextension_paths() -> List[Dict[str, str]]:
+    """Magic method for finding JupyterLab extension static assets."""
     from .js import __prefix__
 
     return [dict(src=str(__prefix__), dest=EXTENSION_NAME)]

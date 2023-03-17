@@ -539,7 +539,6 @@ def task_lint():
             file_dep=[*P.ALL_PY, P.HISTORY],
             actions=[
                 [*P.IN_ENV, "ssort", *P.ALL_PY],
-                [*P.IN_ENV, "isort", "--quiet", "--ac", *P.ALL_PY],
                 [*P.IN_ENV, "black", "--quiet", *P.ALL_PY],
             ],
         ),
@@ -548,11 +547,11 @@ def task_lint():
 
     yield _ok(
         dict(
-            name="pyflakes",
-            file_dep=[*P.ALL_PY, P.OK_BLACK],
-            actions=[[*P.IN_ENV, "pyflakes", *P.ALL_PY]],
+            name="ruff",
+            file_dep=[*P.ALL_PY, P.OK_BLACK, P.PY_PROJ],
+            actions=[[*P.IN_ENV, "ruff", *P.ALL_PY]],
         ),
-        P.OK_PYFLAKES,
+        P.OK_RUFF,
     )
 
     yield _ok(
@@ -628,7 +627,7 @@ def task_lint():
                 *P.ALL_PY_SRC,
                 *P.ALL_TS,
                 P.SCRIPTS / "atest.py",
-                P.OK_PYFLAKES,
+                P.OK_RUFF,
                 P.HISTORY,
             ],
             actions=[
@@ -670,7 +669,7 @@ def task_lint():
                 P.OK_BLACK,
                 P.OK_INDEX,
                 P.OK_PRETTIER,
-                P.OK_PYFLAKES,
+                P.OK_RUFF,
                 P.OK_PYPROJ_FMT,
                 P.OK_ROBOT_LINT,
             ],

@@ -110,3 +110,7 @@ filterwarnings = [
     "error",
     "ignore::DeprecationWarning:traittypes",
 ]
+
+[tool.ruff]
+select = ["W", "E", "I"]
+ignore = ["E501"]
