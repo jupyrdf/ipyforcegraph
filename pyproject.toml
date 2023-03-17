@@ -38,7 +38,10 @@ dependencies = [
 [project.urls]
 "Bug Tracker" = "https://github.com/jupyrdf/ipyforcegraph/issues"
 "Changelog" = "https://github.com/jupyrdf/ipyforcegraph/blob/main/CHANGELOG.md"
+"Conda Forge" = "https://github.com/conda-forge/ipyforcegraph-feedstock"
 "Documentation" = "https://ipyforcegraph.rtfd.io"
+"NPM" = "https://www.npmjs.com/package/@jupyrdf/jupyter-forcegraph"
+"PyPI" = "https://pypi.org/project/ipyforcegraph"
 "Source" = "https://github.com/jupyrdf/ipyforcegraph"
 
 

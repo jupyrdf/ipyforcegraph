@@ -63,7 +63,24 @@ html_theme_options = {
     "github_url": PROJ["urls"]["Source"],
     "use_edit_page_button": True,
     "show_toc_level": 1,
-    "icon_links": [],
+    "icon_links": [
+        {
+            "name": "PyPI",
+            "url": PROJ["urls"]["PyPI"],
+            "icon": "fa-brands fa-python",
+        },
+        {
+            "name": "Conda Forge",
+            "url": PROJ["urls"]["Conda Forge"],
+            "icon": "./_static/anvil.svg",
+            "type": "local",
+        },
+        {
+            "name": "NPM",
+            "url": PROJ["urls"]["NPM"],
+            "icon": "fa-brands fa-npm",
+        },
+    ],
     "pygment_light_style": "github-light",
     "pygment_dark_style": "github-dark",
 }
