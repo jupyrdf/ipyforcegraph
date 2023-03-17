@@ -3,9 +3,9 @@
 [Jupyter Widgets][widgets] for interactive 2D and 3D graphs powered by the
 [force-graph][force-graph] and [3d-force-graph][3d-force-graph] libraries.
 
-|                                       Install                                       |                                      Demo                                       |       Build       |                                     Docs                                     |
-| :---------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------: | :---------------: | :--------------------------------------------------------------------------: |
-| [![npm-badge]][npm] <br/> [![pypi-badge]][pypi] <br/> [![conda-badge]][conda-forge] | [![binder-badge-stable]][binder-stable] <br/> [![binder-badge-dev]][binder-dev] | [![ci-badge]][ci] | [![docs-badge]][docs] <br/> [Examples] <br/>[CHANGELOG] <br/> [CONTRIBUTING] |
+|                                       Install                                       |                                      Demo                                       |                            Build                            |                                     Docs                                     |
+| :---------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------: | :---------------------------------------------------------: | :--------------------------------------------------------------------------: |
+| [![npm-badge]][npm] <br/> [![pypi-badge]][pypi] <br/> [![conda-badge]][conda-forge] | [![binder-badge-stable]][binder-stable] <br/> [![binder-badge-dev]][binder-dev] | [![ci-main-badge]][ci-main] <br/> [![ci-dev-badge]][ci-dev] | [![docs-badge]][docs] <br/> [Examples] <br/>[CHANGELOG] <br/> [CONTRIBUTING] |
 
 ## Screenshots
 
@@ -108,8 +108,14 @@ This work is licensed under the [BSD-3-Clause License][license].
 [examples]: https://github.com/jupyrdf/ipyforcegraph/tree/main/examples/_index.ipynb
 [contributing]: https://github.com/jupyrdf/ipyforcegraph/tree/main/CONTRIBUTING.md
 [changelog]: https://github.com/jupyrdf/ipyforcegraph/tree/main/CHANGELOG.md
-[ci-badge]: https://github.com/jupyrdf/ipyforcegraph/workflows/CI/badge.svg
-[ci]: https://github.com/jupyrdf/ipyforcegraph/actions?query=workflow%3ACI+branch%3Amain
+[ci-main-badge]:
+  https://img.shields.io/github/actions/workflow/status/jupyrdf/ipyforcegraph/ci.yml?branch=main&label=main&logo=github
+[ci-main]:
+  https://github.com/jupyrdf/ipyforcegraph/actions?query=workflow%3ACI+branch%3Amain
+[ci-dev-badge]:
+  https://img.shields.io/github/actions/workflow/status/jupyrdf/ipyforcegraph/ci.yml?branch=dev&label=dev&logo=github
+[ci-dev]:
+  https://github.com/jupyrdf/ipyforcegraph/actions?query=workflow%3ACI+branch%3Adev
 [force-graph]: https://github.com/vasturiano/force-graph
 [3d-force-graph]: https://github.com/vasturiano/3d-force-graph
 [jupyterlab]: https://github.com/jupyterlab/jupyterlab
