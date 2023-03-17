@@ -4,18 +4,20 @@ about: Prepare for a release
 labels: maintenance
 ---
 
-- [ ] merge all outstanding PRs
-  - [ ] _blocking #PR here_
-- [ ] ensure the versions have been bumped
-  - [ ] run `doit preflight:release`
-    - [ ] `pyproject.toml`
-    - [ ] `package.json`
-  - [ ] `README.md` binder badges (`stable` will be broken until tagged)
-- [ ] ensure `CHANGELOG.md` is up-to-date
-- [ ] validate on binder
-  - [ ] _URL of binder_
-- [ ] validate on ReadTheDocs
-  - [ ] _URL of build_
+- [ ] on `dev`
+  - [ ] merge all outstanding PRs
+    - [ ] _blocking #PR here_
+  - [ ] ensure the versions have been bumped
+    - [ ] run `doit preflight:release`
+      - [ ] `pyproject.toml`
+      - [ ] `package.json`
+    - [ ] `README.md` binder badges (`stable` will be broken until tagged)
+  - [ ] ensure `CHANGELOG.md` is up-to-date
+  - [ ] validate on binder
+    - [ ] _URL of binder_
+  - [ ] validate on ReadTheDocs
+    - [ ] _URL of build_
+- [ ] make a PR from `dev` to `main`
 - [ ] wait for a successful build of `main`
   - [ ] _URL of build_
 - [ ] download the `dist` archive and unpack somewhere
@@ -24,7 +26,7 @@ labels: maintenance
     - [ ] _name here_
   - [ ] paste in the relevant `CHANGELOG.md` entries
   - [ ] upload the artifacts
-- [ ] actually upload to npm.com, pypi.org
+- [ ] upload distribution to package repositories
   ```bash
   cd dist
   twine upload *.tar.gz *.whl
@@ -32,7 +34,7 @@ labels: maintenance
   npm publish jupyrdf-jupyter-forcegraph-$VERSION.tgz
   npm logout
   ```
-  - [ ] _URL on npm here_
+  - [ ] _URL on npmjs.org here_
   - [ ] _URL on pypi here_
 - [ ] postmortem
   - [ ] handle `conda-forge` [feedstock] tasks
@@ -43,7 +45,7 @@ labels: maintenance
       - [ ] _URL of pip binder here_
     - [ ] conda `environment.yml`
       - [ ] _URL of conda binder here_
-  - [ ] create postmortem PR
+  - [ ] create postmortem PR from `main` targeting `dev`
     - [ ] _PR# here_
     - [ ] bump to next development version
     - [ ] bump the `CACHE_EPOCH`
