@@ -1,4 +1,4 @@
-"""Main entrypoint for ``ipyforcegraph``."""
+"""Main module metadata for ``ipyforcegraph``."""
 
 # Copyright (c) 2023 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.

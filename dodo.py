@@ -469,7 +469,10 @@ def task_test():
             actions=[
                 (U.clean_some, [html]),
                 _test(),
-                (U.html_expect_xpath_matches, [html]),
+                (
+                    U.html_expect_xpath_matches,
+                    [html, U.XP_JUPYTER_STDERR, 0, "stderr output"],
+                ),
             ],
             targets=[html],
         )
@@ -926,6 +929,14 @@ def task_checkdocs():
         task["file_dep"] += [P.OK_DICTIONARY]
         spell_tasks += [f"""checkdocs:{task["name"]}"""]
         yield task
+        rel_path = dep.relative_to(P.DOCS_BUILD)
+        yield dict(
+            name=f"xref:{rel_path}",
+            file_dep=[dep],
+            actions=[
+                (U.html_expect_xpath_matches, [dep, U.XP_BAD_XREF, 0, "bad xref"]),
+            ],
+        )
 
     yield dict(
         name="spell:ALL",
