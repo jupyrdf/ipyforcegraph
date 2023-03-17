@@ -112,5 +112,11 @@ filterwarnings = [
 ]
 
 [tool.ruff]
-select = ["W", "E", "I"]
+select = [
+  "E",
+  "F",
+  "I",
+  "PLE",
+  "W",
+]
 ignore = ["E501"]

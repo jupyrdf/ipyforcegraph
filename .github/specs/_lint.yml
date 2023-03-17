@@ -6,8 +6,8 @@ dependencies:
   - black-jupyter
   - isort
   - mypy >=1.0.0
+  - nbqa
   - nbstripout
-  - pyflakes
   - pyproject-fmt !=0.9.1
   - pytest-check-links
   - requests-cache

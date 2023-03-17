@@ -179,7 +179,7 @@ https://conda.anaconda.org/conda-forge/noarch/wcwidth-0.2.6-pyhd8ed1ab_0.conda#0
 https://conda.anaconda.org/conda-forge/noarch/wsproto-1.2.0-pyhd8ed1ab_0.tar.bz2#00ba804b54f451d102f6a7615f08470d
 https://conda.anaconda.org/conda-forge/noarch/argon2-cffi-21.3.0-pyhd8ed1ab_0.tar.bz2#a0b402db58f73aaab8ee0ca1025a362e
 https://conda.anaconda.org/conda-forge/noarch/doit-with-toml-0.36.0-pyhd8ed1ab_0.tar.bz2#593faaa546937cfa071928c9127fcb12
-https://conda.anaconda.org/conda-forge/win-64/jupyter_core-5.2.0-py311h1ea47a8_0.conda#2ac3a8cc730d6a61c3d6a6d7c0a4c34f
+https://conda.anaconda.org/conda-forge/win-64/jupyter_core-5.3.0-py311h1ea47a8_0.conda#2b81965b74e70b89053845d1bc287561
 https://conda.anaconda.org/conda-forge/noarch/jupyter_events-0.6.3-pyhd8ed1ab_0.conda#d98c5196ab6ffeb0c2feca2912801353
 https://conda.anaconda.org/conda-forge/win-64/numpy-1.24.2-py311h0b4df5a_0.conda#2596fad79689a38b6061f185c1fc3498
 https://conda.anaconda.org/conda-forge/noarch/prompt-toolkit-3.0.38-pyha770c72_0.conda#59ba1bf8ea558751a0d391249a248765
@@ -202,7 +202,7 @@ https://conda.anaconda.org/conda-forge/noarch/ipykernel-6.21.3-pyh025b116_0.cond
 https://conda.anaconda.org/conda-forge/noarch/nbconvert-core-7.2.9-pyhd8ed1ab_0.conda#a9e1826152e79416db71c51b0d3af28c
 https://conda.anaconda.org/conda-forge/noarch/robotframework-seleniumlibrary-6.0.0-pyhd8ed1ab_0.tar.bz2#2acaef9c04081dc3644501ac575953bf
 https://conda.anaconda.org/conda-forge/noarch/ipywidgets-8.0.4-pyhd8ed1ab_0.conda#9dea5ab3cc33084f7a3680a98859731e
-https://conda.anaconda.org/conda-forge/noarch/jupyter_server-2.4.0-pyhd8ed1ab_0.conda#822f6543bf1fb795cf4d86da550f220a
+https://conda.anaconda.org/conda-forge/noarch/jupyter_server-2.5.0-pyhd8ed1ab_0.conda#7fa3bd3d8dee42934f63711e9fbe959a
 https://conda.anaconda.org/conda-forge/noarch/nbconvert-pandoc-7.2.9-pyhd8ed1ab_0.conda#4a8dc94c7c2f3736dc4b91ec345d5b4b
 https://conda.anaconda.org/conda-forge/noarch/robotframework-jupyterlibrary-0.4.2-pyhd8ed1ab_0.conda#6687f0def03dc3db713149fb8e026068
 https://conda.anaconda.org/conda-forge/noarch/jupyterlab_server-2.20.0-pyhd8ed1ab_0.conda#61df7d51e7f6eabba237740cc04f60a7
