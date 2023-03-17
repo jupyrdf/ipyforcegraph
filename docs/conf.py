@@ -20,7 +20,6 @@ PROJ = PY_PROJ["project"]
 
 # extensions
 extensions = [
-    "myst_nb",
     "sphinx.ext.autosummary",
     "sphinx.ext.autosectionlabel",
     "sphinx.ext.extlinks",
@@ -30,6 +29,7 @@ extensions = [
     "sphinx.ext.viewcode",
     "sphinx.ext.intersphinx",
     "sphinx_copybutton",
+    "myst_nb",
 ]
 
 # meta
@@ -51,6 +51,8 @@ autodoc_default_options = {
     "undoc-members": True,
 }
 inheritance_alias = {}
+autosectionlabel_prefix_document = True
+myst_heading_anchors = 3
 
 # theme
 html_theme = "pydata_sphinx_theme"
@@ -62,6 +64,8 @@ html_theme_options = {
     "use_edit_page_button": True,
     "show_toc_level": 1,
     "icon_links": [],
+    "pygment_light_style": "github-light",
+    "pygment_dark_style": "github-dark",
 }
 html_context = {
     "github_user": "jupyrdf",

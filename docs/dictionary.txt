@@ -53,6 +53,7 @@ LinkShapes
 LinkTooltip
 LinkWidths
 lockfiles
+MacOS
 maintenance
 Mambaforge
 ManyBody

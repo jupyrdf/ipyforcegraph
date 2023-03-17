@@ -163,6 +163,7 @@ PY_PACKAGE_JSON = PY_EXT / "package.json"
 PY_GRAPH_CLASSES = ["ForceGraph", "ForceGraph3D"]
 
 # docs
+SPHINX_ARGS = json.loads(os.environ.get("SPHINX_ARGS", """["-W", "--keep-going"]"""))
 LITE_JSON = [*LITE.glob("*.json")]
 DOCS_BUILD = BUILD / "docs"
 DOCS_CONF = DOCS / "conf.py"
@@ -272,7 +273,7 @@ ATEST_OUT = BUILD / "robot"
 ATEST_CANARY = BUILD / f"robot.{PLATFORM.lower()}_success.ok"
 
 # docs
-DOCS_BUILDINFO = DOCS_BUILD / "html" / ".buildinfo"
+DOCS_BUILDINFO = DOCS_BUILD / ".buildinfo"
 DOCS_LINKS = BUILD / "links"
 
 

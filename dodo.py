@@ -767,7 +767,17 @@ def task_docs():
             P.SHA256SUMS,
         ],
         targets=[P.DOCS_BUILDINFO],
-        actions=[[*P.IN_ENV, "sphinx-build", "-M", "html", P.DOCS, P.DOCS_BUILD]],
+        actions=[
+            [
+                *P.IN_ENV,
+                "sphinx-build",
+                *P.SPHINX_ARGS,
+                "-b",
+                "html",
+                P.DOCS,
+                P.DOCS_BUILD,
+            ]
+        ],
     )
 
 
@@ -860,7 +870,7 @@ def _all_spell():
 def task_checkdocs():
     """check spelling and links of build docs HTML."""
     no_check = ["htmlcov", "pytest", "_static", "genindex"]
-    html = P.DOCS_BUILD / "html"
+    html = P.DOCS_BUILD
     file_dep = sorted(
         {
             p
@@ -881,6 +891,7 @@ def task_checkdocs():
                         *P.IN_ENV,
                         "pytest-check-links",
                         "-vv",
+                        "--no-cov",
                         *["-p", "no:importnb"],
                         "--check-links-cache",
                         *["--check-links-cache-name", P.DOCS_LINKS],
@@ -891,7 +902,7 @@ def task_checkdocs():
                         *file_dep,
                     ],
                     shell=False,
-                    cwd=P.DOCS_BUILD / "html",
+                    cwd=P.DOCS_BUILD,
                 ),
             ],
         ),
