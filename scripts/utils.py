@@ -69,7 +69,7 @@ def template_one(src: Path, dest: Path, context=None):
 
     tmpl = jinja2.Template(src.read_text(**P.UTF8))
     text = tmpl.render(**context)
-    dest.write_text(text, **P.UTF8)
+    dest.write_text(text.replace("\r\n", "\n"), newline="\n", **P.UTF8)
 
 
 def clean_notebook_metadata(nb_json):
