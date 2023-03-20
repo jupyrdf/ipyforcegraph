@@ -32,7 +32,7 @@ class BaseD3Force(Behavior):
 
 
 class ShapeBase(ForceBase):
-    """A column from a ``DataFrameSource``."""
+    """A base class from which all :mod:`~ipyforcegraph.behaviors.shapes` inherit."""
 
     _model_name: str = T.Unicode("ShapeBaseModel").tag(sync=True)
 
@@ -74,7 +74,7 @@ class DynamicValue(ForceBase):
 
 
 class Column(DynamicValue):
-    """A column from a ``DataFrameSource``."""
+    """A column from a :class:`~ipyforcegraph.sources.dataframe.DataFrameSource`."""
 
     _model_name: str = T.Unicode("ColumnModel").tag(sync=True)
 

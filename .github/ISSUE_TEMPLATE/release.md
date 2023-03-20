@@ -9,9 +9,6 @@ labels: maintenance
     - [ ] _blocking #PR here_
   - [ ] ensure the versions have been bumped
     - [ ] run `doit preflight:release`
-      - [ ] `pyproject.toml`
-      - [ ] `package.json`
-    - [ ] `README.md` binder badges (`stable` will be broken until tagged)
   - [ ] ensure `CHANGELOG.md` is up-to-date
   - [ ] validate on binder
     - [ ] _URL of binder_
@@ -22,7 +19,7 @@ labels: maintenance
   - [ ] _URL of build_
 - [ ] download the `dist` archive and unpack somewhere
 - [ ] create a new release through the GitHub UI
-  - [ ] pick a release name from real (or imaginary) [forces]
+  - [ ] pick a new [release] name to go with the version of real (or imaginary) [force]
     - [ ] _name here_
   - [ ] paste in the relevant `CHANGELOG.md` entries
   - [ ] upload the artifacts
@@ -61,5 +58,6 @@ labels: maintenance
     - [ ] update release procedures with lessons learned in
           `.github/ISSUE_TEMPLATE/release.md`
 
-[forces]: https://en.wikipedia.org/wiki/Category:Force
 [feedstock]: https://github.com/conda-forge/ipyforcegraph-feedstock
+[force]: https://en.wikipedia.org/wiki/Category:Force
+[release]: https://github.com/jupyrdf/ipyforcegraph/releases
