@@ -403,8 +403,8 @@ def task_pytest():
     utest_args = [
         *P.IN_ENV,
         "pytest",
-        "--cov-fail-under",
-        str(P.PYTEST_COV_THRESHOLD),
+        f"--cov-fail-under={P.PYTEST_COV_THRESHOLD}",
+        f"--json-report-file={P.PYTEST_JSON}",
     ]
 
     if P.UTEST_PROCESSES:
@@ -418,7 +418,7 @@ def task_pytest():
         doc="run unit tests with pytest",
         uptodate=[config_changed(dict(COMMIT=P.COMMIT, args=P.PYTEST_ARGS))],
         file_dep=[*P.ALL_PY_SRC, P.PY_PROJ, P.OK_PIP_INSTALL],
-        targets=[P.HTMLCOV_INDEX, P.PYTEST_HTML, P.PYTEST_XUNIT],
+        targets=[P.HTMLCOV_INDEX, P.PYTEST_HTML, P.PYTEST_XUNIT, P.PYTEST_JSON],
         actions=[
             utest_args,
             lambda: U.strip_timestamps(
@@ -469,7 +469,10 @@ def task_test():
             actions=[
                 (U.clean_some, [html]),
                 _test(),
-                (U.html_expect_xpath_matches, [html]),
+                (
+                    U.html_expect_xpath_matches,
+                    [html, U.XP_JUPYTER_STDERR, 0, "stderr output"],
+                ),
             ],
             targets=[html],
         )
@@ -536,7 +539,6 @@ def task_lint():
             file_dep=[*P.ALL_PY, P.HISTORY],
             actions=[
                 [*P.IN_ENV, "ssort", *P.ALL_PY],
-                [*P.IN_ENV, "isort", "--quiet", "--ac", *P.ALL_PY],
                 [*P.IN_ENV, "black", "--quiet", *P.ALL_PY],
             ],
         ),
@@ -545,11 +547,11 @@ def task_lint():
 
     yield _ok(
         dict(
-            name="pyflakes",
-            file_dep=[*P.ALL_PY, P.OK_BLACK],
-            actions=[[*P.IN_ENV, "pyflakes", *P.ALL_PY]],
+            name="ruff",
+            file_dep=[*P.ALL_PY, P.OK_BLACK, P.PY_PROJ],
+            actions=[[*P.IN_ENV, "ruff", *P.ALL_PY]],
         ),
-        P.OK_PYFLAKES,
+        P.OK_RUFF,
     )
 
     yield _ok(
@@ -593,6 +595,7 @@ def task_lint():
                 actions=[
                     [*P.IN_ENV, "nbstripout", nb],
                     (U.notebook_lint, [nb]),
+                    [*P.IN_ENV, "nbqa", "ruff", "--fix", nb],
                     [
                         *P.IN_ENV,
                         "jupyter-nbconvert",
@@ -625,7 +628,7 @@ def task_lint():
                 *P.ALL_PY_SRC,
                 *P.ALL_TS,
                 P.SCRIPTS / "atest.py",
-                P.OK_PYFLAKES,
+                P.OK_RUFF,
                 P.HISTORY,
             ],
             actions=[
@@ -667,7 +670,7 @@ def task_lint():
                 P.OK_BLACK,
                 P.OK_INDEX,
                 P.OK_PRETTIER,
-                P.OK_PYFLAKES,
+                P.OK_RUFF,
                 P.OK_PYPROJ_FMT,
                 P.OK_ROBOT_LINT,
             ],
@@ -764,9 +767,20 @@ def task_docs():
             *P.ALL_MD,
             P.OK_PIP_INSTALL,
             P.LITE_SHA256SUMS,
+            P.SHA256SUMS,
         ],
         targets=[P.DOCS_BUILDINFO],
-        actions=[[*P.IN_ENV, "sphinx-build", "-M", "html", P.DOCS, P.DOCS_BUILD]],
+        actions=[
+            [
+                *P.IN_ENV,
+                "sphinx-build",
+                *P.SPHINX_ARGS,
+                "-b",
+                "html",
+                P.DOCS,
+                P.DOCS_BUILD,
+            ]
+        ],
     )
 
 
@@ -859,7 +873,7 @@ def _all_spell():
 def task_checkdocs():
     """check spelling and links of build docs HTML."""
     no_check = ["htmlcov", "pytest", "_static", "genindex"]
-    html = P.DOCS_BUILD / "html"
+    html = P.DOCS_BUILD
     file_dep = sorted(
         {
             p
@@ -880,6 +894,7 @@ def task_checkdocs():
                         *P.IN_ENV,
                         "pytest-check-links",
                         "-vv",
+                        "--no-cov",
                         *["-p", "no:importnb"],
                         "--check-links-cache",
                         *["--check-links-cache-name", P.DOCS_LINKS],
@@ -890,7 +905,7 @@ def task_checkdocs():
                         *file_dep,
                     ],
                     shell=False,
-                    cwd=P.DOCS_BUILD / "html",
+                    cwd=P.DOCS_BUILD,
                 ),
             ],
         ),
@@ -914,6 +929,14 @@ def task_checkdocs():
         task["file_dep"] += [P.OK_DICTIONARY]
         spell_tasks += [f"""checkdocs:{task["name"]}"""]
         yield task
+        rel_path = dep.relative_to(P.DOCS_BUILD)
+        yield dict(
+            name=f"xref:{rel_path}",
+            file_dep=[dep],
+            actions=[
+                (U.html_expect_xpath_matches, [dep, U.XP_BAD_XREF, 0, "bad xref"]),
+            ],
+        )
 
     yield dict(
         name="spell:ALL",

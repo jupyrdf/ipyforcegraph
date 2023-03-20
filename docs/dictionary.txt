@@ -19,6 +19,7 @@ DataFrame
 dataframes
 DataFrameSource
 doit
+DynamicValue
 env
 evented
 ForceBase
@@ -53,6 +54,7 @@ LinkShapes
 LinkTooltip
 LinkWidths
 lockfiles
+MacOS
 maintenance
 Mambaforge
 ManyBody

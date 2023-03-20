@@ -1,9 +1,17 @@
 <!--
 Thanks for contributing to IPyForceGraph!
 Please fill out the following items to submit a pull request.
+
 See the contributing guidelines for more information:
 https://github.com/jupyrdf/ipyforcegraph/main/CONTRIBUTING.md
 -->
+
+## Checklist
+
+- [ ] the PR target is correct
+  - `main` for releases, docs-only fixes and post-release hot-fixes
+  - `dev` for everything else
+- [ ] ran `doit lint` locally
 
 ## References
 
