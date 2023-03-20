@@ -97,6 +97,7 @@ module = [
     "numpy",
     "pandas",
     "traittypes",
+    "doit.*",
 ]
 ignore_missing_imports = true
 

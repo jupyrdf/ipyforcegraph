@@ -549,7 +549,7 @@ def task_lint():
         dict(
             name="ruff",
             file_dep=[*P.ALL_PY, P.OK_BLACK, P.PY_PROJ],
-            actions=[[*P.IN_ENV, "ruff", *P.ALL_PY]],
+            actions=[[*P.IN_ENV, "ruff", "--fix", *P.ALL_PY]],
         ),
         P.OK_RUFF,
     )

@@ -1,3 +1,4 @@
 bqplot ; platform_machine == "wasm32"
 importnb ; platform_machine == "wasm32"
 ipyforcegraph ; platform_machine == "wasm32"
+doit ; platform_machine == "wasm32"
