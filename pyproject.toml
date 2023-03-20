@@ -45,6 +45,19 @@ dependencies = [
 "Source" = "https://github.com/jupyrdf/ipyforcegraph"
 
 
+[tool.coverage.run]
+data_file = "build/reports/.coverage"
+
+[tool.coverage.html]
+show_contexts = true
+
+[tool.coverage.paths]
+ipyforcegraph = [
+    "src/ipyforcegraph",
+    "*/src/ipyforcegraph"
+]
+
+
 [tool.doit]
 backend = "sqlite3"
 verbosity = 2
@@ -90,17 +103,25 @@ ignore_missing_imports = true
 [tool.pytest.ini_options]
 junit_family = "xunit2"
 addopts = [
-  "-vv",
-  "--ff",
   "--pyargs",
   "ipyforcegraph",
-  "--cov=ipyforcegraph",
+  # for contributors
   "--cov-report=term-missing:skip-covered",
-  "--cov-report=html:build/htmlcov",
-  "--no-cov-on-fail",
-  "--html=build/pytest.html",
+  "--color=yes",
+  # for review
+  "--html=build/reports/pytest.html",
   "--self-contained-html",
-  "--junitxml=build/pytest.xunit.xml",
+  "--cov-report=html:build/reports/htmlcov",
+  "--cov-context=test",
+  # coverage
+  "--cov=ipyforcegraph",
+  "--no-cov-on-fail",
+  # for robots
+  "--junitxml=build/reports/pytest.xunit.xml",
+  "--json-report",
+  # misc
+  "-vv",
+  "--ff",
 ]
 filterwarnings = [
     "error",

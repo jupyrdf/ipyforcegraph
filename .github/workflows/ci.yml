@@ -276,9 +276,7 @@ jobs:
           name: |-
             ipyforcegraph-${{ github.run_number }}-${{ job.status }}-reports-${{ matrix.os }}-${{ matrix.py }}-${{ matrix.lab }}
           path: |
-            ./build/robot
-            ./build/htmcov
-            ./build/pytest.html
+            ./build/reports
         if: always()
 
       - name: Rename uncached conda packages

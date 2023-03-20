@@ -403,8 +403,8 @@ def task_pytest():
     utest_args = [
         *P.IN_ENV,
         "pytest",
-        "--cov-fail-under",
-        str(P.PYTEST_COV_THRESHOLD),
+        f"--cov-fail-under={P.PYTEST_COV_THRESHOLD}",
+        f"--json-report-file={P.PYTEST_JSON}",
     ]
 
     if P.UTEST_PROCESSES:
@@ -418,7 +418,7 @@ def task_pytest():
         doc="run unit tests with pytest",
         uptodate=[config_changed(dict(COMMIT=P.COMMIT, args=P.PYTEST_ARGS))],
         file_dep=[*P.ALL_PY_SRC, P.PY_PROJ, P.OK_PIP_INSTALL],
-        targets=[P.HTMLCOV_INDEX, P.PYTEST_HTML, P.PYTEST_XUNIT],
+        targets=[P.HTMLCOV_INDEX, P.PYTEST_HTML, P.PYTEST_XUNIT, P.PYTEST_JSON],
         actions=[
             utest_args,
             lambda: U.strip_timestamps(
