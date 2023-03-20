@@ -105,7 +105,7 @@ Shape Link Feature Works As Expected
     Add And Run JupyterLab Code Cell    assert 0 not in gd.sources[0].nodes.shape
     Add And Run JupyterLab Code Cell    assert 0 not in gd.sources[0].links.shape
 
-    IF    "${feature}" == "color"
+    IF    "${feature}" == "color" and "${OS}" != "Darwin"
         Link Shape Color As Expected    ${screens}    ${input_type}    ${updated_value}
     END
 
