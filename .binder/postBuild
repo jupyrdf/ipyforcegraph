@@ -13,9 +13,6 @@ doit list
 doit -n4 binder || doit list
 doit binder
 
-# tidy up big downloads
-rm -rf node_modules .yarn-packages
-
 # work around default start command
 cp ${NB_PYTHON_PREFIX}/bin/jupyter-lab ${NB_PYTHON_PREFIX}/bin/jupyter-notebook
 
@@ -32,4 +29,4 @@ jupyter labextension disable @jupyterlab/apputils-extension:notification
 jupyter labextension disable @jupyterlab/extensionmanager-extension
 
 # clean up assets un-needed for demo
-rm -rf ~/.cache .yarn-packages node_modules /tmp/yarn*
+rm -rf ~/.cache ./build/.yarn-packages node_modules /tmp/yarn*

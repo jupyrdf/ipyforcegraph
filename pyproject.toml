@@ -102,6 +102,7 @@ ignore_missing_imports = true
 
 [tool.pytest.ini_options]
 junit_family = "xunit2"
+cache_dir = "build/.pytest_cache"
 addopts = [
   "--pyargs",
   "ipyforcegraph",
@@ -137,6 +138,7 @@ select = [
   "W",
 ]
 ignore = ["E501"]
+cache-dir = "build/.ruff_cache"
 
 [tool.nbqa.addopts]
 ruff = ["--ignore=E402"]
