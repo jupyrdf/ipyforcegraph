@@ -2,7 +2,7 @@
  * Copyright (c) 2023 ipyforcegraph contributors.
  * Distributed under the terms of the Modified BSD License.
  */
-import { ECoerce, FALSEY } from './tokens';
+import { DEBUG, ECoerce, EMOJI, FALSEY } from './tokens';
 
 export function noop(...args: any[]): null {
   return null;
@@ -37,13 +37,14 @@ export function coerceArray(value: string): any[] {
   try {
     new_value = JSON.parse(value);
   } catch (e) {
-    console.debug('could not parse ', value, ' as JSON');
+    DEBUG && console.warn(`${EMOJI} could not parse ${value} as JSON`);
     new_value = null;
   }
   if (Array.isArray(new_value)) {
     return new_value;
   }
-  console.debug('Could not parse ', value, ' as an array, setting value to []');
+  DEBUG &&
+    console.log(`${EMOJI} could not parse ${value} as an array, setting value to []`);
   return [];
 }
 

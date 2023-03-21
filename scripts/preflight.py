@@ -112,7 +112,7 @@ def preflight_build():
         print("\n".join(yarn_lock_errors))
         print(
             """Perhaps try:
-            rm -rf node_modules .yarn-packages yarn.lock
+            rm -rf node_modules build yarn.lock
             doit preflight:build
             """
         )

@@ -1,6 +1,12 @@
 # Changelog
 
-## `0.3.0` (unreleased)
+## `0.3.1` (Unreleased)
+
+### `ipyforcegraph 0.3.1`
+
+### `@jupyrdf/jupyter-forcegraph 0.3.1`
+
+## `0.3.0`
 
 ### `ipyforcegraph 0.3.0`
 

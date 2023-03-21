@@ -1,23 +1,44 @@
 # Contributing
 
-## Install
+## Prerequisites
 
 - Get [Mambaforge](https://github.com/conda-forge/miniforge)
-- Get [doit](https://pydoit.org)
+- Get [doit](https://pydoit.org) and `git`
 
-```bash
-mamba install -c conda-forge doit
-```
+  ```bash
+  mamba install -c conda-forge doit git
+  ```
+
+- Start a command prompt with the base environment activated
 
 ## Get Started
 
-```bash
-git clone https://github.com/jupyrdf/ipyforcegraph
-cd ipyforcegraph
-doit list --all # see what you can do
-doit            # this is _basically_ what happens on binder
-doit lab        # start lab
-```
+Most work occurs on the `dev` branch of the
+[GitHub repo](https://github.com/jupyrdf/ipyforcegraph): see
+[below](#making-pull-requests) for more.
+
+- Clone the repo
+
+  ```bash
+  git clone https://github.com/jupyrdf/ipyforcegraph
+  cd ipyforcegraph
+  git checkout dev
+  doit env:dev
+  ```
+
+- Activate the environment
+
+  | Linux/MacOS                            | Windows                         |
+  | -------------------------------------- | ------------------------------- |
+  | `source activate ./envs/py3.11_lab3.6` | `activate ./envs/py3.11_lab3.6` |
+
+- Get up to a running JupyterLab
+
+  ```bash
+  doit list --all # see what you can do
+  doit            # this is _basically_ what happens on binder
+  doit lab        # start lab
+  ```
 
 ## Important Paths
 
@@ -134,34 +155,25 @@ but will usually work when restarted.
 doit watch_docs
 ```
 
+## Making Pull Requests
+
+There are two valid targets for pull request:
+
+- `main`
+  - [releases](#releasing)
+  - fixes to the documentation
+  - post-release "hot" fixes
+- `dev`
+  - any new features
+  - anything else
+
 ## Releasing
 
-- After merging to `main`, download the ipyforcegraph dist artifacts
-- Make sure that the [`CHANGELOG`][changelog] contains the relevant changes for the
-  version to be released
-- Inspect the files in `./dist`
-- Check out `main`
-- Tag appropriately:
+- Make a [release] issue
+- Follow the checklist
 
-  ```bash
-  git push upstream --tags
-  ```
-
-- Ensure you have credentials for `pypi` and `npmjs`
-
-  - `npmjs` requires you have set up two-factor authentication (2FA)... this is
-    _strongly recommended_ for `pypi`
-  - do _not_ use `jlpm publish` or `yarn publish`, as this appears to drop files from
-    the distribution
-
-    ```bash
-    npm login
-    npm publish
-    npm logout
-    twine upload where-you-expanded-the-archive/ipyforcegraph-*
-    ```
-
-[changelog]: https://github.com/jupyrdf/ipyforcegraph/tree/main/CHANGELOG.md
+[release]:
+  https://github.com/jupyrdf/ipyforcegraph/blob/main/.github/ISSUE_TEMPLATE/release.md
 
 ## Updating Dependencies
 
