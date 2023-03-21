@@ -3,19 +3,20 @@
 import sys
 from importlib.util import module_from_spec, spec_from_file_location
 from pathlib import Path
-from typing import Any, Dict, Type
+from typing import Any, Dict, List, Type
 from uuid import uuid4
 
 import pandas as P
 import traitlets as T
 from doit.cmd_base import ModuleTaskLoader, get_loader
-from doit.cmd_list import List
+from doit.cmd_list import List as ListCmd
 from doit.dependency import Dependency, JsonDB, SqliteDB
 from doit.task import Task
 
 from .dataframe import DataFrameSource
 
 TAnyDict = Dict[str, Any]
+Tasks = List[Task]
 
 
 class DodoSource(DataFrameSource):
@@ -49,7 +50,7 @@ class DodoSource(DataFrameSource):
     def _validate_project_root(self, proposal: Any) -> Path:
         return Path(proposal.value).resolve()
 
-    def _reload_tasks(self) -> List[Task]:
+    def _reload_tasks(self) -> Tasks:
         old_sys_path = [*sys.path]
         mod_name = f"""__dodo__{str(uuid4()).replace("-","_")}"""
         dodo_module = None
@@ -67,8 +68,8 @@ class DodoSource(DataFrameSource):
             sys.path = old_sys_path
 
         loader = get_loader({}, task_loader=ModuleTaskLoader(dodo_module.__dict__))
-        cmd = List(loader)
-        tasks = loader.load_tasks(cmd, [])
+        cmd = ListCmd(loader)
+        tasks: Tasks = loader.load_tasks(cmd, [])
         return tasks
 
     def find_graph_data(self) -> TAnyDict:
@@ -100,6 +101,7 @@ class DodoSource(DataFrameSource):
                 "source": task_id,
                 "target": subtask_of_id,
                 "type": "subtask",
+                "id": link_id,
             }
         for field in ["file_dep", "targets"]:
             for path in getattr(task, field):
@@ -125,4 +127,5 @@ class DodoSource(DataFrameSource):
             "source": task_id,
             "target": path_id,
             "type": field,
+            "id": link_id,
         }

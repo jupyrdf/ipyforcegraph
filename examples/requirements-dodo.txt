@@ -1,0 +1,5 @@
+-r requirements-dodo.txt
+doit ; platform_machine == "wasm32"
+ipydatagrid ; platform_machine == "wasm32"
+ipylab ; platform_machine == "wasm32"
+ipytree ; platform_machine == "wasm32"
