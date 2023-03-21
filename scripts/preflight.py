@@ -112,7 +112,7 @@ def preflight_build():
         print("\n".join(yarn_lock_errors))
         print(
             """Perhaps try:
-            rm -rf node_modules .yarn-packages yarn.lock
+            rm -rf node_modules build yarn.lock
             doit preflight:build
             """
         )
@@ -182,7 +182,7 @@ def preflight_release():
 
     print("Checking copyright/license headers...")
     for any_src in [*P.ALL_PY, *P.ALL_CSS, *P.ALL_TS]:
-        any_text = any_src.read_text()
+        any_text = any_src.read_text(**P.UTF8)
         if COPYRIGHT not in any_text:
             problems += [f"{any_src.relative_to(P.ROOT)} missing copyright info"]
         if LICENSE not in any_text:

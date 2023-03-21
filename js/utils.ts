@@ -2,7 +2,7 @@
  * Copyright (c) 2023 ipyforcegraph contributors.
  * Distributed under the terms of the Modified BSD License.
  */
-import { ECoerce, FALSEY } from './tokens';
+import { DEBUG, ECoerce, EMOJI, FALSEY } from './tokens';
 
 export function noop(...args: any[]): null {
   return null;
@@ -32,12 +32,30 @@ export function coerceNumber(value: string): number {
   return Number(value);
 }
 
+export function coerceArray(value: string): any[] {
+  var new_value: any;
+  try {
+    new_value = JSON.parse(value);
+  } catch (e) {
+    DEBUG && console.warn(`${EMOJI} could not parse ${value} as JSON`);
+    new_value = null;
+  }
+  if (Array.isArray(new_value)) {
+    return new_value;
+  }
+  DEBUG &&
+    console.log(`${EMOJI} could not parse ${value} as an array, setting value to []`);
+  return [];
+}
+
 export function getCoercer(coerce: ECoerce): (value: any) => any {
   switch (coerce) {
     case ECoerce.boolish:
       return coerceBoolish;
     case ECoerce.numeric:
       return coerceNumber;
+    case ECoerce.array:
+      return coerceArray;
     default:
       return identity;
   }

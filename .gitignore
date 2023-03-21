@@ -45,7 +45,6 @@ nosetests.xml
 coverage.xml
 *,cover
 .hypothesis/
-.pytest_cache/
 
 # Translations
 *.mo
@@ -151,7 +150,6 @@ $RECYCLE.BIN/
 
 **/node_modules/
 _d/
-**/.yarn-packages/
 
 # Coverage data
 # -------------
@@ -165,6 +163,5 @@ _d/
 *.doit.db*
 .pabotsuitenames
 *.tsbuildinfo*
-*.isorted
 
 d2u*

@@ -19,6 +19,7 @@ DataFrame
 dataframes
 DataFrameSource
 doit
+DynamicValue
 env
 evented
 ForceBase
@@ -35,6 +36,7 @@ ipyforcegraph
 IPyForceGraph
 IPython
 ipywidgets
+jinja2
 js
 jupyrdf
 jupyter
@@ -52,6 +54,7 @@ LinkShapes
 LinkTooltip
 LinkWidths
 lockfiles
+MacOS
 maintenance
 Mambaforge
 ManyBody

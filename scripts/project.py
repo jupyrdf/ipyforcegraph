@@ -33,6 +33,8 @@ OSX = PLATFORM == "Darwin"
 LINUX = PLATFORM == "Linux"
 UNIX = not WIN
 HAS_CONDA_LOCK = shutil.which("conda-lock")
+UTF8 = dict(encoding="utf-8")
+PY_MAJOR = ".".join(map(str, sys.version_info[:2]))
 
 
 def _get_boolish(name, default="false"):
@@ -162,12 +164,17 @@ PY_PACKAGE_JSON = PY_EXT / "package.json"
 PY_GRAPH_CLASSES = ["ForceGraph", "ForceGraph3D"]
 
 # docs
+SPHINX_ARGS = json.loads(os.environ.get("SPHINX_ARGS", """["-W", "--keep-going"]"""))
 LITE_JSON = [*LITE.glob("*.json")]
 DOCS_BUILD = BUILD / "docs"
 DOCS_CONF = DOCS / "conf.py"
 DICTIONARY = DOCS / "dictionary.txt"
 ALL_SPELL = BUILD / "spell/ALL.fail"
-LITE_SPEC = ["--pre", "jupyterlite==0.1.0b18"]
+LITE_SPEC = [
+    "jupyterlite ==0.1.0b19",
+    "jupyterlite-core ==0.1.0b19",
+    "jupyterlite-pyodide-kernel ==0.0.5",
+]
 LITE_BUILD = BUILD / "lite"
 LITE_SHA256SUMS = LITE_BUILD / "SHA256SUMS"
 
@@ -210,7 +217,7 @@ ALL_PY = [
 ALL_YML = [*ROOT.glob("*.yml"), *GH.rglob("*.yml"), *DOCS.glob("*.yml")]
 ALL_JSON = [*ROOT.glob("*.json"), *EXAMPLE_JSON, *LITE_JSON, *BINDER.glob("*.json")]
 ALL_DOCS_MD = [*DOCS.rglob("*.md")]
-ALL_MD = [*ROOT.glob("*.md"), *ALL_DOCS_MD]
+ALL_MD = [*ROOT.glob("*.md"), *ALL_DOCS_MD, *GH.rglob("*.md")]
 ALL_TS = [*TS_SRC.rglob("*.ts")]
 ALL_CSS = [*STYLE.rglob("*.css")]
 PRETTIER_IGNORE = ROOT / ".prettierignore"
@@ -218,32 +225,37 @@ ALL_PRETTIER = [*ALL_YML, *ALL_JSON, *ALL_MD, *ALL_TS, *ALL_CSS]
 ALL_DOS2UNIX = [*ALL_YML, *EXAMPLE_IPYNB, *ALL_PRETTIER]
 
 # built files
-OK_RELEASE = BUILD / "release.ok"
-OK_PREFLIGHT_CONDA = BUILD / "preflight.conda.ok"
-OK_PREFLIGHT_BUILD = BUILD / "preflight.build.ok"
-OK_PREFLIGHT_KERNEL = BUILD / "preflight.kernel.ok"
-OK_PREFLIGHT_LAB = BUILD / "preflight.lab.ok"
-OK_PREFLIGHT_RELEASE = BUILD / "preflight.release.ok"
-OK_BLACK = BUILD / "black.ok"
-OK_PYPROJ_FMT = BUILD / "pyproject.ok"
-OK_ROBOT_LINT = BUILD / "robot.lint.ok"
-OK_LINT = BUILD / "lint.ok"
-OK_PYFLAKES = BUILD / "pyflakes.ok"
-OK_MYPY = BUILD / "mypy.ok"
-OK_NBLINT = {nb.name: BUILD / f"nblint.{nb.name}.ok" for nb in EXAMPLE_IPYNB}
-OK_PIP_INSTALL = BUILD / "pip_install.ok"
-OK_DOCS_PIP_INSTALL = BUILD / "docs_pip_install.ok"
-OK_PRETTIER = BUILD / "prettier.ok"
-OK_INDEX = BUILD / "index.ok"
-OK_LABEXT = BUILD / "labext.ok"
-OK_LINKS = BUILD / "links.ok"
-OK_DOS2UNIX = BUILD / "dos2unix.ok"
+OK = BUILD / "ok"
+OK_RELEASE = OK / "release.ok"
+OK_PREFLIGHT_CONDA = OK / "preflight.conda.ok"
+OK_PREFLIGHT_BUILD = OK / "preflight.build.ok"
+OK_PREFLIGHT_KERNEL = OK / "preflight.kernel.ok"
+OK_PREFLIGHT_LAB = OK / "preflight.lab.ok"
+OK_PREFLIGHT_RELEASE = OK / "preflight.release.ok"
+OK_BLACK = OK / "black.ok"
+OK_PYPROJ_FMT = OK / "pyproject.ok"
+OK_ROBOT_LINT = OK / "robot.lint.ok"
+OK_LINT = OK / "lint.ok"
+OK_RUFF = OK / "ruff.ok"
+OK_MYPY = OK / "mypy.ok"
+OK_NBLINT = {nb.name: OK / f"nblint.{nb.name}.ok" for nb in EXAMPLE_IPYNB}
+OK_PIP_INSTALL = OK / "pip_install.ok"
+OK_DOCS_PIP_INSTALL = OK / "docs_pip_install.ok"
+OK_PRETTIER = OK / "prettier.ok"
+OK_INDEX = OK / "index.ok"
+OK_LABEXT = OK / "labext.ok"
+OK_LINKS = OK / "links.ok"
+OK_DICTIONARY = OK / "dictionary.ok"
+OK_DOS2UNIX = OK / "dos2unix.ok"
 
-HTMLCOV = BUILD / "htmlcov"
+REPORTS = BUILD / "reports"
+
+HTMLCOV = REPORTS / "htmlcov"
 HTMLCOV_INDEX = HTMLCOV / "index.html"
 PYTEST_COV_THRESHOLD = 81
-PYTEST_HTML = BUILD / "pytest.html"
-PYTEST_XUNIT = BUILD / "pytest.xunit.xml"
+PYTEST_HTML = REPORTS / "pytest.html"
+PYTEST_XUNIT = REPORTS / "pytest.xunit.xml"
+PYTEST_JSON = REPORTS / f"report-{PY_MAJOR}-{PLATFORM}.json"
 
 # derived info
 PY_VERSION = PY_PROJ_DATA["project"]["version"]
@@ -262,11 +274,11 @@ SHA256SUMS = DIST / "SHA256SUMS"
 ATEST = ROOT / "atest"
 ATEST_FIXTURES = ATEST / "_resources/fixtures"
 ALL_ROBOT = [*ATEST.rglob("*.robot"), *ATEST.rglob("*.resource")]
-ATEST_OUT = BUILD / "robot"
+ATEST_OUT = REPORTS / "robot"
 ATEST_CANARY = BUILD / f"robot.{PLATFORM.lower()}_success.ok"
 
 # docs
-DOCS_BUILDINFO = DOCS_BUILD / "html" / ".buildinfo"
+DOCS_BUILDINFO = DOCS_BUILD / ".buildinfo"
 DOCS_LINKS = BUILD / "links"
 
 

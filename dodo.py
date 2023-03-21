@@ -81,7 +81,7 @@ def _ok(task, ok):
         *task["actions"],
         lambda: [
             ok.parent.mkdir(exist_ok=True, parents=True),
-            ok.write_text("ok", encoding="utf-8"),
+            ok.write_text("ok", **P.UTF8),
             True,
         ][-1],
     ]
@@ -388,7 +388,7 @@ def task_build():
 
         output = "\n".join(lines)
         print(output)
-        P.SHA256SUMS.write_text(output)
+        P.SHA256SUMS.write_text(output, **P.UTF8)
 
     yield dict(
         name="hash",
@@ -403,8 +403,8 @@ def task_pytest():
     utest_args = [
         *P.IN_ENV,
         "pytest",
-        "--cov-fail-under",
-        str(P.PYTEST_COV_THRESHOLD),
+        f"--cov-fail-under={P.PYTEST_COV_THRESHOLD}",
+        f"--json-report-file={P.PYTEST_JSON}",
     ]
 
     if P.UTEST_PROCESSES:
@@ -418,7 +418,7 @@ def task_pytest():
         doc="run unit tests with pytest",
         uptodate=[config_changed(dict(COMMIT=P.COMMIT, args=P.PYTEST_ARGS))],
         file_dep=[*P.ALL_PY_SRC, P.PY_PROJ, P.OK_PIP_INSTALL],
-        targets=[P.HTMLCOV_INDEX, P.PYTEST_HTML, P.PYTEST_XUNIT],
+        targets=[P.HTMLCOV_INDEX, P.PYTEST_HTML, P.PYTEST_XUNIT, P.PYTEST_JSON],
         actions=[
             utest_args,
             lambda: U.strip_timestamps(
@@ -451,6 +451,8 @@ def task_test():
             ]
             return CmdAction(args, env=env, shell=False)
 
+        html = P.BUILD_NBHTML / nb.name.replace(".ipynb", ".html")
+
         file_dep = [
             *P.ALL_PY_SRC,
             *P.EXAMPLE_IPYNB,
@@ -464,8 +466,15 @@ def task_test():
         return dict(
             name=f"nb:{nb.name}".replace(" ", "_").replace(".ipynb", ""),
             file_dep=file_dep,
-            actions=[_test()],
-            targets=[P.BUILD_NBHTML / nb.name.replace(".ipynb", ".html")],
+            actions=[
+                (U.clean_some, [html]),
+                _test(),
+                (
+                    U.html_expect_xpath_matches,
+                    [html, U.XP_JUPYTER_STDERR, 0, "stderr output"],
+                ),
+            ],
+            targets=[html],
         )
 
     for nb in P.EXAMPLE_IPYNB:
@@ -490,7 +499,7 @@ def task_test():
     def _pabot_logs():
         for robot_out in sorted(P.ATEST_OUT.rglob("robot_*.out")):
             print(f"\n[{robot_out.relative_to(P.ROOT)}]")
-            print(robot_out.read_text() or "<EMPTY>")
+            print(robot_out.read_text(**P.UTF8) or "<EMPTY>")
 
     yield dict(
         name="atest",
@@ -530,7 +539,6 @@ def task_lint():
             file_dep=[*P.ALL_PY, P.HISTORY],
             actions=[
                 [*P.IN_ENV, "ssort", *P.ALL_PY],
-                [*P.IN_ENV, "isort", "--quiet", "--ac", *P.ALL_PY],
                 [*P.IN_ENV, "black", "--quiet", *P.ALL_PY],
             ],
         ),
@@ -539,11 +547,11 @@ def task_lint():
 
     yield _ok(
         dict(
-            name="pyflakes",
-            file_dep=[*P.ALL_PY, P.OK_BLACK],
-            actions=[[*P.IN_ENV, "pyflakes", *P.ALL_PY]],
+            name="ruff",
+            file_dep=[*P.ALL_PY, P.OK_BLACK, P.PY_PROJ],
+            actions=[[*P.IN_ENV, "ruff", *P.ALL_PY]],
         ),
-        P.OK_PYFLAKES,
+        P.OK_RUFF,
     )
 
     yield _ok(
@@ -587,6 +595,7 @@ def task_lint():
                 actions=[
                     [*P.IN_ENV, "nbstripout", nb],
                     (U.notebook_lint, [nb]),
+                    [*P.IN_ENV, "nbqa", "ruff", "--fix", nb],
                     [
                         *P.IN_ENV,
                         "jupyter-nbconvert",
@@ -597,6 +606,7 @@ def task_lint():
                         nb,
                         nb,
                     ],
+                    (U.fix_line_endings, [nb]),
                 ],
             ),
             P.OK_NBLINT[nb.name],
@@ -619,7 +629,7 @@ def task_lint():
                 *P.ALL_PY_SRC,
                 *P.ALL_TS,
                 P.SCRIPTS / "atest.py",
-                P.OK_PYFLAKES,
+                P.OK_RUFF,
                 P.HISTORY,
             ],
             actions=[
@@ -630,7 +640,7 @@ def task_lint():
         P.OK_ROBOT_LINT,
     )
 
-    index_src = P.EXAMPLE_INDEX.read_text(encoding="utf-8")
+    index_src = P.EXAMPLE_INDEX.read_text(**P.UTF8)
 
     def _make_index_check(ex):
         def _check():
@@ -661,7 +671,7 @@ def task_lint():
                 P.OK_BLACK,
                 P.OK_INDEX,
                 P.OK_PRETTIER,
-                P.OK_PYFLAKES,
+                P.OK_RUFF,
                 P.OK_PYPROJ_FMT,
                 P.OK_ROBOT_LINT,
             ],
@@ -758,9 +768,20 @@ def task_docs():
             *P.ALL_MD,
             P.OK_PIP_INSTALL,
             P.LITE_SHA256SUMS,
+            P.SHA256SUMS,
         ],
         targets=[P.DOCS_BUILDINFO],
-        actions=[[*P.IN_ENV, "sphinx-build", "-M", "html", P.DOCS, P.DOCS_BUILD]],
+        actions=[
+            [
+                *P.IN_ENV,
+                "sphinx-build",
+                *P.SPHINX_ARGS,
+                "-b",
+                "html",
+                P.DOCS,
+                P.DOCS_BUILD,
+            ]
+        ],
     )
 
 
@@ -818,7 +839,7 @@ def _make_spellcheck(dep, html):
             print("Unrecognized words in", dep)
             print(fail_str)
             fail_path.parent.mkdir(exist_ok=True, parents=True)
-            fail_path.write_text(fail_str, encoding="utf-8")
+            fail_path.write_text(fail_str, **P.UTF8)
 
     return _ok(
         dict(
@@ -836,7 +857,7 @@ def _all_spell():
     for path in sorted(P.ALL_SPELL.parent.rglob("*.fail")):
         if path == P.ALL_SPELL:
             continue
-        all_fail += path.read_text(encoding="utf-8").strip().splitlines()
+        all_fail += path.read_text(**P.UTF8).strip().splitlines()
 
     all_fail_str = "\n".join(sorted(set(all_fail)))
 
@@ -844,7 +865,7 @@ def _all_spell():
         print("ALL Unrecognized words")
         print(all_fail_str)
 
-    P.ALL_SPELL.write_text(all_fail_str, encoding="utf-8")
+    P.ALL_SPELL.write_text(all_fail_str, **P.UTF8)
 
     return len(all_fail) == 0
 
@@ -853,7 +874,7 @@ def _all_spell():
 def task_checkdocs():
     """check spelling and links of build docs HTML."""
     no_check = ["htmlcov", "pytest", "_static", "genindex"]
-    html = P.DOCS_BUILD / "html"
+    html = P.DOCS_BUILD
     file_dep = sorted(
         {
             p
@@ -874,16 +895,18 @@ def task_checkdocs():
                         *P.IN_ENV,
                         "pytest-check-links",
                         "-vv",
+                        "--no-cov",
                         *["-p", "no:importnb"],
                         "--check-links-cache",
                         *["--check-links-cache-name", P.DOCS_LINKS],
                         # TODO: relax these once published
-                        *["-k", "not (edit or rtfd or pypi)"],
+                        "--check-links-ignore",
+                        "https://",
                         "--links-ext=html",
                         *file_dep,
                     ],
                     shell=False,
-                    cwd=P.DOCS_BUILD / "html",
+                    cwd=P.DOCS_BUILD,
                 ),
             ],
         ),
@@ -892,10 +915,29 @@ def task_checkdocs():
 
     spell_tasks = []
 
+    yield _ok(
+        dict(
+            name="dictionary",
+            doc="ensure dictionary is unique and sorted",
+            file_dep=[P.DICTIONARY],
+            actions=[(U.sort_unique, [P.DICTIONARY])],
+        ),
+        P.OK_DICTIONARY,
+    )
+
     for dep in file_dep:
         task = _make_spellcheck(dep, html)
+        task["file_dep"] += [P.OK_DICTIONARY]
         spell_tasks += [f"""checkdocs:{task["name"]}"""]
         yield task
+        rel_path = dep.relative_to(P.DOCS_BUILD)
+        yield dict(
+            name=f"xref:{rel_path}",
+            file_dep=[dep],
+            actions=[
+                (U.html_expect_xpath_matches, [dep, U.XP_BAD_XREF, 0, "bad xref"]),
+            ],
+        )
 
     yield dict(
         name="spell:ALL",

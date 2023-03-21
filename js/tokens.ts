@@ -2,7 +2,7 @@
  * Copyright (c) 2023 ipyforcegraph contributors.
  * Distributed under the terms of the Modified BSD License.
  */
-import d3Force3d from 'd3-force-3d';
+import type d3Force3d from 'd3-force-3d';
 import type { GraphData, LinkObject, NodeObject } from 'force-graph';
 import type THREE from 'three';
 
@@ -11,6 +11,8 @@ import type { ISignal } from '@lumino/signaling';
 import type { DOMWidgetView } from '@jupyter-widgets/base';
 
 import PKG from '../package.json';
+
+import type { ForceGraphModel } from './widgets';
 
 export const NAME = PKG.name;
 export const VERSION = PKG.version;
@@ -45,6 +47,16 @@ export const DEFAULT_WIDTHS = {
   node: 1,
 };
 
+export const DEFAULT_CURVATURES = {
+  link: 0,
+  selected: 0,
+};
+
+export const DEFAULT_LINE_DASHES = {
+  link: [],
+  selected: [],
+};
+
 export const WIDGET_DEFAULTS = {
   _model_module: NAME,
   _model_module_version: VERSION,
@@ -64,8 +76,11 @@ export type TUpdateKind = void | number;
 
 export interface IBehave {
   updateRequested: ISignal<IBehave, TUpdateKind>;
+  extraColumns?: IExtraColumns;
   // link
   getLinkColor?(options: ILinkBehaveOptions): string | null;
+  getLinkCurvature?(options: ILinkBehaveOptions): number | null;
+  getLinkLineDash?(options: ILinkBehaveOptions): number[] | null;
   getLinkWidth?(options: ILinkBehaveOptions): number | null;
   getLinkLabel?(options: ILinkBehaveOptions): string | null;
   getLinkDirectionalArrowColor?(options: ILinkBehaveOptions): string | null;
@@ -90,6 +105,8 @@ export interface IBehave {
 export const ALL_LINK_METHODS = [
   'getLinkLabel',
   'getLinkColor',
+  'getLinkCurvature',
+  'getLinkLineDash',
   'getLinkWidth',
   'getLinkDirectionalArrowColor',
   'getLinkDirectionalArrowLength',
@@ -163,6 +180,7 @@ export interface IHasGraph<T = any> extends DOMWidgetView {
   source: ISource;
   rendered: Promise<void>;
   wrapFunction: (fn: Function) => Function;
+  model: ForceGraphModel;
 }
 
 export interface ISource {
@@ -216,6 +234,12 @@ export const FALSEY = Object.freeze([
 ]);
 
 export enum ECoerce {
+  array = 'array',
   boolish = 'boolean',
   numeric = 'number',
+}
+
+export interface IExtraColumns {
+  nodes: string[];
+  links: string[];
 }

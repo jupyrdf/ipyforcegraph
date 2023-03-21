@@ -41,10 +41,6 @@ class LinkParticles(Behavior):
         super().__init__(*args, **kwargs)
         self._original_speed: TNumFeature = None
 
-    @T.validate("density", "speed", "width")
-    def _validate_particle_numerics(self, proposal: T.Bunch) -> Any:
-        return coerce(proposal, JSON_TYPES.number)
-
     def emit(self, *links: int) -> None:
         """Emit particles over a series of links"""
         for link in links:
@@ -60,3 +56,7 @@ class LinkParticles(Behavior):
         self.speed = self.speed or self._original_speed
         self.density = self.density or 1
         self._original_speed = None
+
+    @T.validate("density", "speed", "width")
+    def _validate_particle_numerics(self, proposal: T.Bunch) -> Any:
+        return coerce(proposal, JSON_TYPES.number)

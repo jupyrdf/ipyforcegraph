@@ -6,8 +6,11 @@ import { IBackboneModelOptions } from '@jupyter-widgets/base';
 
 import {
   DEFAULT_COLORS,
+  DEFAULT_CURVATURES,
+  DEFAULT_LINE_DASHES,
   DEFAULT_WIDTHS,
   IBehave,
+  IExtraColumns,
   ILinkBehaveOptions,
   ILinkEventBehaveOptions,
   TSelectedSet,
@@ -26,6 +29,8 @@ export class LinkSelectionModel extends BehaviorModel implements IBehave {
       _model_name: LinkSelectionModel.model_name,
       selected: [],
       selected_color: DEFAULT_COLORS.selected,
+      selected_curvature: DEFAULT_CURVATURES.selected,
+      selected_line_dash: DEFAULT_LINE_DASHES.selected,
       selected_width: DEFAULT_WIDTHS.selected,
       multiple: true,
     };
@@ -33,8 +38,12 @@ export class LinkSelectionModel extends BehaviorModel implements IBehave {
 
   initialize(attributes: Backbone.ObjectHash, options: IBackboneModelOptions) {
     super.initialize(attributes, options);
-    this.on('change:selected change:selected_column', this.onValueChange, this);
+    this.on('change:selected change:column_name', this.onValueChange, this);
     this.onValueChange();
+  }
+
+  get extraColumns(): IExtraColumns {
+    return { links: this.columnName ? [this.columnName] : [], nodes: [] };
   }
 
   onValueChange(change?: any) {
@@ -54,6 +63,14 @@ export class LinkSelectionModel extends BehaviorModel implements IBehave {
     return this.get('selected_color') || DEFAULT_COLORS.selected;
   }
 
+  get selectedCurvature(): string {
+    return this.get('selected_curvature') || DEFAULT_CURVATURES.selected;
+  }
+
+  get selectedLineDash(): string {
+    return this.get('selected_line_dash') || DEFAULT_LINE_DASHES.selected;
+  }
+
   get selectedWidth(): string {
     return this.get('selected_width') || DEFAULT_WIDTHS.selected;
   }
@@ -66,17 +83,36 @@ export class LinkSelectionModel extends BehaviorModel implements IBehave {
     return this.get('multiple');
   }
 
+  getLinkColor({ index }: ILinkBehaveOptions): string | null {
+    const color = this.selected.has(index) ? this.selectedColor : null;
+    return color;
+  }
+
+  getLinkCurvature({ index }: ILinkBehaveOptions): number | null {
+    const curvature = this.selected.has(index) ? this.selectedCurvature : null;
+    if (curvature != null) {
+      return parseFloat(curvature);
+    }
+    return null;
+  }
+
+  getLinkLineDash({ index }: ILinkBehaveOptions): number[] | null {
+    const line_dash = this.selected.has(index) ? this.selectedLineDash : null;
+    if (line_dash != null) {
+      if (typeof line_dash === 'string') {
+        return JSON.parse(line_dash);
+      }
+      return line_dash;
+    }
+    return null;
+  }
+
   getLinkWidth({ index }: ILinkBehaveOptions): number | null {
     const width = this.selected.has(index) ? this.selectedWidth : null;
     if (width != null) {
       return parseFloat(width);
     }
     return null;
-  }
-
-  getLinkColor({ index }: ILinkBehaveOptions): string | null {
-    const color = this.selected.has(index) ? this.selectedColor : null;
-    return color;
   }
 
   onLinkClick = ({

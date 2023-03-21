@@ -9,49 +9,15 @@ import ipywidgets as W
 import traitlets as T
 
 from ..trait_utils import JSON_TYPES, coerce
-from ._base import Behavior, ShapeBase, TBoolFeature, TFeature, TNumFeature, _make_trait
-
-
-class HasScale(ShapeBase):
-    """A shape that has ``scale_on_zoom``."""
-
-    _model_name: str = T.Unicode("HasScaleModel").tag(sync=True)
-
-    scale_on_zoom: TBoolFeature = _make_trait(
-        "whether font size/stroke respects the global scale", boolish=True
-    )
-
-    @T.validate("scale_on_zoom")
-    def _validate_scale_bools(self, proposal: T.Bunch) -> Any:
-        return coerce(proposal, JSON_TYPES.boolean)
-
-
-class HasFillAndStroke(HasScale):
-    """A shape that has ``fill`` and ``stroke``."""
-
-    _model_name: str = T.Unicode("HasFillModel").tag(sync=True)
-    fill: TFeature = _make_trait("the fill color of a shape")
-    stroke: TFeature = _make_trait("the stroke color of a shape")
-    stroke_width: TNumFeature = _make_trait("the stroke width of a shape", numeric=True)
-
-    @T.validate("stroke_width")
-    def _validate_has_fill_and_stroke_numerics(self, proposal: T.Bunch) -> Any:
-        return coerce(proposal, JSON_TYPES.number)
-
-
-class HasDimensions(HasFillAndStroke):
-    """A shape that has ``width``, ``height`` and ``depth``."""
-
-    _model_name: str = T.Unicode("HasDimensionsModel").tag(sync=True)
-
-    width: TNumFeature = _make_trait("the width of a shape in ``px``", numeric=True)
-    height: TNumFeature = _make_trait("the height of a shape in ``px``", numeric=True)
-    depth: TNumFeature = _make_trait("the depth of a shape in ``px``", numeric=True)
-    opacity: TNumFeature = _make_trait("the opacity of a shape", numeric=True)
-
-    @T.validate("width", "height", "depth", "opacity")
-    def _validate_dimension_numerics(self, proposal: T.Bunch) -> Any:
-        return coerce(proposal, JSON_TYPES.number)
+from ._base import (
+    Behavior,
+    HasDimensions,
+    HasFillAndStroke,
+    ShapeBase,
+    TFeature,
+    TNumFeature,
+    _make_trait,
+)
 
 
 @W.register
@@ -96,7 +62,12 @@ class Rectangle(HasDimensions):
 class NodeShapes(Behavior):
     """Change the shape of nodes using declarative statements.
 
-    If non-empty, custom ``shapes`` will override the simple ``size`` and ``color``.
+    The ``color` and ``size`` traits affect the default circle, and compose
+    with :class:`~ipyforcegraph.behaviors.selection.NodeSelection`.
+
+    If non-empty, custom ``shapes`` will override the simple ``size`` and
+    ``color``, and will require custom handling with ``column_name`` to reflect
+    user selection.
     """
 
     _model_name: str = T.Unicode("NodeShapeModel").tag(sync=True)
@@ -121,15 +92,33 @@ class NodeShapes(Behavior):
 
 @W.register
 class LinkShapes(Behavior):
-    """Customize the shape of the ``links``."""
+    """
+    Customize the shape of the ``links``.
+
+    .. note::
+        ``line_dash`` is not displayed in :class:`~ipyforcegraph.graphs.ForceGraph3D`.
+    """
 
     _model_name: str = T.Unicode("LinkShapeModel").tag(sync=True)
+
     color: TFeature = _make_trait("the color of the link")
+    curvature: TNumFeature = _make_trait(
+        "the curvature of the link, 0: straight, 1: circular", numeric=True
+    )
+    line_dash: TFeature = _make_trait(
+        "the dash line pattern of the link, e.g., [2, 1] for ``-- -- --``",
+        stringy=False,
+        by_column=False,
+    )
     width: TNumFeature = _make_trait("the width of the link", numeric=True)
 
-    @T.validate("width")
+    @T.validate("curvature", "width")
     def _validate_link_shape_numerics(self, proposal: T.Bunch) -> Any:
         return coerce(proposal, JSON_TYPES.number)
+
+    @T.validate("line_dash")
+    def _validate_link_line_dash(self, proposal: T.Bunch) -> Any:
+        return coerce(proposal, JSON_TYPES.array)
 
 
 @W.register

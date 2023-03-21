@@ -1,9 +1,6 @@
 {
   "LiteBuildConfig": {
     "contents": ["../examples"],
-    "federated_extensions": [
-      "https://conda.anaconda.org/conda-forge/noarch/jupyterlab-webrtc-docprovider-0.1.1-pyhd8ed1ab_0.tar.bz2"
-    ],
     "output_dir": "../build/lite"
   },
   "PipliteAddon": {

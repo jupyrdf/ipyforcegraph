@@ -2,7 +2,7 @@
  * Copyright (c) 2023 ipyforcegraph contributors.
  * Distributed under the terms of the Modified BSD License.
  */
-import { GraphData } from 'force-graph';
+import type { GraphData, LinkObject, NodeObject } from 'force-graph';
 
 import { ISignal, Signal } from '@lumino/signaling';
 
@@ -11,6 +11,7 @@ import { IBackboneModelOptions, WidgetModel } from '@jupyter-widgets/base';
 import {
   DEFAULT_COLUMNS,
   EMPTY_GRAPH_DATA,
+  IExtraColumns,
   WIDGET_DEFAULTS,
   emptyArray,
 } from '../../tokens';
@@ -83,7 +84,17 @@ export class DataFrameSourceModel extends WidgetModel {
     this._dataUpdated.emit(void 0);
   }
 
-  setFromGraphData(graphData: GraphData) {
+  allColumns(obj: NodeObject | LinkObject, extraColumns: string[]) {
+    let allColumns = [...Object.keys(obj)];
+    for (const extraColumn of extraColumns) {
+      if (!allColumns.includes(extraColumn)) {
+        allColumns.push(extraColumn);
+      }
+    }
+    return allColumns;
+  }
+
+  setFromGraphData(graphData: GraphData, extraColumns: IExtraColumns) {
     const { nodes, links } = graphData;
 
     let nodeCount = nodes.length;
@@ -100,7 +111,7 @@ export class DataFrameSourceModel extends WidgetModel {
     const { nodeIdColumn, linkSourceColumn, linkTargetColumn } = this;
 
     if (nodeCount) {
-      for (colName of Object.keys(nodes[0])) {
+      for (colName of this.allColumns(nodes[0], extraColumns.nodes)) {
         col = nodeRecords[colName] = new Array(nodeCount);
         i = 0;
         while (i < nodeCount) {
@@ -111,7 +122,7 @@ export class DataFrameSourceModel extends WidgetModel {
     }
 
     if (linkCount) {
-      for (colName of Object.keys(links[0])) {
+      for (colName of this.allColumns(links[0], extraColumns.links)) {
         col = linkRecords[colName] = new Array(nodeCount);
         i = 0;
         while (i < linkCount) {

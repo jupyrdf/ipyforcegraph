@@ -4,11 +4,9 @@ _inherit_from:
 
 dependencies:
   - black-jupyter
-  - isort
-  - lxml
   - mypy >=1.0.0
+  - nbqa
   - nbstripout
-  - pyflakes
   - pyproject-fmt !=0.9.1
   - pytest-check-links
   - requests-cache

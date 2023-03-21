@@ -11,26 +11,25 @@ jobs:
   binder:
     runs-on: ubuntu-latest
     steps:
-      - name: Add Demo comment
+      - name: Add Binder/Lite PR comment
         uses: actions/github-script@v6
+        env:
+          PR_HEAD_REF: ${{ github.event.pull_request.head.ref }}
+          PR_HEAD_USERREPO: ${{ github.event.pull_request.head.repo.full_name }}
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const PR_NUMBER = context.issue.number
             const { PR_HEAD_REF, PR_HEAD_USERREPO } = process.env;
 
-            const RTD = `https://ipyforcegraph--${PR_NUMBER}.org.readthedocs.build/en/${PR_NUMBER}`;
-            const BH = `https://mybinder.org/v2/gh/${PR_HEAD_USERREPO}/${PR_HEAD_REF}`;
+            const RTD = `https://ipyforcegraph--${PR_NUMBER}.org.readthedocs.build/en/${PR_NUMBER}/_static/lab/index.html?path=_index.ipynb`;
+            const BH = `https://mybinder.org/v2/gh/${PR_HEAD_USERREPO}/${PR_HEAD_REF}?urlpath=lab/tree/examples/_index.ipynb`;
+            const LITE = `https://jupyterlite.rtfd.io/en/latest/_static/badge.svg`;
+            const BND = `https://mybinder.org/badge_logo.svg`;
 
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: [
-                'Try it on [![lite]][rtd] :arrow_left: ReadTheDocs or Binder :arrow_right: [![binder]][mb]',
-                '[lite]: https://jupyterlite.rtfd.io/en/latest/_static/badge.svg',
-                '[binder]: https://mybinder.org/badge_logo.svg',
-                `[rtd]: ${RTD}/_static/lab/index.html?path=_index.ipynb`,
-                `[mb]: ${BH}?urlpath=lab/tree/examples/_index.ipynb`
-              ].join('\n')
+              body: `Try it on [![](${LITE})](${RTD}) :arrow_left: ReadTheDocs or Binder :arrow_right: [![](${BND})](${BH})`,
             });
