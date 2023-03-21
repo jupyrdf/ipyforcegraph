@@ -50,6 +50,13 @@ class DodoSource(DataFrameSource):
     def _validate_project_root(self, proposal: Any) -> Path:
         return Path(proposal.value).resolve()
 
+    def refresh(self) -> None:
+        graph_data = self.find_graph_data()
+
+        with self.hold_sync():
+            self.nodes = P.DataFrame(graph_data["nodes"].values())
+            self.links = P.DataFrame(graph_data["links"].values())
+
     def _reload_tasks(self) -> Tasks:
         old_sys_path = [*sys.path]
         mod_name = f"""__dodo__{str(uuid4()).replace("-","_")}"""
