@@ -9,14 +9,19 @@
 
 ## Screenshots
 
-| 2D graphs                                                                                   | 3D graphs                                                                                   |
-| ------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
-| [![a screenshot of capturing animated 2D graphs][screenshot-2d-image]][screenshot-2d-image] | [![a screenshot of capturing animated 3D graphs][screenshot-3d-image]][screenshot-3d-image] |
+|            | 2D graphs                                                                                   | 3D graphs                                                                                   |
+| ---------- | ------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| demos      | [![a screenshot of capturing animated 2D graphs][screenshot-2d-image]][screenshot-2d-image] | [![a screenshot of capturing animated 3D graphs][screenshot-3d-image]][screenshot-3d-image] |
+| text nodes | [![a screenshot of text nodes in 2D][screenshot-2d-text]][screenshot-2d-text]               | [![a screenshot of text nodes in 2D][screenshot-3d-text]][screenshot-3d-text]               |
 
 [screenshot-2d-image]:
   https://user-images.githubusercontent.com/7581399/212385447-1eb47e5d-a8a4-4ffd-bc7d-b8d280935d35.png
 [screenshot-3d-image]:
   https://user-images.githubusercontent.com/7581399/213015998-73867583-3914-4add-9199-202bf5ce663e.png
+[screenshot-2d-text]:
+  https://user-images.githubusercontent.com/7581399/222569280-3a5141d0-c01d-4726-af7d-5e08d43fe429.png
+[screenshot-3d-text]:
+  https://user-images.githubusercontent.com/7581399/222568840-2a6679a0-4ce3-4ad3-9317-25504c2d2723.png
 
 ## Prerequisites
 
