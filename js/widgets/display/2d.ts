@@ -29,6 +29,8 @@ import {
   CSS,
   DEBUG,
   DEFAULT_COLORS,
+  DEFAULT_CURVATURES,
+  DEFAULT_LINE_DASHES,
   DEFAULT_WIDTHS,
   EMOJI,
   EMPTY_GRAPH_DATA,
@@ -80,6 +82,8 @@ export class ForceGraphModel extends DOMWidgetModel {
       behaviors: [],
       background_color: DEFAULT_COLORS.background,
       default_link_color: DEFAULT_COLORS.link,
+      default_link_curvature: DEFAULT_CURVATURES.link,
+      default_link_line_dash: DEFAULT_LINE_DASHES.link,
       default_link_width: DEFAULT_WIDTHS.link,
       default_node_color: DEFAULT_COLORS.node,
       default_node_size: DEFAULT_WIDTHS.node,
@@ -186,6 +190,14 @@ export class ForceGraphModel extends DOMWidgetModel {
     return this.get('default_link_color') || DEFAULT_COLORS.link;
   }
 
+  get defaultLinkCurvature(): string {
+    return this.get('default_link_curvature') || DEFAULT_CURVATURES.link;
+  }
+
+  get defaultLinkLineDash(): string {
+    return this.get('default_link_line_dash') || DEFAULT_LINE_DASHES.link;
+  }
+
   get defaultLinkWidth(): string {
     return this.get('default_link_width') || DEFAULT_WIDTHS.link;
   }
@@ -226,7 +238,7 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
     this._rendered = new PromiseDelegate();
     this.model.on('change:source', this.onSourceChange, this);
     this.model.on(
-      'change:default_node_color change:default_link_color change:background_color change:default_node_size change:default_link_width',
+      'change:default_node_color change:default_link_color change:background_color change:default_node_size change:default_link_width change:default_link_curvature change:default_link_line_dash',
       this.postUpdate,
       this
     );
@@ -434,6 +446,8 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
       defaultLinkColor,
       defaultNodeColor,
       defaultLinkWidth,
+      defaultLinkCurvature,
+      defaultLinkLineDash,
       defaultNodeSize,
     } = this.model;
 
@@ -451,6 +465,18 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
         ? this.wrapFunction(this.getLinkWidth)
         : this.wrapFunction(() => defaultLinkWidth)
     );
+    graph.linkCurvature(
+      this.model.linkBehaviorsForMethod('getLinkCurvature').length
+        ? this.wrapFunction(this.getLinkCurvature)
+        : this.wrapFunction(() => defaultLinkCurvature)
+    );
+    if (typeof graph['linkLineDash'] === 'function') {
+      graph.linkLineDash(
+        this.model.linkBehaviorsForMethod('getLinkLineDash').length
+          ? this.wrapFunction(this.getLinkLineDash)
+          : this.wrapFunction(() => defaultLinkLineDash)
+      );
+    }
     graph.linkLabel(
       this.model.linkBehaviorsForMethod('getLinkLabel').length
         ? this.wrapFunction(this.getLinkLabel)
@@ -623,6 +649,20 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
   // link behaviors
   protected getLinkColor = (link: LinkObject): string => {
     return this.getComposedLinkAttr(link, 'getLinkColor', this.model.defaultLinkColor);
+  };
+  protected getLinkCurvature = (link: LinkObject): string => {
+    return this.getComposedLinkAttr(
+      link,
+      'getLinkCurvature',
+      this.model.defaultLinkCurvature
+    );
+  };
+  protected getLinkLineDash = (link: LinkObject): string => {
+    return this.getComposedLinkAttr(
+      link,
+      'getLinkLineDash',
+      this.model.defaultLinkLineDash
+    );
   };
   protected getLinkWidth = (link: LinkObject): string => {
     return this.getComposedLinkAttr(link, 'getLinkWidth', this.model.defaultLinkWidth);
