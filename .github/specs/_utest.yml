@@ -1,5 +1,8 @@
 dependencies:
   - importnb
+  - ipydatagrid
+  - ipylab
+  - ipytree
   - lxml
   - pytest-asyncio
   - pytest-cov

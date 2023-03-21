@@ -1,8 +1,4 @@
 dependencies:
-  - importnb
-  - ipydatagrid
-  - ipylab
-  - ipytree
   - networkx
   - orjson
   - stringcase
