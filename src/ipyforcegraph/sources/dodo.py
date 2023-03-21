@@ -60,7 +60,7 @@ class DodoSource(DataFrameSource):
             if spec:
                 dodo_module = module_from_spec(spec)
 
-                if dodo_module is None or spec.loader is None:
+                if dodo_module is None or spec.loader is None:  # pragma: no cover
                     return []
                 sys.modules[mod_name] = dodo_module
                 spec.loader.exec_module(dodo_module)
