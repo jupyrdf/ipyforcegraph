@@ -88,7 +88,6 @@ class Nunjucks(DynamicValue):
     template functions are provided, including the methods and properties in
     `JS Math <https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math>`_.
 
-
     All the data in the ``source`` is available as ``graphData``, which has ``nodes`` and ``links``.
 
     Depending on the context, inside of a template, one can use ``node`` or ``link``, which will have

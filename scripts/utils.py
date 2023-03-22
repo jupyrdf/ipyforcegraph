@@ -133,6 +133,12 @@ def notebook_lint(ipynb: Path):
         return False
 
 
+def fix_line_endings(filepath: Path):
+    """Convert any CRLF line endings to LF."""
+    print(f"... fixing line endings for {filepath.stem}")
+    filepath.write_bytes(filepath.read_bytes().replace(b"\r\n", b"\n"))
+
+
 def fix_windows_line_endings(max_chunk_size: int = 8000):
     """Break filelist into chunks for dos2unix call that converts CRLF to LF."""
     num_files = len(P.ALL_DOS2UNIX)
