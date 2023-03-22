@@ -1,5 +1,9 @@
 # Copyright (c) 2023 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.
+"""
+A :class:`~ipyforcegraph.sources.dataframe.DataFrameSource` which inspects
+a ``dodo.py`` and its :class:`~doit.task.Task`s.
+"""
 import sys
 from importlib.util import module_from_spec, spec_from_file_location
 from pathlib import Path
@@ -117,7 +121,7 @@ class DodoSource(DataFrameSource):
         return graph_data
 
     def discover_one_task(self, task: Task, graph_data: TAnyDict) -> None:
-        """Update nodes and links from a single task."""
+        """Update nodes and links from a single :class:`~doit.task.Task`."""
         task_id = f"task:{task.name}"
         node = {
             "id": task_id,

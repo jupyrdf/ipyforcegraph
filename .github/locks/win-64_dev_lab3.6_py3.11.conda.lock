@@ -6,6 +6,7 @@
 #   - autodoc-traits
 #   - black-jupyter
 #   - bqplot >=0.12.20
+#   - comm >=0.1.3
 #   - docutils >=0.19
 #   - doit-with-toml
 #   - firefox =102
@@ -16,7 +17,7 @@
 #   - ipydatagrid
 #   - ipylab
 #   - ipytree
-#   - ipywidgets >=8.0.4,<9
+#   - ipywidgets >=8.0.5,<9
 #   - jupyter_server >=2.2.1
 #   - jupyterlab >=3,<4
 #   - jupyterlab >=3.6.2,<3.7
@@ -95,7 +96,7 @@ https://conda.anaconda.org/conda-forge/win-64/pthreads-win32-2.9.1-hfa6e2cd_3.ta
 https://conda.anaconda.org/conda-forge/win-64/tk-8.6.12-h8ffe710_0.tar.bz2#c69a5047cc9291ae40afd4a1ad6f0c0f
 https://conda.anaconda.org/conda-forge/win-64/xz-5.2.6-h8d14728_0.tar.bz2#515d77642eaa3639413c6b1bc3f94219
 https://conda.anaconda.org/conda-forge/win-64/yaml-0.2.5-h8ffe710_2.tar.bz2#adbfb9f45d1004a26763652246a33764
-https://conda.anaconda.org/conda-forge/win-64/libxml2-2.10.3-hc3477c8_5.conda#66fea6250d6203a68e68d71f1d13ed8e
+https://conda.anaconda.org/conda-forge/win-64/libxml2-2.10.3-hc3477c8_6.conda#a56f8a52bc13d7eee23457f0e253e055
 https://conda.anaconda.org/conda-forge/win-64/m2-libintl-0.19.7-4.tar.bz2#bfe5803477f36865cd307b1285bd4209
 https://conda.anaconda.org/conda-forge/win-64/python-3.11.0-hcf16a7b_0_cpython.tar.bz2#13ee3577afc291dabd2d9edc59736688
 https://conda.anaconda.org/conda-forge/win-64/zeromq-4.3.4-h0e60522_1.tar.bz2#e1aff0583dda5fb917eb3d2c1025aa80
@@ -210,7 +211,7 @@ https://conda.anaconda.org/conda-forge/noarch/bleach-6.0.0-pyhd8ed1ab_0.conda#d4
 https://conda.anaconda.org/conda-forge/noarch/cattrs-22.2.0-pyhd8ed1ab_0.tar.bz2#5dacf4d924ae284579288e378b1f5943
 https://conda.anaconda.org/conda-forge/win-64/cffi-1.15.1-py311h7d9ee11_3.conda#a8524727eb956b4741e25a64af79edb8
 https://conda.anaconda.org/conda-forge/noarch/click-8.1.3-win_pyhd8ed1ab_2.tar.bz2#6b58680207b526c42dcff68b543803dd
-https://conda.anaconda.org/conda-forge/noarch/comm-0.1.2-pyhd8ed1ab_0.conda#3c78af4752bb1600ebe5e83ef4588eaa
+https://conda.anaconda.org/conda-forge/noarch/comm-0.1.3-pyhd8ed1ab_0.conda#168ae0f82cdf7505048e81054c7354e4
 https://conda.anaconda.org/conda-forge/win-64/coverage-7.2.2-py311ha68e1ae_0.conda#8f48b3d36fc69a5ed9b8d3f3d89e361a
 https://conda.anaconda.org/conda-forge/noarch/h11-0.14.0-pyhd8ed1ab_0.tar.bz2#b21ed0883505ba1910994f1df031a428
 https://conda.anaconda.org/conda-forge/noarch/html5lib-1.1-pyh9f0ad1d_0.tar.bz2#b2355343d6315c892543200231d7154a

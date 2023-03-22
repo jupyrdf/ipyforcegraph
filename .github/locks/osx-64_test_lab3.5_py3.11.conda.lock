@@ -2,6 +2,7 @@
 #   - conda-forge
 #   - nodefaults
 # dependencies:
+#   - comm >=0.1.3
 #   - doit-with-toml
 #   - firefox =102
 #   - geckodriver
@@ -9,7 +10,7 @@
 #   - ipydatagrid
 #   - ipylab
 #   - ipytree
-#   - ipywidgets >=8.0.4,<9
+#   - ipywidgets >=8.0.5,<9
 #   - jupyterlab >=3.5.2,<3.6
 #   - lxml
 #   - numcodecs
@@ -48,7 +49,7 @@ https://conda.anaconda.org/conda-forge/osx-64/firefox-102.9.0esr-hf0c8a7f_0.cond
 https://conda.anaconda.org/conda-forge/osx-64/geckodriver-0.32.2-hf46a32e_0.conda#415d000f9c03260c0eceeecc9aa80c3c
 https://conda.anaconda.org/conda-forge/osx-64/libgfortran5-12.2.0-he409387_31.conda#5a544130e584b1f204ac896ff071d5b3
 https://conda.anaconda.org/conda-forge/osx-64/libsqlite-3.40.0-ha978bb4_0.tar.bz2#ceb13b6726534b96e3b4e3dda91e9050
-https://conda.anaconda.org/conda-forge/osx-64/libxml2-2.10.3-h554bb67_5.conda#6beb75ee4c58f6144af949b3bb4d6ba4
+https://conda.anaconda.org/conda-forge/osx-64/libxml2-2.10.3-h554bb67_6.conda#a13ee90cf605087079100c3895a343d9
 https://conda.anaconda.org/conda-forge/osx-64/openssl-3.1.0-hfd90126_0.conda#a7df3470c748a517663bf095c2ac0235
 https://conda.anaconda.org/conda-forge/osx-64/pandoc-3.1.1-h9d075a6_0.conda#5d082d93256a60f6311068849f7fca10
 https://conda.anaconda.org/conda-forge/osx-64/readline-8.1.2-h3899abd_0.tar.bz2#89fa404901fa8fb7d4f4e07083b8d635
@@ -135,7 +136,7 @@ https://conda.anaconda.org/conda-forge/noarch/backports.functools_lru_cache-1.6.
 https://conda.anaconda.org/conda-forge/noarch/beautifulsoup4-4.12.0-pyha770c72_0.conda#84f54c3bd1a542c8fe696bc8947b040b
 https://conda.anaconda.org/conda-forge/noarch/bleach-6.0.0-pyhd8ed1ab_0.conda#d48b143d01385872a88ef8417e96c30e
 https://conda.anaconda.org/conda-forge/osx-64/cffi-1.15.1-py311ha86e640_3.conda#5967be4da33261eada7cc79593f71088
-https://conda.anaconda.org/conda-forge/noarch/comm-0.1.2-pyhd8ed1ab_0.conda#3c78af4752bb1600ebe5e83ef4588eaa
+https://conda.anaconda.org/conda-forge/noarch/comm-0.1.3-pyhd8ed1ab_0.conda#168ae0f82cdf7505048e81054c7354e4
 https://conda.anaconda.org/conda-forge/osx-64/coverage-7.2.2-py311h5547dcb_0.conda#912eec0baf21527e058cff24f2bc6794
 https://conda.anaconda.org/conda-forge/noarch/h11-0.14.0-pyhd8ed1ab_0.tar.bz2#b21ed0883505ba1910994f1df031a428
 https://conda.anaconda.org/conda-forge/noarch/importlib-metadata-6.1.0-pyha770c72_0.conda#30b3127c385ca2ed5ef87f3d53d466bc
