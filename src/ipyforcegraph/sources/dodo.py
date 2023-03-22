@@ -3,6 +3,10 @@
 """
 A :class:`~ipyforcegraph.sources.dataframe.DataFrameSource` which inspects
 a ``dodo.py`` and its `tasks <https://pydoit.org/tasks.html>`_.
+
+.. note:
+
+    Using this source requires installing `doit <pypi.org/project/doit>`_.
 """
 import sys
 from importlib.util import module_from_spec, spec_from_file_location
