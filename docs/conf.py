@@ -100,7 +100,6 @@ html_css_files = [
 ]
 
 intersphinx_mapping = {
-    "doit": ("https://pydoit.org", None),
     "ipywidgets": ("https://ipywidgets.readthedocs.io/en/latest", None),
     "pandas": ("https://pandas.pydata.org/docs", None),
     "python": ("https://docs.python.org/3", None),

@@ -2,7 +2,7 @@
 # Distributed under the terms of the Modified BSD License.
 """
 A :class:`~ipyforcegraph.sources.dataframe.DataFrameSource` which inspects
-a ``dodo.py`` and its :class:`~doit.task.Task`s.
+a ``dodo.py`` and its `tasks <https://pydoit.org/tasks.html>`_.
 """
 import sys
 from importlib.util import module_from_spec, spec_from_file_location
@@ -41,12 +41,12 @@ class DodoSource(DataFrameSource):
 
     dep_file: str = T.Unicode(
         ".doit.db",
-        help="the path to ``doit``'s ``dep_file``, relative to the ``project_root`",
+        help="the path to ``doit``'s ``dep_file``, relative to the ``project_root``",
     ).tag(sync=False)
 
     dodo_file: str = T.Unicode(
         "dodo.py",
-        help="the path to a ``dodo.py``, relative to the ``project_root`",
+        help="the path to a ``dodo.py``, relative to the ``project_root``",
     ).tag(sync=True)
 
     _deps: Dependency = T.Instance(Dependency, help="A doit dependency tracker").tag(
@@ -121,7 +121,7 @@ class DodoSource(DataFrameSource):
         return graph_data
 
     def discover_one_task(self, task: Task, graph_data: TAnyDict) -> None:
-        """Update nodes and links from a single :class:`~doit.task.Task`."""
+        """Update nodes and links from a single ``Task``."""
         task_id = f"task:{task.name}"
         node = {
             "id": task_id,
@@ -149,7 +149,7 @@ class DodoSource(DataFrameSource):
     def discover_one_file(
         self, path: Path, field: str, task_id: str, graph_data: TAnyDict
     ) -> None:
-        """Update nodes and links for a single file referenced by a task."""
+        """Update nodes and links for a single file referenced by a ``Task``."""
         path_id = f"file:{path}"
         if path_id not in graph_data["nodes"]:
             try:
