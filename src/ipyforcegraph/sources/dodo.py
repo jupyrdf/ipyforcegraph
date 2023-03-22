@@ -3,7 +3,7 @@
 import sys
 from importlib.util import module_from_spec, spec_from_file_location
 from pathlib import Path
-from typing import Any, Dict, List, Type
+from typing import Any, Dict, List
 from uuid import uuid4
 
 import pandas as P
@@ -20,13 +20,34 @@ Tasks = List[Task]
 
 
 class DodoSource(DataFrameSource):
-    project_root: Path = T.Union([T.Unicode(), T.Instance(Path)]).tag(sync=False)
-    backend: str = T.Unicode("sqlite3").tag(sync=False)
+    """A source that displays the files, tasks, and dependencies of a ``dodo.py``."""
+
     graph_data: TAnyDict = T.Dict(help="an internal collection of observed Data").tag(
         sync=False
     )
-    _deps: Dependency = T.Instance(Dependency).tag(sync=False)
-    BACKENDS: Dict[str, Type[object]] = {"sqlite3": SqliteDB, "json": JsonDB}
+
+    project_root: Path = T.Union(
+        [T.Unicode(), T.Instance(Path)],
+        help="a path to a folder that contains a ``dodo.py``",
+    ).tag(sync=False)
+
+    backend: str = T.Unicode(
+        "sqlite3", help="the backend for ``doit``'s dependency state"
+    ).tag(sync=False)
+
+    dep_file: str = T.Unicode(
+        ".doit.db",
+        help="the path to ``doit``'s ``dep_file``, relative to the ``project_root`",
+    ).tag(sync=False)
+
+    dodo_file: str = T.Unicode(
+        "dodo.py",
+        help="the path to a ``dodo.py``, relative to the ``project_root`",
+    ).tag(sync=True)
+
+    _deps: Dependency = T.Instance(Dependency, help="A doit dependency tracker").tag(
+        sync=False
+    )
 
     @T.default("nodes")
     def _default_nodes(self) -> P.DataFrame:
@@ -42,15 +63,19 @@ class DodoSource(DataFrameSource):
 
     @T.default("_deps")
     def _default_deps(self) -> Dependency:
+        backends = {"sqlite3": SqliteDB, "json": JsonDB}
         return Dependency(
-            self.BACKENDS[self.backend], str(self.project_root / ".doit.db")
+            backends[self.backend], str(self.project_root / self.dep_file)
         )
 
     @T.validate("project_root")
     def _validate_project_root(self, proposal: Any) -> Path:
-        return Path(proposal.value).resolve()
+        project_root = Path(proposal.value).resolve()
+        assert project_root.exists()
+        return project_root
 
     def refresh(self) -> None:
+        """Refresh the nodes and links."""
         graph_data = self.find_graph_data()
 
         with self.hold_sync():
@@ -59,11 +84,11 @@ class DodoSource(DataFrameSource):
 
     def _reload_tasks(self) -> Tasks:
         old_sys_path = [*sys.path]
-        mod_name = f"""__dodo__{str(uuid4()).replace("-","_")}"""
+        mod_name = f"""__dodo__{str(uuid4()).replace("-", "_")}"""
         dodo_module = None
         try:
             sys.path += [str(self.project_root)]
-            spec = spec_from_file_location(mod_name, self.project_root / "dodo.py")
+            spec = spec_from_file_location(mod_name, self.project_root / self.dodo_file)
             if spec:
                 dodo_module = module_from_spec(spec)
 
@@ -80,6 +105,7 @@ class DodoSource(DataFrameSource):
         return tasks
 
     def find_graph_data(self) -> TAnyDict:
+        """Find all of the nodes and links."""
         tasks = self._reload_tasks()
         graph_data: TAnyDict = {
             "nodes": {},
@@ -91,6 +117,7 @@ class DodoSource(DataFrameSource):
         return graph_data
 
     def discover_one_task(self, task: Task, graph_data: TAnyDict) -> None:
+        """Update nodes and links from a single task."""
         task_id = f"task:{task.name}"
         node = {
             "id": task_id,
@@ -100,16 +127,17 @@ class DodoSource(DataFrameSource):
             "status": self._deps.get_status(task, graph_data["tasks"].values()).status,
         }
         graph_data["nodes"][task.name] = node
-        subtask_of = task.subtask_of
-        if subtask_of:
-            subtask_of_id = f"task:{subtask_of}"
-            link_id = f"{task_id}--subtask--{subtask_of_id}"
+
+        for task_dep in task.task_dep:
+            task_dep_id = f"task:{task_dep}"
+            link_id = f"{task_id}--has_task_dep--{task_dep_id}"
             graph_data["links"][link_id] = {
                 "source": task_id,
-                "target": subtask_of_id,
-                "type": "subtask",
+                "target": task_dep_id,
+                "type": "has_task_dep",
                 "id": link_id,
             }
+
         for field in ["file_dep", "targets"]:
             for path in getattr(task, field):
                 self.discover_one_file(path, field, task_id, graph_data)
@@ -117,6 +145,7 @@ class DodoSource(DataFrameSource):
     def discover_one_file(
         self, path: Path, field: str, task_id: str, graph_data: TAnyDict
     ) -> None:
+        """Update nodes and links for a single file referenced by a task."""
         path_id = f"file:{path}"
         if path_id not in graph_data["nodes"]:
             try:
@@ -130,9 +159,17 @@ class DodoSource(DataFrameSource):
                 "exists": Path(path).exists(),
             }
         link_id = f"{task_id}--{field}--{path_id}"
+
+        if field == "file_dep":
+            source = path_id
+            target = task_id
+        elif field == "targets":
+            source = task_id
+            target = path_id
+
         graph_data["links"][link_id] = {
-            "source": task_id,
-            "target": path_id,
+            "source": source,
+            "target": target,
             "type": field,
             "id": link_id,
         }
