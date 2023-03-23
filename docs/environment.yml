@@ -10,6 +10,7 @@ dependencies:
   - doit-with-toml
   - flit >=3.7.1,<4
   - git
+  - ipykernel <6.22.0
   - ipywidgets <8.0.5
   - ipywidgets >=8.0.0
   - jupyterlab >=3,<4
