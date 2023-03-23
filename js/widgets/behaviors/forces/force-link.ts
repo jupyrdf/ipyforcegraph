@@ -5,9 +5,8 @@
 // import type d3Force from 'd3-force';
 import { forceLink as d3ForceLink } from 'd3-force-3d';
 
-import { unpack_models as deserialize } from '@jupyter-widgets/base';
-
 import { IBehave, IForce } from '../../../tokens';
+import { widget_serialization } from '../../serializers/widget';
 
 import { FacetedForceModel } from './force';
 
@@ -16,8 +15,8 @@ export class LinkForceModel extends FacetedForceModel implements IBehave, IForce
 
   static serializers = {
     ...FacetedForceModel.serializers,
-    strength: { deserialize },
-    distance: { deserialize },
+    strength: widget_serialization,
+    distance: widget_serialization,
   };
 
   _force: d3ForceLink;

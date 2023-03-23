@@ -4,9 +4,8 @@
  */
 import { forceCenter as d3ForceCenter } from 'd3-force-3d';
 
-import { unpack_models as deserialize } from '@jupyter-widgets/base';
-
 import { IBehave, IForce, TAnyForce } from '../../../tokens';
+import { widget_serialization } from '../../serializers/widget';
 
 import { FacetedForceModel } from './force';
 
@@ -15,9 +14,9 @@ export class CenterForceModel extends FacetedForceModel implements IBehave, IFor
 
   static serializers = {
     ...FacetedForceModel.serializers,
-    x: { deserialize },
-    y: { deserialize },
-    z: { deserialize },
+    x: widget_serialization,
+    y: widget_serialization,
+    z: widget_serialization,
   };
 
   _force: d3ForceCenter;

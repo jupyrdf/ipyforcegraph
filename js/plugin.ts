@@ -37,7 +37,7 @@ const plugin: IPlugin<Application<Widget>, void> = {
         }
 
         loadingWidgets = new PromiseDelegate();
-        const { initializeZstd } = await import('./widgets/serializers');
+        const { initializeZstd } = await import('./widgets/serializers/dataframe');
         await initializeZstd();
 
         DEBUG && console.warn(`${EMOJI} loading widgets`);

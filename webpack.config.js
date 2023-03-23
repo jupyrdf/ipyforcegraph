@@ -12,21 +12,7 @@ module.exports = {
     rules: [
       {
         test: /\.js$/,
-        use: [
-          {
-            'loader': 'source-map-loader',
-            options: {
-              filterSourceMappingUrl: (url, resourcePath) => {
-                if (resourcePath.includes('@bokuweb/zstd-wasm')) {
-                  // doesn't ship `/lib`
-                  return false;
-                }
-                return true;
-              },
-            },
-
-          }
-        ],
+        use: 'source-map-loader',
       },
       {
         test: /zstd\.wasm/,
@@ -34,4 +20,5 @@ module.exports = {
       },
     ],
   },
+  ignoreWarnings: [/Failed to parse source map/],
 };

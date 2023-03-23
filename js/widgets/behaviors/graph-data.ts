@@ -2,11 +2,7 @@
  * Copyright (c) 2023 ipyforcegraph contributors.
  * Distributed under the terms of the Modified BSD License.
  */
-import {
-  IBackboneModelOptions,
-  WidgetModel,
-  unpack_models as deserialize,
-} from '@jupyter-widgets/base';
+import { IBackboneModelOptions, WidgetModel } from '@jupyter-widgets/base';
 
 import {
   EUpdate,
@@ -15,6 +11,7 @@ import {
   IRenderOptions,
   WIDGET_DEFAULTS,
 } from '../../tokens';
+import { widget_serialization } from '../serializers/widget';
 import { DataFrameSourceModel } from '../sources';
 
 import { BehaviorModel } from './base';
@@ -23,7 +20,7 @@ export class GraphDataModel extends BehaviorModel implements IBehave {
   static model_name = 'GraphDataModel';
   static serializers = {
     ...WidgetModel.serializers,
-    sources: { deserialize },
+    sources: widget_serialization,
   };
 
   protected _sourcesToCapture = 0;
