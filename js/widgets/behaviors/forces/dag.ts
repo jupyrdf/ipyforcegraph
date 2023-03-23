@@ -4,10 +4,9 @@
  */
 import { ForceGraphInstance } from 'force-graph/dist/force-graph';
 
-import { unpack_models as deserialize } from '@jupyter-widgets/base';
-
 import { IBehave, IForce } from '../../../tokens';
 import { yes } from '../../../utils';
+import { widget_serialization } from '../../serializers/widget';
 
 import { FacetedForceModel } from './force';
 
@@ -16,10 +15,10 @@ export class DAGBehaviorModel extends FacetedForceModel implements IBehave, IFor
 
   static serializers = {
     ...FacetedForceModel.serializers,
-    mode: { deserialize },
-    level_distance: { deserialize },
+    mode: widget_serialization,
+    level_distance: widget_serialization,
     // node template
-    node_filter: { deserialize },
+    node_filter: widget_serialization,
   };
 
   protected get _modelClass(): typeof DAGBehaviorModel {

@@ -4,10 +4,7 @@
  */
 import type THREE from 'three';
 
-import {
-  IBackboneModelOptions,
-  unpack_models as deserialize,
-} from '@jupyter-widgets/base';
+import { IBackboneModelOptions } from '@jupyter-widgets/base';
 
 import {
   EUpdate,
@@ -17,6 +14,7 @@ import {
   INodeThreeBehaveOptions,
   emptyArray,
 } from '../../tokens';
+import { widget_serialization } from '../serializers/widget';
 
 import { BehaviorModel, FacetedModel } from './base';
 import type { ShapeBaseModel } from './shapes/base';
@@ -25,8 +23,8 @@ export class NodeShapeFacetsModel extends FacetedModel implements IBehave {
   static model_name = 'NodeShapeFacetsModel';
   static serializers = {
     ...BehaviorModel.serializers,
-    size: { deserialize },
-    color: { deserialize },
+    size: widget_serialization,
+    color: widget_serialization,
   };
 
   get _facetClass(): typeof NodeShapeFacetsModel {
@@ -46,7 +44,7 @@ export class NodeShapeModel extends NodeShapeFacetsModel implements IBehave {
   static model_name = 'NodeShapeModel';
   static serializers = {
     ...NodeShapeFacetsModel.serializers,
-    shapes: { deserialize },
+    shapes: widget_serialization,
   };
 
   defaults() {

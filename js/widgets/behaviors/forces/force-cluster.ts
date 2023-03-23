@@ -5,9 +5,8 @@
 import { default as d3ClusterForce } from 'd3-force-cluster-3d';
 import { NodeObject } from 'force-graph/dist/force-graph';
 
-import { unpack_models as deserialize } from '@jupyter-widgets/base';
-
 import { IBehave, IForce, TAnyForce } from '../../../tokens';
+import { widget_serialization } from '../../serializers/widget';
 
 import { FacetedForceModel } from './force';
 
@@ -34,15 +33,15 @@ export class ClusterForceModel extends FacetedForceModel implements IBehave, IFo
 
   static serializers = {
     ...FacetedForceModel.serializers,
-    strength: { deserialize },
-    inertia: { deserialize },
+    strength: widget_serialization,
+    inertia: widget_serialization,
     // node template
-    key: { deserialize },
+    key: widget_serialization,
     // cluster template
-    radius: { deserialize },
-    y: { deserialize },
-    x: { deserialize },
-    z: { deserialize },
+    radius: widget_serialization,
+    y: widget_serialization,
+    x: widget_serialization,
+    z: widget_serialization,
   };
 
   _force: d3ClusterForce;

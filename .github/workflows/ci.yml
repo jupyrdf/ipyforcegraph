@@ -2,7 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches:
+      - dev
+      - main
   pull_request:
     branches: ['*']
   workflow_dispatch:
@@ -19,7 +21,7 @@ env:
   CONDA_EXE: mamba
   # our stuff
   SKIP_CONDA_PREFLIGHT: 1
-  CACHE_EPOCH: 5
+  CACHE_EPOCH: 7
 
 jobs:
   build:
@@ -68,7 +70,7 @@ jobs:
         if: steps.cache-node-modules.outputs.cache-hit != 'true'
         id: cache-yarn-packages
         with:
-          path: .yarn-packages
+          path: build/.yarn-packages
           key: |
             ${{ env.CACHE_EPOCH }}-yarn-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
           restore-keys: |
@@ -274,9 +276,7 @@ jobs:
           name: |-
             ipyforcegraph-${{ github.run_number }}-${{ job.status }}-reports-${{ matrix.os }}-${{ matrix.py }}-${{ matrix.lab }}
           path: |
-            ./build/robot
-            ./build/htmcov
-            ./build/pytest.html
+            ./build/reports
         if: always()
 
       - name: Rename uncached conda packages

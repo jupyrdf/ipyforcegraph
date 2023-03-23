@@ -6,13 +6,19 @@ requires = [
 
 [project]
 name = "ipyforcegraph"
-version = "0.3.0"
+version = "0.3.1"
 description = "2D and 3D force-directed graph widgets for Jupyter"
 readme = "README.md"
 authors = [
     {name = "ipyforcegraph contributors", email = "jupyrdf@users.noreply.github.com"},
 ]
 requires-python = ">=3.8"
+dependencies = [
+  "ipywidgets<9,>=8.0.4",
+  "numcodecs",
+  "pandas",
+  "traittypes",
+]
 classifiers = [
     "Framework :: Jupyter :: JupyterLab :: 3",
     "Framework :: Jupyter :: JupyterLab :: Extensions :: Prebuilt",
@@ -29,17 +35,27 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
 ]
-dependencies = [
-  "ipywidgets<9,>=8.0.4",
-  "numcodecs",
-  "pandas",
-  "traittypes",
-]
 [project.urls]
 "Bug Tracker" = "https://github.com/jupyrdf/ipyforcegraph/issues"
 "Changelog" = "https://github.com/jupyrdf/ipyforcegraph/blob/main/CHANGELOG.md"
+"Conda Forge" = "https://github.com/conda-forge/ipyforcegraph-feedstock"
 "Documentation" = "https://ipyforcegraph.rtfd.io"
+"NPM" = "https://www.npmjs.com/package/@jupyrdf/jupyter-forcegraph"
+"PyPI" = "https://pypi.org/project/ipyforcegraph"
 "Source" = "https://github.com/jupyrdf/ipyforcegraph"
+
+
+[tool.coverage.run]
+data_file = "build/reports/.coverage"
+
+[tool.coverage.html]
+show_contexts = true
+
+[tool.coverage.paths]
+ipyforcegraph = [
+    "src/ipyforcegraph",
+    "*/src/ipyforcegraph"
+]
 
 
 [tool.doit]
@@ -57,10 +73,6 @@ include = ["src/_d"]
 
 [tool.flit.external-data]
 directory = "src/_d"
-
-[tool.isort]
-profile = "black"
-known_first_party = "ipyforcegraph"
 
 [tool.mypy]
 cache_dir = "build/.mypy_cache"
@@ -90,8 +102,43 @@ ignore_missing_imports = true
 
 [tool.pytest.ini_options]
 junit_family = "xunit2"
-addopts = "-vv --ff --pyargs ipyforcegraph --cov ipyforcegraph --cov-report term-missing:skip-covered --cov-report html:build/htmlcov --no-cov-on-fail --html build/pytest.html --self-contained-html --junitxml build/pytest.xunit.xml"
+cache_dir = "build/.pytest_cache"
+addopts = [
+  "--pyargs",
+  "ipyforcegraph",
+  # for contributors
+  "--cov-report=term-missing:skip-covered",
+  "--color=yes",
+  # for review
+  "--html=build/reports/pytest.html",
+  "--self-contained-html",
+  "--cov-report=html:build/reports/htmlcov",
+  "--cov-context=test",
+  # coverage
+  "--cov=ipyforcegraph",
+  "--no-cov-on-fail",
+  # for robots
+  "--junitxml=build/reports/pytest.xunit.xml",
+  "--json-report",
+  # misc
+  "-vv",
+  "--ff",
+]
 filterwarnings = [
     "error",
     "ignore::DeprecationWarning:traittypes",
 ]
+
+[tool.ruff]
+select = [
+  "E",
+  "F",
+  "I",
+  "PLE",
+  "W",
+]
+ignore = ["E501"]
+cache-dir = "build/.ruff_cache"
+
+[tool.nbqa.addopts]
+ruff = ["--ignore=E402"]

@@ -7,6 +7,7 @@ labels: documentation
 <!--
 Welcome! Before creating a new issue:
 * Search for relevant issues
+https://github.com/jupyrdf/ipyforcegraph/issues
 * Follow the issue reporting guidelines:
 https://jupyterlab.readthedocs.io/en/latest/getting_started/issue.html
 -->

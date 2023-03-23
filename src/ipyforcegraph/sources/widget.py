@@ -170,7 +170,7 @@ class WidgetSource(DataFrameSource):
                     P.DataFrame,
                 ),
             )
-            or trait_value == None
+            or trait_value is None
         ):
             return
         elif isinstance(trait_value, T.HasTraits):
@@ -218,7 +218,7 @@ class WidgetSource(DataFrameSource):
                         notifier_self = notifier.__self__
                         source_widget, source_trait = notifier_self.source
                         target_widget, target_trait = notifier_self.target
-                    except:
+                    except Exception:
                         # these are un-characterized ObserveHandler or functions
                         continue
                     if (

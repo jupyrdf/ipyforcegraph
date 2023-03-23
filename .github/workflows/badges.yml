@@ -11,8 +11,11 @@ jobs:
   binder:
     runs-on: ubuntu-latest
     steps:
-      - name: Add Demo comment
+      - name: Add Binder/Lite PR comment
         uses: actions/github-script@v6
+        env:
+          PR_HEAD_REF: ${{ github.event.pull_request.head.ref }}
+          PR_HEAD_USERREPO: ${{ github.event.pull_request.head.repo.full_name }}
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |

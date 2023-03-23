@@ -9,12 +9,15 @@ build:
       - doit list
       - doit setup
       - doit list
+      - doit build
+      - doit list
       - doit lite
       - doit list
 
 sphinx:
   builder: html
   configuration: docs/conf.py
+  fail_on_warning: true
 
 conda:
   environment: docs/environment.yml
