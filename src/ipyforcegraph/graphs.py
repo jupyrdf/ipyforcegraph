@@ -50,12 +50,12 @@ class ForceGraph(W.DOMWidget, ForceBase):
 
     default_link_color: str = T.Unicode(
         "rgba(66, 66, 66, 0.5)",
-        help="a default ``link`` color, which can be overridden by :class:`~ipyforcegraph.behaviors.link.LinkShapes`",
+        help="a default ``link`` color, which can be overridden by :class:`~ipyforcegraph.behaviors.shapes.LinkShapes`",
     ).tag(sync=True)
 
     default_link_width: str = T.Float(
         1.0,
-        help="a default ``link`` width, which can be overridden by :class:`~ipyforcegraph.behaviors.link.LinkShapes`",
+        help="a default ``link`` width, which can be overridden by :class:`~ipyforcegraph.behaviors.shapes.LinkShapes`",
     ).tag(sync=True)
 
     background_color: str = T.Unicode(

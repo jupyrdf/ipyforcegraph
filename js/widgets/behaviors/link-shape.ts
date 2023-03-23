@@ -12,19 +12,29 @@ export class LinkShapeModel extends FacetedModel implements IBehave {
 
   static serializers = {
     ...FacetedModel.serializers,
-    width: widget_serialization,
     color: widget_serialization,
+    curvature: widget_serialization,
+    line_dash: widget_serialization,
+    width: widget_serialization,
   };
 
   protected get _modelClass(): typeof LinkShapeModel {
     return LinkShapeModel;
   }
 
-  getLinkWidth(options: ILinkBehaveOptions): number | null {
-    return this._facets.width ? this._facets.width(options) : null;
-  }
-
   getLinkColor(options: ILinkBehaveOptions): string | null {
     return this._facets.color ? this._facets.color(options) : null;
+  }
+
+  getLinkCurvature(options: ILinkBehaveOptions): number | null {
+    return this._facets.curvature ? this._facets.curvature(options) : null;
+  }
+
+  getLinkLineDash(options: ILinkBehaveOptions): number[] | null {
+    return this._facets.line_dash ? this._facets.line_dash(options) : null;
+  }
+
+  getLinkWidth(options: ILinkBehaveOptions): number | null {
+    return this._facets.width ? this._facets.width(options) : null;
   }
 }

@@ -11,18 +11,6 @@ import traitlets as T
 from .._base import ForceBase
 from ..trait_utils import JSON_TYPES, coerce
 
-__all__ = (
-    "_make_trait",
-    "BaseD3Force",
-    "Behavior",
-    "Column",
-    "Nunjucks",
-    "ShapeBase",
-    "TBoolFeature",
-    "TFeature",
-    "TNumFeature",
-)
-
 TFeature = Optional[Union["Column", "Nunjucks", str]]
 TNumFeature = Optional[Union["Column", "Nunjucks", str, int, float]]
 TBoolFeature = Optional[Union["Column", "Nunjucks", str, bool]]
@@ -44,7 +32,7 @@ class BaseD3Force(Behavior):
 
 
 class ShapeBase(ForceBase):
-    """A column from a ``DataFrameSource``."""
+    """A base class from which all :mod:`~ipyforcegraph.behaviors.shapes` inherit."""
 
     _model_name: str = T.Unicode("ShapeBaseModel").tag(sync=True)
 
@@ -86,7 +74,7 @@ class DynamicValue(ForceBase):
 
 
 class Column(DynamicValue):
-    """A column from a ``DataFrameSource``."""
+    """A column from a :class:`~ipyforcegraph.sources.dataframe.DataFrameSource`."""
 
     _model_name: str = T.Unicode("ColumnModel").tag(sync=True)
 
@@ -99,7 +87,6 @@ class Nunjucks(DynamicValue):
     `jinja2 <https://jinja.palletsprojects.com/en/3.1.x/templates>`_, and a number of extra
     template functions are provided, including the methods and properties in
     `JS Math <https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math>`_.
-
 
     All the data in the ``source`` is available as ``graphData``, which has ``nodes`` and ``links``.
 

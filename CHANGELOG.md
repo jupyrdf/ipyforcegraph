@@ -4,11 +4,9 @@
 
 ### `ipyforcegraph 0.3.1`
 
-- n/a
+- fixes compatibility with `jupyterlab_widgets 3.0.6`
 
 ### `@jupyrdf/jupyter-forcegraph 0.3.1`
-
-- fixes compatibility with `jupyterlab_widgets 3.0.6`
 
 ## `0.3.0`
 

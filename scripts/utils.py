@@ -27,6 +27,7 @@ RE_PYTEST_TIMESTAMP = r"on \d{2}-[^\-]+-\d{4} at \d{2}:\d{2}:\d{2}"
 
 PATTERNS = [RE_TIMESTAMP, RE_PYTEST_TIMESTAMP]
 XP_JUPYTER_STDERR = """//*[@data-mime-type="application/vnd.jupyter.stderr"]"""
+XP_BAD_XREF = """//code[contains(@class, "xref")][not(parent::a)]"""
 
 
 def strip_timestamps(*paths, slug="TIMESTAMP"):
@@ -130,6 +131,12 @@ def notebook_lint(ipynb: Path):
     black_args += ["--quiet"]
     if subprocess.call([*P.IN_ENV, "black", *black_args, ipynb]) != 0:
         return False
+
+
+def fix_line_endings(filepath: Path):
+    """Convert any CRLF line endings to LF."""
+    print(f"... fixing line endings for {filepath.stem}")
+    filepath.write_bytes(filepath.read_bytes().replace(b"\r\n", b"\n"))
 
 
 def fix_windows_line_endings(max_chunk_size: int = 8000):
@@ -288,19 +295,17 @@ def sort_unique(path: Path):
         print(f"sorted and deduplicated {path}")
 
 
-def html_expect_xpath_matches(
-    html: Path, xpath: Optional[str] = XP_JUPYTER_STDERR, expected: Optional[int] = 0
-):
+def html_expect_xpath_matches(html: Path, xpath: str, expected: int, label: str):
     import lxml.html
 
-    tree = lxml.html.fromstring(html.read_text(**P.UTF8))
-    stderrs = tree.xpath(xpath)
+    tree = lxml.html.fromstring(html.read_bytes())
+    matches = tree.xpath(xpath)
+    if matches:
+        print(f"{html} contains {label}:")
+        for match in matches:
+            print(match.text_content(), "\n")
 
-    for stderr in stderrs:
-        print(f"{html} contains stderr:")
-        print(stderr.text_content(), "\n")
-
-    assert len(stderrs) == expected
+    return len(matches) == expected
 
 
 def clean_some(*paths: Path):

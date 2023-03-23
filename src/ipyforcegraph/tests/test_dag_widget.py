@@ -12,4 +12,4 @@ def test_dag() -> None:
     assert behavior.mode is None
     assert behavior.mode is DAG.Mode.off.value
     assert behavior.level_distance is None
-    assert behavior.node_filter == True
+    assert behavior.node_filter is True

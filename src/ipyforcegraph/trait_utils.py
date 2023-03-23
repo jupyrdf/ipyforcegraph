@@ -11,7 +11,7 @@ import traitlets as T
 class JSON_TYPES:
     """Known JSON-compatible types."""
 
-    # array = "array"
+    array = "array"
     boolean = "boolean"
     # integer = "integer""
     number = "number"
