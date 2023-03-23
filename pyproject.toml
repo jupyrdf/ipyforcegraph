@@ -6,7 +6,7 @@ requires = [
 
 [project]
 name = "ipyforcegraph"
-version = "0.3.1"
+version = "0.3.2"
 description = "2D and 3D force-directed graph widgets for Jupyter"
 readme = "README.md"
 authors = [
