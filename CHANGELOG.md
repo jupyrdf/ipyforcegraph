@@ -6,7 +6,7 @@
 
 - n/a
 
-### `@jupyrdf/jupyter-forcegraph 0.3.0`
+### `@jupyrdf/jupyter-forcegraph 0.3.1`
 
 - fixes compatibility with `jupyterlab_widgets 3.0.6`
 
