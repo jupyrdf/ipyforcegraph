@@ -1,12 +1,11 @@
 import type THREE from 'three';
 
-import { unpack_models as deserialize } from '@jupyter-widgets/base';
-
 import {
   EMOJI,
   INodeCanvasBehaveOptions,
   INodeThreeBehaveOptions,
 } from '../../../tokens';
+import { widget_serialization } from '../../serializers/widget';
 import { FacetedModel } from '../base';
 
 /*
@@ -140,14 +139,14 @@ export class GeometryShapeModel extends ShapeBaseModel {
 
   static serializers = {
     ...ShapeBaseModel.serializers,
-    width: { deserialize },
-    height: { deserialize },
-    depth: { deserialize },
-    fill: { deserialize },
-    opacity: { deserialize },
-    stroke: { deserialize },
-    stroke_width: { deserialize },
-    scale_on_zoom: { deserialize },
+    width: widget_serialization,
+    height: widget_serialization,
+    depth: widget_serialization,
+    fill: widget_serialization,
+    opacity: widget_serialization,
+    stroke: widget_serialization,
+    stroke_width: widget_serialization,
+    scale_on_zoom: widget_serialization,
   };
 
   protected get shapeDefaults(): IDimensionOptions {

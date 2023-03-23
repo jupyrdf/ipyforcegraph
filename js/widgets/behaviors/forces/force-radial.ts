@@ -4,9 +4,8 @@
  */
 import { forceRadial as d3ForceRadial } from 'd3-force-3d';
 
-import { unpack_models as deserialize } from '@jupyter-widgets/base';
-
 import { IBehave, IForce } from '../../../tokens';
+import { widget_serialization } from '../../serializers/widget';
 
 import { FacetedForceModel } from './force';
 
@@ -15,11 +14,11 @@ export class RadialForceModel extends FacetedForceModel implements IBehave, IFor
 
   static serializers = {
     ...FacetedForceModel.serializers,
-    x: { deserialize },
-    y: { deserialize },
-    z: { deserialize },
-    radius: { deserialize },
-    strength: { deserialize },
+    x: widget_serialization,
+    y: widget_serialization,
+    z: widget_serialization,
+    radius: widget_serialization,
+    strength: widget_serialization,
   };
 
   _force: d3ForceRadial;

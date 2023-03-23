@@ -4,9 +4,8 @@
  */
 import { forceManyBody as d3ForceManyBody } from 'd3-force-3d';
 
-import { unpack_models as deserialize } from '@jupyter-widgets/base';
-
 import { IBehave, IForce } from '../../../tokens';
+import { widget_serialization } from '../../serializers/widget';
 
 import { FacetedForceModel } from './force';
 
@@ -15,10 +14,10 @@ export class ManyBodyForceModel extends FacetedForceModel implements IBehave, IF
 
   static serializers = {
     ...FacetedForceModel.serializers,
-    strength: { deserialize },
-    theta: { deserialize },
-    distance_max: { deserialize },
-    distance_min: { deserialize },
+    strength: widget_serialization,
+    theta: widget_serialization,
+    distance_max: widget_serialization,
+    distance_min: widget_serialization,
   };
 
   _force: d3ForceManyBody;

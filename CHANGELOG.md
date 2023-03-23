@@ -1,6 +1,16 @@
 # Changelog
 
-## `0.3.0` (unreleased)
+## `0.3.1`
+
+### `ipyforcegraph 0.3.1`
+
+- n/a
+
+### `@jupyrdf/jupyter-forcegraph 0.3.0`
+
+- fixes compatibility with `jupyterlab_widgets 3.0.6`
+
+## `0.3.0`
 
 ### `ipyforcegraph 0.3.0`
 

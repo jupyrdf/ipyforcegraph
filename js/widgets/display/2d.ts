@@ -19,7 +19,6 @@ import {
   DOMWidgetView,
   IBackboneModelOptions,
   WidgetView,
-  unpack_models as deserialize,
 } from '@jupyter-widgets/base';
 
 import {
@@ -55,13 +54,14 @@ import {
   emptyArray,
 } from '../../tokens';
 import { DAGBehaviorModel, FacetedForceModel, GraphForcesModel } from '../behaviors';
+import { widget_serialization } from '../serializers/widget';
 
 export class ForceGraphModel extends DOMWidgetModel {
   static model_name = 'ForceGraphModel';
   static serializers = {
     ...DOMWidgetModel.serializers,
-    source: { deserialize },
-    behaviors: { deserialize },
+    source: widget_serialization,
+    behaviors: widget_serialization,
   };
 
   protected _nodeBehaviorsByMethod: TNodeMethodMap;
