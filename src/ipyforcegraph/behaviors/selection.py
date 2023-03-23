@@ -69,12 +69,14 @@ class LinkSelection(Behavior):
     selected_curvature: float = T.Float(
         None,
         allow_none=True,
-        help="the curvature of selected links, default: None which keeps it same as unselected.",
+        help="the curvature of selected links, default: ``None`` preserves unselected ``curvature``.",
     ).tag(sync=True)
 
     selected_line_dash: Tuple[float] = W.TypedTuple(
         T.Float(),
-        help="the line-dash of selected links, default: no dashes",
+        default_value=None,
+        allow_none=True,
+        help="the line-dash of selected links, default: ``None`` preserves unselected ``line_dash``",
     ).tag(sync=True)
 
     selected_width: float = T.Float(2, help="the width of selected links").tag(
