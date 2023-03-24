@@ -77,7 +77,7 @@ class ForceGraph(W.DOMWidget, ForceBase):
                 behaviors,
                 key=lambda b: (
                     # TODO: investigate giving behaviors a preferred order
-                    1 * ("selected" not in b.__class__.__name__.lower()),
+                    1 * ("selection" not in b.__class__.__name__.lower()),
                     behaviors.index(b),
                 ),
             )
