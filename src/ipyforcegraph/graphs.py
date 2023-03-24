@@ -74,11 +74,8 @@ class ForceGraph(W.DOMWidget, ForceBase):
 
         # TODO: Investigate making ordering a Behavior class variable
         orderings = {
-            "particles": None,
-            "recording": None,
             "selection": 0,
             "shapes": 99,
-            "tooltip": None,
         }
         highest_level = 0
         for behavior in behaviors:
