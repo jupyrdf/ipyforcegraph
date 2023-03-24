@@ -60,6 +60,8 @@ def task_all():
         P.ATEST_CANARY,
         P.HTMLCOV_INDEX,
         P.PYTEST_HTML,
+        P.OK_LINKS,
+        P.ALL_SPELL,
     ]
 
     if not P.TESTING_IN_CI:
