@@ -1,8 +1,17 @@
 # Changelog
 
-## `0.3.1` (Unreleased)
+## `0.3.2` (unreleased)
+
+### `ipyforcegraph 0.3.2`
+
+### `@jupyrdf/jupyter-forcegraph 0.3.2`
+
+## `0.3.1`
 
 ### `ipyforcegraph 0.3.1`
+
+- fixes compatibility with `jupyterlab_widgets 3.0.6`
+- adds `curvature`, `line_dash` to `LinkShapes`
 
 ### `@jupyrdf/jupyter-forcegraph 0.3.1`
 

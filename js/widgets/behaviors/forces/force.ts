@@ -9,13 +9,10 @@ import type {
   NodeObject,
 } from 'force-graph/dist/force-graph';
 
-import {
-  IBackboneModelOptions,
-  WidgetModel,
-  unpack_models as deserialize,
-} from '@jupyter-widgets/base';
+import { IBackboneModelOptions, WidgetModel } from '@jupyter-widgets/base';
 
 import { DEBUG, EMOJI, EUpdate, IForce, TAnyForce } from '../../../tokens';
+import { widget_serialization } from '../../serializers/widget';
 import { BehaviorModel, FacetedModel } from '../base';
 
 export type TForceRecord = Record<string, FacetedForceModel | null>;
@@ -80,7 +77,7 @@ export class GraphForcesModel extends BehaviorModel {
   static model_name = 'GraphForcesModel';
   static serializers = {
     ...WidgetModel.serializers,
-    forces: { deserialize },
+    forces: widget_serialization,
   };
 
   defaults() {
