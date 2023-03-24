@@ -4,6 +4,12 @@
 
 ### `ipyforcegraph 0.3.2`
 
+- improves default selection behavior for `LinkShapes.curvature` and `LinkShapes.line_dash`
+- added more `jsMath` functions (`cosh`, `sinh`, `tanh`, and `hypot`) and provided more comprehensive documentation for them in `Behaviors.ipynb`
+- added a warning if behaviors are not set in the common order (e.g., selection after shapes)
+- fixed labels for controls in `Behaviors.ipynb`
+- set `ruff` to automatically fix `.py` when linting
+
 ### `@jupyrdf/jupyter-forcegraph 0.3.2`
 
 ## `0.3.1`
