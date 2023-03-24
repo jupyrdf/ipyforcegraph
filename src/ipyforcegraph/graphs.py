@@ -80,16 +80,15 @@ class ForceGraph(W.DOMWidget, ForceBase):
             "shapes": 99,
             "tooltip": None,
         }
-        prior_level: Optional[int] = None
+        highest_level = 0
         for behavior in behaviors:
             behavior_level = orderings.get(behavior.__module__.split(".")[-1])
             if behavior_level is None:
                 continue
-            if prior_level is not None and behavior_level < prior_level:
+            if behavior_level < highest_level:
                 warn("Order of behaviors may lead to unintended effects!")
                 break
-            if behavior_level is not None:
-                prior_level = behavior_level
+            highest_level = behavior_level
 
         return behaviors
 
