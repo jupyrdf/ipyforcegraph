@@ -3,7 +3,7 @@
 # Copyright (c) 2023 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.
 
-from typing import Tuple
+from typing import Optional, Tuple
 from warnings import warn
 
 import ipywidgets as W
@@ -72,19 +72,24 @@ class ForceGraph(W.DOMWidget, ForceBase):
         """Ensure behaviors are not unwittingly being put in the wrong order."""
         behaviors: Tuple[Behavior, ...] = proposal.value
 
-        selected_behaviors_first = tuple(
-            sorted(
-                behaviors,
-                key=lambda b: (
-                    # TODO: investigate giving behaviors a preferred order
-                    1 * ("selection" not in b.__class__.__name__.lower()),
-                    behaviors.index(b),
-                ),
-            )
-        )
-
-        if selected_behaviors_first != behaviors:
-            warn("Selected behaviors are not first, may lead to unintended effects!")
+        # TODO: Investigate making ordering a Behavior class variable
+        orderings = {
+            "particles": None,
+            "recording": None,
+            "selection": 0,
+            "shapes": 99,
+            "tooltip": None,
+        }
+        prior_level: Optional[int] = None
+        for behavior in behaviors:
+            behavior_level = orderings.get(behavior.__module__.split(".")[-1])
+            if behavior_level is None:
+                continue
+            if prior_level is not None and behavior_level < prior_level:
+                warn("Order of behaviors may lead to unintended effects!")
+                break
+            if behavior_level is not None:
+                prior_level = behavior_level
 
         return behaviors
 

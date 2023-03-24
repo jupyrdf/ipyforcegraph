@@ -39,7 +39,4 @@ with pytest.warns() as record:
     fg.behaviors = (lsb, gd, lsel)
 
 assert len(record) == 1
-assert (
-    str(record[0].message)
-    == "Selected behaviors are not first, may lead to unintended effects!"
-)
+assert str(record[0].message) == "Order of behaviors may lead to unintended effects!"
