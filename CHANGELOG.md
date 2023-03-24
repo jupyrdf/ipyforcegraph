@@ -1,8 +1,21 @@
 # Changelog
 
-## `0.3.1` (Unreleased)
+## `0.3.2` (unreleased)
+
+### `ipyforcegraph 0.3.2`
+
+- adds `DodoSource` for viewing [doit] tasks graphs
+
+[doit]: https://github.com/pydoit/doit
+
+### `@jupyrdf/jupyter-forcegraph 0.3.2`
+
+## `0.3.1`
 
 ### `ipyforcegraph 0.3.1`
+
+- fixes compatibility with `jupyterlab_widgets 3.0.6`
+- adds `curvature`, `line_dash` to `LinkShapes`
 
 ### `@jupyrdf/jupyter-forcegraph 0.3.1`
 

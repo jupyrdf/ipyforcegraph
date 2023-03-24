@@ -30,10 +30,10 @@ https://conda.anaconda.org/conda-forge/osx-64/fmt-9.1.0-hb8565cd_0.tar.bz2#310d8
 https://conda.anaconda.org/conda-forge/osx-64/libedit-3.1.20191231-h0678c8f_2.tar.bz2#6016a8a1d0e63cac3de2c352cd40208b
 https://conda.anaconda.org/conda-forge/osx-64/libsolv-0.7.23-hbc0c0cd_0.conda#f032439375fa26ce944d8a70f81682a4
 https://conda.anaconda.org/conda-forge/osx-64/libsqlite-3.40.0-ha978bb4_0.tar.bz2#ceb13b6726534b96e3b4e3dda91e9050
-https://conda.anaconda.org/conda-forge/osx-64/libxml2-2.10.3-h554bb67_5.conda#6beb75ee4c58f6144af949b3bb4d6ba4
+https://conda.anaconda.org/conda-forge/osx-64/libxml2-2.10.3-h554bb67_6.conda#a13ee90cf605087079100c3895a343d9
 https://conda.anaconda.org/conda-forge/osx-64/lz4-c-1.9.4-hf0c8a7f_0.conda#aa04f7143228308662696ac24023f991
 https://conda.anaconda.org/conda-forge/osx-64/openssl-3.1.0-hfd90126_0.conda#a7df3470c748a517663bf095c2ac0235
-https://conda.anaconda.org/conda-forge/osx-64/readline-8.1.2-h3899abd_0.tar.bz2#89fa404901fa8fb7d4f4e07083b8d635
+https://conda.anaconda.org/conda-forge/osx-64/readline-8.2-h9e318b2_1.conda#f17f77f2acf4d344734bda76829ce14e
 https://conda.anaconda.org/conda-forge/osx-64/reproc-cpp-14.2.4-hf0c8a7f_0.conda#aef754e1111b466a15227427f65a1733
 https://conda.anaconda.org/conda-forge/osx-64/tk-8.6.12-h5dbffcc_0.tar.bz2#8e9480d9c47061db2ed1b4ecce519a7f
 https://conda.anaconda.org/conda-forge/osx-64/yaml-cpp-0.7.0-hf0c8a7f_2.tar.bz2#06c92b93b45ed2c842eb0893c5d2552a
@@ -51,7 +51,7 @@ https://conda.anaconda.org/conda-forge/noarch/click-8.1.3-unix_pyhd8ed1ab_2.tar.
 https://conda.anaconda.org/conda-forge/noarch/cloudpickle-2.2.1-pyhd8ed1ab_0.conda#b325bfc4cff7d7f8a868f1f7ecc4ed16
 https://conda.anaconda.org/conda-forge/noarch/crashtest-0.4.1-pyhd8ed1ab_0.tar.bz2#709a2295dd907bb34afb57d54320642f
 https://conda.anaconda.org/conda-forge/noarch/distlib-0.3.6-pyhd8ed1ab_0.tar.bz2#b65b4d50dbd2d50fa0aeac367ec9eed7
-https://conda.anaconda.org/conda-forge/noarch/filelock-3.10.0-pyhd8ed1ab_0.conda#6f90f1dc834447823b11d155726fcb37
+https://conda.anaconda.org/conda-forge/noarch/filelock-3.10.2-pyhd8ed1ab_0.conda#ffc2ef3e26b56996755d834507ae8f3e
 https://conda.anaconda.org/conda-forge/noarch/idna-3.4-pyhd8ed1ab_0.tar.bz2#34272b248891bddccc64479f9a7fffed
 https://conda.anaconda.org/conda-forge/osx-64/libcurl-7.88.1-h6df9250_1.conda#1973ff6a22194ece3cb15caddf26db7c
 https://conda.anaconda.org/conda-forge/noarch/lockfile-0.12.2-py_1.tar.bz2#c104d98e09c47519950cffb8dd5b4f10
@@ -93,7 +93,7 @@ https://conda.anaconda.org/conda-forge/noarch/doit-0.36.0-pyhd8ed1ab_0.tar.bz2#f
 https://conda.anaconda.org/conda-forge/noarch/importlib_metadata-6.1.0-hd8ed1ab_0.conda#90bab1d97fdb6bb40c8e00207bf222dc
 https://conda.anaconda.org/conda-forge/osx-64/libmambapy-1.3.1-py311hcc19a12_2.conda#111008ec2cab867d27e54c28411af4bc
 https://conda.anaconda.org/conda-forge/noarch/platformdirs-3.1.1-pyhd8ed1ab_0.conda#1d1a27f637808c76dd83e3f469aa6f7e
-https://conda.anaconda.org/conda-forge/osx-64/pydantic-1.10.6-py311h5547dcb_0.conda#3e441820588af2e68c9348ed47e5692c
+https://conda.anaconda.org/conda-forge/osx-64/pydantic-1.10.7-py311h5547dcb_0.conda#c9684e4de4cc91fe8cb2906fe21ca565
 https://conda.anaconda.org/conda-forge/osx-64/zstandard-0.19.0-py311hebd4beb_1.conda#b0d4f55c803038fd429494acf684e6ef
 https://conda.anaconda.org/conda-forge/noarch/conda-package-streaming-0.7.0-pyhd8ed1ab_1.conda#1a2fa9e53cfbc2e4d9ab21990805a436
 https://conda.anaconda.org/conda-forge/noarch/doit-with-toml-0.36.0-pyhd8ed1ab_0.tar.bz2#593faaa546937cfa071928c9127fcb12
