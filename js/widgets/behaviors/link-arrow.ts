@@ -2,9 +2,8 @@
  * Copyright (c) 2023 ipyforcegraph contributors.
  * Distributed under the terms of the Modified BSD License.
  */
-import { unpack_models as deserialize } from '@jupyter-widgets/base';
-
 import { IBehave, ILinkBehaveOptions } from '../../tokens';
+import { widget_serialization } from '../serializers/widget';
 
 import { FacetedModel } from './base';
 
@@ -13,9 +12,9 @@ export class LinkArrowModel extends FacetedModel implements IBehave {
 
   static serializers = {
     ...FacetedModel.serializers,
-    length: { deserialize },
-    color: { deserialize },
-    relative_position: { deserialize },
+    length: widget_serialization,
+    color: widget_serialization,
+    relative_position: widget_serialization,
   };
 
   protected get _modelClass(): typeof LinkArrowModel {

@@ -250,7 +250,7 @@ def lock_one(platform: str, lockfile: Path, stack: Paths) -> None:
 
     lock_args = ["conda-lock", "--kind=explicit"]
     comment = lock_comment(stack)
-    for env_file in reversed(stack):
+    for env_file in stack:
         lock_args += ["--file", env_file]
     lock_args += ["--platform", platform]
 

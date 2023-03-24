@@ -4,9 +4,8 @@
  */
 import { forceCollide as d3ForceCollision } from 'd3-force-3d';
 
-import { unpack_models as deserialize } from '@jupyter-widgets/base';
-
 import { IBehave, IForce } from '../../../tokens';
+import { widget_serialization } from '../../serializers/widget';
 
 import { FacetedForceModel } from './force';
 
@@ -15,8 +14,8 @@ export class CollisionForceModel extends FacetedForceModel implements IBehave, I
 
   static serializers = {
     ...FacetedForceModel.serializers,
-    radius: { deserialize },
-    strength: { deserialize },
+    radius: widget_serialization,
+    strength: widget_serialization,
   };
 
   _force: d3ForceCollision;
