@@ -3,7 +3,7 @@
 # Copyright (c) 2023 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.
 
-from typing import Optional, Tuple
+from typing import Tuple
 from warnings import warn
 
 import ipywidgets as W
