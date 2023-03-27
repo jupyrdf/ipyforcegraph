@@ -49,12 +49,12 @@ export const DEFAULT_WIDTHS = {
 
 export const DEFAULT_CURVATURES = {
   link: 0,
-  selected: 0,
+  selected: null,
 };
 
 export const DEFAULT_LINE_DASHES = {
   link: [],
-  selected: [],
+  selected: null,
 };
 
 export const WIDGET_DEFAULTS = {
