@@ -3,7 +3,7 @@
 # Copyright (c) 2023 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.
 
-from typing import Tuple
+from typing import Dict, Optional, Tuple
 from warnings import warn
 
 import ipywidgets as W
@@ -72,7 +72,7 @@ class ForceGraph(W.DOMWidget, ForceBase):
         """Ensure behaviors are not unwittingly being put in the wrong order."""
         behaviors: Tuple[Behavior, ...] = proposal.value
 
-        highest = {}
+        highest: Dict[Optional[str], int] = {}
         for behavior in behaviors:
             rank = behavior.RANK
             if rank is None:
