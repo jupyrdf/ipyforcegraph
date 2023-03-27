@@ -79,7 +79,7 @@ class ForceGraph(W.DOMWidget, ForceBase):
                 continue
             context = behavior.CONTEXT
             if context in highest and rank < highest[context]:
-                qualifier = " " if context is None else " '{context}' "
+                qualifier = " " if context is None else f" '{context}' "
                 warn(
                     f"Order of{qualifier}behaviors may lead to counter-intuitive effects!"
                 )
