@@ -79,7 +79,10 @@ class ForceGraph(W.DOMWidget, ForceBase):
                 continue
             context = behavior.CONTEXT
             if context in highest and rank < highest[context]:
-                warn(f"Order of {context} behaviors may lead to unintended effects!")
+                qualifier = " " if context is None else " '{context}' "
+                warn(
+                    f"Order of{qualifier}behaviors may lead to counter-intuitive effects!"
+                )
                 break
             highest[context] = rank
 

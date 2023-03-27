@@ -49,5 +49,5 @@ def test_graph_behavior_order_warnings() -> None:
     assert len(record) == 1
     assert (
         str(record[0].message)
-        == "Order of links behaviors may lead to unintended effects!"
+        == "Order of 'link' behaviors may lead to counter-intuitive effects!"
     )
