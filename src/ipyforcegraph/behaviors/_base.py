@@ -21,6 +21,9 @@ class Behavior(ForceBase):
 
     _model_name: str = T.Unicode("BehaviorModel").tag(sync=True)
 
+    CONTEXT: Optional[str] = None
+    RANK: Optional[int] = None
+
 
 class BaseD3Force(Behavior):
     """A base for all ``d3-force-3d`` force wrappers."""

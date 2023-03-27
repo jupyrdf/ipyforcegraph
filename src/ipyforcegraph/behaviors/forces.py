@@ -87,6 +87,8 @@ class Link(BaseD3Force):
 
     _model_name: str = T.Unicode("LinkForceModel").tag(sync=True)
 
+    CONTEXT = "link"
+
     distance: TNumFeature = _make_trait(
         "the 'desired' distance of a link. Context takes ``link``", numeric=True
     )
@@ -111,6 +113,8 @@ class Center(BaseD3Force):
     """
 
     _model_name: str = T.Unicode("CenterForceModel").tag(sync=True)
+
+    CONTEXT = "node"
 
     x: Optional[float] = T.Float(
         None,
@@ -141,6 +145,8 @@ class X(BaseD3Force):
 
     _model_name: str = T.Unicode("XForceModel").tag(sync=True)
 
+    CONTEXT = "node"
+
     x: TNumFeature = _make_trait(
         "the x-coordinate of the centering position to the specified number. "
         "Context takes ``node``.",
@@ -168,6 +174,8 @@ class Y(BaseD3Force):
     """
 
     _model_name: str = T.Unicode("YForceModel").tag(sync=True)
+
+    CONTEXT = "node"
 
     y: TNumFeature = _make_trait(
         "the y-coordinate of the centering position. " "Context takes ``node``.",
@@ -199,6 +207,8 @@ class Z(BaseD3Force):
 
     _model_name: str = T.Unicode("ZForceModel").tag(sync=True)
 
+    CONTEXT = "node"
+
     z: TNumFeature = _make_trait(
         "the z-coordinate of the centering position. Context takes ``node``.",
         numeric=True,
@@ -229,6 +239,8 @@ class ManyBody(BaseD3Force):
     """
 
     _model_name: str = T.Unicode("ManyBodyForceModel").tag(sync=True)
+
+    CONTEXT = "node"
 
     strength: TNumFeature = _make_trait(
         "a nunjucks template to use to calculate strength. Context takes ``node``",
@@ -269,6 +281,8 @@ class Radial(BaseD3Force):
     """
 
     _model_name: str = T.Unicode("RadialForceModel").tag(sync=True)
+
+    CONTEXT = "node"
 
     radius: TNumFeature = _make_trait(
         "radius of the force. Context takes ``node``",
@@ -314,6 +328,8 @@ class Collision(BaseD3Force):
     """
 
     _model_name: str = T.Unicode("CollisionForceModel").tag(sync=True)
+
+    CONTEXT = "node"
 
     radius: TNumFeature = _make_trait(
         "The radius of collision by node. Context takes ``node``",

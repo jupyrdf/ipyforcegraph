@@ -72,27 +72,16 @@ class ForceGraph(W.DOMWidget, ForceBase):
         """Ensure behaviors are not unwittingly being put in the wrong order."""
         behaviors: Tuple[Behavior, ...] = proposal.value
 
-        # TODO: Investigate making ordering a Behavior class variable
-        orderings = {
-            "selection": 0,
-            "shapes": 99,
-        }
-        highest_levels = {"nodes": 0, "links": 0}
+        highest = {}
         for behavior in behaviors:
-            behavior_level = orderings.get(behavior.__module__.split(".")[-1])
-            if behavior_level is None:
+            rank = behavior.RANK
+            if rank is None:
                 continue
-            class_name = behavior.__class__.__name__
-            if "node" in class_name.lower():
-                context = "nodes"
-            elif "link" in class_name.lower():
-                context = "links"
-            else:
-                continue
-            if behavior_level < highest_levels[context]:
+            context = behavior.CONTEXT
+            if context in highest and rank < highest[context]:
                 warn(f"Order of {context} behaviors may lead to unintended effects!")
                 break
-            highest_levels[context] = behavior_level
+            highest[context] = rank
 
         return behaviors
 

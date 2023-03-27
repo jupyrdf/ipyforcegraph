@@ -22,6 +22,9 @@ class LinkParticles(Behavior):
     """
 
     _model_name: str = T.Unicode("LinkParticleModel").tag(sync=True)
+
+    CONTEXT = "link"
+
     color: TFeature = _make_trait("the color of the particles")
     density: TNumFeature = _make_trait(
         "the number of particles, ideally 0.0 < ``value``", numeric=True

@@ -18,6 +18,9 @@ class NodeSelection(Behavior):
 
     _model_name: str = T.Unicode("NodeSelectionModel").tag(sync=True)
 
+    CONTEXT = "node"
+    RANK: 1
+
     selected: Tuple[Union[int, str], ...] = W.TypedTuple(
         T.Union((T.Int(), T.Unicode())),
         allow_none=True,
@@ -45,6 +48,9 @@ class LinkSelection(Behavior):
     """Enable link selection with synced ids of selected links."""
 
     _model_name: str = T.Unicode("LinkSelectionModel").tag(sync=True)
+
+    CONTEXT = "link"
+    RANK: 1
 
     selected: Tuple[Union[int, str], ...] = W.TypedTuple(
         T.Union((T.Int(), T.Unicode())),

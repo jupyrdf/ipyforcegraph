@@ -72,6 +72,9 @@ class NodeShapes(Behavior):
 
     _model_name: str = T.Unicode("NodeShapeModel").tag(sync=True)
 
+    CONTEXT = "node"
+    RANK = 100
+
     size: TFeature = _make_trait("the size of the default circle shape", numeric=True)
     color: TFeature = _make_trait("the color of the default circle shape")
     shapes: Tuple[ShapeBase] = W.TypedTuple(
@@ -101,6 +104,9 @@ class LinkShapes(Behavior):
 
     _model_name: str = T.Unicode("LinkShapeModel").tag(sync=True)
 
+    CONTEXT = "link"
+    RANK = 100
+
     color: TFeature = _make_trait("the color of the link")
     curvature: TNumFeature = _make_trait(
         "the curvature of the link, 0: straight, 1: circular", numeric=True
@@ -126,6 +132,8 @@ class LinkArrows(Behavior):
     """Customize the size, position, and color of arrows on ``links``."""
 
     _model_name: str = T.Unicode("LinkArrowModel").tag(sync=True)
+
+    CONTEXT = "link"
 
     color: TFeature = _make_trait("the color of the arrow")
     length: TNumFeature = _make_trait("the length of the arrow", numeric=True)
