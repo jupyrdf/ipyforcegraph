@@ -62,7 +62,7 @@ class Rectangle(HasDimensions):
 class NodeShapes(Behavior):
     """Change the shape of nodes using declarative statements.
 
-    The ``color` and ``size`` traits affect the default circle, and compose
+    The ``color`` and ``size`` traits affect the default circle, and compose
     with :class:`~ipyforcegraph.behaviors.selection.NodeSelection`.
 
     If non-empty, custom ``shapes`` will override the simple ``size`` and

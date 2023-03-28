@@ -58,6 +58,12 @@ def replace_between_patterns(src: Path, dest: Path, pattern: str):
     )
 
 
+def fix_line_endings(filepath: Path):
+    """Convert any CRLF line endings to LF."""
+    print(f"... fixing line endings for {filepath.stem}")
+    filepath.write_bytes(filepath.read_bytes().replace(b"\r\n", b"\n"))
+
+
 def template_one(src: Path, dest: Path, context=None):
     """Update a file from a template"""
     try:
@@ -71,6 +77,7 @@ def template_one(src: Path, dest: Path, context=None):
     tmpl = jinja2.Template(src.read_text(**P.UTF8))
     text = tmpl.render(**context)
     dest.write_text(text, **P.UTF8)
+    fix_line_endings(dest)
 
 
 def clean_notebook_metadata(nb_json):
@@ -131,12 +138,6 @@ def notebook_lint(ipynb: Path):
     black_args += ["--quiet"]
     if subprocess.call([*P.IN_ENV, "black", *black_args, ipynb]) != 0:
         return False
-
-
-def fix_line_endings(filepath: Path):
-    """Convert any CRLF line endings to LF."""
-    print(f"... fixing line endings for {filepath.stem}")
-    filepath.write_bytes(filepath.read_bytes().replace(b"\r\n", b"\n"))
 
 
 def fix_windows_line_endings(max_chunk_size: int = 8000):

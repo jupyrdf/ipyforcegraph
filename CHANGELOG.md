@@ -4,6 +4,14 @@
 
 ### `ipyforcegraph 0.3.2`
 
+- improves default selection behavior for `LinkShapes.curvature` and
+  `LinkShapes.line_dash`
+- adds more `jsMath` functions (`cosh`, `sinh`, `tanh`, and `hypot`) and provided more
+  comprehensive documentation for them in `Behaviors.ipynb`
+- adds a warning if behaviors are not set in the common order (e.g., selection after
+  shapes)
+- adds `NodeShape` UI controls in `Shapes.ipynb` and `Behaviors.ipynb`
+- fixed labels for UI controls in `Behaviors.ipynb`
 - adds `DodoSource` for viewing [doit] tasks graphs
 
 [doit]: https://github.com/pydoit/doit

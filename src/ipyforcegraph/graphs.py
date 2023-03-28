@@ -4,6 +4,7 @@
 # Distributed under the terms of the Modified BSD License.
 
 from typing import Tuple
+from warnings import warn
 
 import ipywidgets as W
 import traitlets as T
@@ -65,6 +66,35 @@ class ForceGraph(W.DOMWidget, ForceBase):
     def reheat(self) -> None:
         """Send the reheat command to restart the force simulation"""
         self.send({"action": "reheat"})
+
+    @T.validate("behaviors")
+    def _check_behavior_order(self, proposal: T.Bunch) -> Tuple[Behavior, ...]:
+        """Ensure behaviors are not unwittingly being put in the wrong order."""
+        behaviors: Tuple[Behavior, ...] = proposal.value
+
+        # TODO: Investigate making ordering a Behavior class variable
+        orderings = {
+            "selection": 0,
+            "shapes": 99,
+        }
+        highest_levels = {"nodes": 0, "links": 0}
+        for behavior in behaviors:
+            behavior_level = orderings.get(behavior.__module__.split(".")[-1])
+            if behavior_level is None:
+                continue
+            class_name = behavior.__class__.__name__
+            if "node" in class_name.lower():
+                context = "nodes"
+            elif "link" in class_name.lower():
+                context = "links"
+            else:
+                continue
+            if behavior_level < highest_levels[context]:
+                warn(f"Order of {context} behaviors may lead to unintended effects!")
+                break
+            highest_levels[context] = behavior_level
+
+        return behaviors
 
 
 @W.register
