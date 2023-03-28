@@ -53,6 +53,10 @@ class DodoSource(DataFrameSource):
         help="the path to a ``dodo.py``, relative to the ``project_root``",
     ).tag(sync=True)
 
+    show_directories: bool = T.Bool(
+        False, help="and nodes for directories, and links for containment"
+    ).tag(sync=False)
+
     _deps: Dependency = T.Instance(Dependency, help="A doit dependency tracker").tag(
         sync=False
     )
@@ -82,13 +86,17 @@ class DodoSource(DataFrameSource):
         assert project_root.exists()
         return project_root
 
+    @T.observe("show_directories")
+    def _on_features_change(self, *args: Any) -> None:
+        self.refresh()
+
     def refresh(self) -> None:
         """Refresh the nodes and links."""
         graph_data = self.find_graph_data()
 
         with self.hold_sync():
-            self.nodes = P.DataFrame(graph_data["nodes"].values())
-            self.links = P.DataFrame(graph_data["links"].values())
+            self.nodes = P.DataFrame(graph_data["nodes"].values()).fillna("")
+            self.links = P.DataFrame(graph_data["links"].values()).fillna("")
 
     def _reload_tasks(self) -> Tasks:
         old_sys_path = [*sys.path]
@@ -151,21 +159,28 @@ class DodoSource(DataFrameSource):
                 self.discover_one_file(path, field, task_id, graph_data)
 
     def discover_one_file(
-        self, path: Path, field: str, task_id: str, graph_data: TAnyDict
+        self, path_name: str, field: str, task_id: str, graph_data: TAnyDict
     ) -> None:
         """Update nodes and links for a single file referenced by a ``Task``."""
-        path_id = f"file:{path}"
+        path = Path(path_name).resolve()
+        path_id = f"file:{path_name}"
         if path_id not in graph_data["nodes"]:
+            is_in_project = False
             try:
-                name = Path(path).relative_to(self.project_root).as_posix()
+                name = path.relative_to(self.project_root).as_posix()
+                is_in_project = True
             except Exception:
-                name = str(path)
+                name = path_name
             graph_data["nodes"][path_id] = {
                 "id": path_id,
                 "type": "file",
                 "name": name,
-                "exists": Path(path).exists(),
+                "exists": path.exists(),
             }
+
+            if is_in_project:
+                self.discover_file_parents(path, path_id, graph_data)
+
         link_id = f"{task_id}--{field}--{path_id}"
 
         if field == "file_dep":
@@ -181,3 +196,34 @@ class DodoSource(DataFrameSource):
             "type": field,
             "id": link_id,
         }
+
+    def discover_file_parents(
+        self, path: Path, path_id: str, graph_data: TAnyDict
+    ) -> None:
+        """Discover parent paths."""
+        if not self.show_directories:
+            return
+
+        parent = path.parent
+
+        while parent != self.project_root:
+            parent_id = f"folder:{parent}"
+
+            if parent_id not in graph_data["nodes"]:
+                name = Path(parent).relative_to(self.project_root).as_posix()
+                graph_data["nodes"][parent_id] = {
+                    "id": parent_id,
+                    "type": "directory",
+                    "name": name,
+                    "exists": path.exists(),
+                }
+
+            link_id = f"{parent_id}--contains--{path_id}"
+            graph_data["links"][link_id] = {
+                "source": parent_id,
+                "target": path_id,
+                "type": "contains",
+                "id": link_id,
+            }
+            parent = parent.parent
+            path_id = parent_id
