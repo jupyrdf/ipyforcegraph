@@ -87,8 +87,6 @@ class Link(BaseD3Force):
 
     _model_name: str = T.Unicode("LinkForceModel").tag(sync=True)
 
-    CONTEXT = "link"
-
     distance: TNumFeature = _make_trait(
         "the 'desired' distance of a link. Context takes ``link``", numeric=True
     )
@@ -97,6 +95,10 @@ class Link(BaseD3Force):
         "``link``",
         numeric=True,
     )
+
+    @T.default("context")
+    def _set_context(self) -> Optional[str]:
+        return "link"
 
     @T.validate("distance", "strength")
     def _validate_link_numerics(self, proposal: T.Bunch) -> Any:
@@ -113,8 +115,6 @@ class Center(BaseD3Force):
     """
 
     _model_name: str = T.Unicode("CenterForceModel").tag(sync=True)
-
-    CONTEXT = "node"
 
     x: Optional[float] = T.Float(
         None,
@@ -134,6 +134,10 @@ class Center(BaseD3Force):
         help="the z-coordinate of the position to center the nodes on (only applies to ``ForceGraph3D``)",
     ).tag(sync=True)
 
+    @T.default("context")
+    def _set_context(self) -> Optional[str]:
+        return "node"
+
 
 @W.register
 class X(BaseD3Force):
@@ -144,8 +148,6 @@ class X(BaseD3Force):
     """
 
     _model_name: str = T.Unicode("XForceModel").tag(sync=True)
-
-    CONTEXT = "node"
 
     x: TNumFeature = _make_trait(
         "the x-coordinate of the centering position to the specified number. "
@@ -159,6 +161,10 @@ class X(BaseD3Force):
         default_value=0,
         allow_none=False,
     )
+
+    @T.default("context")
+    def _set_context(self) -> Optional[str]:
+        return "node"
 
     @T.validate("strength", "x")
     def _validate_x_numerics(self, proposal: T.Bunch) -> Any:
@@ -174,8 +180,6 @@ class Y(BaseD3Force):
     """
 
     _model_name: str = T.Unicode("YForceModel").tag(sync=True)
-
-    CONTEXT = "node"
 
     y: TNumFeature = _make_trait(
         "the y-coordinate of the centering position. " "Context takes ``node``.",
@@ -193,6 +197,10 @@ class Y(BaseD3Force):
     def _validate_y_numerics(self, proposal: T.Bunch) -> Any:
         return coerce(proposal, JSON_TYPES.number)
 
+    @T.default("context")
+    def _set_context(self) -> Optional[str]:
+        return "node"
+
 
 @W.register
 class Z(BaseD3Force):
@@ -207,8 +215,6 @@ class Z(BaseD3Force):
 
     _model_name: str = T.Unicode("ZForceModel").tag(sync=True)
 
-    CONTEXT = "node"
-
     z: TNumFeature = _make_trait(
         "the z-coordinate of the centering position. Context takes ``node``.",
         numeric=True,
@@ -220,6 +226,10 @@ class Z(BaseD3Force):
         default_value=0,
         allow_none=False,
     )
+
+    @T.default("context")
+    def _set_context(self) -> Optional[str]:
+        return "node"
 
     @T.validate("strength", "z")
     def _validate_z_numerics(self, proposal: T.Bunch) -> Any:
@@ -239,8 +249,6 @@ class ManyBody(BaseD3Force):
     """
 
     _model_name: str = T.Unicode("ManyBodyForceModel").tag(sync=True)
-
-    CONTEXT = "node"
 
     strength: TNumFeature = _make_trait(
         "a nunjucks template to use to calculate strength. Context takes ``node``",
@@ -267,6 +275,10 @@ class ManyBody(BaseD3Force):
         help="the maximum distance between nodes over which this force is considered",
     ).tag(sync=True)
 
+    @T.default("context")
+    def _set_context(self) -> Optional[str]:
+        return "node"
+
     @T.validate("strength")
     def _validate_manybody_numerics(self, proposal: T.Bunch) -> Any:
         return coerce(proposal, JSON_TYPES.number)
@@ -281,8 +293,6 @@ class Radial(BaseD3Force):
     """
 
     _model_name: str = T.Unicode("RadialForceModel").tag(sync=True)
-
-    CONTEXT = "node"
 
     radius: TNumFeature = _make_trait(
         "radius of the force. Context takes ``node``",
@@ -314,6 +324,10 @@ class Radial(BaseD3Force):
         help="the z-coordinate of the centering position",
     ).tag(sync=True)
 
+    @T.default("context")
+    def _set_context(self) -> Optional[str]:
+        return "node"
+
     @T.validate("strength", "radius")
     def _validate_radial_numerics(self, proposal: T.Bunch) -> Any:
         return coerce(proposal, JSON_TYPES.number)
@@ -329,8 +343,6 @@ class Collision(BaseD3Force):
 
     _model_name: str = T.Unicode("CollisionForceModel").tag(sync=True)
 
-    CONTEXT = "node"
-
     radius: TNumFeature = _make_trait(
         "The radius of collision by node. Context takes ``node``",
         numeric=True,
@@ -343,6 +355,10 @@ class Collision(BaseD3Force):
         max=1.0,
         help="the strength of the force",
     ).tag(sync=True)
+
+    @T.default("context")
+    def _set_context(self) -> Optional[str]:
+        return "node"
 
     @T.validate("radius")
     def _validate_collision_numerics(self, proposal: T.Bunch) -> Any:

@@ -74,10 +74,10 @@ class ForceGraph(W.DOMWidget, ForceBase):
 
         highest: Dict[Optional[str], int] = {}
         for behavior in behaviors:
-            rank = behavior.RANK
+            rank = behavior.rank
             if rank is None:
                 continue
-            context = behavior.CONTEXT
+            context = behavior.context
             if context in highest and rank < highest[context]:
                 qualifier = " " if context is None else f" '{context}' "
                 warn(

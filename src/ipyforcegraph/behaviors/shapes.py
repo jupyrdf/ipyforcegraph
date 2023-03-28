@@ -72,9 +72,6 @@ class NodeShapes(Behavior):
 
     _model_name: str = T.Unicode("NodeShapeModel").tag(sync=True)
 
-    CONTEXT = "node"
-    RANK = 100
-
     size: TFeature = _make_trait("the size of the default circle shape", numeric=True)
     color: TFeature = _make_trait("the color of the default circle shape")
     shapes: Tuple[ShapeBase] = W.TypedTuple(
@@ -87,6 +84,14 @@ class NodeShapes(Behavior):
             shapes = shapes[0]
         kwargs["shapes"] = shapes
         super().__init__(**kwargs)
+
+    @T.default("rank")
+    def _default_rank(self) -> Optional[int]:
+        return 100
+
+    @T.default("context")
+    def _set_context(self) -> Optional[str]:
+        return "node"
 
     @T.validate("size")
     def _validate_node_shape_numerics(self, proposal: T.Bunch) -> Any:
@@ -104,9 +109,6 @@ class LinkShapes(Behavior):
 
     _model_name: str = T.Unicode("LinkShapeModel").tag(sync=True)
 
-    CONTEXT = "link"
-    RANK = 100
-
     color: TFeature = _make_trait("the color of the link")
     curvature: TNumFeature = _make_trait(
         "the curvature of the link, 0: straight, 1: circular", numeric=True
@@ -117,6 +119,14 @@ class LinkShapes(Behavior):
         by_column=False,
     )
     width: TNumFeature = _make_trait("the width of the link", numeric=True)
+
+    @T.default("rank")
+    def _default_rank(self) -> Optional[int]:
+        return 100
+
+    @T.default("context")
+    def _set_context(self) -> Optional[str]:
+        return "link"
 
     @T.validate("curvature", "width")
     def _validate_link_shape_numerics(self, proposal: T.Bunch) -> Any:
@@ -133,14 +143,16 @@ class LinkArrows(Behavior):
 
     _model_name: str = T.Unicode("LinkArrowModel").tag(sync=True)
 
-    CONTEXT = "link"
-
     color: TFeature = _make_trait("the color of the arrow")
     length: TNumFeature = _make_trait("the length of the arrow", numeric=True)
     relative_position: TNumFeature = _make_trait(
         "the relative position of the arrow along the link, 0.0: ``source`` end, 1.0: ``target`` end",
         numeric=True,
     )
+
+    @T.default("context")
+    def _set_context(self) -> Optional[str]:
+        return "link"
 
     @T.validate("length", "relative_position")
     def _validate_arrow_numerics(self, proposal: T.Bunch) -> Any:

@@ -18,9 +18,6 @@ class NodeSelection(Behavior):
 
     _model_name: str = T.Unicode("NodeSelectionModel").tag(sync=True)
 
-    CONTEXT = "node"
-    RANK = 1
-
     selected: Tuple[Union[int, str], ...] = W.TypedTuple(
         T.Union((T.Int(), T.Unicode())),
         allow_none=True,
@@ -42,15 +39,20 @@ class NodeSelection(Behavior):
         help="the color of selected nodes",
     ).tag(sync=True)
 
+    @T.default("rank")
+    def _default_rank(self) -> Optional[int]:
+        return 1
+
+    @T.default("context")
+    def _set_context(self) -> Optional[str]:
+        return "node"
+
 
 @W.register
 class LinkSelection(Behavior):
     """Enable link selection with synced ids of selected links."""
 
     _model_name: str = T.Unicode("LinkSelectionModel").tag(sync=True)
-
-    CONTEXT = "link"
-    RANK = 1
 
     selected: Tuple[Union[int, str], ...] = W.TypedTuple(
         T.Union((T.Int(), T.Unicode())),
@@ -88,3 +90,11 @@ class LinkSelection(Behavior):
     selected_width: float = T.Float(2, help="the width of selected links").tag(
         sync=True
     )
+
+    @T.default("rank")
+    def _default_rank(self) -> Optional[int]:
+        return 1
+
+    @T.default("context")
+    def _set_context(self) -> Optional[str]:
+        return "link"

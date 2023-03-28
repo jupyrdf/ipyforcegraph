@@ -21,8 +21,22 @@ class Behavior(ForceBase):
 
     _model_name: str = T.Unicode("BehaviorModel").tag(sync=True)
 
-    CONTEXT: Optional[str] = None
-    RANK: Optional[int] = None
+    rank: int = T.Int(allow_none=True).tag(sync=True)
+    context: str = T.Unicode(allow_none=True).tag(sync=True)
+
+    @T.default("rank")
+    def _default_rank(self) -> Optional[int]:
+        return None
+
+    @T.default("context")
+    def _set_context(self) -> Optional[str]:
+        return None
+
+    @T.validate("context")
+    def _validate_context(self, proposal: T.Bunch) -> Optional[str]:
+        context: Optional[str] = proposal.value
+        assert context in ("link", "node", None)
+        return context
 
 
 class BaseD3Force(Behavior):

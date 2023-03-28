@@ -3,7 +3,7 @@
 # Copyright (c) 2023 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.
 
-from typing import Any
+from typing import Any, Optional
 
 import ipywidgets as W
 import traitlets as T
@@ -23,8 +23,6 @@ class LinkParticles(Behavior):
 
     _model_name: str = T.Unicode("LinkParticleModel").tag(sync=True)
 
-    CONTEXT = "link"
-
     color: TFeature = _make_trait("the color of the particles")
     density: TNumFeature = _make_trait(
         "the number of particles, ideally 0.0 < ``value``", numeric=True
@@ -35,6 +33,10 @@ class LinkParticles(Behavior):
     width: TNumFeature = _make_trait(
         "the size of the particles, ideally 0.0 < ``value`` < ~5", numeric=True
     )
+
+    @T.default("context")
+    def _set_context(self) -> Optional[str]:
+        return "link"
 
     @T.validate("density", "speed", "width")
     def _validate_particle_numerics(self, proposal: T.Bunch) -> Any:
