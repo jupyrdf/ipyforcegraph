@@ -9,12 +9,17 @@ dependencies:
   - doit-with-toml
   - flit >=3.7.1,<4
   - git
+  - importnb
+  - ipydatagrid
+  - ipylab >=0.7.0
+  - ipytree
   - ipywidgets >=8.0.0
   - jupyter_server >=2.2.1
   - jupyterlab >=3,<4
   - jupyterlab >=3.6.2,<3.7
   - jupyterlab-deck
   - jupyterlab-link-share
+  - lxml
   - myst-nb
   - nodejs >=18,<19
   - numcodecs
@@ -24,9 +29,15 @@ dependencies:
   - pip
   - pkginfo
   - pydata-sphinx-theme
+  - pytest-asyncio
+  - pytest-cov
+  - pytest-html
+  - pytest-json-report
+  - pytest-xdist
   - python >=3.11,<3.12
   - python >=3.8,<3.12
   - python-libarchive-c
+  - scour
   - sphinx
   - sphinx-autobuild
   - sphinx-autodoc-typehints

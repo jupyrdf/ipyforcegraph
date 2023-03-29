@@ -10,6 +10,7 @@ _inherit_from:
   - _lab/lab3.6.yml
   - _py/py3.11.yml
   - _run.yml
+  - _utest.yml
 
 _target: ../../docs/environment.yml
 
