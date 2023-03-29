@@ -751,6 +751,7 @@ def task_lite():
             P.EXAMPLE_REQS,
             P.OK_PIP_INSTALL,
             P.WHEEL,
+            P.LITE_LOGO,
         ],
         task_dep=["lite:pip:install"],
         targets=[P.LITE_SHA256SUMS],

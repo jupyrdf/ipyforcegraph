@@ -9,6 +9,7 @@ a ``dodo.py`` and its `tasks <https://pydoit.org/tasks.html>`_.
     Using this source requires installing `doit <pypi.org/project/doit>`_.
 """
 import sys
+from copy import deepcopy
 from importlib.util import module_from_spec, spec_from_file_location
 from pathlib import Path
 from typing import Any, Dict, List
@@ -53,8 +54,12 @@ class DodoSource(DataFrameSource):
         help="the path to a ``dodo.py``, relative to the ``project_root``",
     ).tag(sync=True)
 
+    show_files: bool = T.Bool(
+        True, help="create a node for each file, or collapse to dep groups"
+    ).tag(sync=False)
+
     show_directories: bool = T.Bool(
-        False, help="and nodes for directories, and links for containment"
+        False, help="create nodes for directories, and links for containment"
     ).tag(sync=False)
 
     _deps: Dependency = T.Instance(Dependency, help="A doit dependency tracker").tag(
@@ -86,7 +91,7 @@ class DodoSource(DataFrameSource):
         assert project_root.exists()
         return project_root
 
-    @T.observe("show_directories")
+    @T.observe("show_directories", "show_files")
     def _on_features_change(self, *args: Any) -> None:
         self.refresh()
 
@@ -130,6 +135,10 @@ class DodoSource(DataFrameSource):
         }
         for task in tasks:
             self.discover_one_task(task, graph_data)
+
+        if not self.show_files:
+            graph_data = self.group_files(graph_data)
+
         return graph_data
 
     def discover_one_task(self, task: Task, graph_data: TAnyDict) -> None:
@@ -142,7 +151,7 @@ class DodoSource(DataFrameSource):
             "doc": task.doc or "",
             "status": self._deps.get_status(task, graph_data["tasks"].values()).status,
         }
-        graph_data["nodes"][task.name] = node
+        graph_data["nodes"][task_id] = node
 
         for task_dep in task.task_dep:
             task_dep_id = f"task:{task_dep}"
@@ -201,7 +210,7 @@ class DodoSource(DataFrameSource):
         self, path: Path, path_id: str, graph_data: TAnyDict
     ) -> None:
         """Discover parent paths."""
-        if not self.show_directories:
+        if not (self.show_directories and self.show_files):
             return
 
         parent = path.parent
@@ -227,3 +236,66 @@ class DodoSource(DataFrameSource):
             }
             parent = parent.parent
             path_id = parent_id
+
+    def group_files(self, graph_data: TAnyDict) -> TAnyDict:
+        """Collapse all ``task_dep`` and ``targets``."""
+        graph_data = deepcopy(graph_data)
+
+        new_nodes: Dict[str, TAnyDict] = {"file_dep": {}, "targets": {}}
+        new_links: Dict[str, TAnyDict] = {
+            "file_dep": {},
+            "targets": {},
+            "file_dep_targets": {},
+        }
+
+        remove_links = set()
+        remove_nodes = set()
+
+        field_keys = {"file_dep": ["source", "target"], "targets": ["target", "source"]}
+        for field, keys in field_keys.items():
+            file_key, task_key = keys
+            for link_id, link in graph_data["links"].items():
+                if link["type"] == field:
+                    task_id = link[task_key]
+                    task_node = graph_data["nodes"][task_id]
+                    new_node_id = f"{field}:{link[task_key]}"
+                    new_node = new_nodes[field].get(new_node_id)
+                    if new_node is None:
+                        new_node = new_nodes[field][new_node_id] = {
+                            "id": new_node_id,
+                            "name": f"""{field} of {task_node["name"]}""",
+                            "type": field,
+                            "paths": [],
+                        }
+                        new_link_id = f"{task_id}--{field}--"
+                        new_links[field][new_link_id] = {
+                            "id": new_link_id,
+                            file_key: new_node_id,
+                            task_key: task_id,
+                            "type": field,
+                        }
+                    new_node["paths"].append(link[file_key])
+                    remove_nodes |= {link[file_key]}
+                    remove_links |= {link_id}
+
+        # make make new links between new nodes
+
+        for dep_node_id, dep_node in new_nodes["file_dep"].items():
+            for target_node_id, target_node in new_nodes["targets"].items():
+                if set(dep_node["paths"]) & set(target_node["paths"]):
+                    new_link_id = f"{dep_node_id}--file_dep_targets--{target_node_id}"
+                    new_links["file_dep_targets"][new_link_id] = {
+                        "id": new_link_id,
+                        "source": dep_node_id,
+                        "target": target_node_id,
+                        "type": "file_dep_targets",
+                    }
+
+        # update the graph data
+        [graph_data["links"].pop(link_id, None) for link_id in remove_links]
+        [graph_data["nodes"].pop(node_id, None) for node_id in remove_nodes]
+        for field in [*field_keys, "file_dep_targets"]:
+            graph_data["nodes"].update(**new_nodes.get(field, {}))
+            graph_data["links"].update(**new_links.get(field, {}))
+
+        return graph_data
