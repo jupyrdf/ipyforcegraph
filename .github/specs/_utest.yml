@@ -1,7 +1,7 @@
 dependencies:
   - importnb
   - ipydatagrid
-  - ipylab
+  - ipylab >=0.7.0
   - ipytree
   - lxml
   - pytest-asyncio
