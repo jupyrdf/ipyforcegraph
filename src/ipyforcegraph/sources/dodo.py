@@ -266,6 +266,7 @@ class DodoSource(DataFrameSource):
                             "name": f"""{field} of {task_node["name"]}""",
                             "type": field,
                             "paths": [],
+                            "exists": True,
                         }
                         new_link_id = f"{task_id}--{field}--"
                         new_links[field][new_link_id] = {
@@ -274,7 +275,9 @@ class DodoSource(DataFrameSource):
                             task_key: task_id,
                             "type": field,
                         }
-                    new_node["paths"].append(link[file_key])
+                    linked_file = graph_data["nodes"][link[file_key]]
+                    new_node["paths"].append(linked_file["name"])
+                    new_node["exists"] = new_node["exists"] and linked_file["exists"]
                     remove_nodes |= {link[file_key]}
                     remove_links |= {link_id}
 
