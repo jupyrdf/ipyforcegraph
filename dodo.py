@@ -210,7 +210,6 @@ def task_env():
 
     yield dict(
         name="dev",
-        uptodate=[config_changed(dict(lite=P.LITE_SPEC))],
         file_dep=[P.LOCKFILE],
         targets=[P.HISTORY],
         actions=[
@@ -723,6 +722,7 @@ def task_lite():
     """build the jupyterlite site"""
 
     yield dict(
+        uptodate=[config_changed(dict(lite=P.LITE_SPEC))],
         name="pip:install",
         file_dep=[P.OK_PIP_INSTALL],
         actions=[[*P.IN_ENV, *P.PIP, "install", "--no-deps", *P.LITE_SPEC]],
