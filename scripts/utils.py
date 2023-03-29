@@ -24,6 +24,7 @@ Paths = List[Path]
 
 RE_TIMESTAMP = r"\d{4}-\d{2}-\d{2} \d{2}:\d{2} -\d*"
 RE_PYTEST_TIMESTAMP = r"on \d{2}-[^\-]+-\d{4} at \d{2}:\d{2}:\d{2}"
+RE_XML_DECL = r"<\?xml.*?>"
 
 PATTERNS = [RE_TIMESTAMP, RE_PYTEST_TIMESTAMP]
 XP_JUPYTER_STDERR = """//*[@data-mime-type="application/vnd.jupyter.stderr"]"""
@@ -315,3 +316,50 @@ def clean_some(*paths: Path):
             shutil.rmtree(path)
         elif path.exists():
             path.unlink()
+
+
+def minimize_one_svg(
+    src: Path,
+    dest: Path,
+    strip_decl: Optional[bool] = None,
+    strip_svg_attrs: Optional[List[str]] = None,
+) -> bool:
+    print(f"optimizing {src.relative_to(P.ROOT)} to {dest.relative_to(P.ROOT)}")
+    args = [
+        *P.IN_ENV,
+        "scour",
+        "-i",
+        str(src),
+        "-o",
+        str(dest),
+        "--enable-viewboxing",
+        "--enable-id-stripping",
+        "--enable-comment-stripping",
+        "--shorten-ids",
+        "--indent=none",
+    ]
+
+    subprocess.call(args) == 0
+
+    if not dest.exists():
+        return False
+
+    old_text = dest.read_text(**P.UTF8)
+    new_text = old_text
+
+    if strip_svg_attrs:
+        from lxml import etree as ET
+
+        svg = ET.fromstring(old_text.encode("utf-8"))
+        for attr in strip_svg_attrs:
+            stripped = svg.attrib.pop(attr, None)
+            print(f"""... stripping <svg {attr}="{stripped}">""")
+
+        new_text = ET.tostring(svg).decode("utf-8")
+
+    if strip_decl:
+        print("... stripping <?xml?> declaration")
+        new_text = re.sub(RE_XML_DECL, "", new_text)
+
+    if old_text != new_text:
+        dest.write_text(new_text, **P.UTF8)

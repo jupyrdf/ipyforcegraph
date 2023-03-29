@@ -166,6 +166,7 @@ PY_GRAPH_CLASSES = ["ForceGraph", "ForceGraph3D"]
 # docs
 SPHINX_ARGS = json.loads(os.environ.get("SPHINX_ARGS", """["-W", "--keep-going"]"""))
 LITE_JSON = [*LITE.glob("*.json")]
+LOGO_SVG = DOCS / "_static/logo.svg"
 DOCS_BUILD = BUILD / "docs"
 DOCS_CONF = DOCS / "conf.py"
 DICTIONARY = DOCS / "dictionary.txt"
@@ -203,6 +204,7 @@ EXAMPLE_PY = [*EXAMPLES.rglob("*.py")]
 EXAMPLE_INDEX = EXAMPLES / "_index.ipynb"
 EXAMPLE_REQS = EXAMPLES / "requirements.txt"
 BUILD_NBHTML = BUILD / "nbsmoke"
+LITE_LOGO = EXAMPLES / "datasets/logo.svg"
 
 # mostly linting
 ALL_PY_SRC = [*PY_SRC.rglob("*.py")]

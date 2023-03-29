@@ -54,6 +54,7 @@
 #   - robotframework-robocop
 #   - robotframework-tidy >=3.4.0
 #   - ruff
+#   - scour
 #   - sphinx
 #   - sphinx-autobuild
 #   - sphinx-autodoc-typehints
@@ -235,6 +236,7 @@ https://conda.anaconda.org/conda-forge/win-64/python-libarchive-c-4.0-py311h1ea4
 https://conda.anaconda.org/conda-forge/noarch/rfc3339-validator-0.1.4-pyhd8ed1ab_0.tar.bz2#fed45fc5ea0813240707998abe49f520
 https://conda.anaconda.org/conda-forge/noarch/robotframework-pythonlibcore-4.1.2-pyhd8ed1ab_0.conda#3af043636b92ad0317a234544b30a4a8
 https://conda.anaconda.org/conda-forge/noarch/robotframework-stacktrace-0.4.1-pyhd8ed1ab_0.tar.bz2#3dc788e294fd159537c931dbb964511e
+https://conda.anaconda.org/conda-forge/noarch/scour-0.38.2-pyhd8ed1ab_0.tar.bz2#59d6742bdfe7b3d54c01c0d999e939f0
 https://conda.anaconda.org/conda-forge/win-64/sqlalchemy-1.4.46-py311ha68e1ae_0.conda#f0c5f7f520e0a1e619b7501450a0fef7
 https://conda.anaconda.org/conda-forge/noarch/ssort-0.11.6-pyhd8ed1ab_0.tar.bz2#53729b150f41dd6ae004ce5854904659
 https://conda.anaconda.org/conda-forge/win-64/tbb-2021.8.0-h91493d7_0.conda#e155410da447d8e37302a561b911dcb8

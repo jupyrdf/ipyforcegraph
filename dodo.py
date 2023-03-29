@@ -722,6 +722,20 @@ def task_lite():
     """build the jupyterlite site"""
 
     yield dict(
+        name="logo",
+        file_dep=[P.LOGO_SVG, P.HISTORY],
+        targets=[P.LITE_LOGO],
+        actions=[
+            (U.clean_some, [P.LITE_LOGO]),
+            (
+                U.minimize_one_svg,
+                [P.LOGO_SVG, P.LITE_LOGO],
+                dict(strip_decl=True, strip_svg_attrs=["width", "height"]),
+            ),
+        ],
+    )
+
+    yield dict(
         uptodate=[config_changed(dict(lite=P.LITE_SPEC))],
         name="pip:install",
         file_dep=[P.OK_PIP_INSTALL],
