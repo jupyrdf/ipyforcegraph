@@ -1,4 +1,3 @@
 dependencies:
-  - networkx
   - orjson
   - stringcase
