@@ -43,10 +43,6 @@ class NodeSelection(Behavior):
     def _default_rank(self) -> Optional[int]:
         return DEFAULT_RANK.selection
 
-    @T.default("context")
-    def _set_context(self) -> Optional[str]:
-        return "node"
-
 
 @W.register
 class LinkSelection(Behavior):
@@ -94,7 +90,3 @@ class LinkSelection(Behavior):
     @T.default("rank")
     def _default_rank(self) -> Optional[int]:
         return DEFAULT_RANK.selection
-
-    @T.default("context")
-    def _set_context(self) -> Optional[str]:
-        return "link"

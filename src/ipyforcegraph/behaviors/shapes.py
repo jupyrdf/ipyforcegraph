@@ -90,10 +90,6 @@ class NodeShapes(Behavior):
     def _default_rank(self) -> Optional[int]:
         return DEFAULT_RANK.shapes
 
-    @T.default("context")
-    def _set_context(self) -> Optional[str]:
-        return "node"
-
     @T.validate("size")
     def _validate_node_shape_numerics(self, proposal: T.Bunch) -> Any:
         return coerce(proposal, JSON_TYPES.number)
@@ -146,10 +142,6 @@ class LinkArrows(Behavior):
         "the relative position of the arrow along the link, 0.0: ``source`` end, 1.0: ``target`` end",
         numeric=True,
     )
-
-    @T.default("context")
-    def _set_context(self) -> Optional[str]:
-        return "link"
 
     @T.validate("length", "relative_position")
     def _validate_arrow_numerics(self, proposal: T.Bunch) -> Any:

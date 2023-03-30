@@ -29,10 +29,6 @@ class NodeTooltip(Behavior):
         kwargs["label"] = label
         super().__init__(**kwargs)
 
-    @T.default("context")
-    def _set_context(self) -> Optional[str]:
-        return "node"
-
 
 @W.register
 class LinkTooltip(Behavior):
@@ -51,7 +47,3 @@ class LinkTooltip(Behavior):
     def __init__(self, label: Optional[TFeature] = None, **kwargs: Any):
         kwargs["label"] = label
         super().__init__(**kwargs)
-
-    @T.default("context")
-    def _set_context(self) -> Optional[str]:
-        return "link"
