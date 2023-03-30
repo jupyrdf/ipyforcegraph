@@ -178,7 +178,7 @@ class DodoSource(DataFrameSource):
             try:
                 name = path.relative_to(self.project_root).as_posix()
                 is_in_project = True
-            except Exception:
+            except Exception:  # pragma: no cover
                 name = path_name
             graph_data["nodes"][path_id] = {
                 "id": path_id,
