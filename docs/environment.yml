@@ -21,6 +21,7 @@ dependencies:
   - jupyterlab-link-share
   - lxml
   - myst-nb
+  - networkx
   - nodejs >=18,<19
   - numcodecs
   - orjson

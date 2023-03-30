@@ -11,4 +11,3 @@ dependencies:
   - pytest-json-report
   - pytest-xdist
   - scour
-
