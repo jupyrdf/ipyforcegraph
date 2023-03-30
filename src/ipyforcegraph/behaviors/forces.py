@@ -96,10 +96,6 @@ class Link(BaseD3Force):
         numeric=True,
     )
 
-    @T.default("context")
-    def _set_context(self) -> Optional[str]:
-        return "link"
-
     @T.validate("distance", "strength")
     def _validate_link_numerics(self, proposal: T.Bunch) -> Any:
         return coerce(proposal, JSON_TYPES.number)
@@ -134,10 +130,6 @@ class Center(BaseD3Force):
         help="the z-coordinate of the position to center the nodes on (only applies to ``ForceGraph3D``)",
     ).tag(sync=True)
 
-    @T.default("context")
-    def _set_context(self) -> Optional[str]:
-        return "node"
-
 
 @W.register
 class X(BaseD3Force):
@@ -161,10 +153,6 @@ class X(BaseD3Force):
         default_value=0,
         allow_none=False,
     )
-
-    @T.default("context")
-    def _set_context(self) -> Optional[str]:
-        return "node"
 
     @T.validate("strength", "x")
     def _validate_x_numerics(self, proposal: T.Bunch) -> Any:
@@ -197,10 +185,6 @@ class Y(BaseD3Force):
     def _validate_y_numerics(self, proposal: T.Bunch) -> Any:
         return coerce(proposal, JSON_TYPES.number)
 
-    @T.default("context")
-    def _set_context(self) -> Optional[str]:
-        return "node"
-
 
 @W.register
 class Z(BaseD3Force):
@@ -226,10 +210,6 @@ class Z(BaseD3Force):
         default_value=0,
         allow_none=False,
     )
-
-    @T.default("context")
-    def _set_context(self) -> Optional[str]:
-        return "node"
 
     @T.validate("strength", "z")
     def _validate_z_numerics(self, proposal: T.Bunch) -> Any:
@@ -274,10 +254,6 @@ class ManyBody(BaseD3Force):
         allow_none=True,
         help="the maximum distance between nodes over which this force is considered",
     ).tag(sync=True)
-
-    @T.default("context")
-    def _set_context(self) -> Optional[str]:
-        return "node"
 
     @T.validate("strength")
     def _validate_manybody_numerics(self, proposal: T.Bunch) -> Any:
@@ -324,10 +300,6 @@ class Radial(BaseD3Force):
         help="the z-coordinate of the centering position",
     ).tag(sync=True)
 
-    @T.default("context")
-    def _set_context(self) -> Optional[str]:
-        return "node"
-
     @T.validate("strength", "radius")
     def _validate_radial_numerics(self, proposal: T.Bunch) -> Any:
         return coerce(proposal, JSON_TYPES.number)
@@ -355,10 +327,6 @@ class Collision(BaseD3Force):
         max=1.0,
         help="the strength of the force",
     ).tag(sync=True)
-
-    @T.default("context")
-    def _set_context(self) -> Optional[str]:
-        return "node"
 
     @T.validate("radius")
     def _validate_collision_numerics(self, proposal: T.Bunch) -> Any:

@@ -8,7 +8,14 @@ import { ISignal, Signal } from '@lumino/signaling';
 import { IBackboneModelOptions, WidgetModel } from '@jupyter-widgets/base';
 
 import { newTemplate } from '../../template-utils';
-import { ECoerce, IBehave, TUpdateKind, WIDGET_DEFAULTS } from '../../tokens';
+import {
+  DEFAULT_BEHAVIOR_RANK,
+  ECoerce,
+  EUpdate,
+  IBehave,
+  TUpdateKind,
+  WIDGET_DEFAULTS,
+} from '../../tokens';
 import { functor, getCoercer, noop } from '../../utils';
 
 export class BehaviorModel extends WidgetModel implements IBehave {
@@ -18,9 +25,19 @@ export class BehaviorModel extends WidgetModel implements IBehave {
     return { ...super.defaults(), ...WIDGET_DEFAULTS };
   }
 
+  get rank(): number {
+    const rank = this.get('rank');
+    return rank == null ? DEFAULT_BEHAVIOR_RANK : rank;
+  }
+
   initialize(attributes: Backbone.ObjectHash, options: IBackboneModelOptions) {
     super.initialize(attributes, options);
+    this.on('change:rank', this.onRankChange);
     this._updateRequested = new Signal(this);
+  }
+
+  onRankChange() {
+    this._updateRequested.emit(EUpdate.Behavior);
   }
 
   get updateRequested(): ISignal<IBehave, TUpdateKind> {

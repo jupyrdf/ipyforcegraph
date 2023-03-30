@@ -16,27 +16,31 @@ TNumFeature = Optional[Union["Column", "Nunjucks", str, int, float]]
 TBoolFeature = Optional[Union["Column", "Nunjucks", str, bool]]
 
 
+class DEFAULT_RANK:
+    """Ranks applied to different behaviors: lower values are applied first.
+
+    Ties are resolved by the arbitrary (but monotonically increasing) model id."
+    """
+
+    #: selection behaviors should generally come earlier
+    selection = 10
+
+    #: shapes should resolve after selection, but before styling of default circles, etc.
+    shapes = 20
+
+    #: a default rank for behaviors: ties are resolved by class name, then "age"
+    behavior = 100
+
+
 class Behavior(ForceBase):
     """The base class for all IPyForceGraph graph behaviors."""
 
     _model_name: str = T.Unicode("BehaviorModel").tag(sync=True)
 
-    rank: int = T.Int(allow_none=True).tag(sync=True)
-    context: str = T.Unicode(allow_none=True).tag(sync=True)
-
-    @T.default("rank")
-    def _default_rank(self) -> Optional[int]:
-        return None
-
-    @T.default("context")
-    def _set_context(self) -> Optional[str]:
-        return None
-
-    @T.validate("context")
-    def _validate_context(self, proposal: T.Bunch) -> Optional[str]:
-        context: Optional[str] = proposal.value
-        assert context in ("link", "node", None)
-        return context
+    rank: int = T.Int(
+        DEFAULT_RANK.behavior,
+        help=("order in which behaviors are applied: lower numbers are applied first."),
+    ).tag(sync=True)
 
 
 class BaseD3Force(Behavior):

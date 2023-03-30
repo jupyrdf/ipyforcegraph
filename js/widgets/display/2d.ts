@@ -96,6 +96,13 @@ export class ForceGraphModel extends DOMWidgetModel {
     void this.onBehaviorsChange();
   }
 
+  compareRank(behaviorA: IBehave, behaviorB: IBehave) {
+    return (
+      behaviorA.rank - behaviorB.rank ||
+      parseInt(behaviorA.cid.slice(1)) - parseInt(behaviorB.cid.slice(1))
+    );
+  }
+
   async onBehaviorsChange(): Promise<void> {
     if (!this._behaviorsChanged) {
       this._behaviorsChanged = new Signal(this);
@@ -112,7 +119,10 @@ export class ForceGraphModel extends DOMWidgetModel {
           methodBehaviors.push(behavior);
         }
       }
-      this._linkBehaviorsByMethod.set(linkMethod, methodBehaviors);
+      this._linkBehaviorsByMethod.set(
+        linkMethod,
+        methodBehaviors.sort(this.compareRank)
+      );
     }
 
     for (let nodeMethod of ALL_NODE_METHODS) {
@@ -122,7 +132,10 @@ export class ForceGraphModel extends DOMWidgetModel {
           methodBehaviors.push(behavior);
         }
       }
-      this._nodeBehaviorsByMethod.set(nodeMethod, methodBehaviors);
+      this._nodeBehaviorsByMethod.set(
+        nodeMethod,
+        methodBehaviors.sort(this.compareRank)
+      );
     }
 
     for (let graphMethod of ALL_GRAPH_METHODS) {
@@ -132,15 +145,20 @@ export class ForceGraphModel extends DOMWidgetModel {
           graphBehaviors.push(behavior);
         }
       }
-      this._graphBehaviorsByMethod.set(graphMethod, graphBehaviors);
+
+      this._graphBehaviorsByMethod.set(
+        graphMethod,
+        graphBehaviors.sort(this.compareRank)
+      );
     }
 
-    this._forceBehaviors = [];
+    let forceBehaviors: GraphForcesModel[] = [];
     for (const behavior of behaviors) {
       if (behavior instanceof GraphForcesModel) {
-        this._forceBehaviors.push(behavior);
+        forceBehaviors.push(behavior);
       }
     }
+    this._forceBehaviors = forceBehaviors.sort(this.compareRank);
 
     this._behaviorsChanged.emit(void 0);
   }

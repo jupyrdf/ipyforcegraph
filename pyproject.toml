@@ -127,6 +127,7 @@ addopts = [
 filterwarnings = [
     "error",
     "ignore::DeprecationWarning:traittypes",
+    "ignore:.metadata:DeprecationWarning:ipywidgets",
 ]
 
 [tool.ruff]

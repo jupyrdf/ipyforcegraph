@@ -3,8 +3,7 @@
 # Copyright (c) 2023 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.
 
-from typing import Dict, Optional, Tuple
-from warnings import warn
+from typing import Tuple
 
 import ipywidgets as W
 import traitlets as T
@@ -66,27 +65,6 @@ class ForceGraph(W.DOMWidget, ForceBase):
     def reheat(self) -> None:
         """Send the reheat command to restart the force simulation"""
         self.send({"action": "reheat"})
-
-    @T.validate("behaviors")
-    def _check_behavior_order(self, proposal: T.Bunch) -> Tuple[Behavior, ...]:
-        """Ensure behaviors are not unwittingly being put in the wrong order."""
-        behaviors: Tuple[Behavior, ...] = proposal.value
-
-        highest: Dict[Optional[str], int] = {}
-        for behavior in behaviors:
-            rank = behavior.rank
-            if rank is None:
-                continue
-            context = behavior.context
-            if context in highest and rank < highest[context]:
-                qualifier = " " if context is None else f" '{context}' "
-                warn(
-                    f"Order of{qualifier}behaviors may lead to counter-intuitive effects!"
-                )
-                break
-            highest[context] = rank
-
-        return behaviors
 
 
 @W.register

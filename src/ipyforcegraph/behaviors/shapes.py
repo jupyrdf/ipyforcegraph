@@ -10,6 +10,7 @@ import traitlets as T
 
 from ..trait_utils import JSON_TYPES, coerce
 from ._base import (
+    DEFAULT_RANK,
     Behavior,
     HasDimensions,
     HasFillAndStroke,
@@ -87,11 +88,7 @@ class NodeShapes(Behavior):
 
     @T.default("rank")
     def _default_rank(self) -> Optional[int]:
-        return 100
-
-    @T.default("context")
-    def _set_context(self) -> Optional[str]:
-        return "node"
+        return DEFAULT_RANK.shapes
 
     @T.validate("size")
     def _validate_node_shape_numerics(self, proposal: T.Bunch) -> Any:
@@ -122,11 +119,7 @@ class LinkShapes(Behavior):
 
     @T.default("rank")
     def _default_rank(self) -> Optional[int]:
-        return 100
-
-    @T.default("context")
-    def _set_context(self) -> Optional[str]:
-        return "link"
+        return DEFAULT_RANK.shapes
 
     @T.validate("curvature", "width")
     def _validate_link_shape_numerics(self, proposal: T.Bunch) -> Any:
@@ -149,10 +142,6 @@ class LinkArrows(Behavior):
         "the relative position of the arrow along the link, 0.0: ``source`` end, 1.0: ``target`` end",
         numeric=True,
     )
-
-    @T.default("context")
-    def _set_context(self) -> Optional[str]:
-        return "link"
 
     @T.validate("length", "relative_position")
     def _validate_arrow_numerics(self, proposal: T.Bunch) -> Any:

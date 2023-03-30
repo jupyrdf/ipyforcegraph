@@ -8,7 +8,7 @@ from typing import Optional, Tuple, Union
 import ipywidgets as W
 import traitlets as T
 
-from ._base import Behavior
+from ._base import DEFAULT_RANK, Behavior
 
 
 @W.register
@@ -41,11 +41,7 @@ class NodeSelection(Behavior):
 
     @T.default("rank")
     def _default_rank(self) -> Optional[int]:
-        return 1
-
-    @T.default("context")
-    def _set_context(self) -> Optional[str]:
-        return "node"
+        return DEFAULT_RANK.selection
 
 
 @W.register
@@ -93,8 +89,4 @@ class LinkSelection(Behavior):
 
     @T.default("rank")
     def _default_rank(self) -> Optional[int]:
-        return 1
-
-    @T.default("context")
-    def _set_context(self) -> Optional[str]:
-        return "link"
+        return DEFAULT_RANK.selection
