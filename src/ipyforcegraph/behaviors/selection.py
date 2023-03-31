@@ -8,7 +8,7 @@ from typing import Optional, Tuple, Union
 import ipywidgets as W
 import traitlets as T
 
-from ._base import Behavior
+from ._base import DEFAULT_RANK, Behavior
 
 
 @W.register
@@ -38,6 +38,10 @@ class NodeSelection(Behavior):
         "rgba(179, 163, 105, 1.0)",
         help="the color of selected nodes",
     ).tag(sync=True)
+
+    @T.default("rank")
+    def _default_rank(self) -> Optional[int]:
+        return DEFAULT_RANK.selection
 
 
 @W.register
@@ -82,3 +86,7 @@ class LinkSelection(Behavior):
     selected_width: float = T.Float(2, help="the width of selected links").tag(
         sync=True
     )
+
+    @T.default("rank")
+    def _default_rank(self) -> Optional[int]:
+        return DEFAULT_RANK.selection

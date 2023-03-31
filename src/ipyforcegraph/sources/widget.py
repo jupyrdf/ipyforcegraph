@@ -218,7 +218,7 @@ class WidgetSource(DataFrameSource):
                         notifier_self = notifier.__self__
                         source_widget, source_trait = notifier_self.source
                         target_widget, target_trait = notifier_self.target
-                    except Exception:
+                    except Exception:  # pragma: no cover
                         # these are un-characterized ObserveHandler or functions
                         continue
                     if (

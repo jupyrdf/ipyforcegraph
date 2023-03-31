@@ -8,7 +8,7 @@ import type THREE from 'three';
 
 import type { ISignal } from '@lumino/signaling';
 
-import type { DOMWidgetView } from '@jupyter-widgets/base';
+import type { DOMWidgetView, WidgetModel } from '@jupyter-widgets/base';
 
 import PKG from '../package.json';
 
@@ -33,6 +33,8 @@ export const DEFAULT_COLUMNS = {
   source: 'source',
   target: 'target',
 };
+
+export const DEFAULT_BEHAVIOR_RANK = 100;
 
 export const DEFAULT_COLORS = {
   selected: 'rgba(179, 163, 105, 1.0)',
@@ -74,7 +76,8 @@ export enum EUpdate {
 }
 export type TUpdateKind = void | number;
 
-export interface IBehave {
+export interface IBehave extends WidgetModel {
+  rank: number;
   updateRequested: ISignal<IBehave, TUpdateKind>;
   extraColumns?: IExtraColumns;
   // link
