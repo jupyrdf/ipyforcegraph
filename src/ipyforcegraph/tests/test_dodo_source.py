@@ -58,8 +58,13 @@ def test_widget_source(
     a_dodo_project: Path, shapes: TDShapes, kwargs: Dict[str, Any]
 ) -> None:
     src = DodoSource(project_root=a_dodo_project, **kwargs)
+    pprint(
+        {
+            "kwargs": kwargs,
+            "nodes": src.nodes.to_dict(orient="records"),
+            "links": src.links.to_dict(orient="records"),
+        }
+    )
     assert shapes == (src.nodes.shape, src.links.shape)
     src.refresh()
     assert shapes == (src.nodes.shape, src.links.shape)
-    pprint(src.nodes.to_dict(orient="records"))
-    pprint(src.links.to_dict(orient="records"))
