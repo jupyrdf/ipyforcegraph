@@ -10,6 +10,7 @@ import traitlets as T
 
 from ..trait_utils import JSON_TYPES, coerce
 from ._base import (
+    DEFAULT_RANK,
     Behavior,
     HasDimensions,
     HasFillAndStroke,
@@ -85,6 +86,10 @@ class NodeShapes(Behavior):
         kwargs["shapes"] = shapes
         super().__init__(**kwargs)
 
+    @T.default("rank")
+    def _default_rank(self) -> Optional[int]:
+        return DEFAULT_RANK.shapes
+
     @T.validate("size")
     def _validate_node_shape_numerics(self, proposal: T.Bunch) -> Any:
         return coerce(proposal, JSON_TYPES.number)
@@ -111,6 +116,10 @@ class LinkShapes(Behavior):
         by_column=False,
     )
     width: TNumFeature = _make_trait("the width of the link", numeric=True)
+
+    @T.default("rank")
+    def _default_rank(self) -> Optional[int]:
+        return DEFAULT_RANK.shapes
 
     @T.validate("curvature", "width")
     def _validate_link_shape_numerics(self, proposal: T.Bunch) -> Any:

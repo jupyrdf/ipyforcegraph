@@ -19,6 +19,7 @@ class NodeTooltip(Behavior):
     """
 
     _model_name: str = T.Unicode("NodeTooltipModel").tag(sync=True)
+
     label: TFeature = _make_trait(
         "the label to display when hovering over the ``node``, can be ``Column`` or ``Nunjucks`` template",
         stringy=False,
@@ -37,6 +38,7 @@ class LinkTooltip(Behavior):
     """
 
     _model_name: str = T.Unicode("LinkTooltipModel").tag(sync=True)
+
     label: TFeature = _make_trait(
         "the label to display when hovering over the ``link``, can be ``Column`` or ``Nunjucks`` template",
         stringy=False,
