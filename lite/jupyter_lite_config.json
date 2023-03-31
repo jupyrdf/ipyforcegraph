@@ -1,7 +1,7 @@
 {
   "LiteBuildConfig": {
     "contents": ["../examples"],
-    "extra_ignore_contents": ["Dodo.*\\.ipynb"],
+    "extra_ignore_contents": ["Dodo.*"],
     "output_dir": "../build/lite"
   },
   "PipliteAddon": {
