@@ -150,6 +150,7 @@ class DodoSource(DataFrameSource):
             "name": f"{task.name}",
             "doc": task.doc or "",
             "status": self._deps.get_status(task, graph_data["tasks"].values()).status,
+            "subtask_of": task.subtask_of,
         }
         graph_data["nodes"][task_id] = node
 

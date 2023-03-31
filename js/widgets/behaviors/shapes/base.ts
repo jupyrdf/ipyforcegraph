@@ -36,6 +36,7 @@ export interface IFillAndStrokeOptions extends IScaleOptions {
   fill?: string;
   stroke_width?: number;
   stroke?: string;
+  line_dash?: number[];
 }
 
 export interface IDimensionOptions extends IFillAndStrokeOptions {
@@ -147,6 +148,7 @@ export class GeometryShapeModel extends ShapeBaseModel {
     stroke: widget_serialization,
     stroke_width: widget_serialization,
     scale_on_zoom: widget_serialization,
+    line_dash: widget_serialization,
   };
 
   protected get shapeDefaults(): IDimensionOptions {
@@ -157,21 +159,27 @@ export class GeometryShapeModel extends ShapeBaseModel {
     const { context, node, globalScale } = options;
     const { x, y } = node;
 
-    this._drawCanvas({
+    const drawOptions = {
       ...this.shapeDefaults,
       context,
       globalScale,
       x,
       y,
       ...this._resolveFacets(options),
-    });
+    };
+
+    if (!drawOptions.width) {
+      return;
+    }
+
+    this._drawCanvas(drawOptions);
   }
 
-  drawNode3D(options: INodeThreeBehaveOptions): THREE.Object3D {
+  drawNode3D(options: INodeThreeBehaveOptions): THREE.Object3D | null {
     const { node, iframeClasses } = options;
     const { x, y } = node;
 
-    return this._drawThree({
+    const drawOptions = {
       ...this.shapeDefaults,
       context: null,
       globalScale: null,
@@ -179,7 +187,13 @@ export class GeometryShapeModel extends ShapeBaseModel {
       y,
       iframeClasses,
       ...this._resolveFacets(options),
-    });
+    };
+
+    if (!drawOptions.width) {
+      return null;
+    }
+
+    return this._drawThree(drawOptions);
   }
 
   protected _drawCanvasPath(options: IDimensionOptions & IBaseOptions): void {
@@ -198,6 +212,8 @@ export class GeometryShapeModel extends ShapeBaseModel {
     context.fillStyle = fill;
     context.strokeStyle = stroke;
     context.lineWidth = scale_on_zoom ? stroke_width / globalScale : stroke_width;
+
+    context.setLineDash(options.line_dash || []);
 
     context.beginPath();
 

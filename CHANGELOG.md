@@ -6,11 +6,12 @@
 
 - improves default selection behavior for `LinkShapes.curvature` and
   `LinkShapes.line_dash`
+- adds `line_dash` to all 2d shapes
 - removes the significance of order in `ForceGraph.behaviors`
   - all node, link, and graph behaviors now have a (sensible default) `.rank` trait
     which determines the order in which they are applied.
   - lower `rank` are applied before higher `rank`
-- adds `DodoSource` for viewing [doit] tasks graphs
+- adds `DodoSource` for interpreting `doit` tasks graphs
 
 ### `@jupyrdf/jupyter-forcegraph 0.3.2`
 

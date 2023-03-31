@@ -189,10 +189,19 @@ class HasFillAndStroke(HasScale):
     fill: TFeature = _make_trait("the fill color of a shape")
     stroke: TFeature = _make_trait("the stroke color of a shape")
     stroke_width: TNumFeature = _make_trait("the stroke width of a shape", numeric=True)
+    line_dash: TFeature = _make_trait(
+        "the dash line pattern of the stroke, e.g., [2, 1] for ``-- -- --``",
+        stringy=False,
+        by_column=False,
+    )
 
     @T.validate("stroke_width")
     def _validate_has_fill_and_stroke_numerics(self, proposal: T.Bunch) -> Any:
         return coerce(proposal, JSON_TYPES.number)
+
+    @T.validate("line_dash")
+    def _validate_has_fill_and_stroke_arrays(self, proposal: T.Bunch) -> Any:
+        return coerce(proposal, JSON_TYPES.array)
 
 
 class HasDimensions(HasFillAndStroke):
