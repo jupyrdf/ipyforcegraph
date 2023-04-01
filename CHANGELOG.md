@@ -10,6 +10,8 @@
   - all node, link, and graph behaviors now have a (sensible default) `.rank` trait
     which determines the order in which they are applied.
   - lower `rank` are applied before higher `rank`
+- updated `LinkParticles` behavior by adding sensible default values, and ability to
+    `stop`, `start`, and `emit` particles over only a subset of links.
 
 ### `@jupyrdf/jupyter-forcegraph 0.3.2`
 
