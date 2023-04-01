@@ -4,9 +4,8 @@
  */
 import type SpriteText from 'three-spritetext';
 
-import { unpack_models as deserialize } from '@jupyter-widgets/base';
-
 import { INodeCanvasBehaveOptions, INodeThreeBehaveOptions } from '../../../tokens';
+import { widget_serialization } from '../../serializers/widget';
 
 import { IBaseOptions, ITextOptions, ShapeBaseModel, TEXT_DEFAULTS } from './base';
 
@@ -19,15 +18,15 @@ export class TextShapeModel extends ShapeBaseModel {
 
   static serializers = {
     ...ShapeBaseModel.serializers,
-    text: { deserialize },
-    font: { deserialize },
-    size: { deserialize },
-    fill: { deserialize },
-    stroke: { deserialize },
-    stroke_width: { deserialize },
-    background: { deserialize },
-    padding: { deserialize },
-    scale_on_zoom: { deserialize },
+    text: widget_serialization,
+    font: widget_serialization,
+    size: widget_serialization,
+    fill: widget_serialization,
+    stroke: widget_serialization,
+    stroke_width: widget_serialization,
+    background: widget_serialization,
+    padding: widget_serialization,
+    scale_on_zoom: widget_serialization,
   };
 
   drawNode2D(options: INodeCanvasBehaveOptions): void {

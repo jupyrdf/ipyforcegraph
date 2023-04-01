@@ -10,6 +10,7 @@ import traitlets as T
 
 from ..trait_utils import JSON_TYPES, coerce
 from ._base import (
+    DEFAULT_RANK,
     Behavior,
     HasDimensions,
     HasFillAndStroke,
@@ -62,7 +63,7 @@ class Rectangle(HasDimensions):
 class NodeShapes(Behavior):
     """Change the shape of nodes using declarative statements.
 
-    The ``color` and ``size`` traits affect the default circle, and compose
+    The ``color`` and ``size`` traits affect the default circle, and compose
     with :class:`~ipyforcegraph.behaviors.selection.NodeSelection`.
 
     If non-empty, custom ``shapes`` will override the simple ``size`` and
@@ -84,6 +85,10 @@ class NodeShapes(Behavior):
             shapes = shapes[0]
         kwargs["shapes"] = shapes
         super().__init__(**kwargs)
+
+    @T.default("rank")
+    def _default_rank(self) -> Optional[int]:
+        return DEFAULT_RANK.shapes
 
     @T.validate("size")
     def _validate_node_shape_numerics(self, proposal: T.Bunch) -> Any:
@@ -111,6 +116,10 @@ class LinkShapes(Behavior):
         by_column=False,
     )
     width: TNumFeature = _make_trait("the width of the link", numeric=True)
+
+    @T.default("rank")
+    def _default_rank(self) -> Optional[int]:
+        return DEFAULT_RANK.shapes
 
     @T.validate("curvature", "width")
     def _validate_link_shape_numerics(self, proposal: T.Bunch) -> Any:

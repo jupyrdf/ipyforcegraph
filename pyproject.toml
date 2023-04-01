@@ -6,13 +6,19 @@ requires = [
 
 [project]
 name = "ipyforcegraph"
-version = "0.3.1"
+version = "0.3.2"
 description = "2D and 3D force-directed graph widgets for Jupyter"
 readme = "README.md"
 authors = [
     {name = "ipyforcegraph contributors", email = "jupyrdf@users.noreply.github.com"},
 ]
 requires-python = ">=3.8"
+dependencies = [
+  "ipywidgets<9,>=8.0.4",
+  "numcodecs",
+  "pandas",
+  "traittypes",
+]
 classifiers = [
     "Framework :: Jupyter :: JupyterLab :: 3",
     "Framework :: Jupyter :: JupyterLab :: Extensions :: Prebuilt",
@@ -28,12 +34,6 @@ classifiers = [
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
-]
-dependencies = [
-  "ipywidgets<9,>=8.0.4",
-  "numcodecs",
-  "pandas",
-  "traittypes",
 ]
 [project.urls]
 "Bug Tracker" = "https://github.com/jupyrdf/ipyforcegraph/issues"
@@ -127,6 +127,7 @@ addopts = [
 filterwarnings = [
     "error",
     "ignore::DeprecationWarning:traittypes",
+    "ignore:.metadata:DeprecationWarning:ipywidgets",
 ]
 
 [tool.ruff]

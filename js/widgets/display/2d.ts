@@ -19,7 +19,6 @@ import {
   DOMWidgetView,
   IBackboneModelOptions,
   WidgetView,
-  unpack_models as deserialize,
 } from '@jupyter-widgets/base';
 
 import {
@@ -57,13 +56,14 @@ import {
   emptyArray,
 } from '../../tokens';
 import { DAGBehaviorModel, FacetedForceModel, GraphForcesModel } from '../behaviors';
+import { widget_serialization } from '../serializers/widget';
 
 export class ForceGraphModel extends DOMWidgetModel {
   static model_name = 'ForceGraphModel';
   static serializers = {
     ...DOMWidgetModel.serializers,
-    source: { deserialize },
-    behaviors: { deserialize },
+    source: widget_serialization,
+    behaviors: widget_serialization,
   };
 
   protected _nodeBehaviorsByMethod: TNodeMethodMap;
@@ -96,6 +96,13 @@ export class ForceGraphModel extends DOMWidgetModel {
     void this.onBehaviorsChange();
   }
 
+  compareRank(behaviorA: IBehave, behaviorB: IBehave) {
+    return (
+      behaviorA.rank - behaviorB.rank ||
+      parseInt(behaviorA.cid.slice(1)) - parseInt(behaviorB.cid.slice(1))
+    );
+  }
+
   async onBehaviorsChange(): Promise<void> {
     if (!this._behaviorsChanged) {
       this._behaviorsChanged = new Signal(this);
@@ -112,7 +119,10 @@ export class ForceGraphModel extends DOMWidgetModel {
           methodBehaviors.push(behavior);
         }
       }
-      this._linkBehaviorsByMethod.set(linkMethod, methodBehaviors);
+      this._linkBehaviorsByMethod.set(
+        linkMethod,
+        methodBehaviors.sort(this.compareRank)
+      );
     }
 
     for (let nodeMethod of ALL_NODE_METHODS) {
@@ -122,7 +132,10 @@ export class ForceGraphModel extends DOMWidgetModel {
           methodBehaviors.push(behavior);
         }
       }
-      this._nodeBehaviorsByMethod.set(nodeMethod, methodBehaviors);
+      this._nodeBehaviorsByMethod.set(
+        nodeMethod,
+        methodBehaviors.sort(this.compareRank)
+      );
     }
 
     for (let graphMethod of ALL_GRAPH_METHODS) {
@@ -132,15 +145,20 @@ export class ForceGraphModel extends DOMWidgetModel {
           graphBehaviors.push(behavior);
         }
       }
-      this._graphBehaviorsByMethod.set(graphMethod, graphBehaviors);
+
+      this._graphBehaviorsByMethod.set(
+        graphMethod,
+        graphBehaviors.sort(this.compareRank)
+      );
     }
 
-    this._forceBehaviors = [];
+    let forceBehaviors: GraphForcesModel[] = [];
     for (const behavior of behaviors) {
       if (behavior instanceof GraphForcesModel) {
-        this._forceBehaviors.push(behavior);
+        forceBehaviors.push(behavior);
       }
     }
+    this._forceBehaviors = forceBehaviors.sort(this.compareRank);
 
     this._behaviorsChanged.emit(void 0);
   }

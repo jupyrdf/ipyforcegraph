@@ -1,8 +1,32 @@
 # Changelog
 
-## `0.3.1` (Unreleased)
+## `0.3.2` (unreleased)
+
+### `ipyforcegraph 0.3.2`
+
+- improves default selection behavior for `LinkShapes.curvature` and
+  `LinkShapes.line_dash`
+- removes the significance of order in `ForceGraph.behaviors`
+  - all node, link, and graph behaviors now have a (sensible default) `.rank` trait
+    which determines the order in which they are applied.
+  - lower `rank` are applied before higher `rank`
+
+### `@jupyrdf/jupyter-forcegraph 0.3.2`
+
+- adds more `jsMath` functions (`cosh`, `sinh`, `tanh`, and `hypot`) and provided more
+  comprehensive documentation for them in `Behaviors.ipynb`
+
+### Documentation
+
+- adds `NodeShape` UI controls in `Shapes.ipynb` and `Behaviors.ipynb`
+- fixed labels for UI controls in `Behaviors.ipynb`
+
+## `0.3.1`
 
 ### `ipyforcegraph 0.3.1`
+
+- fixes compatibility with `jupyterlab_widgets 3.0.6`
+- adds `curvature`, `line_dash` to `LinkShapes`
 
 ### `@jupyrdf/jupyter-forcegraph 0.3.1`
 

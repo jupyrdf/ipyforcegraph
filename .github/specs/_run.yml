@@ -1,5 +1,5 @@
 dependencies:
-  - ipywidgets >=8.0.4,<9
+  - ipywidgets >=8.0.0
   - numcodecs
   - pandas
   - python >=3.8,<3.12

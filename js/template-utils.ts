@@ -27,6 +27,7 @@ export const MATH_UNARY = [
   Math.cbrt,
   Math.ceil,
   Math.cos,
+  Math.cosh,
   Math.exp,
   Math.expm1,
   Math.floor,
@@ -37,14 +38,16 @@ export const MATH_UNARY = [
   Math.log2,
   Math.sign,
   Math.sin,
+  Math.sinh,
   Math.sqrt,
   Math.tan,
+  Math.tanh,
   Math.trunc,
 ];
 
 export const MATH_BINARY = [Math.imul, Math.atan2];
 
-export const MATH_N_ARY = [Math.min, Math.max];
+export const MATH_N_ARY = [Math.min, Math.max, Math.hypot];
 
 namespace Private {
   export let env: Environment | null = null;

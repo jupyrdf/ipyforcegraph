@@ -7,7 +7,7 @@ import { Buffer } from 'buffer';
 
 import { IWidgetManager, WidgetModel } from '@jupyter-widgets/base';
 
-import { DEBUG, EMOJI } from '../tokens';
+import { DEBUG, EMOJI } from '../../tokens';
 
 export interface IReceivedSerializedDataFrame {
   buffer: DataView;
