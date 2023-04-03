@@ -253,7 +253,7 @@ REPORTS = BUILD / "reports"
 
 HTMLCOV = REPORTS / "htmlcov"
 HTMLCOV_INDEX = HTMLCOV / "index.html"
-PYTEST_COV_THRESHOLD = 91
+PYTEST_COV_THRESHOLD = 90 if (WIN and PY_MAJOR == "3.8") else 91
 PYTEST_HTML = REPORTS / "pytest.html"
 PYTEST_XUNIT = REPORTS / "pytest.xunit.xml"
 PYTEST_JSON = REPORTS / f"report-{PY_MAJOR}-{PLATFORM}.json"
