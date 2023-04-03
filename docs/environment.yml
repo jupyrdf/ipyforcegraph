@@ -14,6 +14,7 @@ dependencies:
   - ipylab >=0.7.0
   - ipytree
   - ipywidgets >=8.0.0
+  - jsonpatch
   - jupyter_server >=2.2.1
   - jupyterlab >=3,<4
   - jupyterlab >=3.6.2,<3.7
