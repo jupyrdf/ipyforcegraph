@@ -52,8 +52,7 @@
     "d3-force-cluster-3d": "~1.1.1",
     "force-graph": "~1.43.0",
     "nunjucks": "^3.2.3",
-    "three-spritetext": "~1.8.0",
-    "fast-json-patch": "^3.1.1"
+    "three-spritetext": "~1.8.0"
   },
   "devDependencies": {
     "@jupyterlab/application": "3",

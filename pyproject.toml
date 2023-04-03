@@ -31,7 +31,6 @@ classifiers = [
 ]
 dependencies = [
   "ipywidgets<9,>=8.0.4",
-  "jsonpatch",
   "numcodecs",
   "pandas",
   "traittypes",

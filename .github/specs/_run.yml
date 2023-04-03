@@ -1,6 +1,5 @@
 dependencies:
   - ipywidgets >=8.0.0
-  - jsonpatch
   - numcodecs
   - pandas
   - python >=3.8,<3.12
