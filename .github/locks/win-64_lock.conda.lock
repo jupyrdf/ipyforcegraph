@@ -35,13 +35,13 @@ https://conda.anaconda.org/conda-forge/win-64/krb5-1.20.1-heb0366b_0.conda#a07b0
 https://conda.anaconda.org/conda-forge/win-64/libsolv-0.7.23-h12be248_0.conda#4955aac5971a11e1b79c47912645b9e2
 https://conda.anaconda.org/conda-forge/win-64/libssh2-1.10.0-h9a1e1f7_3.tar.bz2#c2b344e960a173c777bb3ed172c38cd8
 https://conda.anaconda.org/conda-forge/win-64/libxml2-2.10.3-hc3477c8_6.conda#a56f8a52bc13d7eee23457f0e253e055
-https://conda.anaconda.org/conda-forge/win-64/python-3.11.1-h2628c8c_0_cpython.conda#6b06b54c7849d0b4fc5f5984c1ac3c97
+https://conda.anaconda.org/conda-forge/win-64/python-3.11.2-h2628c8c_0_cpython.conda#e4e8ab7e655513a8682a78779d6381c8
 https://conda.anaconda.org/conda-forge/win-64/reproc-cpp-14.2.4-h63175ca_0.conda#a9ee9bbbbda9b32ec690c4909146770d
 https://conda.anaconda.org/conda-forge/win-64/zstd-1.5.2-h12be248_6.conda#62826565682d013b3e2346aaf7bded0e
 https://conda.anaconda.org/conda-forge/noarch/appdirs-1.4.4-pyh9f0ad1d_0.tar.bz2#5f095bc6454094e96f146491fd03633b
 https://conda.anaconda.org/conda-forge/noarch/cachy-0.3.0-pyhd8ed1ab_1.tar.bz2#5dfee17f24e2dfd18d7392b48c9351e2
 https://conda.anaconda.org/conda-forge/noarch/certifi-2022.12.7-pyhd8ed1ab_0.conda#fb9addc3db06e56abe03e0e9f21a63e6
-https://conda.anaconda.org/conda-forge/noarch/charset-normalizer-2.1.1-pyhd8ed1ab_0.tar.bz2#c1d5b294fbf9a795dec349a6f4d8be8e
+https://conda.anaconda.org/conda-forge/noarch/charset-normalizer-3.1.0-pyhd8ed1ab_0.conda#7fcff9f6f123696e940bda77bd4d6551
 https://conda.anaconda.org/conda-forge/noarch/cloudpickle-2.2.1-pyhd8ed1ab_0.conda#b325bfc4cff7d7f8a868f1f7ecc4ed16
 https://conda.anaconda.org/conda-forge/noarch/colorama-0.4.6-pyhd8ed1ab_0.tar.bz2#3faab06a954c2a04039983f2c4a50d99
 https://conda.anaconda.org/conda-forge/noarch/crashtest-0.4.1-pyhd8ed1ab_0.tar.bz2#709a2295dd907bb34afb57d54320642f
@@ -102,7 +102,7 @@ https://conda.anaconda.org/conda-forge/noarch/pyopenssl-23.1.1-pyhd8ed1ab_0.cond
 https://conda.anaconda.org/conda-forge/noarch/virtualenv-20.21.0-pyhd8ed1ab_0.conda#cb9a711f7c9f3074fe522e5a34481e60
 https://conda.anaconda.org/conda-forge/noarch/conda-package-handling-2.0.2-pyh38be061_0.conda#44800e9bd13143292097c65e57323038
 https://conda.anaconda.org/conda-forge/noarch/urllib3-1.26.15-pyhd8ed1ab_0.conda#27db656619a55d727eaf5a6ece3d2fd6
-https://conda.anaconda.org/conda-forge/noarch/requests-2.28.2-pyhd8ed1ab_0.conda#11d178fc55199482ee48d6812ea83983
+https://conda.anaconda.org/conda-forge/noarch/requests-2.28.2-pyhd8ed1ab_1.conda#3bfbd6ead1d7299ed46dab3a7bf0bc8c
 https://conda.anaconda.org/conda-forge/noarch/cachecontrol-0.12.11-pyhd8ed1ab_1.conda#e8f0410e0aa03342304357c5cc3bb75d
 https://conda.anaconda.org/conda-forge/win-64/conda-22.9.0-py311h1ea47a8_2.tar.bz2#b10f47d78cb51f295ee9e6f3a611fa17
 https://conda.anaconda.org/conda-forge/noarch/ensureconda-1.4.3-pyhd8ed1ab_0.tar.bz2#c99ae3abf501990769047b4b40a98f17
