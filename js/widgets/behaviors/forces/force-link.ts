@@ -30,7 +30,7 @@ export class LinkForceModel extends FacetedForceModel implements IBehave, IForce
   }
 
   get force(): d3ForceLink {
-    const { strength, distance } = this._facets;
+    const { strength, distance } = this._linkFacets;
 
     let force = this._force;
     force = strength == null ? force : force.strength(this.wrapForLink(strength));

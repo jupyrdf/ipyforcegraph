@@ -98,10 +98,14 @@ class DodoSource(DataFrameSource):
     def refresh(self) -> None:
         """Refresh the nodes and links."""
         graph_data = self.find_graph_data()
+        nodes = P.DataFrame(graph_data["nodes"].values())
+        nodes.fillna("", inplace=True)
+        links = P.DataFrame(graph_data["links"].values())
+        links.fillna("", inplace=True)
 
         with self.hold_sync():
-            self.nodes = P.DataFrame(graph_data["nodes"].values()).fillna("")
-            self.links = P.DataFrame(graph_data["links"].values()).fillna("")
+            self.nodes = nodes
+            self.links = links
 
     def _reload_tasks(self) -> Tasks:
         old_sys_path = [*sys.path]

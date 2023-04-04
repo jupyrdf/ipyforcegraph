@@ -42,6 +42,7 @@ import {
   INodeBehaveOptions,
   INodeCanvasBehaveOptions,
   INodeEventBehaveOptions,
+  IPreservedColumns,
   IRenderOptions,
   ISource,
   TAnyForce,
@@ -54,6 +55,7 @@ import {
   TUpdateKind,
   WIDGET_DEFAULTS,
   emptyArray,
+  emptyPreservedColumns,
 } from '../../tokens';
 import { DAGBehaviorModel, FacetedForceModel, GraphForcesModel } from '../behaviors';
 import { widget_serialization } from '../serializers/widget';
@@ -182,6 +184,11 @@ export class ForceGraphModel extends DOMWidgetModel {
   get graphData(): GraphData {
     const source = this.get('source');
     return source ? source.graphData : EMPTY_GRAPH_DATA;
+  }
+
+  get preservedColumns(): IPreservedColumns {
+    const source = this.get('source');
+    return source ? source.preservedColumns : emptyPreservedColumns;
   }
 
   get behaviors(): IBehave[] {
@@ -405,10 +412,23 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
 
   async redraw(): Promise<void> {
     await this._rendered.promise;
-    let { graphData } = this.model;
-    DEBUG && console.warn(`${EMOJI} updating...`, graphData);
     await this.postUpdate();
-    (this.graph as any).graphData(graphData);
+    const graph = this.graph as any;
+    const { preservedColumns } = this.model;
+    let graphData = this.model.graphData;
+    const oldGraphData = graph.graphData();
+    if (
+      oldGraphData.nodes.length &&
+      (preservedColumns.nodes.length || preservedColumns.links.length)
+    ) {
+      const { source } = this;
+      graphData = source.mergePreserved(graphData, oldGraphData, preservedColumns);
+      if (graphData == null) {
+        return;
+      }
+    }
+    DEBUG && console.warn(`${EMOJI} updating...`, graphData);
+    graph.graphData(graphData);
   }
 
   wrapFunction = (fn: Function) => {

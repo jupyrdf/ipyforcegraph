@@ -2,6 +2,7 @@ import type THREE from 'three';
 
 import {
   EMOJI,
+  EMark,
   INodeCanvasBehaveOptions,
   INodeThreeBehaveOptions,
 } from '../../../tokens';
@@ -114,13 +115,15 @@ export class ShapeBaseModel extends FacetedModel {
 
   /** Evaluate all facets with the runtime shape into the "dumb" data for drawing. */
   protected _resolveFacets(
-    options: INodeCanvasBehaveOptions | INodeThreeBehaveOptions
+    options: INodeCanvasBehaveOptions | INodeThreeBehaveOptions,
+    markType: EMark
   ): Record<string, any> {
     const draw: Record<string, any> = {};
+    const facets = markType == 'link' ? this._linkFacets : this._nodeFacets;
     for (const facetName of this._facetNames) {
-      if (this._facets[facetName]) {
+      if (facets[facetName]) {
         try {
-          draw[facetName] = this._facets[facetName](options);
+          draw[facetName] = facets[facetName](options);
         } catch (err) {
           console.warn(`${EMOJI} encountered error for ${facetName}`, options, err);
         }
@@ -165,7 +168,7 @@ export class GeometryShapeModel extends ShapeBaseModel {
       globalScale,
       x,
       y,
-      ...this._resolveFacets(options),
+      ...this._resolveFacets(options, EMark.node),
     };
 
     if (!drawOptions.width) {
@@ -186,7 +189,7 @@ export class GeometryShapeModel extends ShapeBaseModel {
       x,
       y,
       iframeClasses,
-      ...this._resolveFacets(options),
+      ...this._resolveFacets(options, EMark.node),
     };
 
     if (!drawOptions.width) {

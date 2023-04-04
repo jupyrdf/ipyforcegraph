@@ -56,7 +56,7 @@ export class ClusterForceModel extends FacetedForceModel implements IBehave, IFo
   }
 
   get force(): TAnyForce {
-    const { strength, inertia, key, radius, x, y, z } = this._facets;
+    const { strength, inertia, key, radius, x, y, z } = this._nodeFacets;
 
     let force = this._force;
     force = inertia == null ? force : force.centerInertia(inertia());

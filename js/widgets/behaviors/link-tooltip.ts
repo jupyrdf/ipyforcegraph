@@ -20,6 +20,6 @@ export class LinkTooltipModel extends FacetedModel implements IBehave {
   }
 
   getLinkLabel(options: ILinkBehaveOptions): string | null {
-    return this._facets.label ? this._facets.label(options) : null;
+    return this._linkFacets.label ? this._linkFacets.label(options) : null;
   }
 }

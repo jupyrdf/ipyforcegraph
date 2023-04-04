@@ -12,8 +12,10 @@ import {
   DEFAULT_COLUMNS,
   EMPTY_GRAPH_DATA,
   IExtraColumns,
+  IPreservedColumns,
   WIDGET_DEFAULTS,
   emptyArray,
+  emptyPreservedColumns,
 } from '../../tokens';
 import { dataframe_serialization } from '../serializers';
 
@@ -37,8 +39,10 @@ export class DataFrameSourceModel extends WidgetModel {
       nodes: null,
       links: null,
       node_id_column: DEFAULT_COLUMNS.id,
+      link_id_column: DEFAULT_COLUMNS.id,
       link_source_column: DEFAULT_COLUMNS.source,
       link_target_column: DEFAULT_COLUMNS.target,
+      node_preserve_columns: [],
     };
   }
 
@@ -55,12 +59,27 @@ export class DataFrameSourceModel extends WidgetModel {
     return this.get('node_id_column') || DEFAULT_COLUMNS.id;
   }
 
+  get linkIdColumn() {
+    return this.get('link_id_column') || DEFAULT_COLUMNS.id;
+  }
+
   get linkSourceColumn() {
     return this.get('link_source_column') || DEFAULT_COLUMNS.source;
   }
 
   get linkTargetColumn() {
     return this.get('link_target_column') || DEFAULT_COLUMNS.target;
+  }
+
+  get preservedColumns(): IPreservedColumns {
+    const nodes = this.get('node_preserve_columns') || emptyArray;
+    const links = this.get('link_preserve_columns') || emptyArray;
+
+    if (!nodes.length && !links.length) {
+      return emptyPreservedColumns;
+    }
+
+    return { nodes, links };
   }
 
   get nodes() {
@@ -149,35 +168,173 @@ export class DataFrameSourceModel extends WidgetModel {
   protected graphUpdate() {
     const graphData: GraphData = { nodes: [], links: [] };
 
-    const { nodes, links, nodeIdColumn, linkSourceColumn, linkTargetColumn } = this;
+    const { nodes, links, linkIdColumn, nodeIdColumn } = this;
 
     const nodeColumns = Object.keys(nodes);
     const linkColumns = Object.keys(links);
 
-    const nodeCount = (nodes[nodeIdColumn] || emptyArray).length;
-    const linkCount = (links[linkSourceColumn] || emptyArray).length;
+    const nodesById: Record<string | number, NodeObject> = {};
 
-    const hasIdColumn = nodes[nodeIdColumn] != null;
+    const nodeCount = (nodes[nodeIdColumn] || emptyArray).length;
+    const linkCount = (links[linkIdColumn] || emptyArray).length;
+
+    const hasNodeIdColumn = nodes[nodeIdColumn] != null;
+    const hasLinkIdColumn = nodes[linkIdColumn] != null;
 
     for (let idx = 0; idx < nodeCount; idx++) {
-      let node = { id: hasIdColumn ? nodes[nodeIdColumn][idx] : idx };
+      const id = hasNodeIdColumn ? nodes[nodeIdColumn][idx] : idx;
+      const node = { id };
+      nodesById[id] = node;
       for (const col of nodeColumns) {
-        node[col] = nodes[col][idx];
+        switch (col) {
+          case nodeIdColumn:
+            continue;
+          default:
+            node[col] = nodes[col][idx];
+            break;
+        }
       }
       graphData.nodes.push(node);
     }
 
     for (let idx = 0; idx < linkCount; idx++) {
+      const id = hasLinkIdColumn ? links[linkIdColumn][idx] : idx;
       let link = {
-        source: links[linkSourceColumn][idx],
-        target: links[linkTargetColumn][idx],
+        id,
       };
       for (const col of linkColumns) {
-        link[col] = links[col][idx];
+        switch (col) {
+          case linkIdColumn:
+            continue;
+          default:
+            link[col] = links[col][idx];
+            break;
+        }
       }
-      graphData.links.push(link);
+      graphData.links.push(link as LinkObject);
     }
 
     this.graphData = graphData;
+  }
+
+  /** merge the new nodes on top of the old nodes */
+  mergePreserved(
+    newGraphData: GraphData,
+    oldGraphData: GraphData,
+    preservedColumns: IPreservedColumns
+  ): GraphData | null {
+    const { nodeIdColumn, linkIdColumn, linkSourceColumn, linkTargetColumn } = this;
+    const newNodes: Record<string | number, NodeObject> = {};
+    const oldNodes: Record<string | number, NodeObject> = {};
+    const newLinks: Record<string | number, LinkObject> = {};
+    const oldLinks: Record<string | number, LinkObject> = {};
+    const oldNodeCount = oldGraphData.nodes.length;
+    const oldLinkCount = oldGraphData.links.length;
+
+    let deletedLinks: number[] = [];
+    let deletedNodes: number[] = [];
+
+    // gather new nodes
+    for (const newNode of newGraphData.nodes) {
+      newNodes[newNode[nodeIdColumn]] = newNode;
+    }
+
+    // gather new links
+    for (const newLink of newGraphData.links) {
+      newLinks[newLink[linkIdColumn]] = newLink;
+    }
+
+    // update nodes in-place
+    let idx = -1;
+    for (const oldNode of oldGraphData.nodes) {
+      idx++;
+      const nodeId = oldNode[nodeIdColumn];
+      const newNode = newNodes[nodeId];
+      if (newNode == null) {
+        deletedNodes.push(idx);
+        continue;
+      }
+      for (const [column, value] of Object.entries(newNode)) {
+        if (
+          value != null &&
+          !preservedColumns.nodes.includes(column) &&
+          column !== nodeIdColumn
+        ) {
+          oldNode[column] = value;
+        }
+      }
+      oldNodes[nodeId] = oldNode;
+    }
+
+    // delete removed nodes
+    let delIdx = deletedNodes.length;
+    while (delIdx) {
+      oldGraphData.nodes.splice(deletedNodes[delIdx], 1);
+      delIdx--;
+    }
+
+    // add missing nodes
+    for (const [nid, newNode] of Object.entries(newNodes)) {
+      if (!oldNodes[nid]) {
+        oldNodes[nid] = newNode;
+        oldGraphData.nodes.push(newNode);
+      }
+    }
+
+    idx = -1;
+
+    // update links in-place
+    for (const oldLink of oldGraphData.links) {
+      idx++;
+      const linkId = oldLink[linkIdColumn];
+      const newLink = newLinks[linkId];
+      if (newLink == null) {
+        deletedLinks.push(idx);
+        continue;
+      }
+      for (const [column, value] of Object.entries(newLink)) {
+        if (value != null && !preservedColumns.links.includes(column)) {
+          switch (column) {
+            case linkIdColumn:
+              break;
+            case linkSourceColumn:
+            case linkTargetColumn:
+              switch (typeof value) {
+                case 'object':
+                  oldLink[column] = value;
+                  break;
+                default:
+                  oldLink[column] = oldNodes[value];
+                  break;
+              }
+              break;
+            default:
+              oldLink[column] = value;
+          }
+        }
+      }
+      oldLinks[linkId] = oldLink;
+    }
+
+    // delete removed nodes
+    delIdx = deletedLinks.length;
+    while (delIdx) {
+      oldGraphData.links.splice(deletedLinks[delIdx], 1);
+      delIdx--;
+    }
+
+    // add missing links
+    for (const [lid, newLink] of Object.entries(newLinks)) {
+      if (!oldLinks[lid]) {
+        oldGraphData.links.push(newLink);
+      }
+    }
+
+    if (
+      oldLinkCount !== oldGraphData.links.length ||
+      oldNodeCount !== oldGraphData.nodes.length
+    ) {
+      return oldGraphData;
+    }
   }
 }

@@ -4,7 +4,11 @@
  */
 import type SpriteText from 'three-spritetext';
 
-import { INodeCanvasBehaveOptions, INodeThreeBehaveOptions } from '../../../tokens';
+import {
+  EMark,
+  INodeCanvasBehaveOptions,
+  INodeThreeBehaveOptions,
+} from '../../../tokens';
 import { widget_serialization } from '../../serializers/widget';
 
 import { IBaseOptions, ITextOptions, ShapeBaseModel, TEXT_DEFAULTS } from './base';
@@ -40,7 +44,7 @@ export class TextShapeModel extends ShapeBaseModel {
       globalScale,
       x,
       y,
-      ...this._resolveFacets(options),
+      ...this._resolveFacets(options, EMark.node),
     };
 
     if (drawOptions.text == null || !drawOptions.text.trim().length) {
@@ -61,7 +65,7 @@ export class TextShapeModel extends ShapeBaseModel {
       x,
       y,
       iframeClasses,
-      ...this._resolveFacets(options),
+      ...this._resolveFacets(options, EMark.node),
     };
 
     if (!drawOptions.text) {

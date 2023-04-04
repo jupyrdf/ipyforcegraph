@@ -54,7 +54,8 @@ export class FacetedModel extends BehaviorModel {
   };
 
   /** Facets are cached as handlers for a specific entity. */
-  protected _facets: Record<string, Function> = JSONExt.emptyObject as any;
+  protected _nodeFacets: Record<string, Function> = JSONExt.emptyObject as any;
+  protected _linkFacets: Record<string, Function> = JSONExt.emptyObject as any;
 
   /** Names of facets are calculated once, on initialization. */
   protected _facetNames: string[] | null = null;
@@ -95,27 +96,31 @@ export class FacetedModel extends BehaviorModel {
 
   /** Handle the facets changing. */
   protected async _onFacetsChanged() {
-    this._facets = JSONExt.emptyObject as any;
+    this._nodeFacets = JSONExt.emptyObject as any;
+    this._linkFacets = JSONExt.emptyObject as any;
     this._updateRequested.emit(void 0);
   }
 
   /** Populate facet handlers. */
   async ensureFacets() {
-    const facets: Record<string, Function> = {};
+    const nodeFacets: Record<string, Function> = {};
+    const linkFacets: Record<string, Function> = {};
     for (const facetName of this.facetNames) {
       let facet = this.get(facetName);
       if (facet instanceof DynamicModel) {
         await facet.ensureHandlers();
-        facets[facetName] = facet.nodeHandler;
+        nodeFacets[facetName] = facet.nodeHandler;
+        linkFacets[facetName] = facet.linkHandler;
         facet.updateRequested.connect(this._onFacetsChanged, this);
         continue;
       }
 
       if (facet != null) {
-        facets[facetName] = functor(facet);
+        nodeFacets[facetName] = linkFacets[facetName] = functor(facet);
       }
     }
-    this._facets = facets;
+    this._nodeFacets = nodeFacets;
+    this._linkFacets = linkFacets;
   }
 
   /** Lazily calculate asset names. */

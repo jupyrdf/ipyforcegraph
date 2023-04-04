@@ -22,16 +22,16 @@ export class LinkArrowModel extends FacetedModel implements IBehave {
   }
 
   getLinkDirectionalArrowColor(options: ILinkBehaveOptions): string | null {
-    return this._facets.color ? this._facets.color(options) : null;
+    return this._linkFacets.color ? this._linkFacets.color(options) : null;
   }
 
   getLinkDirectionalArrowLength(options: ILinkBehaveOptions): number | null {
-    return this._facets.length ? this._facets.length(options) : null;
+    return this._linkFacets.length ? this._linkFacets.length(options) : null;
   }
 
   getLinkDirectionalArrowRelPos(options: ILinkBehaveOptions): number | null {
-    return this._facets.relative_position
-      ? this._facets.relative_position(options)
+    return this._linkFacets.relative_position
+      ? this._linkFacets.relative_position(options)
       : null;
   }
 }
