@@ -334,6 +334,12 @@ export class DataFrameSourceModel extends WidgetModel {
       oldLinkCount !== oldGraphData.links.length ||
       oldNodeCount !== oldGraphData.nodes.length
     ) {
+      // unserialize links
+      for (const link of oldGraphData.links) {
+        link.source = typeof link.source == 'object' ? link.source.id : link.source;
+        link.target = typeof link.target == 'object' ? link.target.id : link.target;
+      }
+
       return oldGraphData;
     }
   }

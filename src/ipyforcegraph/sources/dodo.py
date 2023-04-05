@@ -148,17 +148,21 @@ class DodoSource(DataFrameSource):
     def discover_one_task(self, task: Task, graph_data: TAnyDict) -> None:
         """Update nodes and links from a single ``Task``."""
         task_id = f"task:{task.name}"
+        task_list = [*graph_data["tasks"].values()]
         node = {
             "id": task_id,
             "type": "task",
             "name": f"{task.name}",
             "doc": task.doc or "",
-            "status": self._deps.get_status(task, graph_data["tasks"].values()).status,
+            "status": self._deps.get_status(task, task_list).status,
             "subtask_of": task.subtask_of,
         }
         graph_data["nodes"][task_id] = node
 
         for task_dep in task.task_dep:
+            dep_task = graph_data["tasks"][task_dep]
+            dep_status = self._deps.get_status(dep_task, task_list).status
+
             task_dep_id = f"task:{task_dep}"
             link_id = f"{task_id}--has_task_dep--{task_dep_id}"
             graph_data["links"][link_id] = {
@@ -166,6 +170,7 @@ class DodoSource(DataFrameSource):
                 "target": task_dep_id,
                 "type": "has_task_dep",
                 "id": link_id,
+                "exists": dep_status,
             }
 
         for field in ["file_dep", "targets"]:
@@ -209,6 +214,7 @@ class DodoSource(DataFrameSource):
             "target": target,
             "type": field,
             "id": link_id,
+            "exists": path.exists(),
         }
 
     def discover_file_parents(
