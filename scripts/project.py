@@ -172,7 +172,7 @@ DOCS_CONF = DOCS / "conf.py"
 DICTIONARY = DOCS / "dictionary.txt"
 ALL_SPELL = BUILD / "spell/ALL.fail"
 LITE_SPEC = [
-    "jupyterlite-core ==0.1.0b22",
+    "jupyterlite-core ==0.1.0",
     "jupyterlite-pyodide-kernel ==0.0.6",
 ]
 LITE_BUILD = BUILD / "lite"
