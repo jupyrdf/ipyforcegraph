@@ -1,4 +1,3 @@
 dependencies:
-  - bqplot >=0.12.20
   - jupyterlab-deck
   - jupyterlab-link-share
