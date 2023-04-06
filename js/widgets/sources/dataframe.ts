@@ -227,11 +227,8 @@ export class DataFrameSourceModel extends WidgetModel {
     const newNodes: Record<string | number, NodeObject> = {};
     const oldNodes: Record<string | number, NodeObject> = {};
     const newLinks: Record<string | number, LinkObject> = {};
-    const oldLinks: Record<string | number, LinkObject> = {};
-    const oldNodeCount = oldGraphData.nodes.length;
-    const oldLinkCount = oldGraphData.links.length;
+    const compositeLinks: Record<string | number, LinkObject> = {};
 
-    let deletedLinks: number[] = [];
     let deletedNodes: number[] = [];
 
     // gather new nodes
@@ -288,8 +285,20 @@ export class DataFrameSourceModel extends WidgetModel {
       idx++;
       const linkId = oldLink[linkIdColumn];
       const newLink = newLinks[linkId];
-      if (newLink == null) {
-        deletedLinks.push(idx);
+      const source =
+        typeof oldLink.source == 'object'
+          ? oldLink.source
+          : oldNodes[oldLink[linkSourceColumn]];
+      const target =
+        typeof oldLink.target == 'object'
+          ? oldLink.target
+          : oldNodes[oldLink[linkTargetColumn]];
+
+      if (
+        newLink == null ||
+        !(source && oldNodes[source[nodeIdColumn]]) ||
+        !(target && oldNodes[target[nodeIdColumn]])
+      ) {
         continue;
       }
       for (const [column, value] of Object.entries(newLink)) {
@@ -313,34 +322,27 @@ export class DataFrameSourceModel extends WidgetModel {
           }
         }
       }
-      oldLinks[linkId] = oldLink;
-    }
-
-    // delete removed nodes
-    delIdx = deletedLinks.length;
-    while (delIdx) {
-      oldGraphData.links.splice(deletedLinks[delIdx], 1);
-      delIdx--;
+      compositeLinks[linkId] = oldLink;
     }
 
     // add missing links
     for (const [lid, newLink] of Object.entries(newLinks)) {
-      if (!oldLinks[lid]) {
-        oldGraphData.links.push(newLink);
+      if (!compositeLinks[lid]) {
+        const source =
+          typeof newLink.source == 'object'
+            ? newLink.source
+            : oldNodes[newLink[linkSourceColumn]];
+        const target =
+          typeof newLink.target == 'object'
+            ? newLink.target
+            : oldNodes[newLink[linkTargetColumn]];
+        if (!(source && target)) {
+          continue;
+        }
+        compositeLinks[lid] = { ...newLink, source, target };
       }
     }
 
-    if (
-      oldLinkCount !== oldGraphData.links.length ||
-      oldNodeCount !== oldGraphData.nodes.length
-    ) {
-      // unserialize links
-      for (const link of oldGraphData.links) {
-        link.source = typeof link.source == 'object' ? link.source.id : link.source;
-        link.target = typeof link.target == 'object' ? link.target.id : link.target;
-      }
-
-      return oldGraphData;
-    }
+    return { nodes: oldGraphData.nodes, links: Object.values(compositeLinks) };
   }
 }

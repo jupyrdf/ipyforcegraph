@@ -414,21 +414,28 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
     await this._rendered.promise;
     await this.postUpdate();
     const graph = this.graph as any;
+    if (!graph) {
+      console.warn(`${EMOJI} no graph to redraw`);
+      return;
+    }
+    graph.pauseAnimation();
     const { preservedColumns } = this.model;
     let graphData = this.model.graphData;
     const oldGraphData = graph.graphData();
+    let needsFullRedraw = true;
     if (
       oldGraphData.nodes.length &&
       (preservedColumns.nodes.length || preservedColumns.links.length)
     ) {
       const { source } = this;
       graphData = source.mergePreserved(graphData, oldGraphData, preservedColumns);
-      if (graphData == null) {
-        return;
-      }
+      needsFullRedraw = graphData != null;
     }
-    DEBUG && console.warn(`${EMOJI} updating...`, graphData);
-    graph.graphData(graphData);
+    if (needsFullRedraw) {
+      DEBUG && console.warn(`${EMOJI} updating...`, graphData);
+      graph.graphData(graphData);
+    }
+    graph.resumeAnimation();
   }
 
   wrapFunction = (fn: Function) => {
