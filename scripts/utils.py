@@ -363,3 +363,24 @@ def minimize_one_svg(
 
     if old_text != new_text:
         dest.write_text(new_text, **P.UTF8)
+
+
+def pip_check():
+    proc = subprocess.Popen(
+        [*P.IN_ENV, *P.PIP, "check"], stdout=subprocess.PIPE, stderr=subprocess.PIPE
+    )
+    proc.wait()
+    outs, errs = proc.communicate()
+    all_lines = [
+        *outs.decode("utf-8").strip().splitlines(),
+        *errs.decode("utf-8").strip().splitlines(),
+    ]
+    error_lines = [
+        line
+        for line in all_lines
+        if line.strip()
+        and not any(re.search(skip, line) for skip in P.PIP_CHECK_IGNORE)
+    ]
+    if error_lines:
+        print(error_lines)
+    return not error_lines

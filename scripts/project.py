@@ -147,6 +147,10 @@ else:
 PY = ["python"]
 PYM = [*PY, "-m"]
 PIP = [*PYM, "pip"]
+PIP_CHECK_IGNORE = [
+    r"conda\.cli\.main_run",
+    r"bqplot.*pandas",
+]
 
 JLPM = ["jlpm"]
 JLPM_INSTALL = [*JLPM, "--prefer-offline"]

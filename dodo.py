@@ -257,11 +257,10 @@ def task_setup():
             P.PY_PROJ,
         ]
 
-    py_actions = [[*P.IN_ENV, *P.PIP, "install", *_install]]
-
-    if not P.IN_RTD:
-        # ancient sphinx_rtd_theme wants ancient docutils
-        py_actions += [[*P.IN_ENV, *P.PIP, "check"]]
+    py_actions = [
+        [*P.IN_ENV, *P.PIP, "install", *_install],
+        U.pip_check,
+    ]
 
     if P.CI:
         print("setup:py actions")
