@@ -736,13 +736,6 @@ def task_lite():
     )
 
     yield dict(
-        uptodate=[config_changed(dict(lite=P.LITE_SPEC))],
-        name="pip:install",
-        file_dep=[P.OK_PIP_INSTALL],
-        actions=[[*P.IN_ENV, *P.PIP, "install", "--no-deps", *P.LITE_SPEC]],
-    )
-
-    yield dict(
         name="build",
         file_dep=[
             *P.EXAMPLE_IPYNB,
@@ -753,7 +746,6 @@ def task_lite():
             P.WHEEL,
             P.LITE_LOGO,
         ],
-        task_dep=["lite:pip:install"],
         targets=[P.LITE_SHA256SUMS],
         actions=[
             CmdAction(
