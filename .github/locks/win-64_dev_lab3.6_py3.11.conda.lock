@@ -5,6 +5,7 @@
 #   - ansi2html
 #   - autodoc-traits
 #   - black-jupyter
+#   - bqplot
 #   - docutils >=0.19
 #   - doit-with-toml
 #   - firefox =102
@@ -216,7 +217,7 @@ https://conda.anaconda.org/conda-forge/noarch/cattrs-22.2.0-pyhd8ed1ab_0.tar.bz2
 https://conda.anaconda.org/conda-forge/win-64/cffi-1.15.1-py311h7d9ee11_3.conda#a8524727eb956b4741e25a64af79edb8
 https://conda.anaconda.org/conda-forge/noarch/click-8.1.3-win_pyhd8ed1ab_2.tar.bz2#6b58680207b526c42dcff68b543803dd
 https://conda.anaconda.org/conda-forge/noarch/comm-0.1.3-pyhd8ed1ab_0.conda#168ae0f82cdf7505048e81054c7354e4
-https://conda.anaconda.org/conda-forge/win-64/coverage-7.2.2-py311ha68e1ae_0.conda#8f48b3d36fc69a5ed9b8d3f3d89e361a
+https://conda.anaconda.org/conda-forge/win-64/coverage-7.2.3-py311ha68e1ae_0.conda#1b5bde8d09244de6afbd6c81ac934bfe
 https://conda.anaconda.org/conda-forge/noarch/h11-0.14.0-pyhd8ed1ab_0.tar.bz2#b21ed0883505ba1910994f1df031a428
 https://conda.anaconda.org/conda-forge/noarch/html5lib-1.1-pyh9f0ad1d_0.tar.bz2#b2355343d6315c892543200231d7154a
 https://conda.anaconda.org/conda-forge/noarch/importlib-metadata-6.1.0-pyha770c72_0.conda#30b3127c385ca2ed5ef87f3d53d466bc
@@ -228,7 +229,7 @@ https://conda.anaconda.org/conda-forge/noarch/livereload-2.6.3-pyh9f0ad1d_0.tar.
 https://conda.anaconda.org/conda-forge/win-64/lxml-4.9.2-py311h5942461_0.conda#f032539b8db039d0a673dd197f9dde87
 https://conda.anaconda.org/conda-forge/noarch/markdown-it-py-2.2.0-pyhd8ed1ab_0.conda#b2928a6c6d52d7e3562b4a59c3214e3a
 https://conda.anaconda.org/conda-forge/noarch/matplotlib-inline-0.1.6-pyhd8ed1ab_0.tar.bz2#b21613793fcc81d944c76c9f2864a7de
-https://conda.anaconda.org/conda-forge/win-64/mypy-1.1.1-py311ha68e1ae_0.conda#7be95077cbd360548c460c89a561d559
+https://conda.anaconda.org/conda-forge/win-64/mypy-1.2.0-py311ha68e1ae_0.conda#fc8bfbe7ccad86877206b4eed2170b5d
 https://conda.anaconda.org/conda-forge/noarch/outcome-1.2.0-pyhd8ed1ab_0.tar.bz2#3dbb9ece72652131f12d66e889da7c0a
 https://conda.anaconda.org/conda-forge/noarch/pip-23.0.1-pyhd8ed1ab_0.conda#8025ca83b8ba5430b640b83917c2a6f7
 https://conda.anaconda.org/conda-forge/noarch/py2vega-0.6.1-pyhd8ed1ab_0.tar.bz2#07594783f950301f5943e6d080ffb4eb
@@ -331,7 +332,7 @@ https://conda.anaconda.org/conda-forge/noarch/sphinx-autobuild-2021.3.14-pyhd8ed
 https://conda.anaconda.org/conda-forge/noarch/sphinx-autodoc-typehints-1.21.8-pyhd8ed1ab_0.conda#21e2e0ea045848dcb0053b6cc67a7f7f
 https://conda.anaconda.org/conda-forge/noarch/sphinx-copybutton-0.5.1-pyhd8ed1ab_0.conda#d21ada5f548f3c8957e1fa7ec3cd7f5b
 https://conda.anaconda.org/conda-forge/noarch/twine-4.0.2-pyhd8ed1ab_0.conda#e3a16168d6b9deefb8c1caa7943fb49e
-https://conda.anaconda.org/conda-forge/noarch/bqplot-0.12.37-pyhd8ed1ab_0.conda#b0106860a429dcefcac33b33be2c380b
+https://conda.anaconda.org/conda-forge/noarch/bqplot-0.12.38-pyhd8ed1ab_0.conda#24c801eea3316aecb9c8f271f2478166
 https://conda.anaconda.org/conda-forge/noarch/ipylab-0.7.1-pyhd8ed1ab_1.conda#fd19f67b01ac2ed4d6354c8ae732f889
 https://conda.anaconda.org/conda-forge/noarch/ipytree-0.2.2-pyhd8ed1ab_0.tar.bz2#5cc19cec6c4598183f4a8278e2142810
 https://conda.anaconda.org/conda-forge/noarch/jupyter_server_fileid-0.8.0-pyhd8ed1ab_0.conda#15e37b2cedb857ecc14ba684bb08321d
@@ -343,7 +344,7 @@ https://conda.anaconda.org/conda-forge/noarch/ipydatagrid-1.1.15-pyhd8ed1ab_0.co
 https://conda.anaconda.org/conda-forge/noarch/jupyter_server_ydoc-0.8.0-pyhd8ed1ab_0.conda#780280d42fbcb2eaf654a6ba7a3e5bb5
 https://conda.anaconda.org/conda-forge/noarch/nbclassic-0.5.5-pyhb4ecaf3_1.conda#a29d9080cb29c25b6a36c1d2f3da3ece
 https://conda.anaconda.org/conda-forge/noarch/pytest-check-links-0.8.0-pyhd8ed1ab_0.conda#639513b3fc51ee25e00a423fa430a2da
-https://conda.anaconda.org/conda-forge/noarch/notebook-6.5.3-pyha770c72_0.conda#362b951bafa6bc028c6591a81d82bf45
+https://conda.anaconda.org/conda-forge/noarch/notebook-6.5.4-pyha770c72_0.conda#ec4ce3ce0a55ce21b6f5b86049b97af9
 https://conda.anaconda.org/conda-forge/noarch/jupyterlab-3.6.3-pyhd8ed1ab_0.conda#c4baad1d227e93562154eb41588b2ea9
 https://conda.anaconda.org/conda-forge/noarch/jupyterlab-fonts-2.1.1-pyhd8ed1ab_0.tar.bz2#fc28d40ad8ffa770a870d3c30eac09f2
 https://conda.anaconda.org/conda-forge/noarch/jupyterlab-link-share-0.3.0-pyhd8ed1ab_0.conda#a4dba368117eb46c44b47097479fa693

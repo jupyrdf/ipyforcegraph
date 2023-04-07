@@ -4,6 +4,7 @@ channels:
 dependencies:
   - ansi2html
   - autodoc-traits
+  - bqplot
   - docutils >=0.19
   - doit-with-toml
   - flit >=3.7.1,<4
