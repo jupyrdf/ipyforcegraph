@@ -4,7 +4,6 @@ dependencies:
   - docutils >=0.19
   - jupyterlite-core ==0.1.0
   - jupyterlite-core-with-libarchive
-  - jupyterlite-pyodide-kernel ==0.0.6
   - myst-nb
   - pydata-sphinx-theme
   - sphinx

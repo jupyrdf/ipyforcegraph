@@ -1,3 +1,5 @@
 dependencies:
+  - bqplot
   - jupyterlab-deck
   - jupyterlab-link-share
+  - jupyterlite-pyodide-kernel ==0.0.6

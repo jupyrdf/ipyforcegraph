@@ -148,7 +148,6 @@ PY = ["python"]
 PYM = [*PY, "-m"]
 PIP = [*PYM, "pip"]
 PIP_CHECK_IGNORE = [
-    r"bqplot.*pandas",
     r"conda\.cli\.main_run",
     r"No broken requirements found",
     r"sphinx-rtd-theme.*docutils",
