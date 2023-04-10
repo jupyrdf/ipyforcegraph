@@ -13,7 +13,9 @@
   - lower `rank` are applied before higher `rank`
 - adds `DodoSource` for interpreting `doit` tasks graphs
 - adds `node_preserve_columns`, `link_id_column`, and `link_preserve_columns`
-  - these allow for keeping values when updating data, such as created by `Selection` behaviors
+  - these allow for keeping values when updating data, such as those created by the
+    simulation engine (e.g. `x` and `y`) and custom columns, such as created by
+    `Selection` behaviors
   - `link_id_column` is required if the number and or order of links change
 
 ### `@jupyrdf/jupyter-forcegraph 0.3.2`
