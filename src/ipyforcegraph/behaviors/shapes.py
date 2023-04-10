@@ -132,7 +132,7 @@ class LinkShapes(Behavior):
 
 @W.register
 class LinkArrows(Behavior):
-    """Customize the size, position, and color of arrows on ``links``."""
+    """Customize the ``length``, ``relative_position``, and ``color`` of arrows on ``links``."""
 
     _model_name: str = T.Unicode("LinkArrowModel").tag(sync=True)
 
