@@ -481,6 +481,8 @@ def task_test():
         yield _nb_test(nb)
 
     for robot_template in P.ATEST.rglob("*.j2"):
+        if "ipynb_checkpoints" in str(robot_template):
+            continue
         for graph_class in P.PY_GRAPH_CLASSES:
             name = robot_template.name.replace(".j2", "").replace("GRAPH", graph_class)
             robot_out = robot_template.parent / name
