@@ -20,7 +20,7 @@ dependencies:
   - jupyterlab-link-share
   - jupyterlite-core ==0.1.0
   - jupyterlite-core-with-libarchive
-  - jupyterlite-pyodide-kernel ==0.0.7
+  - jupyterlite-pyodide-kernel ==0.0.8
   - lxml
   - myst-nb
   - networkx
