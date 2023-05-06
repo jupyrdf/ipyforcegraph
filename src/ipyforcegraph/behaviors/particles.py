@@ -50,7 +50,7 @@ class LinkParticles(Behavior):
     def emit(
         self, *link_indeces: int, speed: Optional[float] = None, duration: float = 1
     ) -> None:
-        """Emit particles over a series of links"""
+        """Emit particles over a series of links."""
         stopped = False
 
         if speed is None:
