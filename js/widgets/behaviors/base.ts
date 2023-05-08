@@ -21,6 +21,7 @@ import { functor, getCoercer, noop } from '../../utils';
 
 export class BehaviorModel extends WidgetModel implements IBehave {
   protected _updateRequested: Signal<IBehave, TUpdateKind>;
+  protected _graphDataUpdateRequested: Signal<IBehave, void>;
 
   defaults() {
     return { ...super.defaults(), ...WIDGET_DEFAULTS };
@@ -35,6 +36,7 @@ export class BehaviorModel extends WidgetModel implements IBehave {
     super.initialize(attributes, options);
     this.on('change:rank', this.onRankChange);
     this._updateRequested = new Signal(this);
+    this._graphDataUpdateRequested = new Signal(this);
   }
 
   onRankChange() {
@@ -43,6 +45,10 @@ export class BehaviorModel extends WidgetModel implements IBehave {
 
   get updateRequested(): ISignal<IBehave, TUpdateKind> {
     return this._updateRequested;
+  }
+
+  get graphDataUpdateRequested(): ISignal<IBehave, void> {
+    return this._graphDataUpdateRequested;
   }
 }
 
