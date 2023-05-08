@@ -79,7 +79,9 @@ export type TUpdateKind = void | number;
 export interface IBehave extends WidgetModel {
   rank: number;
   updateRequested: ISignal<IBehave, TUpdateKind>;
+  graphDataUpdateRequested: ISignal<IBehave, void>;
   extraColumns?: IExtraColumns;
+  updateGraphData?(graphData: GraphData): Promise<void>;
   // link
   getLinkColor?(options: ILinkBehaveOptions): string | null;
   getLinkCurvature?(options: ILinkBehaveOptions): number | null;
