@@ -17,6 +17,7 @@
     simulation engine (e.g. `x` and `y`) and custom columns, such as created by
     `Selection` behaviors
   - `link_id_column` is required if the number and or order of links change
+- adds `ColorScaleColumn`, supported by `d3-scale-chromatic`
 
 ### `@jupyrdf/jupyter-forcegraph 0.3.2`
 

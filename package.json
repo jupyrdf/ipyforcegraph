@@ -50,6 +50,8 @@
     "buffer": "^6.0.3",
     "d3-force-3d": "~3.0.5",
     "d3-force-cluster-3d": "~1.1.1",
+    "d3-scale": "^4.0.2",
+    "d3-scale-chromatic": "^3.0.0",
     "force-graph": "~1.43.0",
     "nunjucks": "^3.2.3",
     "three-spritetext": "~1.8.0"
@@ -61,6 +63,8 @@
     "@jupyterlab/theme-light-extension": "3",
     "@trivago/prettier-plugin-sort-imports": "^4.0.0",
     "@types/d3-force": "^3.0.4",
+    "@types/d3-scale": "^4.0.3",
+    "@types/d3-scale-chromatic": "^3.0.0",
     "@types/nunjucks": "^3.2.1",
     "@types/three": "^0.148.0",
     "file-loader": "^6.2.0",
