@@ -6,10 +6,17 @@
 
 - improves default selection behavior for `LinkShapes.curvature` and
   `LinkShapes.line_dash`
+- adds `line_dash` to all 2D shapes
 - removes the significance of order in `ForceGraph.behaviors`
   - all node, link, and graph behaviors now have a (sensible default) `.rank` trait
     which determines the order in which they are applied.
   - lower `rank` are applied before higher `rank`
+- adds `DodoSource` for interpreting `doit` tasks graphs
+- adds `node_preserve_columns`, `link_id_column`, and `link_preserve_columns`
+  - these allow for keeping values when updating data, such as those created by the
+    simulation engine (e.g. `x` and `y`) and custom columns, such as created by
+    `Selection` behaviors
+  - `link_id_column` is required if the number and or order of links change
 
 ### `@jupyrdf/jupyter-forcegraph 0.3.2`
 
@@ -19,7 +26,13 @@
 ### Documentation
 
 - adds `NodeShape` UI controls in `Shapes.ipynb` and `Behaviors.ipynb`
-- fixed labels for UI controls in `Behaviors.ipynb`
+- fixes labels for UI controls in `Behaviors.ipynb`
+- updates to latest JupyterLite packages
+- adds non-JupyterLite-compatible examples
+  - `DodoSource.ipynb` for viewing and running `doit` tasks
+  - `DodoApp.ipynb` for demonstrating a full app, featuring
+    - `ipylab`
+    - `ipydatagrid`
 
 ## `0.3.1`
 

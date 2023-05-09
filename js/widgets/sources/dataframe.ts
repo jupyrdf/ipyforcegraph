@@ -12,8 +12,10 @@ import {
   DEFAULT_COLUMNS,
   EMPTY_GRAPH_DATA,
   IExtraColumns,
+  IPreservedColumns,
   WIDGET_DEFAULTS,
   emptyArray,
+  emptyPreservedColumns,
 } from '../../tokens';
 import { dataframe_serialization } from '../serializers';
 
@@ -37,8 +39,10 @@ export class DataFrameSourceModel extends WidgetModel {
       nodes: null,
       links: null,
       node_id_column: DEFAULT_COLUMNS.id,
+      link_id_column: DEFAULT_COLUMNS.id,
       link_source_column: DEFAULT_COLUMNS.source,
       link_target_column: DEFAULT_COLUMNS.target,
+      node_preserve_columns: [],
     };
   }
 
@@ -55,12 +59,27 @@ export class DataFrameSourceModel extends WidgetModel {
     return this.get('node_id_column') || DEFAULT_COLUMNS.id;
   }
 
+  get linkIdColumn() {
+    return this.get('link_id_column') || DEFAULT_COLUMNS.id;
+  }
+
   get linkSourceColumn() {
     return this.get('link_source_column') || DEFAULT_COLUMNS.source;
   }
 
   get linkTargetColumn() {
     return this.get('link_target_column') || DEFAULT_COLUMNS.target;
+  }
+
+  get preservedColumns(): IPreservedColumns {
+    const nodes = this.get('node_preserve_columns') || emptyArray;
+    const links = this.get('link_preserve_columns') || emptyArray;
+
+    if (!nodes.length && !links.length) {
+      return emptyPreservedColumns;
+    }
+
+    return { nodes, links };
   }
 
   get nodes() {
@@ -149,35 +168,113 @@ export class DataFrameSourceModel extends WidgetModel {
   protected graphUpdate() {
     const graphData: GraphData = { nodes: [], links: [] };
 
-    const { nodes, links, nodeIdColumn, linkSourceColumn, linkTargetColumn } = this;
+    const { nodes, links, linkIdColumn, nodeIdColumn } = this;
 
     const nodeColumns = Object.keys(nodes);
     const linkColumns = Object.keys(links);
 
-    const nodeCount = (nodes[nodeIdColumn] || emptyArray).length;
-    const linkCount = (links[linkSourceColumn] || emptyArray).length;
+    const nodesById: Record<string | number, NodeObject> = {};
 
-    const hasIdColumn = nodes[nodeIdColumn] != null;
+    const nodeCount = (nodes[nodeIdColumn] || emptyArray).length;
+    const linkCount = (links[linkIdColumn] || emptyArray).length;
+
+    const hasNodeIdColumn = nodes[nodeIdColumn] != null;
+    const hasLinkIdColumn = nodes[linkIdColumn] != null;
 
     for (let idx = 0; idx < nodeCount; idx++) {
-      let node = { id: hasIdColumn ? nodes[nodeIdColumn][idx] : idx };
+      const id = hasNodeIdColumn ? nodes[nodeIdColumn][idx] : idx;
+      const node = { id };
+      nodesById[id] = node;
       for (const col of nodeColumns) {
-        node[col] = nodes[col][idx];
+        switch (col) {
+          case nodeIdColumn:
+            continue;
+          default:
+            node[col] = nodes[col][idx];
+            break;
+        }
       }
       graphData.nodes.push(node);
     }
 
     for (let idx = 0; idx < linkCount; idx++) {
+      const id = hasLinkIdColumn ? links[linkIdColumn][idx] : idx;
       let link = {
-        source: links[linkSourceColumn][idx],
-        target: links[linkTargetColumn][idx],
+        id,
       };
       for (const col of linkColumns) {
-        link[col] = links[col][idx];
+        switch (col) {
+          case linkIdColumn:
+            continue;
+          default:
+            link[col] = links[col][idx];
+            break;
+        }
       }
-      graphData.links.push(link);
+      graphData.links.push(link as LinkObject);
     }
 
     this.graphData = graphData;
+  }
+
+  /** merge the new nodes on top of the old nodes */
+  mergePreserved(
+    newGraphData: GraphData,
+    oldGraphData: GraphData,
+    preservedColumns: IPreservedColumns
+  ): GraphData | null {
+    const { nodeIdColumn, linkIdColumn } = this;
+
+    const oldLinks: Record<string | number, LinkObject> = {};
+    const oldNodes: Record<string | number, NodeObject> = {};
+
+    const compositeLinks: Record<string | number, LinkObject> = {};
+    const compositeNodes: Record<string | number, NodeObject> = {};
+
+    // gather old nodes
+    for (const oldNode of oldGraphData.nodes) {
+      oldNodes[oldNode[nodeIdColumn]] = oldNode;
+    }
+
+    // gather old links
+    for (const oldLink of oldGraphData.links) {
+      oldLinks[oldLink[linkIdColumn]] = oldLink;
+    }
+
+    // generate composite nodes
+    for (const newNode of newGraphData.nodes) {
+      const nodeId = newNode[nodeIdColumn];
+      const oldNode = oldNodes[nodeId];
+      const compositeNode = { ...newNode };
+      if (oldNode != null) {
+        for (const [column, value] of Object.entries(oldNode)) {
+          if (preservedColumns.nodes.includes(column)) {
+            compositeNode[column] = value;
+          }
+        }
+      }
+      compositeNodes[nodeId] = compositeNode;
+    }
+
+    // generate composite links
+    for (const newLink of newGraphData.links) {
+      const compositeLink = { ...newLink };
+
+      const linkId = newLink[linkIdColumn];
+      const oldLink = oldLinks[linkId];
+      if (oldLink != null) {
+        for (const [column, value] of Object.entries(oldLink)) {
+          if (preservedColumns.links.includes(column)) {
+            compositeLink[column] = value;
+          }
+        }
+      }
+      compositeLinks[linkId] = compositeLink;
+    }
+
+    const compositeNodeList = Object.values(compositeNodes);
+    const compositeLinkList = Object.values(compositeLinks);
+
+    return { nodes: compositeNodeList, links: compositeLinkList };
   }
 }

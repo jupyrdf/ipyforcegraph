@@ -23,18 +23,18 @@ export class LinkParticleModel extends FacetedModel implements IBehave {
   }
 
   getLinkDirectionalParticleColor(options: ILinkBehaveOptions): string | null {
-    return this._facets.color ? this._facets.color(options) : null;
+    return this._linkFacets.color ? this._linkFacets.color(options) : null;
   }
 
   getLinkDirectionalParticleSpeed(options: ILinkBehaveOptions): number | null {
-    return this._facets.speed ? this._facets.speed(options) : null;
+    return this._linkFacets.speed ? this._linkFacets.speed(options) : null;
   }
 
   getLinkDirectionalParticles(options: ILinkBehaveOptions): number | null {
-    return this._facets.density ? this._facets.density(options) : null;
+    return this._linkFacets.density ? this._linkFacets.density(options) : null;
   }
 
   getLinkDirectionalParticleWidth(options: ILinkBehaveOptions): number | null {
-    return this._facets.width ? this._facets.width(options) : null;
+    return this._linkFacets.width ? this._linkFacets.width(options) : null;
   }
 }

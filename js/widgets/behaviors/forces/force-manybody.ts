@@ -31,7 +31,7 @@ export class ManyBodyForceModel extends FacetedForceModel implements IBehave, IF
   }
 
   get force(): d3ForceManyBody {
-    const { strength, theta, distance_max, distance_min } = this._facets;
+    const { strength, theta, distance_max, distance_min } = this._nodeFacets;
 
     let force = this._force;
     force = strength == null ? force : force.strength(this.wrapForNode(strength));

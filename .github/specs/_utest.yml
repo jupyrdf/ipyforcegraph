@@ -1,8 +1,12 @@
 dependencies:
   - importnb
+  - ipydatagrid
+  - ipylab >=0.7.0
   - lxml
+  - networkx
   - pytest-asyncio
   - pytest-cov
   - pytest-html
   - pytest-json-report
   - pytest-xdist
+  - scour

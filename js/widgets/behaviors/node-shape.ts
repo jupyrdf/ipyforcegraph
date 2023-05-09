@@ -32,11 +32,11 @@ export class NodeShapeFacetsModel extends FacetedModel implements IBehave {
   }
 
   getNodeSize(options: INodeBehaveOptions): number | null {
-    return this._facets.size ? this._facets.size(options) : null;
+    return this._nodeFacets.size ? this._nodeFacets.size(options) : null;
   }
 
   getNodeColor(options: INodeBehaveOptions): string | null {
-    return this._facets.color ? this._facets.color(options) : null;
+    return this._nodeFacets.color ? this._nodeFacets.color(options) : null;
   }
 }
 

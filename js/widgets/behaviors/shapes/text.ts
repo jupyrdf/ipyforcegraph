@@ -4,7 +4,11 @@
  */
 import type SpriteText from 'three-spritetext';
 
-import { INodeCanvasBehaveOptions, INodeThreeBehaveOptions } from '../../../tokens';
+import {
+  EMark,
+  INodeCanvasBehaveOptions,
+  INodeThreeBehaveOptions,
+} from '../../../tokens';
 import { widget_serialization } from '../../serializers/widget';
 
 import { IBaseOptions, ITextOptions, ShapeBaseModel, TEXT_DEFAULTS } from './base';
@@ -27,35 +31,48 @@ export class TextShapeModel extends ShapeBaseModel {
     background: widget_serialization,
     padding: widget_serialization,
     scale_on_zoom: widget_serialization,
+    line_dash: widget_serialization,
   };
 
   drawNode2D(options: INodeCanvasBehaveOptions): void {
     const { context, node, globalScale } = options;
     const { x, y } = node;
 
-    this._drawCanvas({
+    const drawOptions = {
       ...TEXT_DEFAULTS,
       context,
       globalScale,
       x,
       y,
-      ...this._resolveFacets(options),
-    });
+      ...this._resolveFacets(options, EMark.node),
+    };
+
+    if (drawOptions.text == null || !drawOptions.text.trim().length) {
+      return;
+    }
+
+    this._drawCanvas(drawOptions);
   }
 
-  drawNode3D(options: INodeThreeBehaveOptions): SpriteText {
+  drawNode3D(options: INodeThreeBehaveOptions): SpriteText | null {
     const { node, iframeClasses } = options;
     const { x, y } = node;
 
-    return this._drawThree({
+    const drawOptions = {
       ...TEXT_DEFAULTS,
       context: null,
       globalScale: null,
       x,
       y,
       iframeClasses,
-      ...this._resolveFacets(options),
-    });
+      ...this._resolveFacets(options, EMark.node),
+    };
+
+    if (!drawOptions.text) {
+      return null;
+    }
+
+    return this._drawThree(drawOptions);
   }
 
   protected _drawThree(options: ITextOptions & IBaseOptions): SpriteText {
@@ -114,6 +131,7 @@ export class TextShapeModel extends ShapeBaseModel {
       scale_on_zoom,
       stroke_width,
       stroke,
+      line_dash,
     } = {
       ...TEXT_DEFAULTS,
       ...options,
@@ -132,6 +150,7 @@ export class TextShapeModel extends ShapeBaseModel {
     context.textBaseline = 'middle';
 
     if (stroke) {
+      context.setLineDash(line_dash || []);
       context.strokeStyle = stroke;
       context.lineWidth = scale_on_zoom ? stroke_width / globalScale : stroke_width;
       context.strokeText(text, x, y);

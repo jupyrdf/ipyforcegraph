@@ -29,7 +29,7 @@ export class YForceModel extends FacetedForceModel implements IBehave, IForce {
   }
 
   get force(): TAnyForce {
-    const { y, strength } = this._facets;
+    const { y, strength } = this._nodeFacets;
 
     let force = this._force;
     force = y == null ? force : force.y(this.wrapForNode(y));

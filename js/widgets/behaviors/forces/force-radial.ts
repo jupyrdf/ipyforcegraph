@@ -32,7 +32,7 @@ export class RadialForceModel extends FacetedForceModel implements IBehave, IFor
   }
 
   get force(): d3ForceRadial {
-    const { strength, radius, x, y, z } = this._facets;
+    const { strength, radius, x, y, z } = this._nodeFacets;
 
     let force = this._force;
     force = strength == null ? force : force.strength(this.wrapForNode(strength));

@@ -60,6 +60,8 @@ def task_all():
         P.ATEST_CANARY,
         P.HTMLCOV_INDEX,
         P.PYTEST_HTML,
+        P.OK_LINKS,
+        P.ALL_SPELL,
     ]
 
     if not P.TESTING_IN_CI:
@@ -208,7 +210,6 @@ def task_env():
 
     yield dict(
         name="dev",
-        uptodate=[config_changed(dict(lite=P.LITE_SPEC))],
         file_dep=[P.LOCKFILE],
         targets=[P.HISTORY],
         actions=[
@@ -256,11 +257,10 @@ def task_setup():
             P.PY_PROJ,
         ]
 
-    py_actions = [[*P.IN_ENV, *P.PIP, "install", *_install]]
-
-    if not P.IN_RTD:
-        # ancient sphinx_rtd_theme wants ancient docutils
-        py_actions += [[*P.IN_ENV, *P.PIP, "check"]]
+    py_actions = [
+        [*P.IN_ENV, *P.PIP, "install", *_install],
+        U.pip_check,
+    ]
 
     if P.CI:
         print("setup:py actions")
@@ -481,6 +481,8 @@ def task_test():
         yield _nb_test(nb)
 
     for robot_template in P.ATEST.rglob("*.j2"):
+        if "ipynb_checkpoints" in str(robot_template):
+            continue
         for graph_class in P.PY_GRAPH_CLASSES:
             name = robot_template.name.replace(".j2", "").replace("GRAPH", graph_class)
             robot_out = robot_template.parent / name
@@ -721,9 +723,17 @@ def task_lite():
     """build the jupyterlite site"""
 
     yield dict(
-        name="pip:install",
-        file_dep=[P.OK_PIP_INSTALL],
-        actions=[[*P.IN_ENV, *P.PIP, "install", "--no-deps", *P.LITE_SPEC]],
+        name="logo",
+        file_dep=[P.LOGO_SVG, P.HISTORY],
+        targets=[P.LITE_LOGO],
+        actions=[
+            (U.clean_some, [P.LITE_LOGO]),
+            (
+                U.minimize_one_svg,
+                [P.LOGO_SVG, P.LITE_LOGO],
+                dict(strip_decl=True, strip_svg_attrs=["width", "height"]),
+            ),
+        ],
     )
 
     yield dict(
@@ -735,8 +745,8 @@ def task_lite():
             P.EXAMPLE_REQS,
             P.OK_PIP_INSTALL,
             P.WHEEL,
+            P.LITE_LOGO,
         ],
-        task_dep=["lite:pip:install"],
         targets=[P.LITE_SHA256SUMS],
         actions=[
             CmdAction(

@@ -29,7 +29,7 @@ export class CollisionForceModel extends FacetedForceModel implements IBehave, I
   }
 
   get force(): d3ForceCollision {
-    const { radius, strength } = this._facets;
+    const { radius, strength } = this._nodeFacets;
 
     let force = this._force;
     force = radius == null ? force : force.radius(this.wrapForNode(radius));

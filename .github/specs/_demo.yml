@@ -1,5 +1,3 @@
 dependencies:
-  - importnb
-  - networkx
-  - stringcase
   - orjson
+  - stringcase

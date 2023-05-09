@@ -23,7 +23,10 @@ from ._base import (
 
 @W.register
 class Text(HasFillAndStroke):
-    """Draw a text shape, with an optional background."""
+    """Draw a text shape, with an optional background.
+
+    If the ``text`` trait is (or evaluates to) ``0`` or ``None``, no shape will be drawn.
+    """
 
     _model_name: str = T.Unicode("TextShapeModel").tag(sync=True)
 
@@ -47,14 +50,20 @@ class Text(HasFillAndStroke):
 
 @W.register
 class Ellipse(HasDimensions):
-    """Draw an ellipse shape."""
+    """Draw an ellipse shape.
+
+    If the ``width`` trait is (or evaluates to) ``0`` or ``None``, no shape will be drawn.
+    """
 
     _model_name: str = T.Unicode("EllipseShapeModel").tag(sync=True)
 
 
 @W.register
 class Rectangle(HasDimensions):
-    """Draw a rectangle shape."""
+    """Draw a rectangle shape.
+
+    If the ``width`` trait is (or evaluates to) ``0`` or ``None``, no shape will be drawn.
+    """
 
     _model_name: str = T.Unicode("RectangleShapeModel").tag(sync=True)
 
@@ -126,7 +135,7 @@ class LinkShapes(Behavior):
         return coerce(proposal, JSON_TYPES.number)
 
     @T.validate("line_dash")
-    def _validate_link_line_dash(self, proposal: T.Bunch) -> Any:
+    def _validate_link_shape_arrays(self, proposal: T.Bunch) -> Any:
         return coerce(proposal, JSON_TYPES.array)
 
 

@@ -42,6 +42,7 @@ import {
   INodeBehaveOptions,
   INodeCanvasBehaveOptions,
   INodeEventBehaveOptions,
+  IPreservedColumns,
   IRenderOptions,
   ISource,
   TAnyForce,
@@ -54,6 +55,7 @@ import {
   TUpdateKind,
   WIDGET_DEFAULTS,
   emptyArray,
+  emptyPreservedColumns,
 } from '../../tokens';
 import { DAGBehaviorModel, FacetedForceModel, GraphForcesModel } from '../behaviors';
 import { widget_serialization } from '../serializers/widget';
@@ -182,6 +184,11 @@ export class ForceGraphModel extends DOMWidgetModel {
   get graphData(): GraphData {
     const source = this.get('source');
     return source ? source.graphData : EMPTY_GRAPH_DATA;
+  }
+
+  get preservedColumns(): IPreservedColumns {
+    const source = this.get('source');
+    return source ? source.preservedColumns : emptyPreservedColumns;
   }
 
   get behaviors(): IBehave[] {
@@ -405,10 +412,30 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
 
   async redraw(): Promise<void> {
     await this._rendered.promise;
-    let { graphData } = this.model;
-    DEBUG && console.warn(`${EMOJI} updating...`, graphData);
     await this.postUpdate();
-    (this.graph as any).graphData(graphData);
+    const graph = this.graph as any;
+    if (!graph) {
+      console.warn(`${EMOJI} no graph to redraw`);
+      return;
+    }
+    graph.pauseAnimation();
+    const { preservedColumns } = this.model;
+    let graphData = this.model.graphData;
+    const oldGraphData = graph.graphData();
+    let needsFullRedraw = true;
+    if (
+      oldGraphData.nodes.length &&
+      (preservedColumns.nodes.length || preservedColumns.links.length)
+    ) {
+      const { source } = this;
+      graphData = source.mergePreserved(graphData, oldGraphData, preservedColumns);
+      needsFullRedraw = graphData != null;
+    }
+    if (needsFullRedraw) {
+      DEBUG && console.warn(`${EMOJI} updating...`, graphData);
+      graph.graphData(graphData);
+    }
+    graph.resumeAnimation();
   }
 
   wrapFunction = (fn: Function) => {
@@ -440,6 +467,13 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
 
     if (facetPromises.length) {
       await Promise.all(facetPromises);
+    }
+  }
+
+  protected async onGraphDataUpdateRequested(behavior: IBehave) {
+    const graph = this.graph as ForceGraphInstance;
+    if (graph && behavior.updateGraphData) {
+      await behavior.updateGraphData(graph.graphData());
     }
   }
 
@@ -659,6 +693,7 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
 
     for (const behavior of behaviors) {
       behavior.updateRequested.connect(this.postUpdate, this);
+      behavior.graphDataUpdateRequested.connect(this.onGraphDataUpdateRequested, this);
     }
 
     await this.postUpdate();

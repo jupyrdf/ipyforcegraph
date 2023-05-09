@@ -2,6 +2,7 @@
 2FA
 3d
 args
+backend
 BaseD3Force
 bool
 CenterForce
@@ -18,6 +19,8 @@ dataframe
 DataFrame
 dataframes
 DataFrameSource
+dep
+DodoSource
 doit
 DynamicValue
 env
@@ -69,6 +72,7 @@ numpy
 nunjucks
 PandasType
 PRs
+py
 PyData
 pypi
 PyPI
@@ -79,6 +83,7 @@ ReadTheDocs
 repr
 rgba
 ShapeBase
+sqlite3
 str
 TBD
 TODO

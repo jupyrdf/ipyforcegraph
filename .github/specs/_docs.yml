@@ -2,10 +2,10 @@ dependencies:
   - ansi2html
   - autodoc-traits
   - docutils >=0.19
+  - jupyterlite-core ==0.1.0
+  - jupyterlite-core-with-libarchive
   - myst-nb
-  - pkginfo
   - pydata-sphinx-theme
-  - python-libarchive-c
   - sphinx
   - sphinx-autobuild
   - sphinx-autodoc-typehints

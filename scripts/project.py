@@ -147,6 +147,11 @@ else:
 PY = ["python"]
 PYM = [*PY, "-m"]
 PIP = [*PYM, "pip"]
+PIP_CHECK_IGNORE = [
+    r"conda\.cli\.main_run",
+    r"No broken requirements found",
+    r"sphinx-rtd-theme.*docutils",
+]
 
 JLPM = ["jlpm"]
 JLPM_INSTALL = [*JLPM, "--prefer-offline"]
@@ -166,15 +171,11 @@ PY_GRAPH_CLASSES = ["ForceGraph", "ForceGraph3D"]
 # docs
 SPHINX_ARGS = json.loads(os.environ.get("SPHINX_ARGS", """["-W", "--keep-going"]"""))
 LITE_JSON = [*LITE.glob("*.json")]
+LOGO_SVG = DOCS / "_static/logo.svg"
 DOCS_BUILD = BUILD / "docs"
 DOCS_CONF = DOCS / "conf.py"
 DICTIONARY = DOCS / "dictionary.txt"
 ALL_SPELL = BUILD / "spell/ALL.fail"
-LITE_SPEC = [
-    "jupyterlite ==0.1.0b19",
-    "jupyterlite-core ==0.1.0b19",
-    "jupyterlite-pyodide-kernel ==0.0.5",
-]
 LITE_BUILD = BUILD / "lite"
 LITE_SHA256SUMS = LITE_BUILD / "SHA256SUMS"
 
@@ -204,6 +205,7 @@ EXAMPLE_PY = [*EXAMPLES.rglob("*.py")]
 EXAMPLE_INDEX = EXAMPLES / "_index.ipynb"
 EXAMPLE_REQS = EXAMPLES / "requirements.txt"
 BUILD_NBHTML = BUILD / "nbsmoke"
+LITE_LOGO = EXAMPLES / "datasets/logo.svg"
 
 # mostly linting
 ALL_PY_SRC = [*PY_SRC.rglob("*.py")]
@@ -252,7 +254,7 @@ REPORTS = BUILD / "reports"
 
 HTMLCOV = REPORTS / "htmlcov"
 HTMLCOV_INDEX = HTMLCOV / "index.html"
-PYTEST_COV_THRESHOLD = 88
+PYTEST_COV_THRESHOLD = 90 if (WIN and PY_MAJOR == "3.8") else 91
 PYTEST_HTML = REPORTS / "pytest.html"
 PYTEST_XUNIT = REPORTS / "pytest.xunit.xml"
 PYTEST_JSON = REPORTS / f"report-{PY_MAJOR}-{PLATFORM}.json"

@@ -156,9 +156,10 @@ class WidgetSource(DataFrameSource):
             "py_class": klass.__name__,
         }
         graph_data["links"][trait_id] = {
+            "id": trait_id,
+            "type": "has_trait",
             "source": widget_id,
             "target": trait_id,
-            "type": "has_trait",
         }
         if (
             isinstance(
@@ -176,20 +177,24 @@ class WidgetSource(DataFrameSource):
         elif isinstance(trait_value, T.HasTraits):
             if not self.should_discover(trait_value, graph_data):
                 return
-            graph_data["links"][f"{trait_id}-value"] = {
+            link_id = f"{trait_id}-value"
+            graph_data["links"][link_id] = {
+                "id": link_id,
+                "type": "has_trait_value",
                 "source": trait_id,
                 "target": f"{id(trait_value)}",
-                "type": "has_trait_value",
             }
             self.find_widget_graph_data(trait_value, graph_data)
         elif isinstance(trait_value, dict):
             for key, trait_child in trait_value.items():
                 if not self.should_discover(trait_value, graph_data):
                     continue
-                graph_data["links"][f"{trait_id}-value-{key}"] = {
+                link_id = f"{trait_id}-value-{key}"
+                graph_data["links"][link_id] = {
+                    "id": link_id,
+                    "type": "has_trait_value",
                     "source": trait_id,
                     "target": f"{id(trait_child)}",
-                    "type": "has_trait_value",
                     "key": f"{key}",
                 }
                 self.find_widget_graph_data(trait_child, graph_data)
@@ -197,10 +202,12 @@ class WidgetSource(DataFrameSource):
             for i, trait_child in enumerate(trait_value):
                 if not self.should_discover(trait_child, graph_data):
                     continue
-                graph_data["links"][f"{trait_id}-value-{i}"] = {
+                link_id = f"{trait_id}-value-{i}"
+                graph_data["links"][link_id] = {
+                    "id": link_id,
+                    "type": "has_trait_value",
                     "source": trait_id,
                     "target": f"{id(trait_child)}",
-                    "type": "has_trait_value",
                     "index": i,
                 }
                 self.find_widget_graph_data(trait_child, graph_data)
@@ -234,6 +241,8 @@ class WidgetSource(DataFrameSource):
                         and target_id in graph_data["nodes"]
                     ):
                         graph_data["links"][link_id] = {
+                            "id": link_id,
+                            "type": "trait_notifier",
                             "source": source_id,
                             "target": target_id,
                         }

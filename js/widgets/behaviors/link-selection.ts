@@ -2,6 +2,8 @@
  * Copyright (c) 2023 ipyforcegraph contributors.
  * Distributed under the terms of the Modified BSD License.
  */
+import { GraphData } from 'force-graph';
+
 import { IBackboneModelOptions } from '@jupyter-widgets/base';
 
 import {
@@ -9,6 +11,7 @@ import {
   DEFAULT_CURVATURES,
   DEFAULT_LINE_DASHES,
   DEFAULT_WIDTHS,
+  EUpdate,
   IBehave,
   IExtraColumns,
   ILinkBehaveOptions,
@@ -47,7 +50,22 @@ export class LinkSelectionModel extends BehaviorModel implements IBehave {
   }
 
   onValueChange(change?: any) {
-    this._updateRequested.emit(void 0);
+    this._updateRequested.emit(EUpdate.Render);
+    if (this.columnName) {
+      this._graphDataUpdateRequested.emit(void 0);
+    }
+  }
+
+  async updateGraphData(graphData: GraphData): Promise<void> {
+    const { selected, columnName } = this;
+    if (!columnName) {
+      return;
+    }
+    const { links } = graphData;
+    const linkCount = links.length;
+    for (let i = 0; i < linkCount; i++) {
+      links[i][columnName] = selected.has(i);
+    }
   }
 
   get selected(): TSelectedSet {

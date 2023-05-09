@@ -30,7 +30,7 @@ export class CenterForceModel extends FacetedForceModel implements IBehave, IFor
   }
 
   get force(): TAnyForce {
-    const { x, y, z } = this._facets;
+    const { x, y, z } = this._nodeFacets;
 
     let force = this._force;
     force = x == null ? force : force.x(x());

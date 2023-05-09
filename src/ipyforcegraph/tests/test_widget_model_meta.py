@@ -10,6 +10,7 @@ import pytest
 from ipyforcegraph import behaviors, graphs
 from ipyforcegraph._base import ForceBase
 from ipyforcegraph.behaviors import forces, shapes
+from ipyforcegraph.sources.dodo import DodoSource
 from ipyforcegraph.sources.widget import WidgetSource
 
 TSubclassSet = Set[Type[W.Widget]]
@@ -19,7 +20,7 @@ TSubclassData = Dict[Type[W.Widget], str]
 SUBCLASS_BASES = {ForceBase}
 
 #: these reuse the upstream data model
-PURE_PY_SUBCLASSES = {WidgetSource}
+PURE_PY_SUBCLASSES = {WidgetSource, DodoSource}
 
 
 @pytest.fixture
@@ -29,7 +30,7 @@ def widget_subclasses() -> TSubclassSet:
     assert graphs
     assert shapes
 
-    subclasses = SUBCLASS_BASES
+    subclasses: Set[Type] = SUBCLASS_BASES
     subclass_count = -1
 
     while len(subclasses) != subclass_count:

@@ -79,7 +79,9 @@ export type TUpdateKind = void | number;
 export interface IBehave extends WidgetModel {
   rank: number;
   updateRequested: ISignal<IBehave, TUpdateKind>;
+  graphDataUpdateRequested: ISignal<IBehave, void>;
   extraColumns?: IExtraColumns;
+  updateGraphData?(graphData: GraphData): Promise<void>;
   // link
   getLinkColor?(options: ILinkBehaveOptions): string | null;
   getLinkCurvature?(options: ILinkBehaveOptions): number | null;
@@ -186,8 +188,18 @@ export interface IHasGraph<T = any> extends DOMWidgetView {
   model: ForceGraphModel;
 }
 
+export interface IPreservedColumns {
+  nodes: string[];
+  links: string[];
+}
+
 export interface ISource {
   graphData: GraphData;
+  mergePreserved(
+    graphData: GraphData,
+    oldGraphData: GraphData,
+    preservedColumns: IPreservedColumns
+  ): GraphData | null;
   dataUpdated: ISignal<ISource, void>;
 }
 
@@ -209,6 +221,10 @@ export interface IForce {
 export type TSelectedSet = Set<string | number>;
 
 export const emptyArray = Object.freeze([]);
+export const emptyPreservedColumns = Object.freeze({
+  nodes: emptyArray,
+  links: emptyArray,
+}) as IPreservedColumns;
 
 export interface IDynamicCallable {
   (...args: any): string;
@@ -245,4 +261,9 @@ export enum ECoerce {
 export interface IExtraColumns {
   nodes: string[];
   links: string[];
+}
+
+export enum EMark {
+  node = 'node',
+  link = 'link',
 }

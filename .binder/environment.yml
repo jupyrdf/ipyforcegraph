@@ -2,17 +2,21 @@ channels:
   - conda-forge
   - nodefaults
 dependencies:
-  - bqplot >=0.12.20
+  - bqplot
   - doit-with-toml
   - flit >=3.7.1,<4
   - git
   - importnb
-  - ipywidgets >=8.0.4,<9
+  - ipydatagrid
+  - ipylab >=0.7.0
+  - ipywidgets >=8.0.0
   - jupyter_server >=2.2.1
   - jupyterlab >=3,<4
-  - jupyterlab >=3.6.1,<3.7
+  - jupyterlab >=3.6.2,<3.7
   - jupyterlab-deck
   - jupyterlab-link-share
+  - jupyterlite-pyodide-kernel ==0.0.8
+  - lxml
   - networkx
   - nodejs >=18,<19
   - numcodecs
@@ -20,8 +24,14 @@ dependencies:
   - packaging >=22.0
   - pandas
   - pip
+  - pytest-asyncio
+  - pytest-cov
+  - pytest-html
+  - pytest-json-report
+  - pytest-xdist
   - python >=3.11,<3.12
   - python >=3.8,<3.12
+  - scour
   - stringcase
   - tomli
   - traittypes

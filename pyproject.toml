@@ -13,27 +13,26 @@ authors = [
     {name = "ipyforcegraph contributors", email = "jupyrdf@users.noreply.github.com"},
 ]
 requires-python = ">=3.8"
+classifiers = [
+  "Framework :: Jupyter",
+  "Framework :: Jupyter :: JupyterLab",
+  "Framework :: Jupyter :: JupyterLab :: 3",
+  "Framework :: Jupyter :: JupyterLab :: Extensions",
+  "Framework :: Jupyter :: JupyterLab :: Extensions :: Prebuilt",
+  "Intended Audience :: Developers",
+  "Intended Audience :: Science/Research",
+  "License :: OSI Approved :: BSD License",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+]
 dependencies = [
   "ipywidgets<9,>=8.0.4",
   "numcodecs",
   "pandas",
   "traittypes",
-]
-classifiers = [
-    "Framework :: Jupyter :: JupyterLab :: 3",
-    "Framework :: Jupyter :: JupyterLab :: Extensions :: Prebuilt",
-    "Framework :: Jupyter :: JupyterLab :: Extensions",
-    "Framework :: Jupyter :: JupyterLab",
-    "Framework :: Jupyter",
-    "Intended Audience :: Developers",
-    "Intended Audience :: Science/Research",
-    "License :: OSI Approved :: BSD License",
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
 ]
 [project.urls]
 "Bug Tracker" = "https://github.com/jupyrdf/ipyforcegraph/issues"
@@ -43,62 +42,6 @@ classifiers = [
 "NPM" = "https://www.npmjs.com/package/@jupyrdf/jupyter-forcegraph"
 "PyPI" = "https://pypi.org/project/ipyforcegraph"
 "Source" = "https://github.com/jupyrdf/ipyforcegraph"
-
-
-[tool.coverage.run]
-data_file = "build/reports/.coverage"
-
-[tool.coverage.html]
-show_contexts = true
-
-[tool.coverage.paths]
-ipyforcegraph = [
-    "src/ipyforcegraph",
-    "*/src/ipyforcegraph"
-]
-
-
-[tool.doit]
-backend = "sqlite3"
-verbosity = 2
-par_type = "thread"
-default_tasks = ["binder"]
-
-[tool.doit.commands.list]
-status = true
-subtasks = true
-
-[tool.flit.sdist]
-include = ["src/_d"]
-
-[tool.flit.external-data]
-directory = "src/_d"
-
-[tool.mypy]
-cache_dir = "build/.mypy_cache"
-sqlite_cache = true
-python_version = "3.8"
-# settings
-allow_redefinition = true
-check_untyped_defs = true
-disallow_untyped_defs = true
-no_implicit_optional = true
-show_error_codes = true
-warn_return_any = true
-warn_unused_ignores = true
-# broken by ipywidgets
-# disallow_any_unimported = true
-
-[[tool.mypy.overrides]]
-module = [
-    "importlib.metadata",
-    "ipywidgets",
-    "numcodecs",
-    "numpy",
-    "pandas",
-    "traittypes",
-]
-ignore_missing_imports = true
 
 [tool.pytest.ini_options]
 junit_family = "xunit2"
@@ -129,6 +72,61 @@ filterwarnings = [
     "ignore::DeprecationWarning:traittypes",
     "ignore:.metadata:DeprecationWarning:ipywidgets",
 ]
+
+[tool.coverage.run]
+data_file = "build/reports/.coverage"
+
+[tool.coverage.html]
+show_contexts = true
+
+[tool.coverage.paths]
+ipyforcegraph = [
+    "src/ipyforcegraph",
+    "*/src/ipyforcegraph"
+]
+
+[tool.mypy]
+cache_dir = "build/.mypy_cache"
+sqlite_cache = true
+python_version = "3.8"
+# settings
+allow_redefinition = true
+check_untyped_defs = true
+disallow_untyped_defs = true
+no_implicit_optional = true
+show_error_codes = true
+warn_return_any = true
+warn_unused_ignores = true
+# broken by ipywidgets
+# disallow_any_unimported = true
+
+[[tool.mypy.overrides]]
+module = [
+    "importlib.metadata",
+    "ipywidgets",
+    "numcodecs",
+    "numpy",
+    "pandas",
+    "traittypes",
+    "doit.*",
+]
+ignore_missing_imports = true
+
+[tool.doit]
+backend = "sqlite3"
+verbosity = 2
+par_type = "thread"
+default_tasks = ["binder"]
+
+[tool.doit.commands.list]
+status = true
+subtasks = true
+
+[tool.flit.sdist]
+include = ["src/_d"]
+
+[tool.flit.external-data]
+directory = "src/_d"
 
 [tool.ruff]
 select = [

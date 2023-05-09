@@ -20,12 +20,9 @@ export class RectangleShapeModel extends GeometryShapeModel {
 
   protected _drawCanvasPath(options: IRectangleOptions & IBaseOptions): void {
     const { width, height, context, x, y, scale_on_zoom, globalScale } = options;
-    context.rect(
-      x,
-      y,
-      scale_on_zoom ? width / globalScale : width,
-      scale_on_zoom ? height / globalScale : height
-    );
+    const finalWidth = scale_on_zoom ? width / globalScale : width;
+    const finalHeight = scale_on_zoom ? height / globalScale : height;
+    context.rect(x - finalWidth / 2, y - finalHeight / 2, finalWidth, finalHeight);
   }
 
   protected _drawThreeGeometry(
