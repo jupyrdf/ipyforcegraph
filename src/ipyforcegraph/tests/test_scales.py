@@ -11,10 +11,10 @@ import traitlets as T
 import ipyforcegraph.behaviors.scales as S
 
 
-@pytest.mark.parametrize("name", [e.name for e in S.ContinuousColor.SCALE])
+@pytest.mark.parametrize("name", [e.name for e in S.ContinuousColor.Scheme])
 def test_good_continuous_scale(name: str) -> None:
     """Verify the known continuous scales are accepted."""
-    scheme = S.ContinuousColor.SCALE[name]
+    scheme = S.ContinuousColor.Scheme[name]
     scale = S.ContinuousColor("value", scheme=scheme)
     scale.scheme = scheme.value
 
@@ -27,10 +27,10 @@ def test_bad_continuous_scale(scheme: Any) -> None:
         scale.scheme = scheme
 
 
-@pytest.mark.parametrize("name", [e.name for e in S.OrdinalColor.SCALE])
+@pytest.mark.parametrize("name", [e.name for e in S.OrdinalColor.Scheme])
 def test_good_ordinal_scale(name: str) -> None:
     """Verify the known ordinal scales are accepted."""
-    scheme = S.OrdinalColor.SCALE[name]
+    scheme = S.OrdinalColor.Scheme[name]
     scale = S.OrdinalColor("value", scheme=scheme)
     scale.scheme = scheme.value
 

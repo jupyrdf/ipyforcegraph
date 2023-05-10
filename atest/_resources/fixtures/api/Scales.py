@@ -4,7 +4,7 @@ from ipyforcegraph.behaviors import NodeShapes
 
 ns = NodeShapes()
 fg = WIDGET_CLASS(behaviors=[ns])
-scale = SCALE_CLASS("id", scheme=SCALE_CLASS.SCALE.SCHEME)
+scale = SCALE_CLASS("id", scheme=SCALE_CLASS.Scheme.SCHEME)
 display(fg)
 fg.source.nodes = [{"id": 0}, {"id": 1}]
 fg.source.links = [{"source": 0, "target": 1}]

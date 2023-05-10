@@ -20,7 +20,7 @@ from ._base import Column
 class ContinuousColor(Column):
     """A column which will interpolate a numeric column on a color scale."""
 
-    class SCALE(enum.Enum):
+    class Scheme(enum.Enum):
         """Continuous color schemes exported by ``d3-scale-chromatic``"""
 
         blues = "Blues"
@@ -65,7 +65,7 @@ class ContinuousColor(Column):
     _model_name: str = T.Unicode("ContinuousColorModel").tag(sync=True)
 
     scheme: str = T.Enum(
-        values=[*[m.value for m in SCALE], *SCALE],
+        values=[*[m.value for m in Scheme], *Scheme],
         help="name of a continuous ``d3-scale-chromatic`` scheme",
         allow_none=True,
     ).tag(sync=True)
@@ -77,13 +77,13 @@ class ContinuousColor(Column):
 
     @T.validate("scheme")
     def _validate_scheme(self, proposal: T.Bunch) -> Any:
-        return validate_enum(proposal, ContinuousColor.SCALE)
+        return validate_enum(proposal, ContinuousColor.Scheme)
 
 
 class OrdinalColor(Column):
     """A column which will encode a column on an discrete color scale."""
 
-    class SCALE(enum.Enum):
+    class Scheme(enum.Enum):
         """Ordinal color schemes exported by ``d3-scale-chromatic``"""
 
         accent = "Accent"
@@ -100,7 +100,7 @@ class OrdinalColor(Column):
     _model_name: str = T.Unicode("OrdinalColorModel").tag(sync=True)
 
     scheme: str = T.Enum(
-        values=[*[m.value for m in SCALE], *SCALE],
+        values=[*[m.value for m in Scheme], *Scheme],
         help="name of an ordinal ``d3-scale-chromatic`` scheme",
         allow_none=True,
     ).tag(sync=True)
@@ -116,4 +116,4 @@ class OrdinalColor(Column):
 
     @T.validate("scheme")
     def _validate_scheme(self, proposal: T.Bunch) -> Any:
-        return validate_enum(proposal, OrdinalColor.SCALE)
+        return validate_enum(proposal, OrdinalColor.Scheme)
