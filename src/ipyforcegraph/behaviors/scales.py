@@ -13,106 +13,107 @@ from typing import Any, Tuple
 import ipywidgets as W
 import traitlets as T
 
+from ..trait_utils import validate_enum
 from ._base import Column
 
 
-class Chromatic(enum.Enum):
-    """
-    Named color schemes exported by `d3-scale-chromatic <https://github.com/d3/d3-scale-chromatic>`_.
-    """
+class ContinuousColor(Column):
+    """A column which will interpolate a numeric column on a color scale."""
 
-    accent = "Accent"
-    blues = "Blues"
-    brbg = "BrBG"
-    bugn = "BuGn"
-    bupu = "BuPu"
-    category10 = "Category10"
-    cividis = "Cividis"
-    cool = "Cool"
-    cubehelixdefault = "CubehelixDefault"
-    dark2 = "Dark2"
-    gnbu = "GnBu"
-    greens = "Greens"
-    greys = "Greys"
-    inferno = "Inferno"
-    magma = "Magma"
-    oranges = "Oranges"
-    orrd = "OrRd"
-    paired = "Paired"
-    pastel1 = "Pastel1"
-    pastel2 = "Pastel2"
-    piyg = "PiYG"
-    plasma = "Plasma"
-    prgn = "PRGn"
-    pubu = "PuBu"
-    pubugn = "PuBuGn"
-    puor = "PuOr"
-    purd = "PuRd"
-    purples = "Purples"
-    rainbow = "Rainbow"
-    rdbu = "RdBu"
-    rdgy = "RdGy"
-    rdpu = "RdPu"
-    rdylbu = "RdYlBu"
-    rdylgn = "RdYlGn"
-    reds = "Reds"
-    set1 = "Set1"
-    set2 = "Set2"
-    set3 = "Set3"
-    sinebow = "Sinebow"
-    spectral = "Spectral"
-    tableau10 = "Tableau10"
-    turbo = "Turbo"
-    viridis = "Viridis"
-    warm = "Warm"
-    ylgn = "YlGn"
-    ylgnbu = "YlGnBu"
-    ylorbr = "YlOrBr"
-    ylorrd = "YlOrRd"
+    class SCALE(enum.Enum):
+        """Continuous color schemes exported by ``d3-scale-chromatic``"""
 
+        blues = "Blues"
+        brbg = "BrBG"
+        bugn = "BuGn"
+        bupu = "BuPu"
+        cividis = "Cividis"
+        cool = "Cool"
+        cubehelixdefault = "CubehelixDefault"
+        gnbu = "GnBu"
+        greens = "Greens"
+        greys = "Greys"
+        inferno = "Inferno"
+        magma = "Magma"
+        oranges = "Oranges"
+        orrd = "OrRd"
+        piyg = "PiYG"
+        plasma = "Plasma"
+        prgn = "PRGn"
+        pubu = "PuBu"
+        pubugn = "PuBuGn"
+        puor = "PuOr"
+        purd = "PuRd"
+        purples = "Purples"
+        rainbow = "Rainbow"
+        rdbu = "RdBu"
+        rdgy = "RdGy"
+        rdpu = "RdPu"
+        rdylbu = "RdYlBu"
+        rdylgn = "RdYlGn"
+        reds = "Reds"
+        sinebow = "Sinebow"
+        spectral = "Spectral"
+        turbo = "Turbo"
+        viridis = "Viridis"
+        warm = "Warm"
+        ylgn = "YlGn"
+        ylgnbu = "YlGnBu"
+        ylorbr = "YlOrBr"
+        ylorrd = "YlOrRd"
 
-class ColorScaleColumn(Column):
-    """A column which will encode a column as a color scale."""
-
-    _model_name: str = T.Unicode("ColorScaleColumnModel").tag(sync=True)
+    _model_name: str = T.Unicode("ContinuousColorModel").tag(sync=True)
 
     scheme: str = T.Enum(
-        values=[*[m.value for m in Chromatic], *Chromatic],
-        help="name of a ``d3-scale-chromatic`` scheme",
+        values=[*[m.value for m in SCALE], *SCALE],
+        help="name of a continuous ``d3-scale-chromatic`` scheme",
         allow_none=True,
     ).tag(sync=True)
 
-    interpolate: bool = T.Bool(
-        True,
-        help=(
-            "whether ``domain`` should be interpreted as ``[min, max]``, or as "
-            "ordinal values"
-        ),
-    ).tag(sync=True)
-
-    domain: Tuple[Any] = T.Tuple(
+    domain: Tuple[float, float] = W.TypedTuple(
         (0.0, 1.0),
-        help=(
-            "the ``[min, max]`` for ``interpolate`` scales, or the values mapped "
-            "to ordinal colors in the range"
-        ),
-    ).tag(sync=True)
-
-    range: Tuple[str] = W.TypedTuple(
-        T.Unicode(), help=("the colors available in a scheme")
-    ).tag(sync=True)
-
-    sub_scheme: int = T.Int(
-        None, help="the subscheme for non-interpolated colors", allow_none=True
+        help=("the ``[min, max]`` to map to the scale's colors"),
     ).tag(sync=True)
 
     @T.validate("scheme")
     def _validate_scheme(self, proposal: T.Bunch) -> Any:
-        scheme = proposal.value
-        if isinstance(scheme, Chromatic):
-            return scheme.value
+        return validate_enum(proposal, ContinuousColor.SCALE)
 
-        if any(scheme == m.value for m in Chromatic):
-            return scheme
 
-        raise T.TraitError(f"""'{scheme}' is not one of {", ".join([*Chromatic])}""")
+class OrdinalColor(Column):
+    """A column which will encode a column on an discrete color scale."""
+
+    class SCALE(enum.Enum):
+        """Ordinal color schemes exported by ``d3-scale-chromatic``"""
+
+        accent = "Accent"
+        category10 = "Category10"
+        dark2 = "Dark2"
+        paired = "Paired"
+        pastel1 = "Pastel1"
+        pastel2 = "Pastel2"
+        set1 = "Set1"
+        set2 = "Set2"
+        set3 = "Set3"
+        tableau10 = "Tableau10"
+
+    _model_name: str = T.Unicode("OrdinalColorModel").tag(sync=True)
+
+    scheme: str = T.Enum(
+        values=[*[m.value for m in SCALE], *SCALE],
+        help="name of an ordinal ``d3-scale-chromatic`` scheme",
+        allow_none=True,
+    ).tag(sync=True)
+
+    domain: Tuple[Any] = T.Tuple(
+        (0.0, 1.0),
+        help=("values mapped to ordinal colors in the range"),
+    ).tag(sync=True)
+
+    range: Tuple[str] = W.TypedTuple(
+        T.Unicode(), help="the colors available in a scheme (overloaded by ``scheme``)"
+    ).tag(sync=True)
+
+    @T.validate("scheme")
+    def _validate_scheme(self, proposal: T.Bunch) -> Any:
+        return validate_enum(proposal, OrdinalColor.SCALE)
