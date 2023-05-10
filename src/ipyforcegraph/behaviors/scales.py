@@ -1,26 +1,38 @@
-"""Column-wise scales for ``ipyforcegraph``."""
+"""Column-wise scales for ``ipyforcegraph``.
+
+Some documentation provided by:
+- `d3-scale-chromatic <https://github.com/d3/d3-scale-chromatic>`_
+"""
 
 # Copyright (c) 2023 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.
 
 import enum
-from typing import Any
+from typing import Any, Tuple
 
+import ipywidgets as W
 import traitlets as T
 
 from ._base import Column
 
 
 class Chromatic(enum.Enum):
-    """Color schemes exported by ``d3-scale-chromatic``"""
+    """
+    Named color schemes exported by `d3-scale-chromatic`
 
+    .. _d3-scale-chromatic: https://github.com/d3/d3-scale-chromatic
+    """
+
+    accent = "Accent"
     blues = "Blues"
     brbg = "BrBG"
     bugn = "BuGn"
     bupu = "BuPu"
+    category10 = "Category10"
     cividis = "Cividis"
     cool = "Cool"
     cubehelixdefault = "CubehelixDefault"
+    dark2 = "Dark2"
     gnbu = "GnBu"
     greens = "Greens"
     greys = "Greys"
@@ -28,6 +40,9 @@ class Chromatic(enum.Enum):
     magma = "Magma"
     oranges = "Oranges"
     orrd = "OrRd"
+    paired = "Paired"
+    pastel1 = "Pastel1"
+    pastel2 = "Pastel2"
     piyg = "PiYG"
     plasma = "Plasma"
     prgn = "PRGn"
@@ -43,8 +58,12 @@ class Chromatic(enum.Enum):
     rdylbu = "RdYlBu"
     rdylgn = "RdYlGn"
     reds = "Reds"
+    set1 = "Set1"
+    set2 = "Set2"
+    set3 = "Set3"
     sinebow = "Sinebow"
     spectral = "Spectral"
+    tableau10 = "Tableau10"
     turbo = "Turbo"
     viridis = "Viridis"
     warm = "Warm"
@@ -65,15 +84,32 @@ class ColorScaleColumn(Column):
     scheme: str = T.Enum(
         values=[*[m.value for m in Chromatic], *Chromatic],
         help="name of a ``d3-scale-chromatic`` scheme",
+        allow_none=True,
     ).tag(sync=True)
 
-    min: float = T.Float(0.0, help="the minimum value of the domain of a scale").tag(
-        sync=True
-    )
+    interpolate: bool = T.Bool(
+        True,
+        help=(
+            "whether ``domain`` should be interpreted as ``[min, max]``, or as "
+            "ordinal values"
+        ),
+    ).tag(sync=True)
 
-    max: float = T.Float(1.0, help="the maximum value of the domain of a scale").tag(
-        sync=True
-    )
+    domain: Tuple[Any] = T.Tuple(
+        (0.0, 1.0),
+        help=(
+            "the ``[min, max]`` for ``interpolate``d scales, or the values mapped "
+            "to ordinal colors in the range"
+        ),
+    ).tag(sync=True)
+
+    range: Tuple[str] = W.TypedTuple(
+        T.Unicode(), help=("the colors available in a scheme")
+    ).tag(sync=True)
+
+    sub_scheme: int = T.Int(
+        None, help="the subscheme for non-interpolated colors", allow_none=True
+    ).tag(sync=True)
 
     @T.validate("scheme")
     def _validate_scheme(self, proposal: T.Bunch) -> Any:

@@ -19,7 +19,7 @@ def test_good_scale(name: str) -> None:
     scale.scheme = scheme.value
 
 
-@pytest.mark.parametrize("scheme", [0, "false", None])
+@pytest.mark.parametrize("scheme", [0, "false"])
 def test_bad_scale(scheme: Any) -> None:
     """Verify rando scales are caught."""
     scale = S.ColorScaleColumn("value", scheme=S.Chromatic.blues)
