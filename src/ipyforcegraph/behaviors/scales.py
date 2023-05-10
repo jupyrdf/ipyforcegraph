@@ -18,9 +18,7 @@ from ._base import Column
 
 class Chromatic(enum.Enum):
     """
-    Named color schemes exported by `d3-scale-chromatic`
-
-    .. _d3-scale-chromatic: https://github.com/d3/d3-scale-chromatic
+    Named color schemes exported by `d3-scale-chromatic <https://github.com/d3/d3-scale-chromatic>`_.
     """
 
     accent = "Accent"
@@ -74,10 +72,7 @@ class Chromatic(enum.Enum):
 
 
 class ColorScaleColumn(Column):
-    """A column which will encode a numeric column as a color scale.
-
-    Powered by https://github.com/d3/d3-scale-chromatic
-    """
+    """A column which will encode a column as a color scale."""
 
     _model_name: str = T.Unicode("ColorScaleColumnModel").tag(sync=True)
 
@@ -98,7 +93,7 @@ class ColorScaleColumn(Column):
     domain: Tuple[Any] = T.Tuple(
         (0.0, 1.0),
         help=(
-            "the ``[min, max]`` for ``interpolate``d scales, or the values mapped "
+            "the ``[min, max]`` for ``interpolate`` scales, or the values mapped "
             "to ordinal colors in the range"
         ),
     ).tag(sync=True)
@@ -120,4 +115,4 @@ class ColorScaleColumn(Column):
         if any(scheme == m.value for m in Chromatic):
             return scheme
 
-        raise T.TraitError(f"""{scheme} is not one of {", ".join([*Chromatic])}""")
+        raise T.TraitError(f"""'{scheme}' is not one of {", ".join([*Chromatic])}""")
