@@ -247,7 +247,7 @@ https://conda.anaconda.org/conda-forge/noarch/livereload-2.6.3-pyh9f0ad1d_0.tar.
 https://conda.anaconda.org/conda-forge/osx-64/lxml-4.9.2-py311h9f2bb26_0.conda#b7ffe2b1cf4647d84fa841b272dd25cd
 https://conda.anaconda.org/conda-forge/noarch/markdown-it-py-2.2.0-pyhd8ed1ab_0.conda#b2928a6c6d52d7e3562b4a59c3214e3a
 https://conda.anaconda.org/conda-forge/noarch/matplotlib-inline-0.1.6-pyhd8ed1ab_0.tar.bz2#b21613793fcc81d944c76c9f2864a7de
-https://conda.anaconda.org/conda-forge/osx-64/mypy-1.2.0-py311h5547dcb_0.conda#a66c7f5a8b07ecfeca9900a8f15599fc
+https://conda.anaconda.org/conda-forge/osx-64/mypy-1.3.0-py311h2725bcf_0.conda#6fec4a3d2e20813fd64547c45085485f
 https://conda.anaconda.org/conda-forge/noarch/outcome-1.2.0-pyhd8ed1ab_0.tar.bz2#3dbb9ece72652131f12d66e889da7c0a
 https://conda.anaconda.org/conda-forge/noarch/pexpect-4.8.0-pyh1a96a4e_2.tar.bz2#330448ce4403cc74990ac07c555942a1
 https://conda.anaconda.org/conda-forge/noarch/pip-23.1.2-pyhd8ed1ab_0.conda#7288da0d36821349cf1126e8670292df
@@ -285,7 +285,7 @@ https://conda.anaconda.org/conda-forge/noarch/pytest-7.3.1-pyhd8ed1ab_0.conda#54
 https://conda.anaconda.org/conda-forge/noarch/rich-13.3.5-pyhd8ed1ab_0.conda#2e40a02ad28e34f26cee2a72042843db
 https://conda.anaconda.org/conda-forge/noarch/robotframework-pabot-2.15.0-pyhd8ed1ab_0.conda#02e7912139fb64828d18d07c43dcbad0
 https://conda.anaconda.org/conda-forge/noarch/robotframework-robocop-3.1.1-pyhd8ed1ab_0.conda#085598f9bc7287ee92ac0fa6ecfcf522
-https://conda.anaconda.org/conda-forge/osx-64/sqlalchemy-2.0.12-py311h2725bcf_0.conda#5983d014d8dee4dc4e8cd5a3c8ab3b0d
+https://conda.anaconda.org/conda-forge/osx-64/sqlalchemy-2.0.13-py311h2725bcf_0.conda#98db22bb51d540494d300186e6bfb272
 https://conda.anaconda.org/conda-forge/noarch/stack_data-0.6.2-pyhd8ed1ab_0.conda#e7df0fdd404616638df5ece6e69ba7af
 https://conda.anaconda.org/conda-forge/osx-64/trio-0.22.0-py311h6eed73b_1.tar.bz2#71a739c4b0b1e17cfd27cfdf828d52a8
 https://conda.anaconda.org/conda-forge/noarch/wcwidth-0.2.6-pyhd8ed1ab_0.conda#078979d33523cb477bd1916ce41aacc9
