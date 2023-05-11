@@ -53,7 +53,7 @@
     "d3-scale": "^4.0.2",
     "d3-scale-chromatic": "^3.0.0",
     "force-graph": "~1.43.1",
-    "nunjucks": "^3.2.3",
+    "nunjucks": "^3.2.4",
     "three-spritetext": "~1.8.1"
   },
   "devDependencies": {
