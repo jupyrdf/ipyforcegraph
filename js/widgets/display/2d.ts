@@ -470,13 +470,6 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
     }
   }
 
-  protected async onGraphDataUpdateRequested(behavior: IBehave) {
-    const graph = this.graph as ForceGraphInstance;
-    if (graph && behavior.updateGraphData) {
-      await behavior.updateGraphData(graph.graphData());
-    }
-  }
-
   protected async postUpdate(caller?: any, kind?: TUpdateKind): Promise<void> {
     await this.displayed;
     await this.rendered;
@@ -693,7 +686,6 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
 
     for (const behavior of behaviors) {
       behavior.updateRequested.connect(this.postUpdate, this);
-      behavior.graphDataUpdateRequested.connect(this.onGraphDataUpdateRequested, this);
     }
 
     await this.postUpdate();

@@ -3,7 +3,8 @@
 # Copyright (c) 2023 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.
 
-from typing import Any, Tuple
+import enum
+from typing import Any, Tuple, Type
 
 import traitlets as T
 
@@ -35,3 +36,15 @@ def coerce(proposal: T.Bunch, json_type: str) -> Any:
         value.coerce = json_type
 
     return value
+
+
+def validate_enum(proposal: T.Bunch, of_enum: Type[enum.Enum]) -> Any:
+    """Validate a proposal against an enum (or its names)."""
+    value = proposal.value
+    if isinstance(value, of_enum):
+        return value.value
+
+    if any(value == m.value for m in of_enum):
+        return value
+
+    raise T.TraitError(f"""'{value}' is not one of {", ".join([*of_enum])}""")

@@ -13,6 +13,7 @@ import {
   ECoerce,
   EUpdate,
   IBehave,
+  TCoercer,
   TUpdateKind,
   WIDGET_DEFAULTS,
 } from '../../tokens';
@@ -20,7 +21,6 @@ import { functor, getCoercer, noop } from '../../utils';
 
 export class BehaviorModel extends WidgetModel implements IBehave {
   protected _updateRequested: Signal<IBehave, TUpdateKind>;
-  protected _graphDataUpdateRequested: Signal<IBehave, void>;
 
   defaults() {
     return { ...super.defaults(), ...WIDGET_DEFAULTS };
@@ -35,7 +35,6 @@ export class BehaviorModel extends WidgetModel implements IBehave {
     super.initialize(attributes, options);
     this.on('change:rank', this.onRankChange);
     this._updateRequested = new Signal(this);
-    this._graphDataUpdateRequested = new Signal(this);
   }
 
   onRankChange() {
@@ -44,10 +43,6 @@ export class BehaviorModel extends WidgetModel implements IBehave {
 
   get updateRequested(): ISignal<IBehave, TUpdateKind> {
     return this._updateRequested;
-  }
-
-  get graphDataUpdateRequested(): ISignal<IBehave, void> {
-    return this._graphDataUpdateRequested;
   }
 }
 
@@ -222,6 +217,13 @@ export class ColumnModel extends DynamicModel {
 
     const coercer = getCoercer(this.coerce);
 
+    const [_nodeHandler, _linkHandler] = await this._buildHandlers(value, coercer);
+
+    this._nodeHandler = _nodeHandler;
+    this._linkHandler = _linkHandler;
+  }
+
+  async _buildHandlers(value: any, coercer: TCoercer): Promise<Function[]> {
     function _nodeHandler(options: any) {
       return coercer(options.node ? options.node[value] : null);
     }
@@ -229,7 +231,7 @@ export class ColumnModel extends DynamicModel {
     function _linkHandler(options: any) {
       return coercer(options.link ? options.link[value] : null);
     }
-    this._nodeHandler = _nodeHandler;
-    this._linkHandler = _linkHandler;
+
+    return [_nodeHandler, _linkHandler];
   }
 }

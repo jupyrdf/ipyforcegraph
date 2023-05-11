@@ -15,7 +15,7 @@ from typing import Any, Dict, Optional
 import ipywidgets as W
 import traitlets as T
 
-from ..trait_utils import JSON_TYPES, coerce
+from ..trait_utils import JSON_TYPES, coerce, validate_enum
 from ._base import (
     BaseD3Force,
     Behavior,
@@ -450,11 +450,4 @@ class DAG(BaseD3Force):
 
     @T.validate("mode")
     def _validate_enum(self, proposal: T.Bunch) -> Any:
-        mode = proposal.value
-        if isinstance(mode, DAG.Mode):
-            return mode.value
-
-        if any(mode == m.value for m in DAG.Mode):
-            return mode
-
-        raise T.TraitError(f"{mode} is not one of {[*DAG.Mode]}")
+        return validate_enum(proposal, DAG.Mode)

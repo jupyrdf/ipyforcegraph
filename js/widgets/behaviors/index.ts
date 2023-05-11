@@ -16,3 +16,4 @@ export * from './node-selection';
 export * from './node-shape';
 export * from './node-tooltip';
 export * from './shapes';
+export * from './scales';

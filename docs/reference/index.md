@@ -10,6 +10,7 @@ widgets
 sources
 behaviors
 forces
+scales
 ```
 
 ## Bases

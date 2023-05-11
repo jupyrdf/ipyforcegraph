@@ -9,7 +9,7 @@
 #   - python >=3.11,<3.12
 
 @EXPLICIT
-https://conda.anaconda.org/conda-forge/win-64/ca-certificates-2022.12.7-h5b45459_0.conda#31de4d9887dc8eaed9e6230a5dfbb9d6
+https://conda.anaconda.org/conda-forge/win-64/ca-certificates-2023.5.7-h56e8100_0.conda#604212634bd8c4d6f20d44b946e8eedb
 https://conda.anaconda.org/conda-forge/win-64/libexpat-2.5.0-h63175ca_1.conda#636cc3cbbd2e28bcfd2f73b2044aac2c
 https://conda.anaconda.org/conda-forge/noarch/pybind11-abi-4-hd8ed1ab_3.tar.bz2#878f923dd6acc8aeb47a75da6c4098be
 https://conda.anaconda.org/conda-forge/win-64/python_abi-3.11-3_cp311.conda#fd1634ba85cfea9376e1fc02d6f592e9
@@ -22,7 +22,7 @@ https://conda.anaconda.org/conda-forge/win-64/bzip2-1.0.8-h8ffe710_4.tar.bz2#7c0
 https://conda.anaconda.org/conda-forge/win-64/fmt-9.1.0-h181d51b_0.tar.bz2#31a20cf261b2bd0a76d670db1b3e6fa1
 https://conda.anaconda.org/conda-forge/win-64/libffi-3.4.2-h8ffe710_5.tar.bz2#2c96d1b6915b408893f9472569dee135
 https://conda.anaconda.org/conda-forge/win-64/libiconv-1.17-h8ffe710_0.tar.bz2#050119977a86e4856f0416e2edcf81bb
-https://conda.anaconda.org/conda-forge/win-64/libsqlite-3.40.0-hcfcfb64_1.conda#2832b5d2aa943a96b5046cfab01d2462
+https://conda.anaconda.org/conda-forge/win-64/libsqlite-3.41.2-hcfcfb64_1.conda#aa000e5bc50d73577a62b9f8c996a8dd
 https://conda.anaconda.org/conda-forge/win-64/libzlib-1.2.13-hcfcfb64_4.tar.bz2#0cc5c5cc64ee1637f37f8540a175854c
 https://conda.anaconda.org/conda-forge/win-64/lz4-c-1.9.4-hcfcfb64_0.conda#e34720eb20a33fc3bfb8451dd837ab7a
 https://conda.anaconda.org/conda-forge/win-64/lzo-2.10-he774522_1000.tar.bz2#d5cf4b7eaa52316f135eed9e8548ad57
@@ -41,7 +41,7 @@ https://conda.anaconda.org/conda-forge/win-64/reproc-cpp-14.2.4-h63175ca_0.conda
 https://conda.anaconda.org/conda-forge/win-64/zstd-1.5.2-h12be248_6.conda#62826565682d013b3e2346aaf7bded0e
 https://conda.anaconda.org/conda-forge/noarch/appdirs-1.4.4-pyh9f0ad1d_0.tar.bz2#5f095bc6454094e96f146491fd03633b
 https://conda.anaconda.org/conda-forge/noarch/cachy-0.3.0-pyhd8ed1ab_1.tar.bz2#5dfee17f24e2dfd18d7392b48c9351e2
-https://conda.anaconda.org/conda-forge/noarch/certifi-2022.12.7-pyhd8ed1ab_0.conda#fb9addc3db06e56abe03e0e9f21a63e6
+https://conda.anaconda.org/conda-forge/noarch/certifi-2023.5.7-pyhd8ed1ab_0.conda#5d1b71c942b8421285934dad1d891ebc
 https://conda.anaconda.org/conda-forge/noarch/charset-normalizer-3.1.0-pyhd8ed1ab_0.conda#7fcff9f6f123696e940bda77bd4d6551
 https://conda.anaconda.org/conda-forge/noarch/cloudpickle-2.2.1-pyhd8ed1ab_0.conda#b325bfc4cff7d7f8a868f1f7ecc4ed16
 https://conda.anaconda.org/conda-forge/noarch/colorama-0.4.6-pyhd8ed1ab_0.tar.bz2#3faab06a954c2a04039983f2c4a50d99
@@ -84,7 +84,7 @@ https://conda.anaconda.org/conda-forge/noarch/jaraco.classes-3.2.3-pyhd8ed1ab_0.
 https://conda.anaconda.org/conda-forge/noarch/jinja2-3.1.2-pyhd8ed1ab_1.tar.bz2#c8490ed5c70966d232fdd389d0dbed37
 https://conda.anaconda.org/conda-forge/win-64/libmamba-1.3.1-h8a7d157_2.conda#f3dea6dd537d0b6dbb9a86e5ffbf74f5
 https://conda.anaconda.org/conda-forge/noarch/pysocks-1.7.1-pyh0701188_6.tar.bz2#56cd9fe388baac0e90c7149cfac95b60
-https://conda.anaconda.org/conda-forge/win-64/ruamel.yaml-0.17.22-py311ha68e1ae_0.conda#d2d57bb83a5996ad9a2d7438136e7181
+https://conda.anaconda.org/conda-forge/win-64/ruamel.yaml-0.17.24-py311ha68e1ae_0.conda#dbb8c2bdbacdb214c0b827ac9eaa504e
 https://conda.anaconda.org/conda-forge/noarch/typing-extensions-4.5.0-hd8ed1ab_0.conda#b3c594fde1a80a1fc3eb9cc4a5dfe392
 https://conda.anaconda.org/conda-forge/win-64/brotlipy-0.7.0-py311ha68e1ae_1005.tar.bz2#dd9604ece454103e7210110c6d343e37
 https://conda.anaconda.org/conda-forge/noarch/click-default-group-1.2.2-pyhd8ed1ab_1.tar.bz2#72a46ffc25701c173932fd55cf0965d3

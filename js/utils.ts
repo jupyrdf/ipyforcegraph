@@ -2,7 +2,7 @@
  * Copyright (c) 2023 ipyforcegraph contributors.
  * Distributed under the terms of the Modified BSD License.
  */
-import { DEBUG, ECoerce, EMOJI, FALSEY } from './tokens';
+import { DEBUG, ECoerce, EMOJI, FALSEY, TCoercer } from './tokens';
 
 export function noop(...args: any[]): null {
   return null;
@@ -48,7 +48,7 @@ export function coerceArray(value: string): any[] {
   return [];
 }
 
-export function getCoercer(coerce: ECoerce): (value: any) => any {
+export function getCoercer(coerce: ECoerce): TCoercer {
   switch (coerce) {
     case ECoerce.boolish:
       return coerceBoolish;
