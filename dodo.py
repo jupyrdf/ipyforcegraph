@@ -344,15 +344,22 @@ def task_build():
         ts_dep += [P.OK_PRETTIER]
         py_dep += [P.OK_LINT]
 
+    if P.TOTAL_COVERAGE:
+        ts_script = "build:ts:cov"
+    else:
+        ts_script = "build:ts"
+
     yield dict(
         name="ts",
+        uptodate=[config_changed({"TOTAL_COVERAGE": P.TOTAL_COVERAGE})],
         file_dep=ts_dep,
-        actions=[[*P.IN_ENV, *P.JLPM, "build:ts"]],
+        actions=[[*P.IN_ENV, *P.JLPM, ts_script]],
         targets=[P.TSBUILDINFO],
     )
 
     yield dict(
         name="ext",
+        uptodate=[config_changed({"TOTAL_COVERAGE": P.TOTAL_COVERAGE})],
         actions=[[*P.IN_ENV, *P.JLPM, "build:ext"]],
         file_dep=[P.TSBUILDINFO, *P.ALL_CSS],
         targets=[P.PY_PACKAGE_JSON],

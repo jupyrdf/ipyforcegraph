@@ -48,6 +48,7 @@ BUILDING_IN_CI = _get_boolish("BUILDING_IN_CI")
 IN_BINDER = _get_boolish("IN_BINDER")
 IN_RTD = _get_boolish("READTHEDOCS")
 PYTEST_ARGS = json.loads(os.environ.get("PYTEST_ARGS", "[]"))
+TOTAL_COVERAGE = _get_boolish("TOTAL_COVERAGE")
 
 # CI jank
 SKIP_CONDA_PREFLIGHT = _get_boolish("SKIP_CONDA_PREFLIGHT")
