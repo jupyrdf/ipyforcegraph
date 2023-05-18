@@ -15,6 +15,14 @@ import sys
 from pathlib import Path
 
 try:
+    from dotenv import load_dotenv
+
+    load_dotenv()
+except ImportError:
+    print("python-dotenv appears to not be installed: .env will be ignored")
+
+
+try:
     import tomllib
 except Exception:
     import tomli as tomllib
@@ -255,6 +263,8 @@ REPORTS = BUILD / "reports"
 
 HTMLCOV = REPORTS / "htmlcov"
 HTMLCOV_INDEX = HTMLCOV / "index.html"
+ROBOCOV = REPORTS / "robocov"
+NYC_REPORTS = REPORTS / "nyc"
 PYTEST_COV_THRESHOLD = 90 if (WIN and PY_MAJOR == "3.8") else 91
 PYTEST_HTML = REPORTS / "pytest.html"
 PYTEST_XUNIT = REPORTS / "pytest.xunit.xml"

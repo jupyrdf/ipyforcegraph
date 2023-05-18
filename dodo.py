@@ -510,8 +510,14 @@ def task_test():
             print(f"\n[{robot_out.relative_to(P.ROOT)}]")
             print(robot_out.read_text(**P.UTF8) or "<EMPTY>")
 
+    setup_tasks = []
+
+    if P.TOTAL_COVERAGE:
+        setup_tasks = [(U.clean_some, [P.ROBOCOV]), (create_folder, [P.ROBOCOV])]
+
     yield dict(
         name="atest",
+        uptodate=[config_changed({"TOTAL_COVERAGE": P.TOTAL_COVERAGE})],
         file_dep=[
             *P.ALL_PY_SRC,
             *P.ALL_ROBOT,
@@ -523,7 +529,7 @@ def task_test():
             *([] if P.TESTING_IN_CI else [P.OK_ROBOT_LINT, *P.OK_NBLINT.values()]),
         ],
         task_dep=["pytest"],
-        actions=[[*P.IN_ENV, *P.PYM, "scripts.atest"], _pabot_logs],
+        actions=[*setup_tasks, [*P.IN_ENV, *P.PYM, "scripts.atest"], _pabot_logs],
         targets=[P.ATEST_CANARY],
     )
 

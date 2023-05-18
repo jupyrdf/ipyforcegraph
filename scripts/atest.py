@@ -4,8 +4,10 @@
 # Distributed under the terms of the Modified BSD License.
 
 # pylint: disable=broad-except
+import json
 import os
 import shutil
+import subprocess
 import sys
 import time
 
@@ -46,6 +48,30 @@ def atest(attempt, extra_args):
 
     out_dir = P.ATEST_OUT / stem
 
+    if P.TOTAL_COVERAGE:
+        cov_token = [
+            "coverage",
+            "run",
+            "--source",
+            P.PY_PKG,
+            "--data-file",
+            f"{P.ROBOCOV}/.{stem}.coverage",
+            "--context",
+            f"atest-{stem}",
+            "--concurrency",
+            "thread",
+            "--branch",
+            "--parallel-mode",
+            "-m",
+            "jupyter",
+            "lab",
+        ]
+        jupyterlab_cmd = sum(
+            [cov_token if t == "jupyter-lab" else [t] for t in P.JUPYTERLAB_EXE], []
+        )
+    else:
+        jupyterlab_cmd = P.JUPYTERLAB_EXE
+
     args = [
         *["--name", f"{P.PLATFORM}"],
         *["--outputdir", out_dir],
@@ -59,7 +85,8 @@ def atest(attempt, extra_args):
         *["--variable", f"PY:{P.PY_MAJOR}"],
         *["--variable", f"IPYFORCEGRAPH_EXAMPLES:{P.EXAMPLES}"],
         *["--variable", f"IPYFORCEGRAPH_FIXTURES:{P.ATEST_FIXTURES}"],
-        *["--variable", f"""JUPYTERLAB_EXE:{" ".join(map(str, P.JUPYTERLAB_EXE))}"""],
+        *["--variable", f"JUPYTERLAB_EXE:{json.dumps(list(map(str,jupyterlab_cmd)))}"],
+        *["--variable", f"ROBOCOV:{P.ROBOCOV}"],
         *["--randomize", "all"],
         *(extra_args or []),
         *(os.environ.get("ATEST_ARGS", "").split()),
@@ -123,6 +150,20 @@ def attempt_atest_with_retries(*extra_args):
 
     if is_real and not error_count:
         P.ATEST_CANARY.touch()
+
+        if P.TOTAL_COVERAGE:
+            if not [*P.ROBOCOV.glob("*.json")]:
+                print(f"did not generate any coverage files in {P.ROBOCOV}")
+                error_count = 1
+            else:
+                subprocess.call(
+                    [
+                        "jlpm",
+                        "nyc",
+                        f"--report-dir={P.NYC_REPORTS}",
+                        f"--temp-dir={P.ROBOCOV}",
+                    ]
+                )
 
     return error_count
 
