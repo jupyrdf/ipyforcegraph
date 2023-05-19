@@ -110,6 +110,7 @@ jobs:
     runs-on: ${{ matrix.os }}-latest
     env:
       TOTAL_COVERAGE: 1
+      ATEST_RETRIES: 2
       CI: 0
     strategy:
       fail-fast: false
@@ -184,12 +185,18 @@ jobs:
             libxt6 \
             xvfb
 
-      - name: test (coverage)
+      - name: test (unit)
         shell: bash -l {0}
         run: |
-          doit test
+          doit pytest
 
-      - name: upload (cov)
+      - name: test (acceptance)
+        shell: bash -l {0}
+        run: |
+          doit test:atest:*
+
+      - name: upload (coverage)
+        if: always()
         uses: actions/upload-artifact@v3
         with:
           name: ipyforcegraph-${{ github.run_number }}-fullcov
@@ -223,8 +230,8 @@ jobs:
             lab: 'lab3.6'
     env:
       INSTALL_ARTIFACT: ${{ matrix.artifact }}
-      TESTING_IN_CI: 'true'
-      ATEST_RETRIES: '2'
+      TESTING_IN_CI: 1
+      ATEST_RETRIES: 2
       IPYFORCEGRAPH_PY: ${{ matrix.py }}
       IPYFORCEGRAPH_LAB: ${{ matrix.lab }}
     steps:
@@ -256,6 +263,7 @@ jobs:
 
       - name: git checkout
         uses: actions/checkout@v3
+
       - name: env (conda)
         uses: conda-incubator/setup-miniconda@v2
         with:
