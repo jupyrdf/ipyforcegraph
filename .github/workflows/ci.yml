@@ -110,6 +110,7 @@ jobs:
     runs-on: ${{ matrix.os }}-latest
     env:
       TOTAL_COVERAGE: 1
+      CI: 0
     strategy:
       fail-fast: false
       matrix:
@@ -160,6 +161,28 @@ jobs:
       - name: docs
         shell: bash -l {0}
         run: doit -n4 checkdocs
+
+      - name: install apt dependencies (linux)
+        if: ${{ contains(matrix.os, 'ubuntu') }}
+        run: |
+          set -eux
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            libdbus-glib-1-2 \
+            libegl1 \
+            libgdk-pixbuf2.0-0 \
+            libgl1 \
+            libgles2 \
+            libgudev-1.0-0 \
+            libhyphen0 \
+            libnotify4 \
+            libopus0 \
+            libsecret-1-0 \
+            libwebpdemux2 \
+            libwoff1 \
+            libxslt1.1 \
+            libxt6 \
+            xvfb
 
       - name: test (coverage)
         shell: bash -l {0}
