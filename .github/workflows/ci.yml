@@ -108,6 +108,8 @@ jobs:
 
   lint:
     runs-on: ${{ matrix.os }}-latest
+    env:
+      TOTAL_COVERAGE: 1
     strategy:
       fail-fast: false
       matrix:
@@ -138,7 +140,7 @@ jobs:
         shell: bash -l {0}
         run: doit -n4 docs
 
-      - name: upload docs
+      - name: upload (docs)
         uses: actions/upload-artifact@v3
         with:
           name: ipyforcegraph-${{ github.run_number }}-docs
@@ -158,6 +160,18 @@ jobs:
       - name: docs
         shell: bash -l {0}
         run: doit -n4 checkdocs
+
+      - name: test (coverage)
+        shell: bash -l {0}
+        run: |
+          doit test
+
+      - name: upload (cov)
+        uses: actions/upload-artifact@v3
+        with:
+          name: ipyforcegraph-${{ github.run_number }}-fullcov
+          path: |
+            ./build/reports
 
       - name: Rename uncached conda packages
         shell: bash

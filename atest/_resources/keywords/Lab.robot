@@ -156,9 +156,6 @@ Get Editor Content
     ${content} =    Execute JavaScript    return document.querySelector('${css} .CodeMirror').CodeMirror.getValue()
     RETURN    ${content}
 
-Close JupyterLab
-    Close All Browsers
-
 Open Command Palette
     ${open} =    Get WebElements    css:.lm-mod-current ${CMD PALETTE ICON}
     IF    not ${open.__len__()}    Click Element    css:${CMD PALETTE ICON}

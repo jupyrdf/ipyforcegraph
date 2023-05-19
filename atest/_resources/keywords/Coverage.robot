@@ -21,10 +21,5 @@ Capture Page Coverage
     ${cov_json} =    Execute Javascript
     ...    return window.__coverage__ && JSON.stringify(window.__coverage__, null, 2)
     IF    ${cov_json}
-        Create File    ${ROBOCOV}${/}${name}.json    ${cov_json}
+        Create File    ${OUTPUT DIR}${/}jscov${/}${name}.json    ${cov_json}
     END
-
-Reset JupyterLab And Close With Coverage
-    [Documentation]    Close JupyterLab after gathering coverage.
-    Capture Page Coverage
-    Reset JupyterLab And Close

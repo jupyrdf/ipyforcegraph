@@ -58,7 +58,7 @@ def task_all():
     file_dep = [
         *P.EXAMPLE_HTML,
         P.ATEST_CANARY,
-        P.HTMLCOV_INDEX,
+        P.UTEST_COV_INDEX,
         P.PYTEST_HTML,
         P.OK_LINKS,
         P.ALL_SPELL,
@@ -425,11 +425,19 @@ def task_pytest():
         doc="run unit tests with pytest",
         uptodate=[config_changed(dict(COMMIT=P.COMMIT, args=P.PYTEST_ARGS))],
         file_dep=[*P.ALL_PY_SRC, P.PY_PROJ, P.OK_PIP_INSTALL],
-        targets=[P.HTMLCOV_INDEX, P.PYTEST_HTML, P.PYTEST_XUNIT, P.PYTEST_JSON],
+        targets=[
+            P.UTEST_COV_INDEX,
+            P.PYTEST_HTML,
+            P.PYTEST_XUNIT,
+            P.PYTEST_JSON,
+            P.UTEST_COV_DATA,
+        ],
         actions=[
+            (U.clean_some, [P.UTEST_COV]),
+            (create_folder, [P.UTEST_COV]),
             utest_args,
             lambda: U.strip_timestamps(
-                *P.HTMLCOV.rglob("*.html"), P.PYTEST_HTML, slug=P.COMMIT
+                *P.UTEST_COV_INDEX.rglob("*.html"), P.PYTEST_HTML, slug=P.COMMIT
             ),
         ],
     )
@@ -505,16 +513,6 @@ def task_test():
                 targets=[robot_out],
             )
 
-    def _pabot_logs():
-        for robot_out in sorted(P.ATEST_OUT.rglob("robot_*.out")):
-            print(f"\n[{robot_out.relative_to(P.ROOT)}]")
-            print(robot_out.read_text(**P.UTF8) or "<EMPTY>")
-
-    setup_tasks = []
-
-    if P.TOTAL_COVERAGE:
-        setup_tasks = [(U.clean_some, [P.ROBOCOV]), (create_folder, [P.ROBOCOV])]
-
     yield dict(
         name="atest",
         uptodate=[config_changed({"TOTAL_COVERAGE": P.TOTAL_COVERAGE})],
@@ -529,9 +527,24 @@ def task_test():
             *([] if P.TESTING_IN_CI else [P.OK_ROBOT_LINT, *P.OK_NBLINT.values()]),
         ],
         task_dep=["pytest"],
-        actions=[*setup_tasks, [*P.IN_ENV, *P.PYM, "scripts.atest"], _pabot_logs],
+        actions=[[*P.IN_ENV, *P.PYM, "scripts.atest"]],
         targets=[P.ATEST_CANARY],
     )
+
+    if P.TOTAL_COVERAGE:
+        yield dict(
+            name="cov:atest",
+            file_dep=[P.ATEST_CANARY],
+            actions=[U.atest_cov],
+            targets=[P.ATEST_COV_JS_INDEX, P.ATEST_COV_PY_INDEX],
+        )
+
+        yield dict(
+            name="cov:all",
+            file_dep=[P.ATEST_COV_PY_INDEX, P.UTEST_COV_DATA],
+            actions=[U.all_cov],
+            targets=[P.ALL_COV_PY_INDEX],
+        )
 
 
 def task_lint():
