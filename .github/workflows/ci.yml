@@ -22,6 +22,7 @@ env:
   # our stuff
   SKIP_CONDA_PREFLIGHT: 1
   CACHE_EPOCH: 10
+  ATEST_RETRIES: 2
 
 jobs:
   build:
@@ -110,7 +111,6 @@ jobs:
     runs-on: ${{ matrix.os }}-latest
     env:
       TOTAL_COVERAGE: 1
-      ATEST_RETRIES: 2
       CI: 0
     strategy:
       fail-fast: false
@@ -193,13 +193,18 @@ jobs:
       - name: test (acceptance)
         shell: bash -l {0}
         run: |
-          doit test:atest:*
+          doit test:atest
+
+      - name: report (coverage)
+        shell: bash -l {0}
+        run: |
+          doit -n8 coverage
 
       - name: upload (coverage)
         if: always()
         uses: actions/upload-artifact@v3
         with:
-          name: ipyforcegraph-${{ github.run_number }}-fullcov
+          name: ipyforcegraph-${{ github.run_number }}-coverage
           path: |
             ./build/reports
 
@@ -231,7 +236,6 @@ jobs:
     env:
       INSTALL_ARTIFACT: ${{ matrix.artifact }}
       TESTING_IN_CI: 1
-      ATEST_RETRIES: 2
       IPYFORCEGRAPH_PY: ${{ matrix.py }}
       IPYFORCEGRAPH_LAB: ${{ matrix.lab }}
     steps:

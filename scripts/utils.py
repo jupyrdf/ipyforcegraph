@@ -386,47 +386,62 @@ def pip_check():
     return not error_lines
 
 
-def atest_cov():
+def atest_cov_js():
+    all_js_cov = sorted(P.ATEST_OUT.glob("*/jscov/*.json"))
+
+    if not all_js_cov:
+        print("No JS coverage from atest")
+        return False
+
     with tempfile.TemporaryDirectory() as td:
-        if P.ATEST_COV.exists():
-            shutil.rmtree(P.ATEST_COV)
-        all_js_cov = sorted(P.ATEST_OUT.glob("*/jscov/*.json"))
+        for js_cov in all_js_cov:
+            shutil.copy2(js_cov, Path(td) / js_cov.name)
+        subprocess.call(
+            [
+                "jlpm",
+                "nyc",
+                "report",
+                f"--report-dir={P.ATEST_COV_JS}",
+                f"--temp-dir={td}",
+                "--check-coverage",
+                f"--lines={P.JS_COV_LINE_THRESHOLD}",
+                f"--branches={P.JS_COV_BRANCH_THRESHOLD}",
+            ]
+        )
 
-        if not all_js_cov:
-            print("No JS coverage from atest")
-        else:
-            print(f"... combining {len(all_js_cov)} JS coverage dumps")
 
-            for js_cov in all_js_cov:
-                shutil.copy2(js_cov, Path(td) / js_cov.name)
-            subprocess.call(
-                [
-                    "jlpm",
-                    "nyc",
-                    "report",
-                    f"--report-dir={P.ATEST_COV_JS}",
-                    f"--temp-dir={td}",
-                ]
-            )
+def atest_cov_py():
+    all_py_cov = sorted(P.ATEST_OUT.glob("*/pabot_results/*/pycov/.coverage*"))
 
-        all_py_cov = sorted(P.ATEST_OUT.glob("*/pabot_results/*/pycov/.coverage*"))
-
-        if not all_py_cov:
-            print("No Python coverage from atest")
-        else:
-            subprocess.call(["coverage", "combine", "--keep", *all_py_cov], cwd=td)
-            subprocess.call(
-                [
-                    "coverage",
-                    "html",
-                    "--title=atest",
-                    "--show-contexts",
-                    "--omit",
-                    "*/tests/*",
-                    f"--directory={P.ATEST_COV_PY}",
-                ],
-                cwd=td,
-            )
+    if not all_py_cov:
+        print("No Python coverage from atest")
+        return False
+    with tempfile.TemporaryDirectory() as td:
+        subprocess.call(["coverage", "combine", "--keep", *all_py_cov], cwd=td)
+        subprocess.call(
+            [
+                "coverage",
+                "html",
+                "--title=atest",
+                "--show-contexts",
+                "--omit",
+                "*/tests/*",
+                f"--directory={P.ATEST_COV_PY}",
+            ],
+            cwd=td,
+        )
+        subprocess.call(
+            [
+                "coverage",
+                "report",
+                "--omit",
+                "*/tests/*",
+                "--show-missing",
+                "--skip-covered",
+                f"--fail-under={P.ATEST_PY_COV_THRESHOLD}",
+            ],
+            cwd=td,
+        )
 
 
 def all_cov():
@@ -443,6 +458,16 @@ def all_cov():
                 "--title=ALL",
                 "--show-contexts",
                 f"--directory={P.ALL_COV_PY}",
+            ],
+            cwd=td,
+        )
+        subprocess.call(
+            [
+                "coverage",
+                "report",
+                "--show-missing",
+                "--skip-covered",
+                f"--fail-under={P.ALL_PY_COV_THRESHOLD}",
             ],
             cwd=td,
         )

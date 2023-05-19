@@ -531,20 +531,32 @@ def task_test():
         targets=[P.ATEST_CANARY],
     )
 
-    if P.TOTAL_COVERAGE:
-        yield dict(
-            name="cov:atest",
-            file_dep=[P.ATEST_CANARY],
-            actions=[U.atest_cov],
-            targets=[P.ATEST_COV_JS_INDEX, P.ATEST_COV_PY_INDEX],
-        )
 
-        yield dict(
-            name="cov:all",
-            file_dep=[P.ATEST_COV_PY_INDEX, P.UTEST_COV_DATA],
-            actions=[U.all_cov],
-            targets=[P.ALL_COV_PY_INDEX],
-        )
+def task_coverage():
+    """collect and assess all coverage"""
+    if not P.TOTAL_COVERAGE:
+        return
+
+    yield dict(
+        name="atest:js",
+        file_dep=[P.ATEST_CANARY],
+        actions=[U.atest_cov_js],
+        targets=[P.ATEST_COV_JS_INDEX],
+    )
+
+    yield dict(
+        name="atest:py",
+        file_dep=[P.ATEST_CANARY],
+        actions=[U.atest_cov_py],
+        targets=[P.ATEST_COV_PY_INDEX],
+    )
+
+    yield dict(
+        name="all",
+        file_dep=[P.ATEST_COV_PY_INDEX, P.UTEST_COV_DATA],
+        actions=[U.all_cov],
+        targets=[P.ALL_COV_PY_INDEX],
+    )
 
 
 def task_lint():
