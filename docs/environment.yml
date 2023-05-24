@@ -38,6 +38,7 @@ dependencies:
   - pytest-xdist
   - python >=3.11,<3.12
   - python >=3.8,<3.12
+  - python-dotenv
   - scour
   - sphinx
   - sphinx-autobuild

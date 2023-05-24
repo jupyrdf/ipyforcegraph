@@ -5,6 +5,8 @@ ${THREEDEE}                     3D
 ${FORCES}                       Forces
 ${FORCES_TEST}                  Test_Forces
 ${WIDGET_SOURCE}                WidgetSource
+${DODO_SOURCE}                  DodoSource
+${DODO_APP}                     DodoApp
 
 ${IPYFORCEGRAPH GRAPH}          .jp-ForceGraph
 ${IPYFORCEGRAPH FRAME}          ${IPYFORCEGRAPH GRAPH} iframe

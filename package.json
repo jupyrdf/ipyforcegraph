@@ -1,6 +1,6 @@
 {
   "name": "@jupyrdf/jupyter-forcegraph",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "force-graph widget for Jupyter",
   "license": "BSD-3-Clause",
   "author": "ipyforcegraph contributors",
@@ -23,6 +23,7 @@
     "build": "jlpm build:ts && jlpm build:ext",
     "build:ext": "jupyter labextension build .",
     "build:ts": "tsc -b js",
+    "build:ts:cov": "tsc -b js/tsconfig.cov.json",
     "clean": "rimraf ./lib ./src/ipyforcegraph/_d",
     "deduplicate": "yarn-deduplicate -s fewer --fail",
     "lint": "jlpm lint:prettier",
@@ -53,10 +54,12 @@
     "d3-scale": "^4.0.2",
     "d3-scale-chromatic": "^3.0.0",
     "force-graph": "~1.43.1",
-    "nunjucks": "^3.2.3",
+    "nunjucks": "^3.2.4",
     "three-spritetext": "~1.8.1"
   },
   "devDependencies": {
+    "@ephesoft/webpack.istanbul.loader": "^2.2.0",
+    "@istanbuljs/nyc-config-typescript": "^1.0.2",
     "@jupyterlab/application": "3",
     "@jupyterlab/builder": "^3.5.0",
     "@jupyterlab/theme-dark-extension": "3",
@@ -69,11 +72,13 @@
     "@types/three": "^0.148.0",
     "file-loader": "^6.2.0",
     "npm-run-all": "^4.1.5",
+    "nyc": "^15.1.0",
     "prettier": "^2.8.8",
     "prettier-package-json": "^2.8.0",
     "prettier-plugin-sort-json": "^1.0.0",
     "rimraf": "^4.4.1",
     "source-map-loader": "^4.0.1",
+    "ts-node": "^10.9.1",
     "typescript": "~4.9.5",
     "yarn-deduplicate": "^6.0.1"
   },
@@ -103,6 +108,27 @@
         "bundled": true
       }
     }
+  },
+  "nyc": {
+    "extends": "@istanbuljs/nyc-config-typescript",
+    "all": true,
+    "skip-full": true,
+    "require": [
+      "ts-node/register",
+      "source-map-support/register"
+    ],
+    "reporter": [
+      "lcov",
+      "html",
+      "text",
+      "text-summary"
+    ],
+    "extension": [
+      ".js",
+      ".jsx",
+      ".ts",
+      ".tsx"
+    ]
   },
   "prettier": {
     "singleQuote": true,

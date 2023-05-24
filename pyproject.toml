@@ -6,7 +6,7 @@ requires = [
 
 [project]
 name = "ipyforcegraph"
-version = "0.3.2"
+version = "0.3.3"
 description = "2D and 3D force-directed graph widgets for Jupyter"
 readme = "README.md"
 authors = [
@@ -55,7 +55,7 @@ addopts = [
   # for review
   "--html=build/reports/pytest.html",
   "--self-contained-html",
-  "--cov-report=html:build/reports/htmlcov",
+  "--cov-report=html:build/reports/cov_utest/html",
   "--cov-context=test",
   # coverage
   "--cov=ipyforcegraph",
@@ -74,7 +74,9 @@ filterwarnings = [
 ]
 
 [tool.coverage.run]
-data_file = "build/reports/.coverage"
+data_file = "build/reports/cov_utest/.coverage"
+parallel = true
+branch = true
 
 [tool.coverage.html]
 show_contexts = true

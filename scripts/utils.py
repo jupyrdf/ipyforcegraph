@@ -384,3 +384,90 @@ def pip_check():
     if error_lines:
         print(error_lines)
     return not error_lines
+
+
+def atest_cov_js():
+    all_js_cov = sorted(P.ATEST_OUT.glob("*/jscov/*.json"))
+
+    if not all_js_cov:
+        print("No JS coverage from atest")
+        return False
+
+    with tempfile.TemporaryDirectory() as td:
+        for js_cov in all_js_cov:
+            shutil.copy2(js_cov, Path(td) / js_cov.name)
+        subprocess.call(
+            [
+                "jlpm",
+                "nyc",
+                "report",
+                f"--report-dir={P.ATEST_COV_JS}",
+                f"--temp-dir={td}",
+                "--check-coverage",
+                f"--lines={P.JS_COV_LINE_THRESHOLD}",
+                f"--branches={P.JS_COV_BRANCH_THRESHOLD}",
+            ]
+        )
+
+
+def atest_cov_py():
+    all_py_cov = sorted(P.ATEST_OUT.glob("*/pabot_results/*/pycov/.coverage*"))
+
+    if not all_py_cov:
+        print("No Python coverage from atest")
+        return False
+    with tempfile.TemporaryDirectory() as td:
+        subprocess.call(["coverage", "combine", "--keep", *all_py_cov], cwd=td)
+        subprocess.call(
+            [
+                "coverage",
+                "html",
+                "--title=atest",
+                "--show-contexts",
+                "--omit",
+                "*/tests/*",
+                f"--directory={P.ATEST_COV_PY}",
+            ],
+            cwd=td,
+        )
+        subprocess.call(
+            [
+                "coverage",
+                "report",
+                "--omit",
+                "*/tests/*",
+                "--show-missing",
+                "--skip-covered",
+                f"--fail-under={P.ATEST_PY_COV_THRESHOLD}",
+            ],
+            cwd=td,
+        )
+
+
+def all_cov():
+    all_py_cov = [
+        P.UTEST_COV_DATA,
+        *sorted(P.ATEST_OUT.glob("*/pabot_results/*/pycov/.coverage*")),
+    ]
+    with tempfile.TemporaryDirectory() as td:
+        subprocess.call(["coverage", "combine", "--keep", *all_py_cov], cwd=td)
+        subprocess.call(
+            [
+                "coverage",
+                "html",
+                "--title=ALL",
+                "--show-contexts",
+                f"--directory={P.ALL_COV_PY}",
+            ],
+            cwd=td,
+        )
+        subprocess.call(
+            [
+                "coverage",
+                "report",
+                "--show-missing",
+                "--skip-covered",
+                f"--fail-under={P.ALL_PY_COV_THRESHOLD}",
+            ],
+            cwd=td,
+        )
