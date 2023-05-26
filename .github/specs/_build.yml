@@ -1,5 +1,5 @@
 dependencies:
-  - flit >=3.7.1,<4
+  - flit >=3.9.0,<4
   - git
   - jupyterlab >=3,<4
   - nodejs >=18,<19

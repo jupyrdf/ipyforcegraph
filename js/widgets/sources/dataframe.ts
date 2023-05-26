@@ -228,17 +228,26 @@ export class DataFrameSourceModel extends WidgetModel {
     const oldLinks: Record<string | number, LinkObject> = {};
     const oldNodes: Record<string | number, NodeObject> = {};
 
+    const nodeIndices = new Map<string | number, number>();
+    const linkIndices = new Map<string | number, number>();
+
     const compositeLinks: Record<string | number, LinkObject> = {};
     const compositeNodes: Record<string | number, NodeObject> = {};
 
     // gather old nodes
+    let nodeIdx = 0;
     for (const oldNode of oldGraphData.nodes) {
       oldNodes[oldNode[nodeIdColumn]] = oldNode;
+      nodeIndices[oldNode[nodeIdColumn]] = nodeIdx;
+      nodeIdx++;
     }
 
     // gather old links
+    let linkIdx = 0;
     for (const oldLink of oldGraphData.links) {
       oldLinks[oldLink[linkIdColumn]] = oldLink;
+      linkIndices[oldLink[linkIdColumn]] = linkIdx;
+      linkIdx++;
     }
 
     // generate composite nodes
@@ -272,8 +281,15 @@ export class DataFrameSourceModel extends WidgetModel {
       compositeLinks[linkId] = compositeLink;
     }
 
-    const compositeNodeList = Object.values(compositeNodes);
-    const compositeLinkList = Object.values(compositeLinks);
+    const compositeNodeList: NodeObject[] = [];
+    const compositeLinkList: LinkObject[] = [];
+
+    for (const [nodeId, nodeIdx] of nodeIndices.entries()) {
+      compositeNodeList[nodeIdx as number] = compositeNodes[nodeId];
+    }
+    for (const [linkId, linkIdx] of linkIndices.entries()) {
+      compositeLinkList[linkIdx as number] = compositeLinks[linkId];
+    }
 
     return { nodes: compositeNodeList, links: compositeLinkList };
   }

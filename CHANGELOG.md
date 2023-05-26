@@ -8,7 +8,7 @@
 
 ### `@jupyrdf/jupyter-forcegraph 0.3.3`
 
-> TBD
+- improves handling of `node_` and `link_preserve_columns`, respecting ordering
 
 ## `0.3.2`
 

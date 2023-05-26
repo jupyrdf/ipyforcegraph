@@ -4,7 +4,7 @@ channels:
 dependencies:
   - bqplot
   - doit-with-toml
-  - flit >=3.7.1,<4
+  - flit >=3.9.0,<4
   - git
   - importnb
   - ipydatagrid
