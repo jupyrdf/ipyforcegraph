@@ -1,0 +1,29 @@
+{
+  "ignore": [
+    {
+      "component": "pip",
+      "id": "CVE-2018-20225",
+      "reason": "`pip install` is only used during development"
+    },
+    {
+      "component": "parse",
+      "id": "CVE-2019-12760",
+      "reason": "`parso` is not used during development with an insecure cache"
+    },
+    {
+      "component": "py",
+      "id": "CVE-2022-42969",
+      "reason": "`py` is only used during development"
+    },
+    {
+      "component": "pandas",
+      "id": "CVE-2020-13091",
+      "reason": "`read_pickle` is not used"
+    },
+    {
+      "component": "notebook",
+      "id": "CVE-2021-32798",
+      "reason": "`notebook` is not supported, and only retrieved as a transient dependency"
+    }
+  ]
+}

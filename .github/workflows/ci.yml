@@ -160,6 +160,11 @@ jobs:
         run: |
           doit -n4 lint || doit lint || exit 1
 
+      - name: audit
+        shell: bash -l {0}
+        run: |
+          doit audit || exit 1
+
       - name: build docs
         shell: bash -l {0}
         run: doit -n4 docs

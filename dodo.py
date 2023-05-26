@@ -90,6 +90,25 @@ def _ok(task, ok):
     return task
 
 
+def task_audit():
+    """Check dependencies for known vulnerabilities."""
+    yield _ok(
+        dict(
+            name="py",
+            file_dep=[P.HISTORY, P.IGNORED_VULNERABILITIES],
+            actions=[
+                [*P.IN_ENV, "jake", "ddt", f"--whitelist={P.IGNORED_VULNERABILITIES}"]
+            ],
+        ),
+        P.OK_AUDIT_PY,
+    )
+
+    yield _ok(
+        dict(name="js", file_dep=[P.YARN_LOCK], actions=[[*P.IN_ENV, "jlpm", "audit"]]),
+        P.OK_AUDIT_JS,
+    )
+
+
 def task_preflight():
     """ensure a sane development environment"""
     file_dep = [P.SCRIPTS / "preflight.py"]
