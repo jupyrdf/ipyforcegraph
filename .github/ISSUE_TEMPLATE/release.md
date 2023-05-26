@@ -7,11 +7,11 @@ labels: maintenance
 - [ ] on `dev`
   - [ ] merge all outstanding PRs
     - [ ] _blocking #PR here_
+  - [ ] ensure `CHANGELOG.md` is up-to-date
   - [ ] ensure the versions have been bumped
     - [ ] run `doit preflight:release`
-  - [ ] ensure `CHANGELOG.md` is up-to-date
-  - [ ] validate on binder
-    - [ ] _URL of binder_
+  - [ ] ensure a last-minute
+    - [ ] run `doit audit`
   - [ ] validate on ReadTheDocs
     - [ ] _URL of build_
 - [ ] make a PR from `dev` to `main`
@@ -37,11 +37,6 @@ labels: maintenance
   - [ ] handle `conda-forge` [feedstock] tasks
     - [ ] _URL on `conda-forge/ipyforcegraph-feedstock` here_
     - [ ] _URL on `anaconda.org`_
-  - [ ] validate on binder via simplest-possible gists
-    - [ ] pip `requirements.txt`
-      - [ ] _URL of pip binder here_
-    - [ ] conda `environment.yml`
-      - [ ] _URL of conda binder here_
   - [ ] create postmortem PR from `main` targeting `dev`
     - [ ] _PR# here_
     - [ ] bump to next development version
@@ -53,7 +48,6 @@ labels: maintenance
       - [ ] from a clean command prompt
         - [ ] 🐧`source envs/lock/bin/activate`
         - [ ] 🪟 `call envs/lock/Scripts/activate.bat`)
-      - [ ] run `doit lock`
       - [ ] commit the new locks
     - [ ] update release procedures with lessons learned in
           `.github/ISSUE_TEMPLATE/release.md`
