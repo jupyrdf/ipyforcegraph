@@ -58,7 +58,7 @@ def task_all():
     file_dep = [
         *P.EXAMPLE_HTML,
         P.ATEST_CANARY,
-        P.HTMLCOV_INDEX,
+        P.UTEST_COV_INDEX,
         P.PYTEST_HTML,
         P.OK_LINKS,
         P.ALL_SPELL,
@@ -344,15 +344,22 @@ def task_build():
         ts_dep += [P.OK_PRETTIER]
         py_dep += [P.OK_LINT]
 
+    if P.TOTAL_COVERAGE:
+        ts_script = "build:ts:cov"
+    else:
+        ts_script = "build:ts"
+
     yield dict(
         name="ts",
+        uptodate=[config_changed({"TOTAL_COVERAGE": P.TOTAL_COVERAGE})],
         file_dep=ts_dep,
-        actions=[[*P.IN_ENV, *P.JLPM, "build:ts"]],
+        actions=[[*P.IN_ENV, *P.JLPM, ts_script]],
         targets=[P.TSBUILDINFO],
     )
 
     yield dict(
         name="ext",
+        uptodate=[config_changed({"TOTAL_COVERAGE": P.TOTAL_COVERAGE})],
         actions=[[*P.IN_ENV, *P.JLPM, "build:ext"]],
         file_dep=[P.TSBUILDINFO, *P.ALL_CSS],
         targets=[P.PY_PACKAGE_JSON],
@@ -418,11 +425,19 @@ def task_pytest():
         doc="run unit tests with pytest",
         uptodate=[config_changed(dict(COMMIT=P.COMMIT, args=P.PYTEST_ARGS))],
         file_dep=[*P.ALL_PY_SRC, P.PY_PROJ, P.OK_PIP_INSTALL],
-        targets=[P.HTMLCOV_INDEX, P.PYTEST_HTML, P.PYTEST_XUNIT, P.PYTEST_JSON],
+        targets=[
+            P.UTEST_COV_INDEX,
+            P.PYTEST_HTML,
+            P.PYTEST_XUNIT,
+            P.PYTEST_JSON,
+            P.UTEST_COV_DATA,
+        ],
         actions=[
+            (U.clean_some, [P.UTEST_COV]),
+            (create_folder, [P.UTEST_COV]),
             utest_args,
             lambda: U.strip_timestamps(
-                *P.HTMLCOV.rglob("*.html"), P.PYTEST_HTML, slug=P.COMMIT
+                *P.UTEST_COV_INDEX.rglob("*.html"), P.PYTEST_HTML, slug=P.COMMIT
             ),
         ],
     )
@@ -498,13 +513,9 @@ def task_test():
                 targets=[robot_out],
             )
 
-    def _pabot_logs():
-        for robot_out in sorted(P.ATEST_OUT.rglob("robot_*.out")):
-            print(f"\n[{robot_out.relative_to(P.ROOT)}]")
-            print(robot_out.read_text(**P.UTF8) or "<EMPTY>")
-
     yield dict(
         name="atest",
+        uptodate=[config_changed({"TOTAL_COVERAGE": P.TOTAL_COVERAGE})],
         file_dep=[
             *P.ALL_PY_SRC,
             *P.ALL_ROBOT,
@@ -516,8 +527,35 @@ def task_test():
             *([] if P.TESTING_IN_CI else [P.OK_ROBOT_LINT, *P.OK_NBLINT.values()]),
         ],
         task_dep=["pytest"],
-        actions=[[*P.IN_ENV, *P.PYM, "scripts.atest"], _pabot_logs],
+        actions=[[*P.IN_ENV, *P.PYM, "scripts.atest"]],
         targets=[P.ATEST_CANARY],
+    )
+
+
+def task_coverage():
+    """collect and assess all coverage"""
+    if not P.TOTAL_COVERAGE:
+        return
+
+    yield dict(
+        name="atest:js",
+        file_dep=[P.ATEST_CANARY],
+        actions=[U.atest_cov_js],
+        targets=[P.ATEST_COV_JS_INDEX],
+    )
+
+    yield dict(
+        name="atest:py",
+        file_dep=[P.ATEST_CANARY],
+        actions=[U.atest_cov_py],
+        targets=[P.ATEST_COV_PY_INDEX],
+    )
+
+    yield dict(
+        name="all",
+        file_dep=[P.ATEST_COV_PY_INDEX, P.UTEST_COV_DATA],
+        actions=[U.all_cov],
+        targets=[P.ALL_COV_PY_INDEX],
     )
 
 

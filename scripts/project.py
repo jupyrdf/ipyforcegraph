@@ -15,6 +15,14 @@ import sys
 from pathlib import Path
 
 try:
+    from dotenv import load_dotenv
+
+    load_dotenv()
+except ImportError:
+    print("python-dotenv appears to not be installed: .env will be ignored")
+
+
+try:
     import tomllib
 except Exception:
     import tomli as tomllib
@@ -48,6 +56,7 @@ BUILDING_IN_CI = _get_boolish("BUILDING_IN_CI")
 IN_BINDER = _get_boolish("IN_BINDER")
 IN_RTD = _get_boolish("READTHEDOCS")
 PYTEST_ARGS = json.loads(os.environ.get("PYTEST_ARGS", "[]"))
+TOTAL_COVERAGE = _get_boolish("TOTAL_COVERAGE")
 
 # CI jank
 SKIP_CONDA_PREFLIGHT = _get_boolish("SKIP_CONDA_PREFLIGHT")
@@ -252,12 +261,24 @@ OK_DOS2UNIX = OK / "dos2unix.ok"
 
 REPORTS = BUILD / "reports"
 
-HTMLCOV = REPORTS / "htmlcov"
-HTMLCOV_INDEX = HTMLCOV / "index.html"
+UTEST_COV = REPORTS / "cov_utest"
+UTEST_COV_DATA = UTEST_COV / ".coverage"
+UTEST_COV_INDEX = UTEST_COV / "html/index.html"
+ATEST_COV = REPORTS / "cov_atest"
+ATEST_COV_JS = ATEST_COV / "js"
+ATEST_COV_JS_INDEX = ATEST_COV_JS / "index.html"
+ATEST_COV_PY = ATEST_COV / "py"
+ATEST_COV_PY_INDEX = ATEST_COV_PY / "index.html"
+ALL_COV_PY = REPORTS / "cov_ALL"
+ALL_COV_PY_INDEX = ALL_COV_PY / "index.html"
 PYTEST_COV_THRESHOLD = 90 if (WIN and PY_MAJOR == "3.8") else 91
 PYTEST_HTML = REPORTS / "pytest.html"
 PYTEST_XUNIT = REPORTS / "pytest.xunit.xml"
 PYTEST_JSON = REPORTS / f"report-{PY_MAJOR}-{PLATFORM}.json"
+JS_COV_LINE_THRESHOLD = 83
+JS_COV_BRANCH_THRESHOLD = 63
+ATEST_PY_COV_THRESHOLD = 88
+ALL_PY_COV_THRESHOLD = 98
 
 # derived info
 PY_VERSION = PY_PROJ_DATA["project"]["version"]

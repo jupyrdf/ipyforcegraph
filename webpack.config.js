@@ -12,7 +12,9 @@ module.exports = {
     rules: [
       {
         test: /\.js$/,
-        use: 'source-map-loader',
+        use: process.env.TOTAL_COVERAGE
+          ? ['@ephesoft/webpack.istanbul.loader']
+          : ['source-map-loader'],
       },
       {
         test: /zstd\.wasm/,

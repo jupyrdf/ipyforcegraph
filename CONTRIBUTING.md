@@ -75,6 +75,12 @@ in the extension's source and automatically rebuild the extension and applicatio
     ```
 - If you add a new file, probably will have to restart the whole thing
 
+### Environment Variables
+
+With `python-dotenv` (installed by default), the presence of a `.env` file will overload
+any values not set in `dodo.py`. This is an `.ini`-like file, with specific examples
+below.
+
 ### Logging
 
 In the browser, `jupyter-forcegraph` should only emit `console.warn` (or higher)
@@ -126,10 +132,32 @@ Some Test
   ...
 ```
 
+Create an `.env` file:
+
+```ini
+# .env
+ATEST_ARGS="--exclude NOTsome:tag"
+```
+
 Then run:
 
 ```bash
-ATEST_ARGS="--exclude NOTsome:tag" doit test:atest
+doit test
+```
+
+### Full Coverage
+
+To collect coverage from the browser and kernel, create a `.env` file like:
+
+```ini
+# .env
+TOTAL_COVERAGE=1
+```
+
+Then run:
+
+```bash
+doit test
 ```
 
 ## Building Documentation

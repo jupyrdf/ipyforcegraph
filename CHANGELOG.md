@@ -1,6 +1,14 @@
 # Changelog
 
-## `0.3.2` (unreleased)
+## `0.3.3`
+
+### `ipyforcegraph 0.3.3`
+
+### `@jupyrdf/jupyter-forcegraph 0.3.3`
+
+- improves handling of `node_` and `link_preserve_columns`, respecting ordering
+
+## `0.3.2`
 
 ### `ipyforcegraph 0.3.2`
 

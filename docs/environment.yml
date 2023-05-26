@@ -7,7 +7,7 @@ dependencies:
   - bqplot
   - docutils >=0.19
   - doit-with-toml
-  - flit >=3.7.1,<4
+  - flit >=3.9.0,<4
   - git
   - importnb
   - ipydatagrid
@@ -38,6 +38,7 @@ dependencies:
   - pytest-xdist
   - python >=3.11,<3.12
   - python >=3.8,<3.12
+  - python-dotenv
   - scour
   - sphinx
   - sphinx-autobuild

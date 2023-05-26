@@ -21,7 +21,8 @@ env:
   CONDA_EXE: mamba
   # our stuff
   SKIP_CONDA_PREFLIGHT: 1
-  CACHE_EPOCH: 9
+  CACHE_EPOCH: 10
+  ATEST_RETRIES: 2
 
 jobs:
   build:
@@ -108,11 +109,36 @@ jobs:
 
   lint:
     runs-on: ${{ matrix.os }}-latest
+    env:
+      TOTAL_COVERAGE: 1
+      CI: 0
     strategy:
       fail-fast: false
       matrix:
         os: [ubuntu]
     steps:
+      - name: install apt dependencies (linux)
+        if: ${{ contains(matrix.os, 'ubuntu') }}
+        run: |
+          set -eux
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            libdbus-glib-1-2 \
+            libegl1 \
+            libgdk-pixbuf2.0-0 \
+            libgl1 \
+            libgles2 \
+            libgudev-1.0-0 \
+            libhyphen0 \
+            libnotify4 \
+            libopus0 \
+            libsecret-1-0 \
+            libwebpdemux2 \
+            libwoff1 \
+            libxslt1.1 \
+            libxt6 \
+            xvfb
+
       - name: git checkout
         uses: actions/checkout@v3
 
@@ -138,7 +164,7 @@ jobs:
         shell: bash -l {0}
         run: doit -n4 docs
 
-      - name: upload docs
+      - name: upload (docs)
         uses: actions/upload-artifact@v3
         with:
           name: ipyforcegraph-${{ github.run_number }}-docs
@@ -158,6 +184,29 @@ jobs:
       - name: docs
         shell: bash -l {0}
         run: doit -n4 checkdocs
+
+      - name: test (unit)
+        shell: bash -l {0}
+        run: |
+          doit pytest
+
+      - name: test (acceptance)
+        shell: bash -l {0}
+        run: |
+          xvfb-run --auto-servernum doit -n4 test || xvfb-run --auto-servernum doit test || exit 1
+
+      - name: report (coverage)
+        shell: bash -l {0}
+        run: |
+          doit -n8 coverage
+
+      - name: upload (coverage)
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: ipyforcegraph-${{ github.run_number }}-coverage
+          path: |
+            ./build/reports
 
       - name: Rename uncached conda packages
         shell: bash
@@ -186,8 +235,7 @@ jobs:
             lab: 'lab3.6'
     env:
       INSTALL_ARTIFACT: ${{ matrix.artifact }}
-      TESTING_IN_CI: 'true'
-      ATEST_RETRIES: '2'
+      TESTING_IN_CI: 1
       IPYFORCEGRAPH_PY: ${{ matrix.py }}
       IPYFORCEGRAPH_LAB: ${{ matrix.lab }}
     steps:
@@ -219,6 +267,7 @@ jobs:
 
       - name: git checkout
         uses: actions/checkout@v3
+
       - name: env (conda)
         uses: conda-incubator/setup-miniconda@v2
         with:

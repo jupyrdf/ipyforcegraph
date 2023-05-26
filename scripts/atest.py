@@ -4,6 +4,7 @@
 # Distributed under the terms of the Modified BSD License.
 
 # pylint: disable=broad-except
+import json
 import os
 import shutil
 import sys
@@ -17,6 +18,9 @@ from . import project as P
 PROCESSES = int(os.environ.get("ATEST_PROCESSES", "4"))
 RETRIES = int(os.environ.get("ATEST_RETRIES", "0"))
 ATTEMPT = int(os.environ.get("ATEST_ATTEMPT", "0"))
+
+# used in some example notebooks
+os.environ.update(IPFG_ROOT=str(P.ROOT))
 
 
 def get_stem(attempt, extra_args):
@@ -46,6 +50,8 @@ def atest(attempt, extra_args):
 
     out_dir = P.ATEST_OUT / stem
 
+    jupyterlab_cmd = P.JUPYTERLAB_EXE
+
     args = [
         *["--name", f"{P.PLATFORM}"],
         *["--outputdir", out_dir],
@@ -59,7 +65,9 @@ def atest(attempt, extra_args):
         *["--variable", f"PY:{P.PY_MAJOR}"],
         *["--variable", f"IPYFORCEGRAPH_EXAMPLES:{P.EXAMPLES}"],
         *["--variable", f"IPYFORCEGRAPH_FIXTURES:{P.ATEST_FIXTURES}"],
-        *["--variable", f"""JUPYTERLAB_EXE:{" ".join(map(str, P.JUPYTERLAB_EXE))}"""],
+        *["--variable", f"JUPYTERLAB_EXE:{json.dumps(list(map(str,jupyterlab_cmd)))}"],
+        *["--variable", f"ATEST_COV:{P.ATEST_COV}"],
+        *["--variable", f"TOTAL_COVERAGE:{int(P.TOTAL_COVERAGE)}"],
         *["--randomize", "all"],
         *(extra_args or []),
         *(os.environ.get("ATEST_ARGS", "").split()),
@@ -87,7 +95,7 @@ def atest(attempt, extra_args):
         args = [
             *["--processes", PROCESSES],
             "--artifactsinsubfolders",
-            *["--artifacts", "png,log,svg"],
+            *["--artifacts", "png,log,svg,json"],
             *args,
         ]
 

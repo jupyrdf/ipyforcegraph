@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "inlineSourceMap": true,
+    "outDir": "../lib",
+    "rootDir": ".",
+    "sourceMap": false,
+    "tsBuildInfoFile": "../build/.src.tsbuildinfo"
+  },
+  "extends": "../tsconfigbase.json",
+  "include": ["./**/*"],
+  "references": [{ "path": "../" }]
+}
