@@ -3,7 +3,12 @@
  * Distributed under the terms of the Modified BSD License.
  */
 import type d3Force3d from 'd3-force-3d';
-import type { GraphData, LinkObject, NodeObject } from 'force-graph';
+import type {
+  ForceGraphInstance,
+  GraphData,
+  LinkObject,
+  NodeObject,
+} from 'force-graph';
 import type THREE from 'three';
 
 import type { ISignal } from '@lumino/signaling';
@@ -79,9 +84,16 @@ export type TUpdateKind = void | number;
 export interface IBehave extends WidgetModel {
   rank: number;
   updateRequested: ISignal<IBehave, TUpdateKind>;
-  graphDataUpdateRequested: ISignal<IBehave, void>;
   extraColumns?: IExtraColumns;
+
+  // custom signals
+  graphDataUpdateRequested: ISignal<IBehave, void>;
   updateGraphData?(graphData: GraphData): Promise<void>;
+
+  // custom signals
+  graphCameraUpdateRequested: ISignal<IBehave, void>;
+  updateGraphCamera?(graph: ForceGraphInstance): Promise<void>;
+
   // link
   getLinkColor?(options: ILinkBehaveOptions): string | null;
   getLinkCurvature?(options: ILinkBehaveOptions): number | null;
@@ -104,6 +116,7 @@ export interface IBehave extends WidgetModel {
   // evented
   onNodeClick?(options: INodeEventBehaveOptions): boolean;
   onLinkClick?(options: ILinkEventBehaveOptions): boolean;
+  onZoom?(zoomData: IZoomData): void;
   onRender?(options: IRenderOptions): void;
 }
 
@@ -134,7 +147,7 @@ export const ALL_NODE_METHODS = [
 ];
 export type TNodeBehaveMethod = (typeof ALL_NODE_METHODS)[number];
 
-export const ALL_GRAPH_METHODS = ['onRender'];
+export const ALL_GRAPH_METHODS = ['onRender', 'onZoom'];
 export type TGraphBehaveMethod = (typeof ALL_GRAPH_METHODS)[number];
 
 export type TNodeMethodMap = Map<TNodeBehaveMethod, IBehave[]>;
@@ -268,4 +281,11 @@ export interface IExtraColumns {
 export enum EMark {
   node = 'node',
   link = 'link',
+}
+
+export interface IZoomData {
+  k: number;
+  x: number;
+  y: number;
+  z: number;
 }

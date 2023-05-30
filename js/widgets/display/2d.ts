@@ -45,6 +45,7 @@ import {
   IPreservedColumns,
   IRenderOptions,
   ISource,
+  IZoomData,
   TAnyForce,
   TGraphBehaveMethod,
   TGraphMethodMap,
@@ -477,6 +478,13 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
     }
   }
 
+  protected async onGraphCameraUpdateRequested(behavior: IBehave) {
+    const graph = this.graph as ForceGraphInstance;
+    if (graph && behavior.updateGraphCamera) {
+      await behavior.updateGraphCamera(graph);
+    }
+  }
+
   protected async postUpdate(caller?: any, kind?: TUpdateKind): Promise<void> {
     await this.displayed;
     await this.rendered;
@@ -599,6 +607,11 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
         ? this.wrapFunction(this.onLinkClick)
         : null
     );
+    graph.onZoom(
+      this.model.graphBehaviorsForMethod('onZoom').length
+        ? this.wrapFunction(this.onZoom)
+        : null
+    );
 
     // forces
     this.getForceUpdate();
@@ -694,6 +707,10 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
     for (const behavior of behaviors) {
       behavior.updateRequested.connect(this.postUpdate, this);
       behavior.graphDataUpdateRequested.connect(this.onGraphDataUpdateRequested, this);
+      behavior.graphCameraUpdateRequested.connect(
+        this.onGraphCameraUpdateRequested,
+        this
+      );
     }
 
     await this.postUpdate();
@@ -891,6 +908,12 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
       if (!shouldContinue) {
         return;
       }
+    }
+  };
+
+  protected onZoom = (zoom: IZoomData) => {
+    for (const behavior of this.model.graphBehaviorsForMethod('onZoom')) {
+      behavior.onZoom(zoom);
     }
   };
 
