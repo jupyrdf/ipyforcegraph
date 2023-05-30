@@ -111,6 +111,7 @@ BINDER = ROOT / ".binder"
 POSTBUILD = BINDER / "postBuild"
 LITE = ROOT / "lite"
 LITE_CONFIG = LITE / "jupyter_lite_config.json"
+IGNORED_VULNERABILITIES = ROOT / "ignored-vulnerabilities.json"
 
 # envs
 ALL_PLATFORMS = ["linux-64", "osx-64", "win-64"]
@@ -258,6 +259,8 @@ OK_LABEXT = OK / "labext.ok"
 OK_LINKS = OK / "links.ok"
 OK_DICTIONARY = OK / "dictionary.ok"
 OK_DOS2UNIX = OK / "dos2unix.ok"
+OK_AUDIT_PY = OK / "audit.py.ok"
+OK_AUDIT_JS = OK / "audit.js.ok"
 
 REPORTS = BUILD / "reports"
 

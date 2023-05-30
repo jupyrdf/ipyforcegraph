@@ -4,6 +4,7 @@ _inherit_from:
 
 dependencies:
   - black-jupyter
+  - jake
   - mypy >=1.0.0
   - nbqa
   - nbstripout
