@@ -912,8 +912,9 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
   };
 
   protected onZoom = (zoom: IZoomData) => {
+    const graph = this.graph as ForceGraphInstance;
     for (const behavior of this.model.graphBehaviorsForMethod('onZoom')) {
-      behavior.onZoom(zoom);
+      behavior.onZoom({ ...zoom, graph });
     }
   };
 

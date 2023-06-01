@@ -288,4 +288,5 @@ export interface IZoomData {
   x: number;
   y: number;
   z: number;
+  graph: ForceGraphInstance;
 }

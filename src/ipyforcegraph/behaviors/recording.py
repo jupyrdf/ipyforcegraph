@@ -101,6 +101,14 @@ class GraphCamera(Behavior):
         T.Float(), allow_none=True, help="the center of the viewport as `[x, y, z?]`"
     ).tag(sync=True)
 
+    visible: Tuple[int, ...] = W.TypedTuple(
+        T.Int(), help="the indices of all visible nodes"
+    ).tag(sync=True)
+
+    capture_visible: bool = T.Bool(
+        False, help="whether visible nodes should be captured as ``visible``"
+    ).tag(sync=True)
+
 
 @W.register
 class GraphDirector(Behavior):

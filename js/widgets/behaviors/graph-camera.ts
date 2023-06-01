@@ -39,13 +39,49 @@ export class GraphCameraModel extends ZoomBase implements IBehave {
       _model_name: GraphCameraModel.model_name,
       zoom: 0,
       center: [0, 0],
+      visible: [],
+      capture_visible: false,
     };
   }
 
+  get visible(): number[] {
+    return this.get('visible') || [];
+  }
+
+  set visible(visible: number[]) {
+    this.set('visible', visible);
+  }
+
+  get captureVisible(): boolean {
+    return this.get('capture_visible');
+  }
+
+  set captureVisible(captureVisible: boolean) {
+    this.set('capture_visible', captureVisible);
+  }
+
   onZoom(zoom: IZoomData): void {
-    this.zoom = zoom.k;
+    const { graph } = zoom;
+    const { k } = zoom;
+    this.zoom = k;
     const z = zoom.z == null ? [] : [zoom.z];
     this.center = [zoom.x, zoom.y, ...z];
+    if (this.captureVisible) {
+      const halfW = graph.width() / 2 / k;
+      const halfH = graph.height() / 2 / k;
+      const bx = [zoom.x - halfW, zoom.x + halfW];
+      const by = [zoom.y - halfH, zoom.y + halfH];
+      const visible: number[] = [];
+      let i = 0;
+      for (let { x, y } of graph.graphData().nodes) {
+        if (x >= bx[0] && x <= bx[1] && y >= by[0] && y <= by[1]) {
+          visible.push(i);
+        }
+        i++;
+      }
+      this.visible = visible;
+    }
+
     this.save();
   }
 }
@@ -143,6 +179,7 @@ export class GraphDirectorModel extends ZoomBase implements IBehave {
       await this.ensureFacets();
       fitNodes = this._nodeFacets['fit_nodes'];
     }
+
     if (fitNodes) {
       const wrappedFit = this.wrapForNode(fitNodes) as any;
       graph.zoomToFit(this.fitDuration, this.fitPadding, wrappedFit);
