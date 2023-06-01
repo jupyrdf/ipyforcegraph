@@ -6,8 +6,6 @@
 #   - autodoc-traits
 #   - black-jupyter
 #   - bqplot
-#   - conda-forge/label/robotframework_jupyterlibrary_alpha::robotframework-jupyterlibrary
-#     >=0.5.0a0
 #   - docutils >=0.19
 #   - doit-with-toml
 #   - dos2unix
@@ -55,6 +53,7 @@
 #   - python >=3.8,<3.12
 #   - python-dotenv
 #   - requests-cache
+#   - robotframework-jupyterlibrary
 #   - robotframework-pabot
 #   - robotframework-robocop
 #   - robotframework-tidy >=3.4.0
@@ -380,7 +379,7 @@ https://conda.anaconda.org/conda-forge/noarch/ipykernel-6.23.1-pyh210e3f2_0.cond
 https://conda.anaconda.org/conda-forge/noarch/jupyter-cache-0.6.1-pyhd8ed1ab_0.conda#2e360820ae68e3d28e1a5a9d2714ca5c
 https://conda.anaconda.org/conda-forge/noarch/nbconvert-core-7.4.0-pyhd8ed1ab_0.conda#4456e6030a8309bdad57569b0170b6a3
 https://conda.anaconda.org/conda-forge/noarch/nbqa-1.7.0-pyhd8ed1ab_1.conda#65da1779c33b7fa51a0aba5c30758c5e
-https://conda.anaconda.org/conda-forge/label/robotframework_jupyterlibrary_alpha/noarch/robotframework-jupyterlibrary-0.5.0a0-pyhbd01f6c_0.conda#ddf6944afacd8f2e8a87d0c6aa141f93
+https://conda.anaconda.org/conda-forge/noarch/robotframework-jupyterlibrary-0.4.2-pyhd8ed1ab_0.conda#6687f0def03dc3db713149fb8e026068
 https://conda.anaconda.org/conda-forge/noarch/ipywidgets-8.0.6-pyhd8ed1ab_0.conda#68627a08556e4a273e4c7bfc84251457
 https://conda.anaconda.org/conda-forge/noarch/jupyter_server-2.6.0-pyhd8ed1ab_0.conda#39fd52b0fcb2fb52bac47a1419bf09bd
 https://conda.anaconda.org/conda-forge/noarch/myst-nb-0.17.2-pyhd8ed1ab_0.conda#40190b7d06f86b63d28fa78aaa39c023

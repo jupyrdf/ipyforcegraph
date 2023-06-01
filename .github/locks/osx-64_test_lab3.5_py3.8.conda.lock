@@ -3,8 +3,6 @@
 #   - nodefaults
 # dependencies:
 #   - comm <0.1.3
-#   - conda-forge/label/robotframework_jupyterlibrary_alpha::robotframework-jupyterlibrary
-#     >=0.5.0a0
 #   - doit-with-toml
 #   - firefox =102
 #   - geckodriver
@@ -30,6 +28,7 @@
 #   - python >=3.8,<3.12
 #   - python >=3.8,<3.9
 #   - python-dotenv
+#   - robotframework-jupyterlibrary
 #   - robotframework-pabot
 #   - robotframework-robocop
 #   - robotframework-tidy >=3.4.0
@@ -222,7 +221,7 @@ https://conda.anaconda.org/conda-forge/noarch/nbclient-0.8.0-pyhd8ed1ab_0.conda#
 https://conda.anaconda.org/conda-forge/noarch/robotframework-seleniumlibrary-6.1.0-pyhd8ed1ab_0.conda#15700afca8f7ab35542e9c1af63568f1
 https://conda.anaconda.org/conda-forge/noarch/ipykernel-6.21.2-pyh736e0ef_0.conda#aa43ffb10a39d9eb2538761a3f838a87
 https://conda.anaconda.org/conda-forge/noarch/nbconvert-core-7.4.0-pyhd8ed1ab_0.conda#4456e6030a8309bdad57569b0170b6a3
-https://conda.anaconda.org/conda-forge/label/robotframework_jupyterlibrary_alpha/noarch/robotframework-jupyterlibrary-0.5.0a0-pyhbd01f6c_0.conda#ddf6944afacd8f2e8a87d0c6aa141f93
+https://conda.anaconda.org/conda-forge/noarch/robotframework-jupyterlibrary-0.4.2-pyhd8ed1ab_0.conda#6687f0def03dc3db713149fb8e026068
 https://conda.anaconda.org/conda-forge/noarch/ipywidgets-8.0.4-pyhd8ed1ab_0.conda#9dea5ab3cc33084f7a3680a98859731e
 https://conda.anaconda.org/conda-forge/noarch/jupyter_server-2.6.0-pyhd8ed1ab_0.conda#39fd52b0fcb2fb52bac47a1419bf09bd
 https://conda.anaconda.org/conda-forge/noarch/nbconvert-pandoc-7.4.0-pyhd8ed1ab_0.conda#127c702e1b1eff595be82bc6a78cfce0

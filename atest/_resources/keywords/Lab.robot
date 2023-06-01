@@ -46,7 +46,7 @@ Open With JupyterLab Menu
     END
 
 Ensure File Browser is Open
-    ${sel} =    Set Variable    css:.p-TabBar-tab[data-id="filebrowser"]:not(.p-mod-current)
+    ${sel} =    Set Variable    css:.lm-TabBar-tab[data-id="filebrowser"]:not(.lm-mod-current)
     ${els} =    Get WebElements    ${sel}
     IF    ${els.__len__()}    Click Element    ${sel}
 
@@ -54,7 +54,7 @@ Ensure Sidebar Is Closed
     [Arguments]    ${side}=left
     ${els} =    Get WebElements    css:#jp-${side}-stack
     IF    ${els.__len__()} and ${els[0].is_displayed()}
-        Wait Until Keyword Succeeds    3x    0.5s    Click Element    css:.jp-mod-${side} .p-TabBar-tab.p-mod-current
+        Wait Until Keyword Succeeds    3x    0.5s    Click Element    css:.jp-mod-${side} .lm-TabBar-tab.lm-mod-current
     END
 
 Refresh File List
