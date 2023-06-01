@@ -1,7 +1,8 @@
 dependencies:
   - firefox =102
   - geckodriver
-  - robotframework-jupyterlibrary
+  - conda-forge/label/robotframework_jupyterlibrary_alpha::robotframework-jupyterlibrary
+    >=0.5.0a0
   - robotframework-pabot
   - robotframework-robocop
   - robotframework-tidy >=3.4.0
