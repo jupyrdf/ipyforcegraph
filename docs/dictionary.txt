@@ -44,7 +44,9 @@ ForceGraph
 ForceGraph3D
 gnbu
 GnBu
+GraphCamera
 GraphData
+GraphDirector
 GraphForces
 GraphImage
 HasDimensions
@@ -138,6 +140,7 @@ TODO
 traitleted
 traitlets
 traittypes
+truthy
 TypedTuple
 TypeScript
 vasturiano
