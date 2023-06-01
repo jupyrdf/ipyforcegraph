@@ -98,7 +98,7 @@ class GraphCamera(Behavior):
     ).tag(sync=True)
 
     center: Tuple[float, ...] = W.TypedTuple(
-        T.Float, allow_none=True, help="the center of the viewport as `[x, y, z?]`"
+        T.Float(), allow_none=True, help="the center of the viewport as `[x, y, z?]`"
     ).tag(sync=True)
 
 
@@ -113,7 +113,7 @@ class GraphDirector(Behavior):
     ).tag(sync=True)
 
     center: Optional[Tuple[float, ...]] = W.TypedTuple(
-        T.Float,
+        T.Float(),
         allow_none=True,
         help="the desired center of the viewport as `[x, y, z?]`",
     ).tag(sync=True)
