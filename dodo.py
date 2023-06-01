@@ -373,14 +373,14 @@ def task_build():
         uptodate=[config_changed({"TOTAL_COVERAGE": P.TOTAL_COVERAGE})],
         file_dep=ts_dep,
         actions=[[*P.IN_ENV, *P.JLPM, ts_script]],
-        targets=[P.TSBUILDINFO],
+        targets=[P.TSBUILDINFO, P.JS_LIB_INDEX_JS],
     )
 
     yield dict(
         name="ext",
         uptodate=[config_changed({"TOTAL_COVERAGE": P.TOTAL_COVERAGE})],
         actions=[[*P.IN_ENV, *P.JLPM, "build:ext"]],
-        file_dep=[P.TSBUILDINFO, *P.ALL_CSS],
+        file_dep=[P.TSBUILDINFO, P.JS_LIB_INDEX_JS, *P.ALL_CSS],
         targets=[P.PY_PACKAGE_JSON],
     )
 

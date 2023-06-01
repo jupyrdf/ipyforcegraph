@@ -193,6 +193,7 @@ LITE_SHA256SUMS = LITE_BUILD / "SHA256SUMS"
 # js stuff
 JS_LIB = ROOT / "lib"
 TSBUILDINFO = BUILD / ".src.tsbuildinfo"
+JS_LIB_INDEX_JS = JS_LIB / "index.js"
 TS_SRC = ROOT / "js"
 STYLE = ROOT / "style"
 ALL_TSCONFIG = [
