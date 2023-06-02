@@ -607,11 +607,6 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
         ? this.wrapFunction(this.onLinkClick)
         : null
     );
-    graph.onZoom(
-      this.model.graphBehaviorsForMethod('onZoom').length
-        ? this.wrapFunction(this.onZoom)
-        : null
-    );
 
     // forces
     this.getForceUpdate();
@@ -692,6 +687,12 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
     graph.onRenderFramePost(
       this.model.graphBehaviorsForMethod('onRender').length
         ? this.wrapFunction(this.onRender)
+        : null
+    );
+
+    graph.onZoom(
+      this.model.graphBehaviorsForMethod('onZoom').length
+        ? this.wrapFunction(this.onZoom)
         : null
     );
   }

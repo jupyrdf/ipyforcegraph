@@ -332,7 +332,7 @@ def task_setup():
             dict(
                 name="labext",
                 actions=[[*P.IN_ENV, *P.LAB_EXT, "develop", "--overwrite", "."]],
-                file_dep=[P.OK_PIP_INSTALL, P.PY_PACKAGE_JSON],
+                file_dep=[P.OK_PIP_INSTALL, P.PY_PACKAGE_JSON, P.HISTORY],
             ),
             P.OK_LABEXT,
         )
