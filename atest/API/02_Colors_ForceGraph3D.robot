@@ -14,34 +14,33 @@ Force Tags      suite:colors
 *** Variables ***
 ${SCREENS}      ${SCREENS ROOT}${/}api
 
-*** Test Cases ***
 
+*** Test Cases ***
 ForceGraph3D Can Update background_color
-    Color Feature Works As Expected  ForceGraph3D  background_color
+    Color Feature Works As Expected    ForceGraph3D    background_color
 
 ForceGraph3D Can Update default_link_color
-    Color Feature Works As Expected  ForceGraph3D  default_link_color
+    Color Feature Works As Expected    ForceGraph3D    default_link_color
 
 ForceGraph3D Can Update default_node_color
-    Color Feature Works As Expected  ForceGraph3D  default_node_color
-
+    Color Feature Works As Expected    ForceGraph3D    default_node_color
 
 
 *** Keywords ***
 Color Feature Works As Expected
     [Arguments]    ${widget_class}    ${feature}
     ${screens} =    Set Variable    ${SCREENS}${/}${widget_class.lower()}_${feature}
-    Maybe Skip A Test    widget_class=${widget_class}   feature=${feature}
+    Maybe Skip A Test    widget_class=${widget_class}    feature=${feature}
     Set Screenshot Directory    ${screens}
     Set Up Color Example    ${feature}    ${widget_class}
-    ${frame} =   Set Variable   css:${IPYFORCEGRAPH FRAME}
-    ${transparent} =    Get Element Screenshot Size    ${frame}  ${screens}    01-transparent.png
-    ${redden} =   Set Variable   fg.${feature} = "rgba(255, 0, 0, 1.0)"
-    Add And Run JupyterLab Code Cell  ${redden}
+    ${frame} =    Set Variable    css:${IPYFORCEGRAPH FRAME}
+    ${transparent} =    Get Element Screenshot Size    ${frame}    ${screens}    01-transparent.png
+    ${redden} =    Set Variable    fg.${feature} = "rgba(255, 0, 0, 1.0)"
+    Add And Run JupyterLab Code Cell    ${redden}
     Wait For All Cells To Run
     Sleep    0.5s
-    ${color} =   Get Element Screenshot Size    ${frame}    ${screens}    02-color.png
-    Should Be True Or Screenshot    ${color} > ${transparent}  03-color-bigger-than-transparent.png
+    ${color} =    Get Element Screenshot Size    ${frame}    ${screens}    02-color.png
+    Should Be True Or Screenshot    ${color} > ${transparent}    03-color-bigger-than-transparent.png
     [Teardown]    Clean Up Color Example
 
 Set Up Color Example
@@ -50,7 +49,7 @@ Set Up Color Example
     ${text} =    Get File    ${IPYFORCEGRAPH_FIXTURES}${/}api${/}Colors.py
     ${text} =    Set Variable    ${text.replace("WIDGET_CLASS", "${widget_class}")}
     ${text} =    Set Variable    ${text.replace("FEATURE", "${feature}")}
-    Log   ${text}
+    Log    ${text}
     Launch A New JupyterLab Document
     Set CodeMirror Value    .jp-CodeCell .CodeMirror    ${text.strip()}
     Execute JupyterLab Command    Show Log Console

@@ -65,6 +65,7 @@ ${SCREENS}      ${SCREENS ROOT}${/}api
 *** Keywords ***
 Set Up Behavior Example
     [Arguments]    ${behavior}    ${widget_class}
+    Maybe Skip A Test    widget_class=${widget_class}
     Set Tags    behavior:${behavior.lower()}    widget:${widget_class.lower()}
     Set Screenshot Directory    ${SCREENS}${/}${widget_class.lower()}_${behavior.lower()}
     ${text} =    Get File    ${IPYFORCEGRAPH_FIXTURES}${/}api${/}${behavior}.py
