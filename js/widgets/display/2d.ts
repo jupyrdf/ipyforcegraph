@@ -332,8 +332,13 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
     this.graph = graph as any;
     contentWindow.addEventListener('resize', this.onWindowResize);
     this._rendered.resolve(void 0);
+    await this.onGraphInitialized();
     await this.redraw();
   };
+
+  protected async onGraphInitialized(): Promise<void> {
+    // just for overloading
+  }
 
   protected onWindowResize = () => {
     const { contentWindow } = this._iframe;
@@ -913,7 +918,7 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
   };
 
   protected onZoom = (zoom: IZoomData) => {
-    const graph = this.graph as ForceGraphInstance;
+    const graph = zoom.graph || (this.graph as ForceGraphInstance);
     for (const behavior of this.model.graphBehaviorsForMethod('onZoom')) {
       behavior.onZoom({ ...zoom, graph });
     }

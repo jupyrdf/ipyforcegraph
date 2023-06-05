@@ -284,9 +284,11 @@ export enum EMark {
 }
 
 export interface IZoomData {
-  k: number;
   x: number;
   y: number;
-  z: number;
+  z?: number;
+  k?: number;
+  lookAt?: THREE.Vector3;
   graph: ForceGraphInstance;
+  iframeClasses?: Record<string, any>;
 }

@@ -5,10 +5,15 @@
 import type { ForceGraph3DGenericInstance, ForceGraph3DInstance } from '3d-force-graph';
 import type { NodeObject } from 'force-graph';
 import type THREE from 'three';
+import { FlyControls } from 'three/examples/jsm/controls/FlyControls.js';
+import type { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls.js';
 
 import { INodeThreeBehaveOptions, IRenderOptions } from '../../tokens';
 
 import { ForceGraphModel, ForceGraphView } from './2d';
+
+export type TAnyControls = OrbitControls | TrackballControls | FlyControls;
 
 export class ForceGraph3DModel extends ForceGraphModel {
   static model_name = 'ForceGraph3DModel';
@@ -30,7 +35,20 @@ export class ForceGraph3DView extends ForceGraphView<
 > {
   static view_name = 'ForceGraph3DView';
 
+  private _threeRenderer: THREE.WebGLRenderer;
+  private _threeControls: TAnyControls;
+  private _threeCamera: THREE.PerspectiveCamera;
+
   model: ForceGraph3DModel;
+
+  protected async onGraphInitialized(): Promise<void> {
+    const graph = this.graph as ForceGraph3DInstance;
+    this._threeRenderer = graph.renderer() as THREE.WebGLRenderer;
+    this._threeControls = graph.controls() as TAnyControls;
+    this._threeCamera = graph.camera() as THREE.PerspectiveCamera;
+
+    this._threeControls.addEventListener('change', this.onControlsChange);
+  }
 
   protected get graphJsClass(): string {
     return 'ForceGraph3D';
@@ -61,9 +79,25 @@ export class ForceGraph3DView extends ForceGraphView<
   }
 
   protected get threeRenderer(): THREE.WebGLRenderer {
-    const graph = this.graph as ForceGraph3DInstance;
-    return graph.renderer() as THREE.WebGLRenderer;
+    return this._threeRenderer;
   }
+
+  protected get threeControls(): TAnyControls {
+    return this._threeControls;
+  }
+
+  protected get threeCamera(): THREE.PerspectiveCamera {
+    return this._threeCamera;
+  }
+
+  protected onControlsChange = async (): Promise<void> => {
+    const position = this.graph.cameraPosition();
+    this.onZoom({
+      ...position,
+      graph: this.graph as any,
+      iframeClasses: this._iframeClasses,
+    });
+  };
 
   protected getOnRenderPostUpdate() {
     const graph = this.graph as ForceGraph3DInstance;

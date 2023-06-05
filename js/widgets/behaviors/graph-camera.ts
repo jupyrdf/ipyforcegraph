@@ -2,6 +2,7 @@
  * Copyright (c) 2023 ipyforcegraph contributors.
  * Distributed under the terms of the Modified BSD License.
  */
+import { ForceGraph3DInstance } from '3d-force-graph';
 import { ForceGraphInstance } from 'force-graph';
 
 import { IBackboneModelOptions } from '@jupyter-widgets/base';
@@ -67,22 +68,58 @@ export class GraphCameraModel extends ZoomBase implements IBehave {
     const z = zoom.z == null ? [] : [zoom.z];
     this.center = [zoom.x, zoom.y, ...z];
     if (this.captureVisible) {
-      const halfW = graph.width() / 2 / k;
-      const halfH = graph.height() / 2 / k;
-      const bx = [zoom.x - halfW, zoom.x + halfW];
-      const by = [zoom.y - halfH, zoom.y + halfH];
-      const visible: number[] = [];
-      let i = 0;
-      for (let { x, y } of graph.graphData().nodes) {
-        if (x >= bx[0] && x <= bx[1] && y >= by[0] && y <= by[1]) {
-          visible.push(i);
-        }
-        i++;
-      }
-      this.visible = visible;
+      this.visible = graph.hasOwnProperty('nodeThreeObject')
+        ? this.getVisible3d(zoom)
+        : this.getVisible2d(zoom);
     }
 
     this.save();
+  }
+
+  protected getVisible3d(zoom: IZoomData): number[] {
+    const graph = zoom.graph as any as ForceGraph3DInstance;
+    const visible = [];
+    let i = 0;
+
+    const { THREE } = zoom.iframeClasses;
+    const camera = graph.camera();
+
+    const frustum: THREE.Frustum = new THREE.Frustum().setFromProjectionMatrix(
+      new THREE.Matrix4().multiplyMatrices(
+        camera.projectionMatrix,
+        camera.matrixWorldInverse
+      )
+    );
+
+    for (let node of graph.graphData().nodes) {
+      let __threeObj: THREE.Object3D = (node as any).__threeObj;
+      if (
+        frustum.containsPoint(__threeObj.position) ||
+        frustum.intersectsObject(__threeObj)
+      ) {
+        visible.push(i);
+      }
+      i++;
+    }
+
+    return visible;
+  }
+
+  protected getVisible2d(zoom: IZoomData): number[] {
+    const { graph, k } = zoom;
+    const halfW = graph.width() / 2 / k;
+    const halfH = graph.height() / 2 / k;
+    const bx = [zoom.x - halfW, zoom.x + halfW];
+    const by = [zoom.y - halfH, zoom.y + halfH];
+    const visible = [];
+    let i = 0;
+    for (let { x, y } of graph.graphData().nodes) {
+      if (x >= bx[0] && x <= bx[1] && y >= by[0] && y <= by[1]) {
+        visible.push(i);
+      }
+      i++;
+    }
+    return visible;
   }
 }
 
