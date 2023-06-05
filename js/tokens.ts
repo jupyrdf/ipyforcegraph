@@ -81,6 +81,11 @@ export enum EUpdate {
 }
 export type TUpdateKind = void | number;
 
+export interface IUpdateGraphCameraOptions {
+  graph: ForceGraphInstance;
+  iframeClasses?: Record<string, any>;
+}
+
 export interface IBehave extends WidgetModel {
   rank: number;
   updateRequested: ISignal<IBehave, TUpdateKind>;
@@ -92,7 +97,7 @@ export interface IBehave extends WidgetModel {
 
   // custom signals
   graphCameraUpdateRequested: ISignal<IBehave, void>;
-  updateGraphCamera?(graph: ForceGraphInstance): Promise<void>;
+  updateGraphCamera?(options: IUpdateGraphCameraOptions): Promise<void>;
 
   // link
   getLinkColor?(options: ILinkBehaveOptions): string | null;

@@ -7,7 +7,12 @@ import { ForceGraphInstance } from 'force-graph';
 
 import { IBackboneModelOptions } from '@jupyter-widgets/base';
 
-import { IBehave, IZoomData, WIDGET_DEFAULTS } from '../../tokens';
+import {
+  IBehave,
+  IUpdateGraphCameraOptions,
+  IZoomData,
+  WIDGET_DEFAULTS,
+} from '../../tokens';
 import { widget_serialization } from '../serializers/widget';
 
 import { FacetedModel } from './base';
@@ -21,12 +26,24 @@ class ZoomBase extends FacetedModel implements IBehave {
     this.set('zoom', zoom);
   }
 
+  get lookAt() {
+    return this.get('look_at');
+  }
+
+  set lookAt(lookAt: number[]) {
+    this.set('look_at', lookAt ? lookAt : null);
+  }
+
   get center(): number[] {
     return this.get('center');
   }
 
   set center(center: number[]) {
     this.set('center', center);
+  }
+
+  is3d(graph: ForceGraphInstance | ForceGraph3DInstance) {
+    return graph.hasOwnProperty('nodeThreeObject');
   }
 }
 
@@ -62,15 +79,14 @@ export class GraphCameraModel extends ZoomBase implements IBehave {
   }
 
   onZoom(zoom: IZoomData): void {
-    const { graph } = zoom;
-    const { k } = zoom;
-    this.zoom = k;
+    const { graph, k, lookAt } = zoom;
+    const is3d = this.is3d(graph);
     const z = zoom.z == null ? [] : [zoom.z];
     this.center = [zoom.x, zoom.y, ...z];
+    this.zoom = k;
+    this.lookAt = zoom.lookAt != null ? [lookAt.x, lookAt.y, lookAt.z] : null;
     if (this.captureVisible) {
-      this.visible = graph.hasOwnProperty('nodeThreeObject')
-        ? this.getVisible3d(zoom)
-        : this.getVisible2d(zoom);
+      this.visible = is3d ? this.getVisible3d(zoom) : this.getVisible2d(zoom);
     }
 
     this.save();
@@ -210,8 +226,12 @@ export class GraphDirectorModel extends ZoomBase implements IBehave {
     }
   }
 
-  async updateGraphCamera(graph: ForceGraphInstance): Promise<void> {
+  async updateGraphCamera(options: IUpdateGraphCameraOptions): Promise<void> {
+    const { graph } = options;
+    const is3d = this.is3d(graph);
+
     let fitNodes = null;
+
     if (this.get('fit_nodes')) {
       await this.ensureFacets();
       fitNodes = this._nodeFacets['fit_nodes'];
@@ -221,17 +241,25 @@ export class GraphDirectorModel extends ZoomBase implements IBehave {
       const wrappedFit = this.wrapForNode(fitNodes) as any;
       graph.zoomToFit(this.fitDuration, this.fitPadding, wrappedFit);
     } else {
-      const k = this.zoom;
-      const [x, y] = this.center || [];
-      if (this.zoomFirst) {
-        k == null ? null : graph.zoom(k, this.zoomDuration);
-        this.center == null ? null : graph.centerAt(x, y, this.panDuration);
+      if (is3d) {
+        let graph3 = graph as any as ForceGraph3DInstance;
+        const Vector3 = options.iframeClasses.THREE.Vector3;
+        let lookAt: THREE.Vector3 = new Vector3(...this.lookAt);
+        let [x, y, z] = this.center;
+        graph3.cameraPosition({ x, y, z }, lookAt, this.zoomDuration);
       } else {
-        k == null ? null : graph.centerAt(x, y, this.panDuration);
-        this.center == null ? null : graph.zoom(k, this.zoomDuration);
+        const k = this.zoom;
+        const [x, y] = this.center || [];
+        if (this.zoomFirst) {
+          k == null ? null : graph.zoom(k, this.zoomDuration);
+          this.center == null ? null : graph.centerAt(x, y, this.panDuration);
+        } else {
+          k == null ? null : graph.centerAt(x, y, this.panDuration);
+          this.center == null ? null : graph.zoom(k, this.zoomDuration);
+        }
       }
       this._resetting = true;
-      this.save({ zoom: null, center: null });
+      this.save({ zoom: null, center: null, look_at: null });
       setTimeout(this._doneResetting, this.panDuration + this.zoomDuration);
     }
   }

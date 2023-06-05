@@ -94,11 +94,15 @@ class GraphCamera(Behavior):
     _model_name: str = T.Unicode("GraphCameraModel").tag(sync=True)
 
     zoom: float = T.Float(
-        None, allow_none=True, help="the current zoom level of the viewport"
+        None, allow_none=True, help="the current 2d zoom level of the viewport"
     ).tag(sync=True)
 
     center: Tuple[float, ...] = W.TypedTuple(
         T.Float(), allow_none=True, help="the center of the viewport as `[x, y, z?]`"
+    ).tag(sync=True)
+
+    look_at: Tuple[float, ...] = W.TypedTuple(
+        T.Float(), allow_none=True, help="the direction of a 3d camera as `[x, y, z?]`"
     ).tag(sync=True)
 
     visible: Tuple[int, ...] = W.TypedTuple(
@@ -117,7 +121,7 @@ class GraphDirector(Behavior):
     _model_name: str = T.Unicode("GraphDirectorModel").tag(sync=True)
 
     zoom: Optional[float] = T.Float(
-        None, allow_none=True, help="the desired zoom level of the viewport"
+        None, allow_none=True, help="the desired 2d zoom level of the viewport"
     ).tag(sync=True)
 
     center: Optional[Tuple[float, ...]] = W.TypedTuple(
@@ -126,8 +130,12 @@ class GraphDirector(Behavior):
         help="the desired center of the viewport as `[x, y, z?]`",
     ).tag(sync=True)
 
+    look_at: Tuple[float, ...] = W.TypedTuple(
+        T.Float(), allow_none=True, help="the direction of a 3d camera as `[x, y, z]`"
+    ).tag(sync=True)
+
     zoom_first: bool = T.Bool(
-        False, help="whether to apply zoom the viewport before panning"
+        False, help="whether to zoom the viewport before panning"
     ).tag(sync=True)
 
     fit_nodes: TFeature = _make_trait(

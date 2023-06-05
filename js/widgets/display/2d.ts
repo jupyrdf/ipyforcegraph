@@ -486,7 +486,7 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
   protected async onGraphCameraUpdateRequested(behavior: IBehave) {
     const graph = this.graph as ForceGraphInstance;
     if (graph && behavior.updateGraphCamera) {
-      await behavior.updateGraphCamera(graph);
+      await behavior.updateGraphCamera({ graph, iframeClasses: this._iframeClasses });
     }
   }
 
