@@ -94,7 +94,7 @@ class GraphCamera(Behavior):
     _model_name: str = T.Unicode("GraphCameraModel").tag(sync=True)
 
     zoom: float = T.Float(
-        None, allow_none=True, help="the current 2d zoom level of the viewport"
+        None, allow_none=True, help="the current 2D zoom level of the viewport"
     ).tag(sync=True)
 
     center: Tuple[float, ...] = W.TypedTuple(
@@ -102,7 +102,7 @@ class GraphCamera(Behavior):
     ).tag(sync=True)
 
     look_at: Tuple[float, ...] = W.TypedTuple(
-        T.Float(), allow_none=True, help="the direction of a 3d camera as `[x, y, z?]`"
+        T.Float(), allow_none=True, help="the direction of a 3D camera as `[x, y, z?]`"
     ).tag(sync=True)
 
     visible: Tuple[int, ...] = W.TypedTuple(
@@ -121,7 +121,7 @@ class GraphDirector(Behavior):
     _model_name: str = T.Unicode("GraphDirectorModel").tag(sync=True)
 
     zoom: Optional[float] = T.Float(
-        None, allow_none=True, help="the desired 2d zoom level of the viewport"
+        None, allow_none=True, help="the desired 2D zoom level of the viewport"
     ).tag(sync=True)
 
     center: Optional[Tuple[float, ...]] = W.TypedTuple(
