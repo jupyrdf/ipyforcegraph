@@ -58,7 +58,7 @@ export class GraphCameraModel extends ZoomBase implements IBehave {
       zoom: 0,
       center: [0, 0],
       visible: [],
-      capture_visible: false,
+      capturing: false,
     };
   }
 
@@ -71,11 +71,11 @@ export class GraphCameraModel extends ZoomBase implements IBehave {
   }
 
   get captureVisible(): boolean {
-    return this.get('capture_visible');
+    return this.get('capturing');
   }
 
   set captureVisible(captureVisible: boolean) {
-    this.set('capture_visible', captureVisible);
+    this.set('capturing', captureVisible);
   }
 
   onZoom(zoom: IZoomData): void {
@@ -146,7 +146,7 @@ export class GraphDirectorModel extends ZoomBase implements IBehave {
 
   static serializers = {
     ...FacetedModel.serializers,
-    fit_nodes: widget_serialization,
+    visible: widget_serialization,
   };
 
   protected get _modelClass(): typeof GraphDirectorModel {
@@ -159,8 +159,8 @@ export class GraphDirectorModel extends ZoomBase implements IBehave {
       ...WIDGET_DEFAULTS,
       _model_name: GraphCameraModel.model_name,
       zoom: null,
-      fit_nodes: null,
-      fit_padding: null,
+      visible: null,
+      padding: null,
       center: null,
       zoom_first: false,
       zoom_duration: 0.2,
@@ -172,7 +172,7 @@ export class GraphDirectorModel extends ZoomBase implements IBehave {
   initialize(attributes: Backbone.ObjectHash, options: IBackboneModelOptions) {
     super.initialize(attributes, options);
     this.on(
-      'change:zoom change:center change:fit_nodes change:fit_padding',
+      'change:zoom change:center change:visible change:padding',
       this.onZoomChanged,
       this
     );
@@ -230,15 +230,15 @@ export class GraphDirectorModel extends ZoomBase implements IBehave {
     const { graph } = options;
     const is3d = this.is3d(graph);
 
-    let fitNodes = null;
+    let visible = null;
 
-    if (this.get('fit_nodes')) {
+    if (this.get('visible')) {
       await this.ensureFacets();
-      fitNodes = this._nodeFacets['fit_nodes'];
+      visible = this._nodeFacets['visible'];
     }
 
-    if (fitNodes) {
-      const wrappedFit = this.wrapForNode(fitNodes) as any;
+    if (visible) {
+      const wrappedFit = this.wrapForNode(visible) as any;
       graph.zoomToFit(this.fitDuration, this.fitPadding, wrappedFit);
     } else {
       if (is3d) {
@@ -252,10 +252,10 @@ export class GraphDirectorModel extends ZoomBase implements IBehave {
         const [x, y] = this.center || [];
         if (this.zoomFirst) {
           k == null ? null : graph.zoom(k, this.zoomDuration);
-          this.center == null ? null : graph.centerAt(x, y, this.panDuration);
+          x == null && y == null ? null : graph.centerAt(x, y, this.panDuration);
         } else {
-          k == null ? null : graph.centerAt(x, y, this.panDuration);
-          this.center == null ? null : graph.zoom(k, this.zoomDuration);
+          x == null && y == null ? null : graph.centerAt(x, y, this.panDuration);
+          k == null ? null : graph.zoom(k, this.zoomDuration);
         }
       }
       this._resetting = true;

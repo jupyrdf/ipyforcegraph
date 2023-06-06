@@ -109,7 +109,7 @@ class GraphCamera(Behavior):
         T.Int(), help="the indices of all visible nodes"
     ).tag(sync=True)
 
-    capture_visible: bool = T.Bool(
+    capturing: bool = T.Bool(
         False, help="whether visible nodes should be captured as ``visible``"
     ).tag(sync=True)
 
@@ -138,13 +138,13 @@ class GraphDirector(Behavior):
         False, help="whether to zoom the viewport before panning"
     ).tag(sync=True)
 
-    fit_nodes: TFeature = _make_trait(
+    visible: TFeature = _make_trait(
         "fit nodes in viewport for which this column/template is truthy",
         by_template=True,
         by_column=True,
     )
 
-    fit_padding: float = T.Float(
+    padding: float = T.Float(
         10, help="pixels of padding between nodes and viewport"
     ).tag(sync=True)
 
@@ -154,6 +154,6 @@ class GraphDirector(Behavior):
 
     fit_duration: float = T.Float(0.2, help="seconds to animate a fit").tag(sync=True)
 
-    @T.validate("fit_nodes")
+    @T.validate("visible")
     def _validate_scale_bools(self, proposal: T.Bunch) -> Any:
         return coerce(proposal, JSON_TYPES.boolean)
