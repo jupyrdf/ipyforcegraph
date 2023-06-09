@@ -12,7 +12,6 @@
 
 import os
 import subprocess
-from hashlib import sha256
 
 from doit import create_after
 from doit.action import CmdAction
@@ -402,25 +401,11 @@ def task_build():
         targets=[P.WHEEL, P.SDIST],
     )
 
-    def _run_hash():
-        # mimic sha256sum CLI
-        if P.SHA256SUMS.exists():
-            P.SHA256SUMS.unlink()
-
-        lines = []
-
-        for p in P.HASH_DEPS:
-            lines += ["  ".join([sha256(p.read_bytes()).hexdigest(), p.name])]
-
-        output = "\n".join(lines)
-        print(output)
-        P.SHA256SUMS.write_text(output, **P.UTF8)
-
     yield dict(
         name="hash",
         file_dep=P.HASH_DEPS,
         targets=[P.SHA256SUMS],
-        actions=[_run_hash],
+        actions=[(U.hash_files, [P.SHA256SUMS, P.HASH_DEPS])],
     )
 
 
@@ -1011,4 +996,29 @@ def task_checkdocs():
         task_dep=spell_tasks,
         actions=[_all_spell],
         targets=[P.ALL_SPELL],
+    )
+
+
+def task_site():
+    yield dict(
+        name="build",
+        file_dep=[
+            P.PAGES_LITE_CONFIG,
+            P.UTEST_COV_INDEX,
+            P.ATEST_COV_JS_INDEX,
+            P.ALL_COV_PY_INDEX,
+        ],
+        targets=[P.PAGES_LITE_BUILD_SHASUMS],
+        actions=[
+            CmdAction(
+                [*P.IN_ENV, "jupyter", "lite", "build"],
+                shell=False,
+                cwd=str(P.PAGES_LITE),
+            ),
+            lambda: U.hash_files(
+                P.PAGES_LITE_BUILD_SHASUMS,
+                [p for p in P.PAGES_LITE_BUILD.rglob("*") if not p.is_dir()],
+                quiet=True,
+            ),
+        ],
     )
