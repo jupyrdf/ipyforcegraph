@@ -12,6 +12,7 @@ import type {
 } from 'force-graph';
 
 import { PromiseDelegate } from '@lumino/coreutils';
+import { Throttler } from '@lumino/polling';
 import { ISignal, Signal } from '@lumino/signaling';
 
 import {
@@ -49,6 +50,7 @@ import {
   TAnyForce,
   TGraphBehaveMethod,
   TGraphMethodMap,
+  THROTTLE_OPTS,
   TLinkBehaveMethod,
   TLinkMethodMap,
   TNodeBehaveMethod,
@@ -695,11 +697,21 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
         : null
     );
 
-    graph.onZoom(
-      this.model.graphBehaviorsForMethod('onZoom').length
-        ? this.wrapFunction(this.onZoom)
-        : null
-    );
+    if (this.model.graphBehaviorsForMethod('onZoom').length) {
+      const throttled = new Throttler(
+        this.wrapFunction((zoomData: any) => this.onZoom(zoomData)),
+        THROTTLE_OPTS
+      );
+      graph.onZoom((zoomData) => throttled.invoke(zoomData));
+    } else {
+      graph.onZoom(null);
+    }
+
+    // graph.onZoom(
+    //   this.model.graphBehaviorsForMethod('onZoom').length
+    //     ? this.wrapFunction(this.onZoom)
+    //     : null
+    // );
   }
 
   // composable behaviors

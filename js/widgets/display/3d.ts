@@ -11,13 +11,11 @@ import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls
 
 import { Throttler } from '@lumino/polling';
 
-import { INodeThreeBehaveOptions, IRenderOptions } from '../../tokens';
+import { INodeThreeBehaveOptions, IRenderOptions, THROTTLE_OPTS } from '../../tokens';
 
 import { ForceGraphModel, ForceGraphView } from './2d';
 
 export type TAnyControls = OrbitControls | TrackballControls | FlyControls;
-
-const THROTTLE_OPTS: Throttler.IOptions = { limit: 200, edge: 'trailing' };
 
 export class ForceGraph3DModel extends ForceGraphModel {
   static model_name = 'ForceGraph3DModel';

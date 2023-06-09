@@ -11,6 +11,7 @@ import type {
 } from 'force-graph';
 import type THREE from 'three';
 
+import type { Throttler } from '@lumino/polling';
 import type { ISignal } from '@lumino/signaling';
 
 import type { DOMWidgetView, WidgetModel } from '@jupyter-widgets/base';
@@ -297,3 +298,5 @@ export interface IZoomData {
   graph: ForceGraphInstance;
   iframeClasses?: Record<string, any>;
 }
+
+export const THROTTLE_OPTS: Throttler.IOptions = { limit: 200, edge: 'trailing' };
