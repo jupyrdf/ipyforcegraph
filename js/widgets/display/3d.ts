@@ -9,11 +9,15 @@ import { FlyControls } from 'three/examples/jsm/controls/FlyControls.js';
 import type { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls.js';
 
+import { Throttler } from '@lumino/polling';
+
 import { INodeThreeBehaveOptions, IRenderOptions } from '../../tokens';
 
 import { ForceGraphModel, ForceGraphView } from './2d';
 
 export type TAnyControls = OrbitControls | TrackballControls | FlyControls;
+
+const THROTTLE_OPTS: Throttler.IOptions = { limit: 200, edge: 'trailing' };
 
 export class ForceGraph3DModel extends ForceGraphModel {
   static model_name = 'ForceGraph3DModel';
@@ -47,7 +51,9 @@ export class ForceGraph3DView extends ForceGraphView<
     this._threeControls = graph.controls() as TAnyControls;
     this._threeCamera = graph.camera() as THREE.PerspectiveCamera;
 
-    this._threeControls.addEventListener('change', this.onControlsChange);
+    const throttled = new Throttler(() => this.onControlsChange(), THROTTLE_OPTS);
+
+    this._threeControls.addEventListener('change', () => throttled.invoke());
   }
 
   protected get graphJsClass(): string {
