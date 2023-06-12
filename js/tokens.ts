@@ -125,36 +125,67 @@ export interface IBehave extends WidgetModel {
   onZoom?(zoomData: IZoomData): void;
   onRender?(options: IRenderOptions): void;
 }
+export enum ELinkBehaveMethod {
+  getLinkLabel = 0,
+  getLinkColor = 1,
+  getLinkCurvature = 2,
+  getLinkLineDash = 3,
+  getLinkWidth = 4,
+  getLinkDirectionalArrowColor = 5,
+  getLinkDirectionalArrowLength = 6,
+  getLinkDirectionalArrowRelPos = 7,
+  getLinkDirectionalParticleColor = 8,
+  getLinkDirectionalParticleSpeed = 9,
+  getLinkDirectionalParticleWidth = 10,
+  getLinkDirectionalParticles = 11,
+  onLinkClick = 12,
+}
 
-export const ALL_LINK_METHODS = [
-  'getLinkLabel',
-  'getLinkColor',
-  'getLinkCurvature',
-  'getLinkLineDash',
-  'getLinkWidth',
-  'getLinkDirectionalArrowColor',
-  'getLinkDirectionalArrowLength',
-  'getLinkDirectionalArrowRelPos',
-  'getLinkDirectionalParticleColor',
-  'getLinkDirectionalParticleSpeed',
-  'getLinkDirectionalParticleWidth',
-  'getLinkDirectionalParticles',
-  'onLinkClick',
-];
-export type TLinkBehaveMethod = (typeof ALL_LINK_METHODS)[number];
+export const ALL_LINK_METHODS = {
+  getLinkLabel: ELinkBehaveMethod.getLinkLabel,
+  getLinkColor: ELinkBehaveMethod.getLinkColor,
+  getLinkCurvature: ELinkBehaveMethod.getLinkCurvature,
+  getLinkLineDash: ELinkBehaveMethod.getLinkLineDash,
+  getLinkWidth: ELinkBehaveMethod.getLinkWidth,
+  getLinkDirectionalArrowColor: ELinkBehaveMethod.getLinkDirectionalArrowColor,
+  getLinkDirectionalArrowLength: ELinkBehaveMethod.getLinkDirectionalArrowLength,
+  getLinkDirectionalArrowRelPos: ELinkBehaveMethod.getLinkDirectionalArrowRelPos,
+  getLinkDirectionalParticleColor: ELinkBehaveMethod.getLinkDirectionalParticleColor,
+  getLinkDirectionalParticleSpeed: ELinkBehaveMethod.getLinkDirectionalParticleSpeed,
+  getLinkDirectionalParticleWidth: ELinkBehaveMethod.getLinkDirectionalParticleWidth,
+  getLinkDirectionalParticles: ELinkBehaveMethod.getLinkDirectionalParticles,
+  onLinkClick: ELinkBehaveMethod.onLinkClick,
+};
+export type TLinkBehaveMethod = keyof typeof ALL_LINK_METHODS;
 
-export const ALL_NODE_METHODS = [
-  'getNodeLabel',
-  'getNodeColor',
-  'getNodeSize',
-  'getNodeCanvasObject',
-  'getNodeThreeObject',
-  'onNodeClick',
-];
-export type TNodeBehaveMethod = (typeof ALL_NODE_METHODS)[number];
+export enum ENodeBehaveMethod {
+  getNodeLabel = 0,
+  getNodeColor = 1,
+  getNodeSize = 2,
+  getNodeCanvasObject = 3,
+  getNodeThreeObject = 4,
+  onNodeClick = 5,
+}
 
-export const ALL_GRAPH_METHODS = ['onRender', 'onZoom'];
-export type TGraphBehaveMethod = (typeof ALL_GRAPH_METHODS)[number];
+export const ALL_NODE_METHODS = {
+  getNodeLabel: ENodeBehaveMethod.getNodeLabel,
+  getNodeColor: ENodeBehaveMethod.getNodeColor,
+  getNodeSize: ENodeBehaveMethod.getNodeSize,
+  getNodeCanvasObject: ENodeBehaveMethod.getNodeCanvasObject,
+  getNodeThreeObject: ENodeBehaveMethod.getNodeThreeObject,
+  onNodeClick: ENodeBehaveMethod.onNodeClick,
+};
+export type TNodeBehaveMethod = keyof typeof ALL_NODE_METHODS;
+
+export enum EGraphBehaveMethod {
+  onRender = 0,
+  onZoom = 1,
+}
+export const ALL_GRAPH_METHODS = {
+  onRender: EGraphBehaveMethod.onRender,
+  onZoom: EGraphBehaveMethod.onZoom,
+};
+export type TGraphBehaveMethod = keyof typeof ALL_GRAPH_METHODS;
 
 export type TNodeMethodMap = Map<TNodeBehaveMethod, IBehave[]>;
 export type TLinkMethodMap = Map<TLinkBehaveMethod, IBehave[]>;

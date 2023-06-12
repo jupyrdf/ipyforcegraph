@@ -11,7 +11,13 @@ import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls
 
 import { Throttler } from '@lumino/polling';
 
-import { INodeThreeBehaveOptions, IRenderOptions, THROTTLE_OPTS } from '../../tokens';
+import {
+  EGraphBehaveMethod,
+  ENodeBehaveMethod,
+  INodeThreeBehaveOptions,
+  IRenderOptions,
+  THROTTLE_OPTS,
+} from '../../tokens';
 
 import { ForceGraphModel, ForceGraphView } from './2d';
 
@@ -107,13 +113,13 @@ export class ForceGraph3DView extends ForceGraphView<
     const graph = this.graph as ForceGraph3DInstance;
 
     graph.nodeThreeObject(
-      this.model.nodeBehaviorsForMethod('getNodeThreeObject').length
+      this._nodeBehaviorsByMethod[ENodeBehaveMethod.getNodeThreeObject].length
         ? this.wrapFunction(this.getNodeThreeObject)
         : null
     );
 
     this.threeRenderer.setAnimationLoop(
-      this.model.graphBehaviorsForMethod('onRender').length
+      this._graphBehaviorsByMethod[EGraphBehaveMethod.onRender].length
         ? this.wrapFunction(this.onRender)
         : null
     );
@@ -129,7 +135,9 @@ export class ForceGraph3DView extends ForceGraphView<
       iframeClasses: this._iframeClasses,
     };
 
-    for (const behavior of this.model.nodeBehaviorsForMethod('getNodeThreeObject')) {
+    for (const behavior of this._nodeBehaviorsByMethod[
+      ENodeBehaveMethod.getNodeThreeObject
+    ]) {
       let method = behavior.getNodeThreeObject;
       value = method.call(behavior, options);
       if (value != null) {
