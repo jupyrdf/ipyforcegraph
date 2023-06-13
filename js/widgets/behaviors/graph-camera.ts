@@ -247,7 +247,7 @@ export class GraphDirectorModel extends ZoomBase implements IBehave {
           return;
         }
         let graph3 = graph as any as ForceGraph3DInstance;
-        const Vector3 = options.iframeClasses.THREE.Vector3;
+        const { Vector3 } = options.iframeClasses.THREE;
         const vLookAt: THREE.Vector3 = new Vector3(...lookAt);
         const [x, y, z] = center;
         graph3.cameraPosition({ x, y, z }, vLookAt, this.zoomDuration);
