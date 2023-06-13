@@ -18,6 +18,7 @@ export class FacetedForceModel extends FacetedModel implements IForce {
   _force: TAnyForce;
 
   forceFactory(): TAnyForce {
+    /* istanbul ignore next */
     throw new Error('Not implemented');
   }
 

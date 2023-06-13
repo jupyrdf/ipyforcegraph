@@ -1,2 +1,3 @@
 importnb ; platform_machine == "wasm32"
 ipyforcegraph ; platform_machine == "wasm32"
+ipylab ; platform_machine == "wasm32"
