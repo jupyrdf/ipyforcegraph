@@ -31,7 +31,7 @@ class ZoomBase extends FacetedModel implements IBehave {
   }
 
   set lookAt(lookAt: number[]) {
-    this.set('look_at', lookAt ? lookAt : null);
+    this.set('look_at', lookAt && lookAt.length ? lookAt : null);
   }
 
   get center(): number[] {
@@ -242,11 +242,15 @@ export class GraphDirectorModel extends ZoomBase implements IBehave {
       graph.zoomToFit(this.fitDuration, this.fitPadding, wrappedFit);
     } else {
       if (is3d) {
+        const { lookAt, center } = this;
+        if (!lookAt || !center) {
+          return;
+        }
         let graph3 = graph as any as ForceGraph3DInstance;
         const Vector3 = options.iframeClasses.THREE.Vector3;
-        let lookAt: THREE.Vector3 = new Vector3(...this.lookAt);
-        let [x, y, z] = this.center;
-        graph3.cameraPosition({ x, y, z }, lookAt, this.zoomDuration);
+        const vLookAt: THREE.Vector3 = new Vector3(...lookAt);
+        const [x, y, z] = center;
+        graph3.cameraPosition({ x, y, z }, vLookAt, this.zoomDuration);
       } else {
         const k = this.zoom;
         const [x, y] = this.center || [];
