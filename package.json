@@ -39,7 +39,8 @@
   "resolutions": {
     "json5": "^2.1.1",
     "loader-utils": "^2.0.0",
-    "prettier": "^2.8.3",
+    "prettier": "^2.8.8",
+    "semver": ">=7.5.2",
     "typescript": "~4.9.5",
     "webpack": "^5.76.0"
   },

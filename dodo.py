@@ -264,7 +264,7 @@ def task_setup():
         else:
             raise RuntimeError(f"Don't know how to install {P.INSTALL_ARTIFACT}")
     else:
-        _install += ["-e", "."]
+        _install += ["-e", ".", "--no-build-isolation", "--no-deps"]
 
     file_dep = [
         P.HISTORY,
