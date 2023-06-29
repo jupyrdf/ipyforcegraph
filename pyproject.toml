@@ -43,6 +43,17 @@ dependencies = [
 "PyPI" = "https://pypi.org/project/ipyforcegraph"
 "Source" = "https://github.com/jupyrdf/ipyforcegraph"
 
+[tool.ruff]
+select = [
+  "E",
+  "F",
+  "I",
+  "PLE",
+  "W",
+]
+ignore = ["E501"]
+cache-dir = "build/.ruff_cache"
+
 [tool.pytest.ini_options]
 junit_family = "xunit2"
 cache_dir = "build/.pytest_cache"
@@ -129,17 +140,6 @@ include = ["src/_d"]
 
 [tool.flit.external-data]
 directory = "src/_d"
-
-[tool.ruff]
-select = [
-  "E",
-  "F",
-  "I",
-  "PLE",
-  "W",
-]
-ignore = ["E501"]
-cache-dir = "build/.ruff_cache"
 
 [tool.nbqa.addopts]
 ruff = ["--ignore=E402"]

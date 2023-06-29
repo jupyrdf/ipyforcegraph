@@ -3,15 +3,11 @@
  * Distributed under the terms of the Modified BSD License.
  */
 import { ObjectHash } from 'backbone';
-import type {
-  ForceGraphInstance,
-  LinkObject,
-  NodeObject,
-} from 'force-graph/dist/force-graph';
+import type { ForceGraphInstance, NodeObject } from 'force-graph/dist/force-graph';
 
 import { IBackboneModelOptions, WidgetModel } from '@jupyter-widgets/base';
 
-import { DEBUG, EMOJI, EUpdate, IForce, TAnyForce } from '../../../tokens';
+import { EUpdate, IForce, TAnyForce } from '../../../tokens';
 import { widget_serialization } from '../../serializers/widget';
 import { BehaviorModel, FacetedModel } from '../base';
 
@@ -22,6 +18,7 @@ export class FacetedForceModel extends FacetedModel implements IForce {
   _force: TAnyForce;
 
   forceFactory(): TAnyForce {
+    /* istanbul ignore next */
     throw new Error('Not implemented');
   }
 
@@ -37,39 +34,6 @@ export class FacetedForceModel extends FacetedModel implements IForce {
 
   get force(): TAnyForce {
     return this._force;
-  }
-
-  wrapForContext<T>(fn: Function, contextName: string, contextAllName: string) {
-    function wrapped(context: T, i: number, contextAll: T[]) {
-      let value: number | boolean | null;
-      try {
-        let rendered = fn({
-          [contextName]: context,
-          i,
-          [contextAllName]: contextAll,
-        });
-        value = rendered == null ? null : rendered;
-        if (typeof value != 'boolean') {
-          if (value == null || isNaN(value)) {
-            value = null;
-          }
-        }
-      } catch (err) {
-        DEBUG && console.warn(EMOJI, err);
-        value = null;
-      }
-      return value;
-    }
-
-    return wrapped;
-  }
-
-  protected wrapForNode(handler: CallableFunction): CallableFunction {
-    return this.wrapForContext<NodeObject>(handler, 'node', 'nodes');
-  }
-
-  protected wrapForLink(handler: CallableFunction): CallableFunction {
-    return this.wrapForContext<LinkObject>(handler, 'link', 'links');
   }
 }
 

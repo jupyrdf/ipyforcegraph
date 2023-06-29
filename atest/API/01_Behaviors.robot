@@ -18,53 +18,54 @@ ${SCREENS}      ${SCREENS ROOT}${/}api
 
 *** Test Cases ***
 2D Node Select
-    [Setup]    Set Up Behavior Example    NodeSelection    ${IPYFORCEGRAPH CLASS}
+    Set Up Behavior Example    NodeSelection    ${IPYFORCEGRAPH CLASS}
     Click IPyForceGraph Canvas
     Wait Until Tag Widget Exists    0
     Remove Widget Tag
     Wait Until No Tag Widgets Exist
 
 2D Link Select
-    [Setup]    Set Up Behavior Example    LinkSelection    ${IPYFORCEGRAPH CLASS}
+    Set Up Behavior Example    LinkSelection    ${IPYFORCEGRAPH CLASS}
     Click IPyForceGraph Canvas
     Wait Until Tag Widget Exists    0
     Remove Widget Tag
     Wait Until No Tag Widgets Exist
 
 2D Node Labels
-    [Setup]    Set Up Behavior Example    NodeTooltip    ${IPYFORCEGRAPH CLASS}
+    Set Up Behavior Example    NodeTooltip    ${IPYFORCEGRAPH CLASS}
     Click IPyForceGraph Canvas    text=hello world
 
 3D Node Select
-    [Setup]    Set Up Behavior Example    NodeSelection    ${IPYFORCEGRAPH CLASS 3D}
+    Set Up Behavior Example    NodeSelection    ${IPYFORCEGRAPH CLASS 3D}
     Click IPyForceGraph Canvas
     Wait Until Tag Widget Exists    0
     Remove Widget Tag
     Wait Until No Tag Widgets Exist
 
 3D Link Select
-    [Setup]    Set Up Behavior Example    LinkSelection    ${IPYFORCEGRAPH CLASS 3D}
+    Set Up Behavior Example    LinkSelection    ${IPYFORCEGRAPH CLASS 3D}
     Click IPyForceGraph Canvas
     Wait Until Tag Widget Exists    0
     Remove Widget Tag
     Wait Until No Tag Widgets Exist
 
 3D Node Labels
-    [Setup]    Set Up Behavior Example    NodeTooltip    ${IPYFORCEGRAPH CLASS 3D}
+    Set Up Behavior Example    NodeTooltip    ${IPYFORCEGRAPH CLASS 3D}
     Click IPyForceGraph Canvas    text=hello world
 
 2D Graph Data
-    [Setup]    Set Up Behavior Example    GraphData    ${IPYFORCEGRAPH CLASS}
+    Set Up Behavior Example    GraphData    ${IPYFORCEGRAPH CLASS}
     Page Should Not Contain Standard Errors    01-no-errors.png
 
 3D Graph Data
-    [Setup]    Set Up Behavior Example    GraphData    ${IPYFORCEGRAPH CLASS 3D}
+    Set Up Behavior Example    GraphData    ${IPYFORCEGRAPH CLASS 3D}
     Page Should Not Contain Standard Errors    01-no-errors.png
 
 
 *** Keywords ***
 Set Up Behavior Example
     [Arguments]    ${behavior}    ${widget_class}
+    Maybe Skip A Test    widget_class=${widget_class}
     Set Tags    behavior:${behavior.lower()}    widget:${widget_class.lower()}
     Set Screenshot Directory    ${SCREENS}${/}${widget_class.lower()}_${behavior.lower()}
     ${text} =    Get File    ${IPYFORCEGRAPH_FIXTURES}${/}api${/}${behavior}.py

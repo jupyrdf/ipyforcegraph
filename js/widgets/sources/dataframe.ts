@@ -223,74 +223,56 @@ export class DataFrameSourceModel extends WidgetModel {
     oldGraphData: GraphData,
     preservedColumns: IPreservedColumns
   ): GraphData | null {
-    const { nodeIdColumn, linkIdColumn } = this;
+    const { nodeIdColumn, linkIdColumn, mergeOne } = this;
 
     const oldLinks: Record<string | number, LinkObject> = {};
     const oldNodes: Record<string | number, NodeObject> = {};
 
-    const nodeIndices = new Map<string | number, number>();
-    const linkIndices = new Map<string | number, number>();
+    const nodes: NodeObject[] = [];
+    const links: LinkObject[] = [];
 
-    const compositeLinks: Record<string | number, LinkObject> = {};
-    const compositeNodes: Record<string | number, NodeObject> = {};
-
-    // gather old nodes
-    let nodeIdx = 0;
     for (const oldNode of oldGraphData.nodes) {
       oldNodes[oldNode[nodeIdColumn]] = oldNode;
-      nodeIndices[oldNode[nodeIdColumn]] = nodeIdx;
-      nodeIdx++;
     }
 
-    // gather old links
-    let linkIdx = 0;
     for (const oldLink of oldGraphData.links) {
       oldLinks[oldLink[linkIdColumn]] = oldLink;
-      linkIndices[oldLink[linkIdColumn]] = linkIdx;
-      linkIdx++;
     }
 
-    // generate composite nodes
     for (const newNode of newGraphData.nodes) {
-      const nodeId = newNode[nodeIdColumn];
-      const oldNode = oldNodes[nodeId];
-      const compositeNode = { ...newNode };
-      if (oldNode != null) {
-        for (const [column, value] of Object.entries(oldNode)) {
-          if (preservedColumns.nodes.includes(column)) {
-            compositeNode[column] = value;
-          }
-        }
-      }
-      compositeNodes[nodeId] = compositeNode;
+      mergeOne(newNode, nodes, oldNodes, nodeIdColumn, preservedColumns.nodes);
     }
 
     // generate composite links
     for (const newLink of newGraphData.links) {
-      const compositeLink = { ...newLink };
-
-      const linkId = newLink[linkIdColumn];
-      const oldLink = oldLinks[linkId];
-      if (oldLink != null) {
-        for (const [column, value] of Object.entries(oldLink)) {
-          if (preservedColumns.links.includes(column)) {
-            compositeLink[column] = value;
-          }
-        }
-      }
-      compositeLinks[linkId] = compositeLink;
+      mergeOne(newLink, links, oldLinks, linkIdColumn, preservedColumns.links);
     }
 
-    const compositeNodeList: NodeObject[] = [];
-    const compositeLinkList: LinkObject[] = [];
-
-    for (const [nodeId, nodeIdx] of nodeIndices.entries()) {
-      compositeNodeList[nodeIdx as number] = compositeNodes[nodeId];
-    }
-    for (const [linkId, linkIdx] of linkIndices.entries()) {
-      compositeLinkList[linkIdx as number] = compositeLinks[linkId];
-    }
-
-    return { nodes: compositeNodeList, links: compositeLinkList };
+    return { nodes, links };
   }
+
+  /** merge a single new node/link with any preserved columns */
+  mergeOne = <T = NodeObject | LinkObject>(
+    item: T,
+    newItems: T[],
+    oldItems: Record<string, T>,
+    idColumn: string,
+    preservedColumns: string[]
+  ): void => {
+    const compositeItem: T = { ...item };
+    const itemId = compositeItem[idColumn];
+    const oldItem = oldItems[itemId];
+
+    newItems.push(compositeItem);
+
+    if (oldItem == null) {
+      return;
+    }
+
+    for (const column of preservedColumns) {
+      if (oldItem.hasOwnProperty(column)) {
+        compositeItem[column] = oldItem[column];
+      }
+    }
+  };
 }

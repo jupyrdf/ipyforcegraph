@@ -15,13 +15,14 @@ dependencies:
   - ipywidgets >=8.0.0
   - jupyter_server >=2.2.1
   - jupyterlab >=3,<4
-  - jupyterlab >=3.6.2,<3.7
+  - jupyterlab >=3.6.4,<3.7
   - jupyterlab-deck
   - jupyterlab-link-share
   - jupyterlite-core ==0.1.0
   - jupyterlite-core-with-libarchive
   - jupyterlite-pyodide-kernel ==0.0.8
   - lxml
+  - mdit-py-plugins <0.4.0
   - myst-nb
   - networkx
   - nodejs >=18,<19

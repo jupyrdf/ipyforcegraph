@@ -35,10 +35,10 @@ Color Feature Works As Expected
     Set Up Color Example    ${feature}    ${widget_class}
     ${frame} =    Set Variable    css:${IPYFORCEGRAPH FRAME}
     ${transparent} =    Get Element Screenshot Size    ${frame}    ${screens}    01-transparent.png
-    Add And Run JupyterLab Code Cell
-    ...    fg.${feature} = "rgba(255, 0, 0, 1.0)"
+    ${redden} =    Set Variable    fg.${feature} = "rgba(255, 0, 0, 1.0)"
+    Add And Run JupyterLab Code Cell    ${redden}
     Wait For All Cells To Run
-    Sleep    1s
+    Sleep    0.5s
     ${color} =    Get Element Screenshot Size    ${frame}    ${screens}    02-color.png
     Should Be True Or Screenshot    ${color} > ${transparent}    03-color-bigger-than-transparent.png
     [Teardown]    Clean Up Color Example
@@ -49,6 +49,7 @@ Set Up Color Example
     ${text} =    Get File    ${IPYFORCEGRAPH_FIXTURES}${/}api${/}Colors.py
     ${text} =    Set Variable    ${text.replace("WIDGET_CLASS", "${widget_class}")}
     ${text} =    Set Variable    ${text.replace("FEATURE", "${feature}")}
+    Log    ${text}
     Launch A New JupyterLab Document
     Set CodeMirror Value    .jp-CodeCell .CodeMirror    ${text.strip()}
     Execute JupyterLab Command    Show Log Console

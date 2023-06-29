@@ -70,7 +70,7 @@ def atest(attempt, extra_args):
         *["--variable", f"TOTAL_COVERAGE:{int(P.TOTAL_COVERAGE)}"],
         *["--randomize", "all"],
         *(extra_args or []),
-        *(os.environ.get("ATEST_ARGS", "").split()),
+        *(json.loads(os.environ.get("ATEST_ARGS", "[]"))),
     ]
 
     if out_dir.exists():

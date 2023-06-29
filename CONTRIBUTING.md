@@ -136,7 +136,7 @@ Create an `.env` file:
 
 ```ini
 # .env
-ATEST_ARGS="--exclude NOTsome:tag"
+ATEST_ARGS=["--exclude", "NOTsome:tag"]
 ```
 
 Then run:
