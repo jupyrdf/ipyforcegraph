@@ -1,6 +1,6 @@
 # Changelog
 
-## `0.3.4` (unreleased)
+## `0.3.4`
 
 ### `ipyforcegraph 0.3.4`
 
