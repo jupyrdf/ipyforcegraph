@@ -111,6 +111,9 @@ BINDER = ROOT / ".binder"
 POSTBUILD = BINDER / "postBuild"
 LITE = ROOT / "lite"
 LITE_CONFIG = LITE / "jupyter_lite_config.json"
+IGNORED_VULNERABILITIES = ROOT / "ignored-vulnerabilities.json"
+PAGES_LITE = ROOT / "pages-lite"
+
 
 # envs
 ALL_PLATFORMS = ["linux-64", "osx-64", "win-64"]
@@ -192,6 +195,7 @@ LITE_SHA256SUMS = LITE_BUILD / "SHA256SUMS"
 # js stuff
 JS_LIB = ROOT / "lib"
 TSBUILDINFO = BUILD / ".src.tsbuildinfo"
+JS_LIB_INDEX_JS = JS_LIB / "index.js"
 TS_SRC = ROOT / "js"
 STYLE = ROOT / "style"
 ALL_TSCONFIG = [
@@ -226,7 +230,13 @@ ALL_PY = [
     DODO,
 ]
 ALL_YML = [*ROOT.glob("*.yml"), *GH.rglob("*.yml"), *DOCS.glob("*.yml")]
-ALL_JSON = [*ROOT.glob("*.json"), *EXAMPLE_JSON, *LITE_JSON, *BINDER.glob("*.json")]
+ALL_JSON = [
+    *ROOT.glob("*.json"),
+    *EXAMPLE_JSON,
+    *LITE_JSON,
+    *BINDER.glob("*.json"),
+    *PAGES_LITE.glob("*.json"),
+]
 ALL_DOCS_MD = [*DOCS.rglob("*.md")]
 ALL_MD = [*ROOT.glob("*.md"), *ALL_DOCS_MD, *GH.rglob("*.md")]
 ALL_TS = [*TS_SRC.rglob("*.ts")]
@@ -258,6 +268,8 @@ OK_LABEXT = OK / "labext.ok"
 OK_LINKS = OK / "links.ok"
 OK_DICTIONARY = OK / "dictionary.ok"
 OK_DOS2UNIX = OK / "dos2unix.ok"
+OK_AUDIT_PY = OK / "audit.py.ok"
+OK_AUDIT_JS = OK / "audit.js.ok"
 
 REPORTS = BUILD / "reports"
 
@@ -304,7 +316,12 @@ ATEST_CANARY = BUILD / f"robot.{PLATFORM.lower()}_success.ok"
 DOCS_BUILDINFO = DOCS_BUILD / ".buildinfo"
 DOCS_LINKS = BUILD / "links"
 
-
 # nblint
 NB_METADATA_KEYS = ["kernelspec", "language_info"]
 CLOBBER_CELL_METADATA_KEYS = ["jupyter", "collapsed"]
+
+# github pages
+PAGES_LITE_CONFIG = PAGES_LITE / "jupyter_lite_config.json"
+
+PAGES_LITE_BUILD = BUILD / "pages-lite"
+PAGES_LITE_BUILD_SHASUMS = PAGES_LITE_BUILD / "SHA256SUMS"

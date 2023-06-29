@@ -1,5 +1,16 @@
 # Changelog
 
+## `0.3.4`
+
+### `ipyforcegraph 0.3.4`
+
+- adds `GraphCamera` behavior which can observe the contents of a graph viewport
+- adds `GraphDirector` behavior which can update the graph viewport
+
+### `@jupyrdf/jupyter-forcegraph 0.3.4`
+
+> TBD
+
 ## `0.3.3`
 
 ### `ipyforcegraph 0.3.3`

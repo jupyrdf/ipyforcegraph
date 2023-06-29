@@ -21,7 +21,7 @@ env:
   CONDA_EXE: mamba
   # our stuff
   SKIP_CONDA_PREFLIGHT: 1
-  CACHE_EPOCH: 10
+  CACHE_EPOCH: 11
   ATEST_RETRIES: 2
 
 jobs:
@@ -159,6 +159,11 @@ jobs:
         shell: bash -l {0}
         run: |
           doit -n4 lint || doit lint || exit 1
+
+      - name: audit
+        shell: bash -l {0}
+        run: |
+          doit audit || exit 1
 
       - name: build docs
         shell: bash -l {0}

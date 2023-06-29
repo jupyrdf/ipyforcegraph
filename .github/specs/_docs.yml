@@ -5,6 +5,7 @@ dependencies:
   - jupyterlite-core ==0.1.0
   - jupyterlite-core-with-libarchive
   - myst-nb
+  - mdit-py-plugins <0.4.0
   - pydata-sphinx-theme
   - sphinx
   - sphinx-autobuild

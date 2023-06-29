@@ -12,7 +12,6 @@
 
 import os
 import subprocess
-from hashlib import sha256
 
 from doit import create_after
 from doit.action import CmdAction
@@ -88,6 +87,25 @@ def _ok(task, ok):
         ][-1],
     ]
     return task
+
+
+def task_audit():
+    """Check dependencies for known vulnerabilities."""
+    yield _ok(
+        dict(
+            name="py",
+            file_dep=[P.HISTORY, P.IGNORED_VULNERABILITIES],
+            actions=[
+                [*P.IN_ENV, "jake", "ddt", f"--whitelist={P.IGNORED_VULNERABILITIES}"]
+            ],
+        ),
+        P.OK_AUDIT_PY,
+    )
+
+    yield _ok(
+        dict(name="js", file_dep=[P.YARN_LOCK], actions=[[*P.IN_ENV, "jlpm", "audit"]]),
+        P.OK_AUDIT_JS,
+    )
 
 
 def task_preflight():
@@ -246,7 +264,7 @@ def task_setup():
         else:
             raise RuntimeError(f"Don't know how to install {P.INSTALL_ARTIFACT}")
     else:
-        _install += ["-e", "."]
+        _install += ["-e", ".", "--no-build-isolation", "--no-deps"]
 
     file_dep = [
         P.HISTORY,
@@ -313,7 +331,7 @@ def task_setup():
             dict(
                 name="labext",
                 actions=[[*P.IN_ENV, *P.LAB_EXT, "develop", "--overwrite", "."]],
-                file_dep=[P.OK_PIP_INSTALL, P.PY_PACKAGE_JSON],
+                file_dep=[P.OK_PIP_INSTALL, P.PY_PACKAGE_JSON, P.HISTORY],
             ),
             P.OK_LABEXT,
         )
@@ -354,14 +372,14 @@ def task_build():
         uptodate=[config_changed({"TOTAL_COVERAGE": P.TOTAL_COVERAGE})],
         file_dep=ts_dep,
         actions=[[*P.IN_ENV, *P.JLPM, ts_script]],
-        targets=[P.TSBUILDINFO],
+        targets=[P.TSBUILDINFO, P.JS_LIB_INDEX_JS],
     )
 
     yield dict(
         name="ext",
         uptodate=[config_changed({"TOTAL_COVERAGE": P.TOTAL_COVERAGE})],
         actions=[[*P.IN_ENV, *P.JLPM, "build:ext"]],
-        file_dep=[P.TSBUILDINFO, *P.ALL_CSS],
+        file_dep=[P.TSBUILDINFO, P.JS_LIB_INDEX_JS, *P.ALL_CSS],
         targets=[P.PY_PACKAGE_JSON],
     )
 
@@ -383,25 +401,11 @@ def task_build():
         targets=[P.WHEEL, P.SDIST],
     )
 
-    def _run_hash():
-        # mimic sha256sum CLI
-        if P.SHA256SUMS.exists():
-            P.SHA256SUMS.unlink()
-
-        lines = []
-
-        for p in P.HASH_DEPS:
-            lines += ["  ".join([sha256(p.read_bytes()).hexdigest(), p.name])]
-
-        output = "\n".join(lines)
-        print(output)
-        P.SHA256SUMS.write_text(output, **P.UTF8)
-
     yield dict(
         name="hash",
         file_dep=P.HASH_DEPS,
         targets=[P.SHA256SUMS],
-        actions=[_run_hash],
+        actions=[(U.hash_files, [P.SHA256SUMS, P.HASH_DEPS])],
     )
 
 
@@ -992,4 +996,29 @@ def task_checkdocs():
         task_dep=spell_tasks,
         actions=[_all_spell],
         targets=[P.ALL_SPELL],
+    )
+
+
+def task_site():
+    yield dict(
+        name="build",
+        file_dep=[
+            P.PAGES_LITE_CONFIG,
+            P.UTEST_COV_INDEX,
+            P.ATEST_COV_JS_INDEX,
+            P.ALL_COV_PY_INDEX,
+        ],
+        targets=[P.PAGES_LITE_BUILD_SHASUMS],
+        actions=[
+            CmdAction(
+                [*P.IN_ENV, "jupyter", "lite", "build"],
+                shell=False,
+                cwd=str(P.PAGES_LITE),
+            ),
+            lambda: U.hash_files(
+                P.PAGES_LITE_BUILD_SHASUMS,
+                [p for p in P.PAGES_LITE_BUILD.rglob("*") if not p.is_dir()],
+                quiet=True,
+            ),
+        ],
     )

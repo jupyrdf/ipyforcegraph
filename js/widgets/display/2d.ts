@@ -12,6 +12,7 @@ import type {
 } from 'force-graph';
 
 import { PromiseDelegate } from '@lumino/coreutils';
+import { Throttler } from '@lumino/polling';
 import { ISignal, Signal } from '@lumino/signaling';
 
 import {
@@ -22,17 +23,17 @@ import {
 } from '@jupyter-widgets/base';
 
 import {
-  ALL_GRAPH_METHODS,
-  ALL_LINK_METHODS,
-  ALL_NODE_METHODS,
   CSS,
   DEBUG,
   DEFAULT_COLORS,
   DEFAULT_CURVATURES,
   DEFAULT_LINE_DASHES,
   DEFAULT_WIDTHS,
+  EGraphBehaveMethod,
+  ELinkBehaveMethod,
   EMOJI,
   EMPTY_GRAPH_DATA,
+  ENodeBehaveMethod,
   EUpdate,
   IActionMessage,
   IBehave,
@@ -45,16 +46,13 @@ import {
   IPreservedColumns,
   IRenderOptions,
   ISource,
+  IZoomData,
   TAnyForce,
-  TGraphBehaveMethod,
-  TGraphMethodMap,
+  THROTTLE_OPTS,
   TLinkBehaveMethod,
-  TLinkMethodMap,
   TNodeBehaveMethod,
-  TNodeMethodMap,
   TUpdateKind,
   WIDGET_DEFAULTS,
-  emptyArray,
   emptyPreservedColumns,
 } from '../../tokens';
 import { DAGBehaviorModel, FacetedForceModel, GraphForcesModel } from '../behaviors';
@@ -68,9 +66,9 @@ export class ForceGraphModel extends DOMWidgetModel {
     behaviors: widget_serialization,
   };
 
-  protected _nodeBehaviorsByMethod: TNodeMethodMap;
-  protected _linkBehaviorsByMethod: TLinkMethodMap;
-  protected _graphBehaviorsByMethod: TGraphMethodMap;
+  protected _nodeBehaviorsByMethod: IBehave[][];
+  protected _linkBehaviorsByMethod: IBehave[][];
+  protected _graphBehaviorsByMethod: IBehave[][];
   protected _forceBehaviors: GraphForcesModel[];
   protected _behaviorsChanged: Signal<ForceGraphModel, void>;
 
@@ -108,39 +106,33 @@ export class ForceGraphModel extends DOMWidgetModel {
   async onBehaviorsChange(): Promise<void> {
     if (!this._behaviorsChanged) {
       this._behaviorsChanged = new Signal(this);
-      this._linkBehaviorsByMethod = new Map();
-      this._nodeBehaviorsByMethod = new Map();
-      this._graphBehaviorsByMethod = new Map();
+      this._linkBehaviorsByMethod = [];
+      this._nodeBehaviorsByMethod = [];
+      this._graphBehaviorsByMethod = [];
     }
     const { behaviors } = this;
 
-    for (let linkMethod of ALL_LINK_METHODS) {
+    for (let [linkMethod, eLinkMethod] of Object.entries(ELinkBehaveMethod)) {
       let methodBehaviors: IBehave[] = [];
       for (const behavior of behaviors) {
         if (behavior[linkMethod]) {
           methodBehaviors.push(behavior);
         }
       }
-      this._linkBehaviorsByMethod.set(
-        linkMethod,
-        methodBehaviors.sort(this.compareRank)
-      );
+      this._linkBehaviorsByMethod[eLinkMethod] = methodBehaviors.sort(this.compareRank);
     }
 
-    for (let nodeMethod of ALL_NODE_METHODS) {
+    for (let [nodeMethod, eNodeMethod] of Object.entries(ENodeBehaveMethod)) {
       let methodBehaviors: IBehave[] = [];
       for (const behavior of behaviors) {
         if (behavior[nodeMethod]) {
           methodBehaviors.push(behavior);
         }
       }
-      this._nodeBehaviorsByMethod.set(
-        nodeMethod,
-        methodBehaviors.sort(this.compareRank)
-      );
+      this._nodeBehaviorsByMethod[eNodeMethod] = methodBehaviors.sort(this.compareRank);
     }
 
-    for (let graphMethod of ALL_GRAPH_METHODS) {
+    for (let [graphMethod, eGraphMethod] of Object.entries(EGraphBehaveMethod)) {
       let graphBehaviors: IBehave[] = [];
       for (const behavior of behaviors) {
         if (behavior[graphMethod]) {
@@ -148,9 +140,8 @@ export class ForceGraphModel extends DOMWidgetModel {
         }
       }
 
-      this._graphBehaviorsByMethod.set(
-        graphMethod,
-        graphBehaviors.sort(this.compareRank)
+      this._graphBehaviorsByMethod[eGraphMethod] = graphBehaviors.sort(
+        this.compareRank
       );
     }
 
@@ -165,19 +156,19 @@ export class ForceGraphModel extends DOMWidgetModel {
     this._behaviorsChanged.emit(void 0);
   }
 
-  linkBehaviorsForMethod(method: TLinkBehaveMethod): readonly IBehave[] {
-    return this._linkBehaviorsByMethod.get(method) || emptyArray;
+  get linkBehaviorsByMethod(): IBehave[][] {
+    return this._linkBehaviorsByMethod;
   }
 
-  nodeBehaviorsForMethod(method: TNodeBehaveMethod): readonly IBehave[] {
-    return this._nodeBehaviorsByMethod.get(method) || emptyArray;
+  get nodeBehaviorsByMethod(): IBehave[][] {
+    return this._nodeBehaviorsByMethod;
   }
 
-  graphBehaviorsForMethod(method: TGraphBehaveMethod): readonly IBehave[] {
-    return this._graphBehaviorsByMethod.get(method) || emptyArray;
+  get graphBehaviorsByMethod(): IBehave[][] {
+    return this._graphBehaviorsByMethod;
   }
 
-  get forceBehaviors(): readonly GraphForcesModel[] {
+  get forceBehaviors(): GraphForcesModel[] {
     return this._forceBehaviors;
   }
 
@@ -243,6 +234,10 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
   protected _rendered: PromiseDelegate<void>;
   protected _iframe: HTMLIFrameElement | null;
   protected _iframeClasses: Record<string, any>;
+
+  protected _nodeBehaviorsByMethod: IBehave[][];
+  protected _linkBehaviorsByMethod: IBehave[][];
+  protected _graphBehaviorsByMethod: IBehave[][];
 
   get source(): ISource {
     return this.model.get('source');
@@ -331,8 +326,13 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
     this.graph = graph as any;
     contentWindow.addEventListener('resize', this.onWindowResize);
     this._rendered.resolve(void 0);
+    await this.onGraphInitialized();
     await this.redraw();
   };
+
+  protected async onGraphInitialized(): Promise<void> {
+    // just for overloading
+  }
 
   protected onWindowResize = () => {
     const { contentWindow } = this._iframe;
@@ -470,10 +470,23 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
     }
   }
 
+  protected async ensureBehaviorCache() {
+    this._nodeBehaviorsByMethod = this.model.nodeBehaviorsByMethod;
+    this._linkBehaviorsByMethod = this.model.linkBehaviorsByMethod;
+    this._graphBehaviorsByMethod = this.model.graphBehaviorsByMethod;
+  }
+
   protected async onGraphDataUpdateRequested(behavior: IBehave) {
     const graph = this.graph as ForceGraphInstance;
     if (graph && behavior.updateGraphData) {
       await behavior.updateGraphData(graph.graphData());
+    }
+  }
+
+  protected async onGraphCameraUpdateRequested(behavior: IBehave) {
+    const graph = this.graph as ForceGraphInstance;
+    if (graph && behavior.updateGraphCamera) {
+      await behavior.updateGraphCamera({ graph, iframeClasses: this._iframeClasses });
     }
   }
 
@@ -492,6 +505,9 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
     }
 
     await this.ensureAllFacets();
+    await this.ensureBehaviorCache();
+
+    const { _linkBehaviorsByMethod, _nodeBehaviorsByMethod } = this;
 
     const {
       backgroundColor,
@@ -508,94 +524,94 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
 
     // link
     graph.linkColor(
-      this.model.linkBehaviorsForMethod('getLinkColor').length
+      _linkBehaviorsByMethod[ELinkBehaveMethod.getLinkColor].length
         ? this.wrapFunction(this.getLinkColor)
         : this.wrapFunction(() => defaultLinkColor)
     );
     graph.linkWidth(
-      this.model.linkBehaviorsForMethod('getLinkWidth').length
+      _linkBehaviorsByMethod[ELinkBehaveMethod.getLinkWidth].length
         ? this.wrapFunction(this.getLinkWidth)
         : this.wrapFunction(() => defaultLinkWidth)
     );
     graph.linkCurvature(
-      this.model.linkBehaviorsForMethod('getLinkCurvature').length
+      _linkBehaviorsByMethod[ELinkBehaveMethod.getLinkCurvature].length
         ? this.wrapFunction(this.getLinkCurvature)
         : this.wrapFunction(() => defaultLinkCurvature)
     );
     if (typeof graph['linkLineDash'] === 'function') {
       graph.linkLineDash(
-        this.model.linkBehaviorsForMethod('getLinkLineDash').length
+        _linkBehaviorsByMethod[ELinkBehaveMethod.getLinkLineDash].length
           ? this.wrapFunction(this.getLinkLineDash)
           : this.wrapFunction(() => defaultLinkLineDash)
       );
     }
     graph.linkLabel(
-      this.model.linkBehaviorsForMethod('getLinkLabel').length
+      _linkBehaviorsByMethod[ELinkBehaveMethod.getLinkLabel].length
         ? this.wrapFunction(this.getLinkLabel)
         : null
     );
 
     graph.linkDirectionalArrowColor(
-      this.model.linkBehaviorsForMethod('getLinkDirectionalArrowColor').length
+      _linkBehaviorsByMethod[ELinkBehaveMethod.getLinkDirectionalArrowColor].length
         ? this.wrapFunction(this.getLinkDirectionalArrowColor)
         : null
     );
     graph.linkDirectionalArrowLength(
-      this.model.linkBehaviorsForMethod('getLinkDirectionalArrowLength').length
+      _linkBehaviorsByMethod[ELinkBehaveMethod.getLinkDirectionalArrowLength].length
         ? this.wrapFunction(this.getLinkDirectionalArrowLength)
         : null
     );
     graph.linkDirectionalArrowRelPos(
-      this.model.linkBehaviorsForMethod('getLinkDirectionalArrowRelPos').length
+      _linkBehaviorsByMethod[ELinkBehaveMethod.getLinkDirectionalArrowRelPos].length
         ? this.wrapFunction(this.getLinkDirectionalArrowRelPos)
         : null
     );
     graph.linkDirectionalParticleColor(
-      this.model.linkBehaviorsForMethod('getLinkDirectionalParticleColor').length
+      _linkBehaviorsByMethod[ELinkBehaveMethod.getLinkDirectionalParticleColor].length
         ? this.wrapFunction(this.getLinkDirectionalParticleColor)
         : null
     );
     graph.linkDirectionalParticleSpeed(
-      this.model.linkBehaviorsForMethod('getLinkDirectionalParticleSpeed').length
+      _linkBehaviorsByMethod[ELinkBehaveMethod.getLinkDirectionalParticleSpeed].length
         ? this.wrapFunction(this.getLinkDirectionalParticleSpeed)
         : null
     );
     graph.linkDirectionalParticleWidth(
-      this.model.linkBehaviorsForMethod('getLinkDirectionalParticleWidth').length
+      _linkBehaviorsByMethod[ELinkBehaveMethod.getLinkDirectionalParticleWidth].length
         ? this.wrapFunction(this.getLinkDirectionalParticleWidth)
         : null
     );
     graph.linkDirectionalParticles(
-      this.model.linkBehaviorsForMethod('getLinkDirectionalParticles').length
+      _linkBehaviorsByMethod[ELinkBehaveMethod.getLinkDirectionalParticles].length
         ? this.wrapFunction(this.getLinkDirectionalParticles)
         : null
     );
 
     // node
     graph.nodeColor(
-      this.model.nodeBehaviorsForMethod('getNodeColor').length
+      _nodeBehaviorsByMethod[ENodeBehaveMethod.getNodeColor].length
         ? this.wrapFunction(this.getNodeColor)
         : this.wrapFunction(() => defaultNodeColor)
     );
     graph.nodeVal(
-      this.model.nodeBehaviorsForMethod('getNodeSize').length
+      _nodeBehaviorsByMethod[ENodeBehaveMethod.getNodeSize].length
         ? this.wrapFunction(this.getNodeSize)
         : this.wrapFunction(() => defaultNodeSize)
     );
     graph.nodeLabel(
-      this.model.nodeBehaviorsForMethod('getNodeLabel').length
+      _nodeBehaviorsByMethod[ENodeBehaveMethod.getNodeLabel].length
         ? this.wrapFunction(this.getNodeLabel)
         : null
     );
 
     // evented
     graph.onNodeClick(
-      this.model.nodeBehaviorsForMethod('onNodeClick').length
+      _nodeBehaviorsByMethod[ENodeBehaveMethod.onNodeClick].length
         ? this.wrapFunction(this.onNodeClick)
         : null
     );
     graph.onLinkClick(
-      this.model.linkBehaviorsForMethod('onLinkClick').length
+      _linkBehaviorsByMethod[ELinkBehaveMethod.onLinkClick].length
         ? this.wrapFunction(this.onLinkClick)
         : null
     );
@@ -671,16 +687,26 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
     const graph = this.graph as ForceGraphInstance;
 
     graph.nodeCanvasObject(
-      this.model.nodeBehaviorsForMethod('getNodeCanvasObject').length
+      this._nodeBehaviorsByMethod[ENodeBehaveMethod.getNodeCanvasObject].length
         ? this.wrapFunction(this.getNodeCanvasObject)
         : null
     );
 
     graph.onRenderFramePost(
-      this.model.graphBehaviorsForMethod('onRender').length
+      this._graphBehaviorsByMethod[EGraphBehaveMethod.onRender].length
         ? this.wrapFunction(this.onRender)
         : null
     );
+
+    if (this._graphBehaviorsByMethod[EGraphBehaveMethod.onZoom].length) {
+      const throttled = new Throttler(
+        this.wrapFunction((zoomData: any) => this.onZoom(zoomData)),
+        THROTTLE_OPTS
+      );
+      graph.onZoom((zoomData) => throttled.invoke(zoomData));
+    } else {
+      graph.onZoom(null);
+    }
   }
 
   // composable behaviors
@@ -694,6 +720,10 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
     for (const behavior of behaviors) {
       behavior.updateRequested.connect(this.postUpdate, this);
       behavior.graphDataUpdateRequested.connect(this.onGraphDataUpdateRequested, this);
+      behavior.graphCameraUpdateRequested.connect(
+        this.onGraphCameraUpdateRequested,
+        this
+      );
     }
 
     await this.postUpdate();
@@ -701,11 +731,17 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
 
   // link behaviors
   protected getLinkColor = (link: LinkObject): string => {
-    return this.getComposedLinkAttr(link, 'getLinkColor', this.model.defaultLinkColor);
+    return this.getComposedLinkAttr(
+      link,
+      ELinkBehaveMethod.getLinkColor,
+      'getLinkColor',
+      this.model.defaultLinkColor
+    );
   };
   protected getLinkCurvature = (link: LinkObject): string => {
     return this.getComposedLinkAttr(
       link,
+      ELinkBehaveMethod.getLinkCurvature,
       'getLinkCurvature',
       this.model.defaultLinkCurvature
     );
@@ -713,53 +749,99 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
   protected getLinkLineDash = (link: LinkObject): string => {
     return this.getComposedLinkAttr(
       link,
+      ELinkBehaveMethod.getLinkLineDash,
       'getLinkLineDash',
       this.model.defaultLinkLineDash
     );
   };
   protected getLinkWidth = (link: LinkObject): string => {
-    return this.getComposedLinkAttr(link, 'getLinkWidth', this.model.defaultLinkWidth);
+    return this.getComposedLinkAttr(
+      link,
+      ELinkBehaveMethod.getLinkWidth,
+      'getLinkWidth',
+      this.model.defaultLinkWidth
+    );
   };
 
   protected getLinkLabel = (link: LinkObject): string => {
-    return this.getComposedLinkAttr(link, 'getLinkLabel', '');
+    return this.getComposedLinkAttr(
+      link,
+      ELinkBehaveMethod.getLinkLabel,
+      'getLinkLabel',
+      ''
+    );
   };
 
   protected getLinkDirectionalArrowColor = (link: LinkObject): string => {
-    return this.getComposedLinkAttr(link, 'getLinkDirectionalArrowColor', '');
+    return this.getComposedLinkAttr(
+      link,
+      ELinkBehaveMethod.getLinkDirectionalArrowColor,
+      'getLinkDirectionalArrowColor',
+      ''
+    );
   };
 
   protected getLinkDirectionalArrowLength = (link: LinkObject): string => {
     return this.castToNumber(
-      this.getComposedLinkAttr(link, 'getLinkDirectionalArrowLength', '')
+      this.getComposedLinkAttr(
+        link,
+        ELinkBehaveMethod.getLinkDirectionalArrowLength,
+        'getLinkDirectionalArrowLength',
+        ''
+      )
     );
   };
 
   protected getLinkDirectionalArrowRelPos = (link: LinkObject): string => {
     return this.castToNumber(
-      this.getComposedLinkAttr(link, 'getLinkDirectionalArrowRelPos', '')
+      this.getComposedLinkAttr(
+        link,
+        ELinkBehaveMethod.getLinkDirectionalArrowRelPos,
+        'getLinkDirectionalArrowRelPos',
+        ''
+      )
     );
   };
 
   protected getLinkDirectionalParticleColor = (link: LinkObject): string => {
-    return this.getComposedLinkAttr(link, 'getLinkDirectionalParticleColor', '');
+    return this.getComposedLinkAttr(
+      link,
+      ELinkBehaveMethod.getLinkDirectionalParticleColor,
+      'getLinkDirectionalParticleColor',
+      ''
+    );
   };
 
   protected getLinkDirectionalParticleSpeed = (link: LinkObject): string => {
     return this.castToNumber(
-      this.getComposedLinkAttr(link, 'getLinkDirectionalParticleSpeed', '')
+      this.getComposedLinkAttr(
+        link,
+        ELinkBehaveMethod.getLinkDirectionalParticleSpeed,
+        'getLinkDirectionalParticleSpeed',
+        ''
+      )
     );
   };
 
   protected getLinkDirectionalParticleWidth = (link: LinkObject): string => {
     return this.castToNumber(
-      this.getComposedLinkAttr(link, 'getLinkDirectionalParticleWidth', '')
+      this.getComposedLinkAttr(
+        link,
+        ELinkBehaveMethod.getLinkDirectionalParticleWidth,
+        'getLinkDirectionalParticleWidth',
+        ''
+      )
     );
   };
 
   protected getLinkDirectionalParticles = (link: LinkObject): string => {
     return this.castToNumber(
-      this.getComposedLinkAttr(link, 'getLinkDirectionalParticles', '')
+      this.getComposedLinkAttr(
+        link,
+        ELinkBehaveMethod.getLinkDirectionalParticles,
+        'getLinkDirectionalParticles',
+        ''
+      )
     );
   };
 
@@ -774,6 +856,7 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
 
   getComposedLinkAttr(
     link: LinkObject,
+    methodIdx: ELinkBehaveMethod,
     methodName: TLinkBehaveMethod,
     defaultValue: string
   ) {
@@ -786,8 +869,8 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
       link,
     };
 
-    for (const behavior of this.model.linkBehaviorsForMethod(methodName)) {
-      let method = behavior[methodName];
+    for (const behavior of this._linkBehaviorsByMethod[methodIdx]) {
+      let method = behavior[methodName] as any;
       value = method.call(behavior, options);
       if (value != null) {
         break;
@@ -799,15 +882,30 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
 
   // node behaviors
   protected getNodeColor = (node: NodeObject): string => {
-    return this.getComposedNodeAttr(node, 'getNodeColor', this.model.defaultNodeColor);
+    return this.getComposedNodeAttr(
+      node,
+      ENodeBehaveMethod.getNodeColor,
+      'getNodeColor',
+      this.model.defaultNodeColor
+    );
   };
 
   protected getNodeLabel = (node: NodeObject): string => {
-    return this.getComposedNodeAttr(node, 'getNodeLabel', '');
+    return this.getComposedNodeAttr(
+      node,
+      ENodeBehaveMethod.getNodeLabel,
+      'getNodeLabel',
+      ''
+    );
   };
 
   protected getNodeSize = (node: NodeObject): string => {
-    return this.getComposedNodeAttr(node, 'getNodeSize', this.model.defaultNodeSize);
+    return this.getComposedNodeAttr(
+      node,
+      ENodeBehaveMethod.getNodeSize,
+      'getNodeSize',
+      this.model.defaultNodeSize
+    );
   };
 
   protected getNodeCanvasObject = (
@@ -825,7 +923,9 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
       globalScale,
     };
 
-    for (const behavior of this.model.nodeBehaviorsForMethod('getNodeCanvasObject')) {
+    for (const behavior of this._nodeBehaviorsByMethod[
+      ENodeBehaveMethod.getNodeCanvasObject
+    ]) {
       let method = behavior.getNodeCanvasObject;
       value = method.call(behavior, options);
       if (value != null) {
@@ -836,6 +936,7 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
 
   getComposedNodeAttr(
     node: NodeObject,
+    methodIdx: ENodeBehaveMethod,
     methodName: TNodeBehaveMethod,
     defaultValue: string
   ) {
@@ -847,8 +948,8 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
       node,
     };
 
-    for (const behavior of this.model.nodeBehaviorsForMethod(methodName)) {
-      let method = behavior[methodName];
+    for (const behavior of this._nodeBehaviorsByMethod[methodIdx]) {
+      let method = behavior[methodName] as any;
       value = method.call(behavior, options);
       if (value != null) {
         break;
@@ -868,7 +969,7 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
       node,
       index: node['index'] != null ? node['index'] : graphData.nodes.indexOf(node),
     };
-    for (const behavior of this.model.nodeBehaviorsForMethod('onNodeClick')) {
+    for (const behavior of this._nodeBehaviorsByMethod[ENodeBehaveMethod.onNodeClick]) {
       shouldContinue = behavior.onNodeClick(options);
       if (!shouldContinue) {
         return;
@@ -886,11 +987,18 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
       link,
       index: link['index'] != null ? link['index'] : graphData.links.indexOf(link),
     };
-    for (const behavior of this.model.linkBehaviorsForMethod('onLinkClick')) {
+    for (const behavior of this._linkBehaviorsByMethod[ELinkBehaveMethod.onLinkClick]) {
       shouldContinue = behavior.onLinkClick(options);
       if (!shouldContinue) {
         return;
       }
+    }
+  };
+
+  protected onZoom = (zoom: IZoomData) => {
+    const graph = zoom.graph || (this.graph as ForceGraphInstance);
+    for (const behavior of this._graphBehaviorsByMethod[EGraphBehaveMethod.onZoom]) {
+      behavior.onZoom({ ...zoom, graph });
     }
   };
 
@@ -907,7 +1015,7 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
       globalScale,
     };
     options = this.updateRenderOptions(options);
-    for (const behavior of this.model.graphBehaviorsForMethod('onRender')) {
+    for (const behavior of this._graphBehaviorsByMethod[EGraphBehaveMethod.onRender]) {
       behavior.onRender(options);
     }
   };

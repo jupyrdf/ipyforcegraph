@@ -11,6 +11,7 @@ import subprocess
 import tempfile
 import textwrap
 from functools import lru_cache
+from hashlib import sha256
 from itertools import product
 from pathlib import Path
 from typing import Any, Dict, List, Optional
@@ -471,3 +472,28 @@ def all_cov():
             ],
             cwd=td,
         )
+
+
+def hash_files(
+    hash_file: Path,
+    hash_deps: List[Path],
+    quiet: Optional[bool] = False,
+    root: Optional[Path] = None,
+):
+    root = root or hash_file.parent
+    if hash_file.exists():
+        hash_file.unlink()
+
+    lines = []
+
+    for p in hash_deps:
+        lines += [
+            "  ".join(
+                [sha256(p.read_bytes()).hexdigest(), p.relative_to(root).as_posix()]
+            )
+        ]
+
+    output = "\n".join(lines)
+    hash_file.write_text(output, **P.UTF8)
+    if not quiet:
+        print(output)

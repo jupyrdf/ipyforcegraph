@@ -1,0 +1,110 @@
+name: pages
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+env:
+  PYTHONIOENCODING: utf-8
+  PYTHONUNBUFFERED: '1'
+  PIP_DISABLE_PIP_VERSION_CHECK: 'True'
+  # until have mamabforge...
+  CONDA_EXE: mamba
+  # our stuff
+  SKIP_CONDA_PREFLIGHT: 1
+  CACHE_EPOCH: 11
+  ATEST_RETRIES: 2
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}-latest
+    env:
+      TOTAL_COVERAGE: 1
+      CI: 0
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu]
+    steps:
+      - name: install apt dependencies (linux)
+        if: ${{ contains(matrix.os, 'ubuntu') }}
+        run: |
+          set -eux
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            libdbus-glib-1-2 \
+            libegl1 \
+            libgdk-pixbuf2.0-0 \
+            libgl1 \
+            libgles2 \
+            libgudev-1.0-0 \
+            libhyphen0 \
+            libnotify4 \
+            libopus0 \
+            libsecret-1-0 \
+            libwebpdemux2 \
+            libwoff1 \
+            libxslt1.1 \
+            libxt6 \
+            xvfb
+
+      - name: git checkout
+        uses: actions/checkout@v3
+
+      - name: cache (yarn)
+        uses: actions/cache@v3
+        with:
+          path: node_modules/
+          key: yarn-${{ runner.os }}-${{ hashFiles('yarn.lock', '.yarnrc') }}
+
+      - name: base env (conda)
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+          environment-file: .github/locks/linux-64_dev_lab3.6_py3.11.conda.lock
+          miniforge-variant: Mambaforge
+          use-mamba: true
+
+      - name: test (unit)
+        shell: bash -l {0}
+        run: |
+          doit pytest
+
+      - name: test (acceptance)
+        shell: bash -l {0}
+        run: |
+          xvfb-run --auto-servernum doit -n4 test || xvfb-run --auto-servernum doit test || exit 1
+
+      - name: report (coverage)
+        shell: bash -l {0}
+        run: |
+          doit coverage
+
+      - name: report (coverage)
+        shell: bash -l {0}
+        run: |
+          doit site
+
+      - uses: actions/upload-pages-artifact@v1
+        with:
+          path: build/pages-lite
+
+      - name: Rename uncached conda packages
+        shell: bash
+        run: mv "${CONDA_PKGS_DIR}" "${CONDA_PKGS_DIR}_do_not_cache"
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v2

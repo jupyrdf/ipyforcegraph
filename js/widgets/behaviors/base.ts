@@ -2,6 +2,8 @@
  * Copyright (c) 2023 ipyforcegraph contributors.
  * Distributed under the terms of the Modified BSD License.
  */
+import { LinkObject, NodeObject } from 'force-graph';
+
 import { JSONExt } from '@lumino/coreutils';
 import { ISignal, Signal } from '@lumino/signaling';
 
@@ -9,8 +11,10 @@ import { IBackboneModelOptions, WidgetModel } from '@jupyter-widgets/base';
 
 import { newTemplate } from '../../template-utils';
 import {
+  DEBUG,
   DEFAULT_BEHAVIOR_RANK,
   ECoerce,
+  EMOJI,
   EUpdate,
   IBehave,
   TCoercer,
@@ -22,6 +26,7 @@ import { functor, getCoercer, noop } from '../../utils';
 export class BehaviorModel extends WidgetModel implements IBehave {
   protected _updateRequested: Signal<IBehave, TUpdateKind>;
   protected _graphDataUpdateRequested: Signal<IBehave, void>;
+  protected _graphCameraUpdateRequested: Signal<IBehave, void>;
 
   defaults() {
     return { ...super.defaults(), ...WIDGET_DEFAULTS };
@@ -37,6 +42,7 @@ export class BehaviorModel extends WidgetModel implements IBehave {
     this.on('change:rank', this.onRankChange);
     this._updateRequested = new Signal(this);
     this._graphDataUpdateRequested = new Signal(this);
+    this._graphCameraUpdateRequested = new Signal(this);
   }
 
   onRankChange() {
@@ -49,6 +55,10 @@ export class BehaviorModel extends WidgetModel implements IBehave {
 
   get graphDataUpdateRequested(): ISignal<IBehave, void> {
     return this._graphDataUpdateRequested;
+  }
+
+  get graphCameraUpdateRequested(): ISignal<IBehave, void> {
+    return this._graphCameraUpdateRequested;
   }
 }
 
@@ -144,6 +154,40 @@ export class FacetedModel extends BehaviorModel {
       this._facetNames = facetNames;
     }
     return this._facetNames;
+  }
+
+  wrapForContext<T>(fn: Function, contextName: string, contextAllName: string) {
+    function wrapped(context: T, i: number, contextAll: T[]) {
+      let value: number | boolean | null;
+      try {
+        const finalContext = {
+          [contextName]: context,
+          i,
+          [contextAllName]: contextAll,
+        };
+        let rendered = fn(finalContext);
+        value = rendered == null ? null : rendered;
+        if (typeof value != 'boolean') {
+          if (value == null || isNaN(value)) {
+            value = null;
+          }
+        }
+      } catch (err) {
+        DEBUG && console.warn(EMOJI, err);
+        value = null;
+      }
+      return value;
+    }
+
+    return wrapped;
+  }
+
+  protected wrapForNode(handler: CallableFunction): CallableFunction {
+    return this.wrapForContext<NodeObject>(handler, 'node', 'nodes');
+  }
+
+  protected wrapForLink(handler: CallableFunction): CallableFunction {
+    return this.wrapForContext<LinkObject>(handler, 'link', 'links');
   }
 }
 

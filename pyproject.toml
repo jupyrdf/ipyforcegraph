@@ -6,7 +6,7 @@ requires = [
 
 [project]
 name = "ipyforcegraph"
-version = "0.3.3"
+version = "0.3.4"
 description = "2D and 3D force-directed graph widgets for Jupyter"
 readme = "README.md"
 authors = [
@@ -42,6 +42,17 @@ dependencies = [
 "NPM" = "https://www.npmjs.com/package/@jupyrdf/jupyter-forcegraph"
 "PyPI" = "https://pypi.org/project/ipyforcegraph"
 "Source" = "https://github.com/jupyrdf/ipyforcegraph"
+
+[tool.ruff]
+select = [
+  "E",
+  "F",
+  "I",
+  "PLE",
+  "W",
+]
+ignore = ["E501"]
+cache-dir = "build/.ruff_cache"
 
 [tool.pytest.ini_options]
 junit_family = "xunit2"
@@ -129,17 +140,6 @@ include = ["src/_d"]
 
 [tool.flit.external-data]
 directory = "src/_d"
-
-[tool.ruff]
-select = [
-  "E",
-  "F",
-  "I",
-  "PLE",
-  "W",
-]
-ignore = ["E501"]
-cache-dir = "build/.ruff_cache"
 
 [tool.nbqa.addopts]
 ruff = ["--ignore=E402"]
