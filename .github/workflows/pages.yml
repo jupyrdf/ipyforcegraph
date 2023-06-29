@@ -3,8 +3,7 @@ name: pages
 on:
   push:
     branches:
-      # TODO: change to `main` after this has been demonstrated to work
-      - dev
+      - main
 
 permissions:
   contents: read
