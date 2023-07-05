@@ -47,7 +47,7 @@ export class TextShapeModel extends ShapeBaseModel {
       ...this._resolveFacets(options, EMark.node),
     };
 
-    if (drawOptions.text == null || !drawOptions.text.trim().length) {
+    if (drawOptions.text == null || !`${drawOptions.text}`.trim().length) {
       return;
     }
 

@@ -1,5 +1,13 @@
 # Changelog
 
+## `0.3.5`
+
+### `ipyforcegraph 0.3.5`
+
+### `@jupyrdf/jupyter-forcegraph 0.3.5`
+
+- 2D node text can now be provided by non-text values (by constant or `Column`)
+
 ## `0.3.4`
 
 ### `ipyforcegraph 0.3.4`
