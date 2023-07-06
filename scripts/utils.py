@@ -397,7 +397,7 @@ def atest_cov_js():
     with tempfile.TemporaryDirectory() as td:
         for js_cov in all_js_cov:
             shutil.copy2(js_cov, Path(td) / js_cov.name)
-        subprocess.call(
+        rc = subprocess.call(
             [
                 "jlpm",
                 "nyc",
@@ -409,6 +409,7 @@ def atest_cov_js():
                 f"--branches={P.JS_COV_BRANCH_THRESHOLD}",
             ]
         )
+    return rc == 0
 
 
 def atest_cov_py():
@@ -431,7 +432,7 @@ def atest_cov_py():
             ],
             cwd=td,
         )
-        subprocess.call(
+        rc = subprocess.call(
             [
                 "coverage",
                 "report",
@@ -443,6 +444,7 @@ def atest_cov_py():
             ],
             cwd=td,
         )
+    return rc == 0
 
 
 def all_cov():
@@ -462,7 +464,7 @@ def all_cov():
             ],
             cwd=td,
         )
-        subprocess.call(
+        rc = subprocess.call(
             [
                 "coverage",
                 "report",
@@ -472,6 +474,7 @@ def all_cov():
             ],
             cwd=td,
         )
+    return rc == 0
 
 
 def hash_files(
