@@ -4,11 +4,11 @@
 
 ### `ipyforcegraph 0.3.6`
 
-> TBD
+- rename `GraphDirector.padding` to `.fit_padding`
 
 ### `@jupyrdf/jupyter-forcegraph 0.3.6`
 
-> TBD
+- normalize `GraphDirectorModel.padding` to `fit_padding`
 
 ## `0.3.5`
 
