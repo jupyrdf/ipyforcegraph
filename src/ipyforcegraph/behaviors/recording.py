@@ -144,15 +144,15 @@ class GraphDirector(Behavior):
         by_column=True,
     )
 
-    padding: float = T.Float(
-        10, help="pixels of padding between nodes and viewport"
-    ).tag(sync=True)
-
     zoom_duration: float = T.Float(0.2, help="seconds to animate a zoom").tag(sync=True)
 
     pan_duration: float = T.Float(0.2, help="seconds to animate a pan").tag(sync=True)
 
     fit_duration: float = T.Float(0.2, help="seconds to animate a fit").tag(sync=True)
+
+    fit_padding: float = T.Float(
+        10, help="pixels of padding between visible nodes and viewport"
+    ).tag(sync=True)
 
     @T.validate("visible")
     def _validate_scale_bools(self, proposal: T.Bunch) -> Any:

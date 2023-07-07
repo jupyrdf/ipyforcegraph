@@ -203,7 +203,7 @@ jobs:
       - name: report (coverage)
         shell: bash -l {0}
         run: |
-          doit -n8 coverage
+          doit -n8 coverage && doit -n8 coverage
 
       - name: upload (coverage)
         if: always()

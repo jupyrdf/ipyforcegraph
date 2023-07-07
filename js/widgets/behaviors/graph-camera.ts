@@ -89,7 +89,11 @@ export class GraphCameraModel extends ZoomBase implements IBehave {
       this.visible = is3d ? this.getVisible3d(zoom) : this.getVisible2d(zoom);
     }
 
-    this.save();
+    try {
+      this.save();
+    } catch {
+      // nothing to do here
+    }
   }
 
   protected getVisible3d(zoom: IZoomData): number[] {
@@ -160,7 +164,7 @@ export class GraphDirectorModel extends ZoomBase implements IBehave {
       _model_name: GraphCameraModel.model_name,
       zoom: null,
       visible: null,
-      padding: null,
+      fit_padding: null,
       center: null,
       zoom_first: false,
       zoom_duration: 0.2,
@@ -172,7 +176,7 @@ export class GraphDirectorModel extends ZoomBase implements IBehave {
   initialize(attributes: Backbone.ObjectHash, options: IBackboneModelOptions) {
     super.initialize(attributes, options);
     this.on(
-      'change:zoom change:center change:visible change:padding',
+      'change:zoom change:center change:visible change:fit_padding',
       this.onZoomChanged,
       this
     );
