@@ -21,7 +21,7 @@ env:
   CONDA_EXE: mamba
   # our stuff
   SKIP_CONDA_PREFLIGHT: 1
-  CACHE_EPOCH: 13
+  CACHE_EPOCH: 14
   ATEST_RETRIES: 2
 
 jobs:
