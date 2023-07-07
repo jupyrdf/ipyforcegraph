@@ -1,14 +1,22 @@
 # Changelog
 
-## `0.3.5` (unreleased)
+## `0.3.6` (unreleased)
+
+### `ipyforcegraph 0.3.6`
+
+- rename `GraphDirector.padding` to `.fit_padding`
+
+### `@jupyrdf/jupyter-forcegraph 0.3.6`
+
+- normalize `GraphDirectorModel.padding` to `fit_padding`
+
+## `0.3.5`
 
 ### `ipyforcegraph 0.3.5`
 
-> TBD
-
 ### `@jupyrdf/jupyter-forcegraph 0.3.5`
 
-> TBD
+- 2D node text can now be provided by non-text values (by constant or `Column`)
 
 ## `0.3.4`
 

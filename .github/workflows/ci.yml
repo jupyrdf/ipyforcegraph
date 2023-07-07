@@ -21,7 +21,7 @@ env:
   CONDA_EXE: mamba
   # our stuff
   SKIP_CONDA_PREFLIGHT: 1
-  CACHE_EPOCH: 12
+  CACHE_EPOCH: 13
   ATEST_RETRIES: 2
 
 jobs:
@@ -203,7 +203,7 @@ jobs:
       - name: report (coverage)
         shell: bash -l {0}
         run: |
-          doit -n8 coverage
+          doit -n8 coverage && doit -n8 coverage
 
       - name: upload (coverage)
         if: always()
