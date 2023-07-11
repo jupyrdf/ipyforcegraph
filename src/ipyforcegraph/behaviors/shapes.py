@@ -109,6 +109,9 @@ class LinkShapes(Behavior):
     """
     Customize the shape of the ``links``.
 
+    Custom ``shapes`` will be drawn on top of default lines, and may not
+    interact predictably with ``curvature``.
+
     .. note::
         ``line_dash`` is not displayed in :class:`~ipyforcegraph.graphs.ForceGraph3D`.
     """
@@ -125,6 +128,17 @@ class LinkShapes(Behavior):
         by_column=False,
     )
     width: TNumFeature = _make_trait("the width of the link", numeric=True)
+
+    shapes: Tuple[ShapeBase] = W.TypedTuple(
+        T.Instance(ShapeBase),
+        help="the shapes to draw for each ``link``",
+    ).tag(sync=True, **W.widget_serialization)
+
+    def __init__(self, *shapes: Union[Sequence[ShapeBase], ShapeBase], **kwargs: Any):
+        if len(shapes) == 1 and isinstance(shapes, list):
+            shapes = shapes[0]
+        kwargs["shapes"] = shapes
+        super().__init__(**kwargs)
 
     @T.default("rank")
     def _default_rank(self) -> Optional[int]:

@@ -3,6 +3,8 @@ import type THREE from 'three';
 import {
   EMOJI,
   EMark,
+  ILinkCanvasBehaveOptions,
+  ILinkThreeBehaveOptions,
   INodeCanvasBehaveOptions,
   INodeThreeBehaveOptions,
 } from '../../../tokens';
@@ -103,13 +105,23 @@ export class ShapeBaseModel extends FacetedModel {
   /** Required in subclass. The model name should be unique between shapes.  */
   static model_name = 'ShapeBaseModel';
 
-  /** Required in subclass. Draw a shape on a canvas. */
+  /** Required in subclass. Draw a node shape on a canvas. */
   drawNode2D(options: INodeCanvasBehaveOptions): void {
     return;
   }
 
-  /** Required in subclass. Draw a shape in Three.js. */
+  /** Required in subclass. Draw a node shape in Three.js. */
   drawNode3D(options: INodeThreeBehaveOptions): THREE.Object3D | null {
+    return;
+  }
+
+  /** Required in subclass. Draw a link shape on a canvas. */
+  drawLink2D(options: ILinkCanvasBehaveOptions): void {
+    return;
+  }
+
+  /** Required in subclass. Draw a link shape in Three.js. */
+  drawLink3D(options: ILinkThreeBehaveOptions): THREE.Object3D | null {
     return;
   }
 

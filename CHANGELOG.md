@@ -4,11 +4,11 @@
 
 ### `ipyforcegraph 0.3.7`
 
-> TBD
+- adds `LinkShapes.shapes` with support for the `Text` shape
 
 ### `@jupyrdf/jupyter-forcegraph 0.3.7`
 
-> TBD
+- adds `LinkShapesModel.shapes` with support for the `TextModel` shape
 
 ## `0.3.6`
 

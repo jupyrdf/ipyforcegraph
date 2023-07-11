@@ -209,6 +209,14 @@ export interface INodeThreeBehaveOptions extends INodeBehaveOptions {
   iframeClasses: Record<string, any>;
 }
 
+export interface ILinkCanvasBehaveOptions extends ILinkBehaveOptions {
+  context: CanvasRenderingContext2D;
+}
+
+export interface ILinkThreeBehaveOptions extends ILinkBehaveOptions {
+  iframeClasses: Record<string, any>;
+}
+
 export interface INodeEventBehaveOptions extends INodeBehaveOptions {
   event: MouseEvent;
   index: number;
