@@ -74,13 +74,13 @@ export class LinkShapeModel extends LinkShapeFacetsModel implements IBehave {
 
     const anyThis = this as any;
 
-    if (this.shapes.length && !anyThis.getNodeCanvasObject) {
+    if (this.shapes.length && !anyThis.getLinkCanvasObject) {
       anyThis.getLinkCanvasObject = this._getLinkCanvasObject;
       anyThis.getLinkThreeObject = this._getLinkThreeObject;
       this._updateRequested.emit(EUpdate.Behavior);
-    } else if (this.shapes.length && !anyThis.getNodeCanvasObject) {
-      delete anyThis.getNodeCanvasObject;
-      delete anyThis.getNodeThreeObject;
+    } else if (!this.shapes.length && anyThis.getLinkCanvasObject) {
+      delete anyThis.getLinkCanvasObject;
+      delete anyThis.getLinkThreeObject;
       this._updateRequested.emit(EUpdate.Behavior);
     } else {
       this._updateRequested.emit(void 0);

@@ -6,12 +6,22 @@ import type SpriteText from 'three-spritetext';
 
 import {
   EMark,
+  ILinkCanvasBehaveOptions,
   INodeCanvasBehaveOptions,
   INodeThreeBehaveOptions,
 } from '../../../tokens';
 import { widget_serialization } from '../../serializers/widget';
 
-import { IBaseOptions, ITextOptions, ShapeBaseModel, TEXT_DEFAULTS } from './base';
+import {
+  ILinkCanvasOptions,
+  INodeCanvasOptions,
+  INodeOptions,
+  ITextOptions,
+  ShapeBaseModel,
+  TEXT_DEFAULTS,
+} from './base';
+
+const ELLIPSIS = ' …';
 
 export class TextShapeModel extends ShapeBaseModel {
   static model_name = 'TextShapeModel';
@@ -51,7 +61,7 @@ export class TextShapeModel extends ShapeBaseModel {
       return;
     }
 
-    this._drawCanvas(drawOptions);
+    this._drawCanvasNode(drawOptions);
   }
 
   drawNode3D(options: INodeThreeBehaveOptions): SpriteText | null {
@@ -72,10 +82,27 @@ export class TextShapeModel extends ShapeBaseModel {
       return null;
     }
 
-    return this._drawThree(drawOptions);
+    return this._drawThreeNode(drawOptions);
   }
 
-  protected _drawThree(options: ITextOptions & IBaseOptions): SpriteText {
+  drawLink2D(options: ILinkCanvasBehaveOptions): void {
+    const { context, link } = options;
+
+    const drawOptions = {
+      ...TEXT_DEFAULTS,
+      context,
+      link,
+      ...this._resolveFacets(options, EMark.link),
+    };
+
+    if (drawOptions.text == null || !`${drawOptions.text}`.trim().length) {
+      return;
+    }
+
+    this._drawCanvasLink(drawOptions);
+  }
+
+  protected _drawThreeNode(options: ITextOptions & INodeOptions): SpriteText {
     const {
       text,
       fill,
@@ -116,7 +143,7 @@ export class TextShapeModel extends ShapeBaseModel {
     return sprite;
   }
 
-  protected _drawCanvas(options: ITextOptions & IBaseOptions): void {
+  protected _drawCanvasNode(options: ITextOptions & INodeCanvasOptions): void {
     const {
       context,
       text,
@@ -138,10 +165,10 @@ export class TextShapeModel extends ShapeBaseModel {
     };
     const fontSize = scale_on_zoom ? size / globalScale : size;
     context.font = `${fontSize}px ${font}`;
-    const textWidth = context.measureText(text).width;
-    const bb = [textWidth + fontSize * padding, fontSize + fontSize * padding];
 
     if (background) {
+      const textWidth = context.measureText(text).width;
+      const bb = [textWidth + fontSize * padding, fontSize + fontSize * padding];
       context.fillStyle = background;
       context.fillRect(x - bb[0] / 2, y - bb[1] / 2, bb[0], bb[1]);
     }
@@ -158,5 +185,86 @@ export class TextShapeModel extends ShapeBaseModel {
 
     context.fillStyle = fill;
     context.fillText(text, x, y);
+  }
+
+  protected _drawCanvasLink(options: ITextOptions & ILinkCanvasOptions): void {
+    const {
+      background,
+      context,
+      fill,
+      font,
+      line_dash,
+      link,
+      padding,
+      size,
+      stroke_width,
+      stroke,
+      text,
+    } = options;
+
+    const start = link.source;
+    const end = link.target;
+
+    // ignore unbound links
+    if (typeof start !== 'object' || typeof end !== 'object') {
+      return;
+    }
+
+    // calculate label positioning
+    const x = start.x + (end.x - start.x) / 2;
+    const y = start.y + (end.y - start.y) / 2;
+
+    const relLink = { x: end.x - start.x, y: end.y - start.y };
+    const linkWidth = Math.sqrt(relLink.x * relLink.x + relLink.y * relLink.y);
+
+    // maintain label vertical orientation for legibility
+    let textAngle = Math.atan2(relLink.y, relLink.x);
+    if (textAngle > Math.PI / 2) {
+      textAngle = -(Math.PI - textAngle);
+    }
+
+    if (textAngle < -Math.PI / 2) {
+      textAngle = -(-Math.PI - textAngle);
+    }
+
+    context.font = `${size}px ${font}`;
+
+    let label = text;
+
+    let textWidth = context.measureText(text).width;
+
+    let extraPad = 3 * size;
+
+    if (textWidth + extraPad > linkWidth) {
+      while (label.length && textWidth + extraPad > linkWidth) {
+        label = label.slice(0, -1).trim();
+        textWidth = context.measureText(`${label}${ELLIPSIS}`.trim()).width;
+      }
+      label = `${label}${ELLIPSIS}`.trim();
+    }
+
+    context.save();
+    context.translate(x, y);
+    context.rotate(textAngle);
+
+    if (background) {
+      const bb = [textWidth + size * padding, size + size * padding];
+      context.fillStyle = background;
+      context.fillRect(-bb[0] / 2, -bb[1] / 2, bb[0], bb[1]);
+    }
+
+    context.textAlign = 'center';
+    context.textBaseline = 'middle';
+
+    if (stroke) {
+      context.setLineDash(line_dash || []);
+      context.strokeStyle = stroke;
+      context.lineWidth = stroke_width;
+      context.strokeText(text, x, y);
+    }
+
+    context.fillStyle = fill;
+    context.fillText(label, 0, 0);
+    context.restore();
   }
 }

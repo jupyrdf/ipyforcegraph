@@ -39,6 +39,7 @@ import {
   IBehave,
   IHasGraph,
   ILinkBehaveOptions,
+  ILinkCanvasBehaveOptions,
   ILinkEventBehaveOptions,
   INodeBehaveOptions,
   INodeCanvasBehaveOptions,
@@ -394,8 +395,12 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
           window.init = (args) => {
             const div = document.createElement('div');
             document.body.appendChild(div);
+            const graph = ${this.graphJsClass}(args || {})(div);
+            if ('${this.graphJsClass}' === 'ForceGraph') {
+              graph.linkCanvasObjectMode(() => 'after');
+            }
             return {
-              graph: ${this.graphJsClass}(args || {})(div),
+              graph,
               iframeClasses: ${this.extraJsClasses}
             };
           }
@@ -692,6 +697,15 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
         : null
     );
 
+    const canvasFn = this._linkBehaviorsByMethod[ELinkBehaveMethod.getLinkCanvasObject]
+      .length
+      ? this.wrapFunction(this.getLinkCanvasObject)
+      : null;
+
+    // graph.linkCanvasObjectMode(() => 'after');
+
+    graph.linkCanvasObject(canvasFn);
+
     graph.onRenderFramePost(
       this._graphBehaviorsByMethod[EGraphBehaveMethod.onRender].length
         ? this.wrapFunction(this.onRender)
@@ -879,6 +893,31 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
 
     return value != null ? value : defaultValue;
   }
+
+  protected getLinkCanvasObject = (
+    link: LinkObject,
+    context: CanvasRenderingContext2D
+  ): void => {
+    let value: string | null;
+    const graphData = (this.graph as ForceGraphInstance).graphData();
+    const options: ILinkCanvasBehaveOptions = {
+      view: this,
+      index: graphData.links.indexOf(link),
+      context,
+      graphData,
+      link,
+    };
+
+    for (const behavior of this._linkBehaviorsByMethod[
+      ELinkBehaveMethod.getLinkCanvasObject
+    ]) {
+      let method = behavior.getLinkCanvasObject;
+      value = method.call(behavior, options);
+      if (value != null) {
+        break;
+      }
+    }
+  };
 
   // node behaviors
   protected getNodeColor = (node: NodeObject): string => {

@@ -4,8 +4,8 @@
  */
 import type THREE from 'three';
 
-import { GeometryShapeModel } from './base';
-import { IBaseOptions, IRectangleOptions, RECTANGLE_DEFAULTS } from './base';
+import { GeometryShapeModel, INodeCanvasOptions } from './base';
+import { INodeOptions, IRectangleOptions, RECTANGLE_DEFAULTS } from './base';
 
 export class RectangleShapeModel extends GeometryShapeModel {
   static model_name = 'RectangleShapeModel';
@@ -18,7 +18,7 @@ export class RectangleShapeModel extends GeometryShapeModel {
     return RECTANGLE_DEFAULTS;
   }
 
-  protected _drawCanvasPath(options: IRectangleOptions & IBaseOptions): void {
+  protected _drawCanvasPath(options: IRectangleOptions & INodeCanvasOptions): void {
     const { width, height, context, x, y, scale_on_zoom, globalScale } = options;
     const finalWidth = scale_on_zoom ? width / globalScale : width;
     const finalHeight = scale_on_zoom ? height / globalScale : height;
@@ -26,7 +26,7 @@ export class RectangleShapeModel extends GeometryShapeModel {
   }
 
   protected _drawThreeGeometry(
-    options: IRectangleOptions & IBaseOptions
+    options: IRectangleOptions & INodeOptions
   ): THREE.BufferGeometry {
     const _THREE: typeof THREE = options.iframeClasses.THREE;
     return new _THREE.BoxGeometry(options.width, options.height, options.depth);

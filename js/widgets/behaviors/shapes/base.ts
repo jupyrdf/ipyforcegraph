@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2023 ipyforcegraph contributors.
+ * Distributed under the terms of the Modified BSD License.
+ */
+import { LinkObject } from 'force-graph/dist/force-graph';
 import type THREE from 'three';
 
 import {
@@ -11,16 +16,26 @@ import {
 import { widget_serialization } from '../../serializers/widget';
 import { FacetedModel } from '../base';
 
-/*
- * Copyright (c) 2023 ipyforcegraph contributors.
- * Distributed under the terms of the Modified BSD License.
- */
 export interface IBaseOptions {
-  context: CanvasRenderingContext2D;
+  iframeClasses?: Record<string, any>;
+}
+
+export interface INodeOptions extends IBaseOptions {
   x: number;
   y: number;
   globalScale: number;
-  iframeClasses?: Record<string, any>;
+}
+
+export interface ILinkOptions extends IBaseOptions {
+  link: LinkObject;
+}
+
+export interface ILinkCanvasOptions extends ILinkOptions {
+  context: CanvasRenderingContext2D;
+}
+
+export interface INodeCanvasOptions extends INodeOptions {
+  context: CanvasRenderingContext2D;
 }
 
 export type TBoundingBox = number[];
@@ -127,7 +142,11 @@ export class ShapeBaseModel extends FacetedModel {
 
   /** Evaluate all facets with the runtime shape into the "dumb" data for drawing. */
   protected _resolveFacets(
-    options: INodeCanvasBehaveOptions | INodeThreeBehaveOptions,
+    options:
+      | INodeCanvasBehaveOptions
+      | INodeThreeBehaveOptions
+      | ILinkCanvasBehaveOptions
+      | ILinkThreeBehaveOptions,
     markType: EMark
   ): Record<string, any> {
     const draw: Record<string, any> = {};
@@ -211,11 +230,11 @@ export class GeometryShapeModel extends ShapeBaseModel {
     return this._drawThree(drawOptions);
   }
 
-  protected _drawCanvasPath(options: IDimensionOptions & IBaseOptions): void {
+  protected _drawCanvasPath(options: IDimensionOptions & INodeCanvasOptions): void {
     throw new Error(`${EMOJI} does not draw canvas ${this._modelClass}`);
   }
 
-  protected _drawCanvas(options: IDimensionOptions & IBaseOptions): void {
+  protected _drawCanvas(options: IDimensionOptions & INodeCanvasOptions): void {
     const { context, globalScale, fill, scale_on_zoom, stroke_width, opacity, stroke } =
       {
         ...RECTANGLE_DEFAULTS,
@@ -239,12 +258,12 @@ export class GeometryShapeModel extends ShapeBaseModel {
   }
 
   protected _drawThreeGeometry(
-    options: IDimensionOptions & IBaseOptions
+    options: IDimensionOptions & INodeOptions
   ): THREE.BufferGeometry {
     throw new Error(`${EMOJI} doesn't implement 3d geometry ${this._modelClass}`);
   }
 
-  protected _drawThree(options: IDimensionOptions & IBaseOptions): THREE.Object3D {
+  protected _drawThree(options: IDimensionOptions & INodeOptions): THREE.Object3D {
     const { fill, iframeClasses, opacity } = {
       ...RECTANGLE_DEFAULTS,
       ...options,

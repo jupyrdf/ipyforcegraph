@@ -4,8 +4,8 @@
  */
 import type THREE from 'three';
 
-import { GeometryShapeModel } from './base';
-import { ELLIPSE_DEFAULTS, FULL_CIRCLE, IBaseOptions, IEllipseOptions } from './base';
+import { GeometryShapeModel, INodeCanvasOptions } from './base';
+import { ELLIPSE_DEFAULTS, FULL_CIRCLE, IEllipseOptions, INodeOptions } from './base';
 
 export class EllipseShapeModel extends GeometryShapeModel {
   static model_name = 'EllipseShapeModel';
@@ -18,7 +18,7 @@ export class EllipseShapeModel extends GeometryShapeModel {
     return ELLIPSE_DEFAULTS;
   }
 
-  protected _drawCanvasPath(options: IEllipseOptions & IBaseOptions): void {
+  protected _drawCanvasPath(options: IEllipseOptions & INodeCanvasOptions): void {
     const { width, height, context, x, y, scale_on_zoom, globalScale } = options;
     const radiusX = width / 2;
     const radiusY = height / 2;
@@ -34,7 +34,7 @@ export class EllipseShapeModel extends GeometryShapeModel {
   }
 
   protected _drawThreeGeometry(
-    options: IEllipseOptions & IBaseOptions
+    options: IEllipseOptions & INodeOptions
   ): THREE.BufferGeometry {
     const { height, width, depth, scale_on_zoom, globalScale } = options;
     const _THREE: typeof THREE = options.iframeClasses.THREE;

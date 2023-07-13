@@ -101,29 +101,31 @@ export interface IBehave extends WidgetModel {
   updateGraphCamera?(options: IUpdateGraphCameraOptions): Promise<void>;
 
   // link
+  getLinkCanvasObject?(options: ILinkCanvasBehaveOptions): any;
   getLinkColor?(options: ILinkBehaveOptions): string | null;
   getLinkCurvature?(options: ILinkBehaveOptions): number | null;
-  getLinkLineDash?(options: ILinkBehaveOptions): number[] | null;
-  getLinkWidth?(options: ILinkBehaveOptions): number | null;
-  getLinkLabel?(options: ILinkBehaveOptions): string | null;
   getLinkDirectionalArrowColor?(options: ILinkBehaveOptions): string | null;
   getLinkDirectionalArrowLength?(options: ILinkBehaveOptions): number | null;
   getLinkDirectionalArrowRelPos?(options: ILinkBehaveOptions): number | null;
   getLinkDirectionalParticleColor?(options: ILinkBehaveOptions): string | null;
+  getLinkDirectionalParticles?(options: ILinkBehaveOptions): number | null;
   getLinkDirectionalParticleSpeed?(options: ILinkBehaveOptions): number | null;
   getLinkDirectionalParticleWidth?(options: ILinkBehaveOptions): number | null;
-  getLinkDirectionalParticles?(options: ILinkBehaveOptions): number | null;
+  getLinkLabel?(options: ILinkBehaveOptions): string | null;
+  getLinkLineDash?(options: ILinkBehaveOptions): number[] | null;
+  getLinkThreeObject?(options: ILinkThreeBehaveOptions): THREE.Object3D | null;
+  getLinkWidth?(options: ILinkBehaveOptions): number | null;
   // node
+  getNodeCanvasObject?(options: INodeCanvasBehaveOptions): any;
   getNodeColor?(options: INodeBehaveOptions): string | null;
   getNodeLabel?(options: INodeBehaveOptions): string | null;
   getNodeSize?(options: INodeBehaveOptions): number | null;
-  getNodeCanvasObject?(options: INodeCanvasBehaveOptions): any;
   getNodeThreeObject?(options: INodeThreeBehaveOptions): THREE.Object3D | null;
   // evented
-  onNodeClick?(options: INodeEventBehaveOptions): boolean;
   onLinkClick?(options: ILinkEventBehaveOptions): boolean;
-  onZoom?(zoomData: IZoomData): void;
+  onNodeClick?(options: INodeEventBehaveOptions): boolean;
   onRender?(options: IRenderOptions): void;
+  onZoom?(zoomData: IZoomData): void;
 }
 export enum ELinkBehaveMethod {
   getLinkLabel = 0,
@@ -139,6 +141,8 @@ export enum ELinkBehaveMethod {
   getLinkDirectionalParticleWidth = 10,
   getLinkDirectionalParticles = 11,
   onLinkClick = 12,
+  getLinkCanvasObject = 13,
+  getLinkThreeObject = 14,
 }
 
 export const ALL_LINK_METHODS = {
@@ -155,6 +159,8 @@ export const ALL_LINK_METHODS = {
   getLinkDirectionalParticleWidth: ELinkBehaveMethod.getLinkDirectionalParticleWidth,
   getLinkDirectionalParticles: ELinkBehaveMethod.getLinkDirectionalParticles,
   onLinkClick: ELinkBehaveMethod.onLinkClick,
+  getLinkCanvasObject: ELinkBehaveMethod.getLinkCanvasObject,
+  getLinkThreeObject: ELinkBehaveMethod.getLinkThreeObject,
 };
 export type TLinkBehaveMethod = keyof typeof ALL_LINK_METHODS;
 
