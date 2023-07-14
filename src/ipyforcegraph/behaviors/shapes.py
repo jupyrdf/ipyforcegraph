@@ -14,6 +14,7 @@ from ._base import (
     Behavior,
     HasDimensions,
     HasFillAndStroke,
+    HasOffsets,
     ShapeBase,
     TFeature,
     TNumFeature,
@@ -22,7 +23,7 @@ from ._base import (
 
 
 @W.register
-class Text(HasFillAndStroke):
+class Text(HasFillAndStroke, HasOffsets):
     """Draw a text shape, with an optional background.
 
     If the ``text`` trait is (or evaluates to) ``0`` or ``None``, no shape will be drawn.

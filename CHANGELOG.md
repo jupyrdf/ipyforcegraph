@@ -5,6 +5,7 @@
 ### `ipyforcegraph 0.3.7`
 
 - adds `LinkShapes.shapes` with support for the `Text` shape
+- adds `offset_x`, `offset_y`, and `offset_z` to all shapes
 
 ### `@jupyrdf/jupyter-forcegraph 0.3.7`
 

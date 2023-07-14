@@ -62,6 +62,9 @@ export interface IDimensionOptions extends IFillAndStrokeOptions {
   height?: number;
   depth?: number;
   opacity?: number;
+  offset_x?: number;
+  offset_y?: number;
+  offset_z?: number;
 }
 
 // options for specific shapes
@@ -76,6 +79,9 @@ export interface ITextOptions extends IFillAndStrokeOptions {
   font?: string;
   background?: string;
   padding?: number;
+  offset_x?: number;
+  offset_y?: number;
+  offset_z?: number;
 }
 
 export interface IRectangleOptions extends IDimensionOptions {
@@ -93,6 +99,9 @@ export const ELLIPSE_DEFAULTS: IEllipseOptions = Object.freeze({
   scale_on_zoom: false,
   stroke: transparent,
   stroke_width: 2,
+  offset_x: 0,
+  offset_y: 0,
+  offset_z: 0,
 });
 
 export const RECTANGLE_DEFAULTS: IRectangleOptions = Object.freeze({
@@ -104,6 +113,9 @@ export const RECTANGLE_DEFAULTS: IRectangleOptions = Object.freeze({
   scale_on_zoom: false,
   stroke: transparent,
   stroke_width: 2,
+  offset_x: 0,
+  offset_y: 0,
+  offset_z: 0,
 });
 
 export const TEXT_DEFAULTS: ITextOptions = Object.freeze({
@@ -114,6 +126,9 @@ export const TEXT_DEFAULTS: ITextOptions = Object.freeze({
   text: '',
   scale_on_zoom: true,
   stroke_width: 2,
+  offset_x: 0,
+  offset_y: 0,
+  offset_z: 0,
 });
 
 export class ShapeBaseModel extends FacetedModel {
@@ -183,6 +198,9 @@ export class GeometryShapeModel extends ShapeBaseModel {
     stroke_width: widget_serialization,
     scale_on_zoom: widget_serialization,
     line_dash: widget_serialization,
+    offset_x: widget_serialization,
+    offset_y: widget_serialization,
+    offset_z: widget_serialization,
   };
 
   protected get shapeDefaults(): IDimensionOptions {

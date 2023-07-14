@@ -19,10 +19,25 @@ export class RectangleShapeModel extends GeometryShapeModel {
   }
 
   protected _drawCanvasPath(options: IRectangleOptions & INodeCanvasOptions): void {
-    const { width, height, context, x, y, scale_on_zoom, globalScale } = options;
+    const {
+      width,
+      height,
+      context,
+      x,
+      y,
+      scale_on_zoom,
+      globalScale,
+      offset_x,
+      offset_y,
+    } = options;
     const finalWidth = scale_on_zoom ? width / globalScale : width;
     const finalHeight = scale_on_zoom ? height / globalScale : height;
-    context.rect(x - finalWidth / 2, y - finalHeight / 2, finalWidth, finalHeight);
+    context.rect(
+      offset_x + x - finalWidth / 2,
+      offset_y + y - finalHeight / 2,
+      finalWidth,
+      finalHeight
+    );
   }
 
   protected _drawThreeGeometry(

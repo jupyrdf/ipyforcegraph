@@ -45,6 +45,9 @@ export class TextShapeModel extends ShapeBaseModel {
     padding: widget_serialization,
     scale_on_zoom: widget_serialization,
     line_dash: widget_serialization,
+    offset_x: widget_serialization,
+    offset_y: widget_serialization,
+    offset_z: widget_serialization,
   };
 
   drawNode2D(options: INodeCanvasBehaveOptions): void {
@@ -147,7 +150,7 @@ export class TextShapeModel extends ShapeBaseModel {
   }
 
   protected _drawCanvasNode(options: ITextOptions & INodeCanvasOptions): void {
-    const {
+    let {
       context,
       text,
       size,
@@ -158,10 +161,14 @@ export class TextShapeModel extends ShapeBaseModel {
       x,
       y,
       scale_on_zoom,
+      offset_x,
+      offset_y,
     } = {
       ...TEXT_DEFAULTS,
       ...options,
     };
+    x = offset_x ? x + offset_x : x;
+    y = offset_y ? y + offset_y : y;
     const fontSize = scale_on_zoom ? size / globalScale : size;
     context.font = `${fontSize}px ${font}`;
 
@@ -176,7 +183,8 @@ export class TextShapeModel extends ShapeBaseModel {
   }
 
   protected _drawCanvasLink(options: ITextOptions & ILinkCanvasOptions): void {
-    const { background, context, font, link, padding, size } = options;
+    const { background, context, font, link, padding, size, offset_x, offset_y } =
+      options;
 
     if (typeof link.source !== 'object' || typeof link.target !== 'object') {
       return;
@@ -195,10 +203,10 @@ export class TextShapeModel extends ShapeBaseModel {
     if (background) {
       const bb = [textWidth + size * padding, size + size * padding];
       context.fillStyle = background;
-      context.fillRect(-bb[0] / 2, -bb[1] / 2, bb[0], bb[1]);
+      context.fillRect(offset_x - bb[0] / 2, offset_y - bb[1] / 2, bb[0], bb[1]);
     }
 
-    this._drawCanvasText(label, 0, 0, options);
+    this._drawCanvasText(label, offset_x, offset_y, options);
 
     context.restore();
   }

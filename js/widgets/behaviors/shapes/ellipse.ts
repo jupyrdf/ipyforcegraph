@@ -19,12 +19,22 @@ export class EllipseShapeModel extends GeometryShapeModel {
   }
 
   protected _drawCanvasPath(options: IEllipseOptions & INodeCanvasOptions): void {
-    const { width, height, context, x, y, scale_on_zoom, globalScale } = options;
+    const {
+      width,
+      height,
+      context,
+      x,
+      y,
+      scale_on_zoom,
+      globalScale,
+      offset_x,
+      offset_y,
+    } = options;
     const radiusX = width / 2;
     const radiusY = height / 2;
     context.ellipse(
-      x,
-      y,
+      x + offset_x,
+      y + offset_y,
       scale_on_zoom ? radiusX / globalScale : radiusX,
       scale_on_zoom ? radiusY / globalScale : radiusY,
       0,
