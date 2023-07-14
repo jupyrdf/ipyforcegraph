@@ -174,7 +174,8 @@ class HasScale(ShapeBase):
     _model_name: str = T.Unicode("HasScaleModel").tag(sync=True)
 
     scale_on_zoom: TBoolFeature = _make_trait(
-        "whether font size/stroke respects the global scale", boolish=True
+        "whether font size/stroke respects the global scale. Has no impact on `link` shapes.",
+        boolish=True,
     )
 
     @T.validate("scale_on_zoom")
