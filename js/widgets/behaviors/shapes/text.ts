@@ -1,6 +1,9 @@
 /*
  * Copyright (c) 2023 ipyforcegraph contributors.
  * Distributed under the terms of the Modified BSD License.
+ *
+ * Derived from:
+ * https://github.com/vasturiano/force-graph/blob/master/example/text-links/index.html
  */
 import type SpriteText from 'three-spritetext';
 
@@ -151,14 +154,10 @@ export class TextShapeModel extends ShapeBaseModel {
       globalScale,
       font,
       padding,
-      fill,
       background,
       x,
       y,
       scale_on_zoom,
-      stroke_width,
-      stroke,
-      line_dash,
     } = {
       ...TEXT_DEFAULTS,
       ...options,
@@ -173,48 +172,69 @@ export class TextShapeModel extends ShapeBaseModel {
       context.fillRect(x - bb[0] / 2, y - bb[1] / 2, bb[0], bb[1]);
     }
 
-    context.textAlign = 'center';
-    context.textBaseline = 'middle';
-
-    if (stroke) {
-      context.setLineDash(line_dash || []);
-      context.strokeStyle = stroke;
-      context.lineWidth = scale_on_zoom ? stroke_width / globalScale : stroke_width;
-      context.strokeText(text, x, y);
-    }
-
-    context.fillStyle = fill;
-    context.fillText(text, x, y);
+    this._drawCanvasText(text, x, y, options);
   }
 
   protected _drawCanvasLink(options: ITextOptions & ILinkCanvasOptions): void {
-    const {
-      background,
-      context,
-      fill,
-      font,
-      line_dash,
-      link,
-      padding,
-      size,
-      stroke_width,
-      stroke,
-      text,
-    } = options;
+    const { background, context, font, link, padding, size } = options;
 
-    const start = link.source;
-    const end = link.target;
+    if (typeof link.source !== 'object' || typeof link.target !== 'object') {
+      return;
+    }
+
+    context.font = `${size}px ${font}`;
+
+    const [x, y, textAngle, linkWidth] = this._getTextTransforms(options);
+
+    const [label, textWidth] = this._getTruncatedCanvasText(linkWidth, options);
+
+    context.save();
+    context.translate(x, y);
+    context.rotate(textAngle);
+
+    if (background) {
+      const bb = [textWidth + size * padding, size + size * padding];
+      context.fillStyle = background;
+      context.fillRect(-bb[0] / 2, -bb[1] / 2, bb[0], bb[1]);
+    }
+
+    this._drawCanvasText(label, 0, 0, options);
+
+    context.restore();
+  }
+
+  _drawCanvasBackground(
+    text: string,
+    size: number,
+    x: number,
+    y: number,
+    options: ITextOptions & (ILinkCanvasOptions | INodeCanvasOptions)
+  ) {
+    const { context, background, padding } = options;
+    if (background) {
+      const textWidth = context.measureText(text).width;
+      const bb = [textWidth + size * padding, size + size * padding];
+      context.fillStyle = background;
+      context.fillRect(x - bb[0] / 2, y - bb[1] / 2, bb[0], bb[1]);
+    }
+  }
+
+  _getTextTransforms(
+    options: ITextOptions & ILinkCanvasOptions
+  ): [number, number, number, number] {
+    const { link } = options;
+    const { source, target } = link;
 
     // ignore unbound links
-    if (typeof start !== 'object' || typeof end !== 'object') {
+    if (typeof source !== 'object' || typeof target !== 'object') {
       return;
     }
 
     // calculate label positioning
-    const x = start.x + (end.x - start.x) / 2;
-    const y = start.y + (end.y - start.y) / 2;
+    const x = source.x + (target.x - source.x) / 2;
+    const y = source.y + (target.y - source.y) / 2;
 
-    const relLink = { x: end.x - start.x, y: end.y - start.y };
+    const relLink = { x: target.x - source.x, y: target.y - source.y };
     const linkWidth = Math.sqrt(relLink.x * relLink.x + relLink.y * relLink.y);
 
     // maintain label vertical orientation for legibility
@@ -226,13 +246,16 @@ export class TextShapeModel extends ShapeBaseModel {
     if (textAngle < -Math.PI / 2) {
       textAngle = -(-Math.PI - textAngle);
     }
+    return [x, y, textAngle, linkWidth];
+  }
 
-    context.font = `${size}px ${font}`;
-
+  _getTruncatedCanvasText(
+    linkWidth: number,
+    options: ITextOptions & ILinkCanvasOptions
+  ): [string, number] {
+    const { text, context, size } = options;
     let label = text;
-
     let textWidth = context.measureText(text).width;
-
     let extraPad = 3 * size;
 
     if (textWidth + extraPad > linkWidth) {
@@ -243,15 +266,16 @@ export class TextShapeModel extends ShapeBaseModel {
       label = `${label}${ELLIPSIS}`.trim();
     }
 
-    context.save();
-    context.translate(x, y);
-    context.rotate(textAngle);
+    return [label, textWidth];
+  }
 
-    if (background) {
-      const bb = [textWidth + size * padding, size + size * padding];
-      context.fillStyle = background;
-      context.fillRect(-bb[0] / 2, -bb[1] / 2, bb[0], bb[1]);
-    }
+  _drawCanvasText(
+    text: string,
+    x: number,
+    y: number,
+    options: ITextOptions & (ILinkCanvasOptions | INodeCanvasOptions)
+  ) {
+    const { line_dash, context, stroke, stroke_width, fill } = options;
 
     context.textAlign = 'center';
     context.textBaseline = 'middle';
@@ -264,7 +288,6 @@ export class TextShapeModel extends ShapeBaseModel {
     }
 
     context.fillStyle = fill;
-    context.fillText(label, 0, 0);
-    context.restore();
+    context.fillText(text, x, y);
   }
 }
