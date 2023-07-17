@@ -211,22 +211,6 @@ export class TextShapeModel extends ShapeBaseModel {
     context.restore();
   }
 
-  _drawCanvasBackground(
-    text: string,
-    size: number,
-    x: number,
-    y: number,
-    options: ITextOptions & (ILinkCanvasOptions | INodeCanvasOptions)
-  ) {
-    const { context, background, padding } = options;
-    if (background) {
-      const textWidth = context.measureText(text).width;
-      const bb = [textWidth + size * padding, size + size * padding];
-      context.fillStyle = background;
-      context.fillRect(x - bb[0] / 2, y - bb[1] / 2, bb[0], bb[1]);
-    }
-  }
-
   _getTextTransforms(
     options: ITextOptions & ILinkCanvasOptions
   ): [number, number, number, number] {
