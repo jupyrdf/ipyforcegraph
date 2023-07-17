@@ -14,6 +14,7 @@ import {
   ILinkThreeBehaveOptions,
   INodeCanvasBehaveOptions,
   INodeThreeBehaveOptions,
+  IThreeLinkPosition,
 } from '../../../tokens';
 import { widget_serialization } from '../../serializers/widget';
 
@@ -101,7 +102,7 @@ export class TextShapeModel extends ShapeBaseModel {
       ...TEXT_DEFAULTS,
       link,
       iframeClasses,
-      ...this._resolveFacets(options, EMark.node),
+      ...this._resolveFacets(options, EMark.link),
     };
 
     if (!drawOptions.text) {
@@ -112,19 +113,23 @@ export class TextShapeModel extends ShapeBaseModel {
   }
 
   positionLink3D(options: ILinkThreeBehaveOptions): void {
-    const { position, sprite } = options;
+    const { link, position, sprite } = options;
 
     if (!sprite || !position) {
       return;
     }
 
-    const { start, end } = position;
+    const drawOptions = {
+      ...TEXT_DEFAULTS,
+      link,
+      ...this._resolveFacets(options, EMark.link),
+    };
 
-    Object.assign(sprite.position, {
-      x: start.x + (end.x - start.x) / 2,
-      y: start.y + (end.y - start.y) / 2,
-      z: start.z + (end.z - start.z) / 2,
-    });
+    if (!drawOptions.text) {
+      return null;
+    }
+
+    this._positionThreeLink(sprite, position, drawOptions);
   }
 
   drawLink2D(options: ILinkCanvasBehaveOptions): void {
@@ -144,7 +149,7 @@ export class TextShapeModel extends ShapeBaseModel {
     this._drawCanvasLink(drawOptions);
   }
 
-  _drawThreeLink(options: ITextOptions & ILinkOptions): SpriteText {
+  protected _drawThreeLink(options: ITextOptions & ILinkOptions): SpriteText {
     const {
       text,
       fill,
@@ -180,6 +185,23 @@ export class TextShapeModel extends ShapeBaseModel {
     }
 
     return sprite;
+  }
+
+  protected _positionThreeLink(
+    sprite: THREE.Object3D,
+    position: IThreeLinkPosition,
+    options: ITextOptions & ILinkOptions
+  ): void {
+    const { offset_x, offset_y, offset_z } = {
+      ...TEXT_DEFAULTS,
+      ...options,
+    };
+    const { start, end } = position;
+    Object.assign(sprite.position, {
+      x: start.x + (end.x - start.x) / 2 + offset_x,
+      y: start.y + (end.y - start.y) / 2 + offset_y,
+      z: start.z + (end.z - start.z) / 2 + offset_z,
+    });
   }
 
   protected _drawThreeNode(options: ITextOptions & INodeOptions): SpriteText {
