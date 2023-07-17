@@ -292,6 +292,7 @@ export class TextShapeModel extends ShapeBaseModel {
       context.setLineDash(line_dash || []);
       context.strokeStyle = stroke;
       context.lineWidth = stroke_width;
+      context.lineJoin = 'round';
       context.strokeText(text, x, y);
     }
 
