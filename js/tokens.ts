@@ -115,6 +115,7 @@ export interface IBehave extends WidgetModel {
   getLinkLineDash?(options: ILinkBehaveOptions): number[] | null;
   getLinkThreeObject?(options: ILinkThreeBehaveOptions): THREE.Object3D | null;
   getLinkWidth?(options: ILinkBehaveOptions): number | null;
+  getLinkPosition?(options: ILinkThreeBehaveOptions): void;
   // node
   getNodeCanvasObject?(options: INodeCanvasBehaveOptions): any;
   getNodeColor?(options: INodeBehaveOptions): string | null;
@@ -143,6 +144,7 @@ export enum ELinkBehaveMethod {
   onLinkClick = 12,
   getLinkCanvasObject = 13,
   getLinkThreeObject = 14,
+  getLinkPosition = 15,
 }
 
 export const ALL_LINK_METHODS = {
@@ -161,6 +163,7 @@ export const ALL_LINK_METHODS = {
   onLinkClick: ELinkBehaveMethod.onLinkClick,
   getLinkCanvasObject: ELinkBehaveMethod.getLinkCanvasObject,
   getLinkThreeObject: ELinkBehaveMethod.getLinkThreeObject,
+  getLinkPosition: ELinkBehaveMethod.getLinkPosition,
 };
 export type TLinkBehaveMethod = keyof typeof ALL_LINK_METHODS;
 
@@ -221,6 +224,8 @@ export interface ILinkCanvasBehaveOptions extends ILinkBehaveOptions {
 
 export interface ILinkThreeBehaveOptions extends ILinkBehaveOptions {
   iframeClasses: Record<string, any>;
+  sprite?: THREE.Object3D;
+  position?: IThreeLinkPosition;
 }
 
 export interface INodeEventBehaveOptions extends INodeBehaveOptions {
@@ -345,3 +350,14 @@ export interface IZoomData {
 }
 
 export const THROTTLE_OPTS: Throttler.IOptions = { limit: 200, edge: 'trailing' };
+
+export interface IThreePoint {
+  x: number;
+  y: number;
+  z: number;
+}
+
+export interface IThreeLinkPosition {
+  start: IThreePoint;
+  end: IThreePoint;
+}

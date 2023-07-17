@@ -396,9 +396,9 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
             const div = document.createElement('div');
             document.body.appendChild(div);
             const graph = ${this.graphJsClass}(args || {})(div);
-            if ('${this.graphJsClass}' === 'ForceGraph') {
-              graph.linkCanvasObjectMode(() => 'after');
-            }
+
+            ${this.graphJsPostInit}
+
             return {
               graph,
               iframeClasses: ${this.extraJsClasses}
@@ -413,6 +413,10 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
       </body>
     `;
     return src;
+  }
+
+  protected get graphJsPostInit() {
+    return `graph.linkCanvasObjectMode(() => 'after');`;
   }
 
   async redraw(): Promise<void> {

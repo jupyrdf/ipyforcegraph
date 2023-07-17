@@ -17,13 +17,13 @@ ${SCREENS}      ${SCREENS ROOT}${/}api${/}links-shapes2
 
 *** Test Cases ***
 ForceGraph3D Can Update Text Fill
-    Pass Execution    TODO: ForceGraph3D vs link shape fill
+    Link Shape Feature Works As Expected    ForceGraph3D    Text    fill
 
 ForceGraph3D Can Update Text Background
-    Pass Execution    TODO: ForceGraph3D vs link shape background
+    Link Shape Feature Works As Expected    ForceGraph3D    Text    background
 
 ForceGraph3D Can Update Text Stroke
-    Pass Execution    TODO: ForceGraph3D vs link shape stroke
+    Link Shape Feature Works As Expected    ForceGraph3D    Text    stroke
 
 
 *** Keywords ***

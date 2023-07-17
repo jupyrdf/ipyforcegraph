@@ -155,6 +155,11 @@ export class ShapeBaseModel extends FacetedModel {
     return;
   }
 
+  /** Required in subclass. Position a link shape in Three.js. */
+  positionLink3D(options: ILinkThreeBehaveOptions): void {
+    return;
+  }
+
   /** Evaluate all facets with the runtime shape into the "dumb" data for drawing. */
   protected _resolveFacets(
     options:

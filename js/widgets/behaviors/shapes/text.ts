@@ -5,11 +5,13 @@
  * Derived from:
  * https://github.com/vasturiano/force-graph/blob/master/example/text-links/index.html
  */
+import type THREE from 'three';
 import type SpriteText from 'three-spritetext';
 
 import {
   EMark,
   ILinkCanvasBehaveOptions,
+  ILinkThreeBehaveOptions,
   INodeCanvasBehaveOptions,
   INodeThreeBehaveOptions,
 } from '../../../tokens';
@@ -17,6 +19,7 @@ import { widget_serialization } from '../../serializers/widget';
 
 import {
   ILinkCanvasOptions,
+  ILinkOptions,
   INodeCanvasOptions,
   INodeOptions,
   ITextOptions,
@@ -91,6 +94,39 @@ export class TextShapeModel extends ShapeBaseModel {
     return this._drawThreeNode(drawOptions);
   }
 
+  drawLink3D(options: ILinkThreeBehaveOptions): THREE.Object3D | null {
+    const { link, iframeClasses } = options;
+
+    const drawOptions = {
+      ...TEXT_DEFAULTS,
+      link,
+      iframeClasses,
+      ...this._resolveFacets(options, EMark.node),
+    };
+
+    if (!drawOptions.text) {
+      return null;
+    }
+
+    return this._drawThreeLink(drawOptions);
+  }
+
+  positionLink3D(options: ILinkThreeBehaveOptions): void {
+    const { position, sprite } = options;
+
+    if (!sprite || !position) {
+      return;
+    }
+
+    const { start, end } = position;
+
+    Object.assign(sprite.position, {
+      x: start.x + (end.x - start.x) / 2,
+      y: start.y + (end.y - start.y) / 2,
+      z: start.z + (end.z - start.z) / 2,
+    });
+  }
+
   drawLink2D(options: ILinkCanvasBehaveOptions): void {
     const { context, link } = options;
 
@@ -106,6 +142,44 @@ export class TextShapeModel extends ShapeBaseModel {
     }
 
     this._drawCanvasLink(drawOptions);
+  }
+
+  _drawThreeLink(options: ITextOptions & ILinkOptions): SpriteText {
+    const {
+      text,
+      fill,
+      font,
+      size,
+      stroke,
+      stroke_width,
+      background,
+      padding,
+      iframeClasses,
+    } = {
+      ...TEXT_DEFAULTS,
+      ...options,
+    };
+    const _SpriteText: typeof SpriteText = iframeClasses.SpriteText;
+
+    const sprite = new _SpriteText(text);
+    sprite.material.depthWrite = false;
+    sprite.textHeight = size;
+
+    sprite.color = fill;
+    sprite.fontFace = font;
+    sprite.fontSize = size;
+
+    if (stroke) {
+      sprite.strokeColor = stroke;
+      sprite.strokeWidth = stroke_width;
+    }
+
+    if (background) {
+      sprite.backgroundColor = background;
+      sprite.padding = padding;
+    }
+
+    return sprite;
   }
 
   protected _drawThreeNode(options: ITextOptions & INodeOptions): SpriteText {

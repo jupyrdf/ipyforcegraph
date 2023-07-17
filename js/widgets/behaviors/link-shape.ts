@@ -77,6 +77,7 @@ export class LinkShapeModel extends LinkShapeFacetsModel implements IBehave {
     if (this.shapes.length && !anyThis.getLinkCanvasObject) {
       anyThis.getLinkCanvasObject = this._getLinkCanvasObject;
       anyThis.getLinkThreeObject = this._getLinkThreeObject;
+      anyThis.getLinkPosition = this._getLinkPosition;
       this._updateRequested.emit(EUpdate.Behavior);
     } else if (!this.shapes.length && anyThis.getLinkCanvasObject) {
       delete anyThis.getLinkCanvasObject;
@@ -107,6 +108,12 @@ export class LinkShapeModel extends LinkShapeFacetsModel implements IBehave {
       if (obj) {
         return obj;
       }
+    }
+  }
+
+  _getLinkPosition(options: ILinkThreeBehaveOptions): void {
+    for (const shape of this.shapes) {
+      shape.positionLink3D(options);
     }
   }
 }

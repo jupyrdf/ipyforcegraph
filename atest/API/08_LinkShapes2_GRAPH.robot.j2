@@ -21,11 +21,7 @@ ${SCREENS}      ${SCREENS ROOT}${/}api${/}links-shapes2
 {% for shape_class, features in shapes.items() %}
     {% for feature in features %}
 {{ graph_class }} Can Update {{ shape_class }} {{ feature.title() }}
-    {% if graph_class == "ForceGraph3D" -%}
-    Pass Execution   TODO: {{ graph_class }} vs link shape {{ feature }}
-    {% else -%}
     Link Shape Feature Works As Expected  {{ graph_class }}  {{ shape_class }}  {{ feature }}
-    {% endif %}
     {%- endfor %}
 {%- endfor %}
 
