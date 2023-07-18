@@ -14,6 +14,7 @@ from ._base import (
     Behavior,
     HasDimensions,
     HasFillAndStroke,
+    HasOffsets,
     ShapeBase,
     TFeature,
     TNumFeature,
@@ -22,7 +23,7 @@ from ._base import (
 
 
 @W.register
-class Text(HasFillAndStroke):
+class Text(HasFillAndStroke, HasOffsets):
     """Draw a text shape, with an optional background.
 
     If the ``text`` trait is (or evaluates to) ``0`` or ``None``, no shape will be drawn.
@@ -32,7 +33,12 @@ class Text(HasFillAndStroke):
 
     text: TFeature = _make_trait("the text of a shape")
     font: TFeature = _make_trait("the font face of a shape")
-    size: TNumFeature = _make_trait("the font size of a shape in ``px``", numeric=True)
+    size: TNumFeature = _make_trait(
+        "the visible font size of text in ``px``", numeric=True
+    )
+    size_pixels: TNumFeature = _make_trait(
+        "the rendered size of text in ``px``. 3D only.", numeric=True
+    )
     background: TFeature = _make_trait("the background fill color of a shape")
     padding: TNumFeature = _make_trait(
         "the padding around the shape in ``px``", numeric=True
@@ -43,7 +49,7 @@ class Text(HasFillAndStroke):
             kwargs["text"] = text
         super().__init__(**kwargs)
 
-    @T.validate("size", "padding")
+    @T.validate("size", "padding", "size_pixels")
     def _validate_text_numerics(self, proposal: T.Bunch) -> Any:
         return coerce(proposal, JSON_TYPES.number)
 
@@ -109,6 +115,9 @@ class LinkShapes(Behavior):
     """
     Customize the shape of the ``links``.
 
+    Custom ``shapes`` will be drawn on top of default lines, and may not
+    interact predictably with ``curvature``.
+
     .. note::
         ``line_dash`` is not displayed in :class:`~ipyforcegraph.graphs.ForceGraph3D`.
     """
@@ -125,6 +134,17 @@ class LinkShapes(Behavior):
         by_column=False,
     )
     width: TNumFeature = _make_trait("the width of the link", numeric=True)
+
+    shapes: Tuple[ShapeBase] = W.TypedTuple(
+        T.Instance(ShapeBase),
+        help="the shapes to draw for each ``link``",
+    ).tag(sync=True, **W.widget_serialization)
+
+    def __init__(self, *shapes: Union[Sequence[ShapeBase], ShapeBase], **kwargs: Any):
+        if len(shapes) == 1 and isinstance(shapes, list):
+            shapes = shapes[0]
+        kwargs["shapes"] = shapes
+        super().__init__(**kwargs)
 
     @T.default("rank")
     def _default_rank(self) -> Optional[int]:

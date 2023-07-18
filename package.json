@@ -1,6 +1,6 @@
 {
   "name": "@jupyrdf/jupyter-forcegraph",
-  "version": "0.3.6",
+  "version": "0.3.7",
   "description": "force-graph widget for Jupyter",
   "license": "BSD-3-Clause",
   "author": "ipyforcegraph contributors",
@@ -49,13 +49,13 @@
     "@jupyter-widgets/base": "^6.0.2",
     "@jupyter-widgets/controls": "^5.0.3",
     "@jupyter-widgets/jupyterlab-manager": "^5.0.5",
-    "3d-force-graph": "~1.71.4",
+    "3d-force-graph": "~1.71.5",
     "buffer": "^6.0.3",
     "d3-force-3d": "~3.0.5",
     "d3-force-cluster-3d": "~1.1.1",
     "d3-scale": "^4.0.2",
     "d3-scale-chromatic": "^3.0.0",
-    "force-graph": "~1.43.1",
+    "force-graph": "~1.43.2",
     "nunjucks": "^3.2.4",
     "three-spritetext": "~1.8.1"
   },

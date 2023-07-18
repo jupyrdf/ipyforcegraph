@@ -52,6 +52,7 @@ GraphForces
 GraphImage
 HasDimensions
 HasFillAndStroke
+HasOffsets
 HasScale
 ipyforcegraph
 IPyForceGraph

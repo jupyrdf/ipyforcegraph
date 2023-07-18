@@ -4,6 +4,7 @@
  */
 import type { ForceGraph3DGenericInstance, ForceGraph3DInstance } from '3d-force-graph';
 import type { NodeObject } from 'force-graph';
+import { LinkObject } from 'force-graph/dist/force-graph';
 import type THREE from 'three';
 import { FlyControls } from 'three/examples/jsm/controls/FlyControls.js';
 import type { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
@@ -13,9 +14,12 @@ import { Throttler } from '@lumino/polling';
 
 import {
   EGraphBehaveMethod,
+  ELinkBehaveMethod,
   ENodeBehaveMethod,
+  ILinkThreeBehaveOptions,
   INodeThreeBehaveOptions,
   IRenderOptions,
+  IThreeLinkPosition,
   THROTTLE_OPTS,
 } from '../../tokens';
 
@@ -62,6 +66,10 @@ export class ForceGraph3DView extends ForceGraphView<
 
   protected get graphJsClass(): string {
     return 'ForceGraph3D';
+  }
+
+  protected get graphJsPostInit(): string {
+    return 'graph.linkThreeObjectExtend(true);';
   }
 
   protected get extraJsClasses(): string {
@@ -118,6 +126,18 @@ export class ForceGraph3DView extends ForceGraphView<
         : null
     );
 
+    graph.linkPositionUpdate(
+      this._linkBehaviorsByMethod[ELinkBehaveMethod.getLinkPosition].length
+        ? this.wrapFunction(this.getLinkPosition)
+        : null
+    );
+
+    graph.linkThreeObject(
+      this._linkBehaviorsByMethod[ELinkBehaveMethod.getLinkThreeObject].length
+        ? this.wrapFunction(this.getLinkThreeObject)
+        : null
+    );
+
     this.threeRenderer.setAnimationLoop(
       this._graphBehaviorsByMethod[EGraphBehaveMethod.onRender].length
         ? this.wrapFunction(this.onRender)
@@ -143,6 +163,52 @@ export class ForceGraph3DView extends ForceGraphView<
       if (value != null) {
         return value;
       }
+    }
+  };
+
+  protected getLinkThreeObject = (link: LinkObject): THREE.Object3D | null => {
+    let value: THREE.Object3D | null;
+    const graphData = (this.graph as ForceGraph3DInstance).graphData();
+    const options: ILinkThreeBehaveOptions = {
+      view: this,
+      graphData,
+      link,
+      index: graphData.links.indexOf(link),
+      iframeClasses: this._iframeClasses,
+    };
+
+    for (const behavior of this._linkBehaviorsByMethod[
+      ELinkBehaveMethod.getLinkThreeObject
+    ]) {
+      let method = behavior.getLinkThreeObject;
+      value = method.call(behavior, options);
+      if (value != null) {
+        return value;
+      }
+    }
+  };
+
+  protected getLinkPosition = (
+    sprite: THREE.Object3D,
+    position: IThreeLinkPosition,
+    link: LinkObject
+  ): void => {
+    const graphData = (this.graph as ForceGraph3DInstance).graphData();
+    const options: ILinkThreeBehaveOptions = {
+      view: this,
+      graphData,
+      link,
+      index: graphData.links.indexOf(link),
+      sprite,
+      position,
+      iframeClasses: this._iframeClasses,
+    };
+
+    for (const behavior of this._linkBehaviorsByMethod[
+      ELinkBehaveMethod.getLinkPosition
+    ]) {
+      let method = behavior.getLinkPosition;
+      method.call(behavior, options);
     }
   };
 
