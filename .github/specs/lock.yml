@@ -2,7 +2,7 @@ _inherit_from:
   - _channels.yml
 
 dependencies:
-  - conda-lock >=2.0.0,<2.1
+  - conda-lock >=2.1.1,<2.2
   - mamba >=1.4.2,<1.5
   - python >=3.11,<3.12
   - conda <22.11.1
