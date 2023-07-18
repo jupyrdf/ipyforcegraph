@@ -7,6 +7,7 @@ ${FORCES_TEST}                  Test_Forces
 ${WIDGET_SOURCE}                WidgetSource
 ${DODO_SOURCE}                  DodoSource
 ${DODO_APP}                     DodoApp
+${LINK_TEXT}                    LinkText
 
 ${IPYFORCEGRAPH GRAPH}          .jp-ForceGraph
 ${IPYFORCEGRAPH FRAME}          ${IPYFORCEGRAPH GRAPH} iframe
