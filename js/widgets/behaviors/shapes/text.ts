@@ -92,7 +92,7 @@ export class TextShapeModel extends ShapeBaseModel {
       return null;
     }
 
-    return this._drawThreeNode(drawOptions);
+    return this._drawThreeText(drawOptions);
   }
 
   drawLink3D(options: ILinkThreeBehaveOptions): THREE.Object3D | null {
@@ -109,7 +109,7 @@ export class TextShapeModel extends ShapeBaseModel {
       return null;
     }
 
-    return this._drawThreeLink(drawOptions);
+    return this._drawThreeText(drawOptions);
   }
 
   positionLink3D(options: ILinkThreeBehaveOptions): void {
@@ -149,44 +149,6 @@ export class TextShapeModel extends ShapeBaseModel {
     this._drawCanvasLink(drawOptions);
   }
 
-  protected _drawThreeLink(options: ITextOptions & ILinkOptions): SpriteText {
-    const {
-      text,
-      fill,
-      font,
-      size,
-      stroke,
-      stroke_width,
-      background,
-      padding,
-      iframeClasses,
-    } = {
-      ...TEXT_DEFAULTS,
-      ...options,
-    };
-    const _SpriteText: typeof SpriteText = iframeClasses.SpriteText;
-
-    const sprite = new _SpriteText(text);
-    sprite.material.depthWrite = false;
-    sprite.textHeight = size;
-
-    sprite.color = fill;
-    sprite.fontFace = font;
-    sprite.fontSize = size;
-
-    if (stroke) {
-      sprite.strokeColor = stroke;
-      sprite.strokeWidth = stroke_width;
-    }
-
-    if (background) {
-      sprite.backgroundColor = background;
-      sprite.padding = padding;
-    }
-
-    return sprite;
-  }
-
   protected _positionThreeLink(
     sprite: THREE.Object3D,
     position: IThreeLinkPosition,
@@ -204,7 +166,9 @@ export class TextShapeModel extends ShapeBaseModel {
     });
   }
 
-  protected _drawThreeNode(options: ITextOptions & INodeOptions): SpriteText {
+  protected _drawThreeText(
+    options: ITextOptions & (INodeOptions | ILinkOptions)
+  ): SpriteText {
     const {
       text,
       fill,
@@ -224,13 +188,14 @@ export class TextShapeModel extends ShapeBaseModel {
 
     const sprite = new _SpriteText(text);
 
-    // make sprite background transparent
     sprite.material.depthWrite = false;
     sprite.textHeight = size;
-
     sprite.color = fill;
     sprite.fontFace = font;
-    sprite.fontSize = size;
+
+    if (options.size_pixels) {
+      sprite.fontSize = options.size_pixels;
+    }
 
     if (stroke) {
       sprite.strokeColor = stroke;

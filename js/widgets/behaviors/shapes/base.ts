@@ -76,6 +76,7 @@ export interface IEllipseOptions extends IDimensionOptions {
 export interface ITextOptions extends IFillAndStrokeOptions {
   text: string;
   size?: number;
+  size_pixels?: number;
   font?: string;
   background?: string;
   padding?: number;

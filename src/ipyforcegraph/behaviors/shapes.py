@@ -33,7 +33,12 @@ class Text(HasFillAndStroke, HasOffsets):
 
     text: TFeature = _make_trait("the text of a shape")
     font: TFeature = _make_trait("the font face of a shape")
-    size: TNumFeature = _make_trait("the font size of a shape in ``px``", numeric=True)
+    size: TNumFeature = _make_trait(
+        "the visible font size of text in ``px``", numeric=True
+    )
+    size_pixels: TNumFeature = _make_trait(
+        "the rendered size of text in ``px``. 3D only.", numeric=True
+    )
     background: TFeature = _make_trait("the background fill color of a shape")
     padding: TNumFeature = _make_trait(
         "the padding around the shape in ``px``", numeric=True
@@ -44,7 +49,7 @@ class Text(HasFillAndStroke, HasOffsets):
             kwargs["text"] = text
         super().__init__(**kwargs)
 
-    @T.validate("size", "padding")
+    @T.validate("size", "padding", "size_pixels")
     def _validate_text_numerics(self, proposal: T.Bunch) -> Any:
         return coerce(proposal, JSON_TYPES.number)
 
