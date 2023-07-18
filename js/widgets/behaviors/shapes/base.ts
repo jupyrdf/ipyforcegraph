@@ -1,24 +1,41 @@
+/*
+ * Copyright (c) 2023 ipyforcegraph contributors.
+ * Distributed under the terms of the Modified BSD License.
+ */
+import { LinkObject } from 'force-graph/dist/force-graph';
 import type THREE from 'three';
 
 import {
   EMOJI,
   EMark,
+  ILinkCanvasBehaveOptions,
+  ILinkThreeBehaveOptions,
   INodeCanvasBehaveOptions,
   INodeThreeBehaveOptions,
 } from '../../../tokens';
 import { widget_serialization } from '../../serializers/widget';
 import { FacetedModel } from '../base';
 
-/*
- * Copyright (c) 2023 ipyforcegraph contributors.
- * Distributed under the terms of the Modified BSD License.
- */
 export interface IBaseOptions {
-  context: CanvasRenderingContext2D;
+  iframeClasses?: Record<string, any>;
+}
+
+export interface INodeOptions extends IBaseOptions {
   x: number;
   y: number;
   globalScale: number;
-  iframeClasses?: Record<string, any>;
+}
+
+export interface ILinkOptions extends IBaseOptions {
+  link: LinkObject;
+}
+
+export interface ILinkCanvasOptions extends ILinkOptions {
+  context: CanvasRenderingContext2D;
+}
+
+export interface INodeCanvasOptions extends INodeOptions {
+  context: CanvasRenderingContext2D;
 }
 
 export type TBoundingBox = number[];
@@ -45,6 +62,9 @@ export interface IDimensionOptions extends IFillAndStrokeOptions {
   height?: number;
   depth?: number;
   opacity?: number;
+  offset_x?: number;
+  offset_y?: number;
+  offset_z?: number;
 }
 
 // options for specific shapes
@@ -56,9 +76,13 @@ export interface IEllipseOptions extends IDimensionOptions {
 export interface ITextOptions extends IFillAndStrokeOptions {
   text: string;
   size?: number;
+  size_pixels?: number;
   font?: string;
   background?: string;
   padding?: number;
+  offset_x?: number;
+  offset_y?: number;
+  offset_z?: number;
 }
 
 export interface IRectangleOptions extends IDimensionOptions {
@@ -76,6 +100,9 @@ export const ELLIPSE_DEFAULTS: IEllipseOptions = Object.freeze({
   scale_on_zoom: false,
   stroke: transparent,
   stroke_width: 2,
+  offset_x: 0,
+  offset_y: 0,
+  offset_z: 0,
 });
 
 export const RECTANGLE_DEFAULTS: IRectangleOptions = Object.freeze({
@@ -87,6 +114,9 @@ export const RECTANGLE_DEFAULTS: IRectangleOptions = Object.freeze({
   scale_on_zoom: false,
   stroke: transparent,
   stroke_width: 2,
+  offset_x: 0,
+  offset_y: 0,
+  offset_z: 0,
 });
 
 export const TEXT_DEFAULTS: ITextOptions = Object.freeze({
@@ -97,25 +127,47 @@ export const TEXT_DEFAULTS: ITextOptions = Object.freeze({
   text: '',
   scale_on_zoom: true,
   stroke_width: 2,
+  offset_x: 0,
+  offset_y: 0,
+  offset_z: 0,
 });
 
 export class ShapeBaseModel extends FacetedModel {
   /** Required in subclass. The model name should be unique between shapes.  */
   static model_name = 'ShapeBaseModel';
 
-  /** Required in subclass. Draw a shape on a canvas. */
+  /** Required in subclass. Draw a node shape on a canvas. */
   drawNode2D(options: INodeCanvasBehaveOptions): void {
     return;
   }
 
-  /** Required in subclass. Draw a shape in Three.js. */
+  /** Required in subclass. Draw a node shape in Three.js. */
   drawNode3D(options: INodeThreeBehaveOptions): THREE.Object3D | null {
+    return;
+  }
+
+  /** Required in subclass. Draw a link shape on a canvas. */
+  drawLink2D(options: ILinkCanvasBehaveOptions): void {
+    return;
+  }
+
+  /** Required in subclass. Draw a link shape in Three.js. */
+  drawLink3D(options: ILinkThreeBehaveOptions): THREE.Object3D | null {
+    return;
+  }
+
+  /** Required in subclass. Position a link shape in Three.js. */
+  positionLink3D(options: ILinkThreeBehaveOptions): void {
     return;
   }
 
   /** Evaluate all facets with the runtime shape into the "dumb" data for drawing. */
   protected _resolveFacets(
-    options: INodeCanvasBehaveOptions | INodeThreeBehaveOptions,
+    options:
+      | INodeCanvasBehaveOptions
+      | INodeThreeBehaveOptions
+      | ILinkCanvasBehaveOptions
+      | ILinkThreeBehaveOptions,
     markType: EMark
   ): Record<string, any> {
     const draw: Record<string, any> = {};
@@ -152,6 +204,9 @@ export class GeometryShapeModel extends ShapeBaseModel {
     stroke_width: widget_serialization,
     scale_on_zoom: widget_serialization,
     line_dash: widget_serialization,
+    offset_x: widget_serialization,
+    offset_y: widget_serialization,
+    offset_z: widget_serialization,
   };
 
   protected get shapeDefaults(): IDimensionOptions {
@@ -199,11 +254,11 @@ export class GeometryShapeModel extends ShapeBaseModel {
     return this._drawThree(drawOptions);
   }
 
-  protected _drawCanvasPath(options: IDimensionOptions & IBaseOptions): void {
+  protected _drawCanvasPath(options: IDimensionOptions & INodeCanvasOptions): void {
     throw new Error(`${EMOJI} does not draw canvas ${this._modelClass}`);
   }
 
-  protected _drawCanvas(options: IDimensionOptions & IBaseOptions): void {
+  protected _drawCanvas(options: IDimensionOptions & INodeCanvasOptions): void {
     const { context, globalScale, fill, scale_on_zoom, stroke_width, opacity, stroke } =
       {
         ...RECTANGLE_DEFAULTS,
@@ -227,12 +282,12 @@ export class GeometryShapeModel extends ShapeBaseModel {
   }
 
   protected _drawThreeGeometry(
-    options: IDimensionOptions & IBaseOptions
+    options: IDimensionOptions & INodeOptions
   ): THREE.BufferGeometry {
     throw new Error(`${EMOJI} doesn't implement 3d geometry ${this._modelClass}`);
   }
 
-  protected _drawThree(options: IDimensionOptions & IBaseOptions): THREE.Object3D {
+  protected _drawThree(options: IDimensionOptions & INodeOptions): THREE.Object3D {
     const { fill, iframeClasses, opacity } = {
       ...RECTANGLE_DEFAULTS,
       ...options,

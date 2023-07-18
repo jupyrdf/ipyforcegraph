@@ -174,7 +174,8 @@ class HasScale(ShapeBase):
     _model_name: str = T.Unicode("HasScaleModel").tag(sync=True)
 
     scale_on_zoom: TBoolFeature = _make_trait(
-        "whether font size/stroke respects the global scale", boolish=True
+        "whether font size/stroke respects the global scale. Has no impact on `link` shapes.",
+        boolish=True,
     )
 
     @T.validate("scale_on_zoom")
@@ -204,7 +205,30 @@ class HasFillAndStroke(HasScale):
         return coerce(proposal, JSON_TYPES.array)
 
 
-class HasDimensions(HasFillAndStroke):
+class HasOffsets(ShapeBase):
+    """A shape that can be offset in the horizontal, vertical, or elevation dimensions."""
+
+    _model_name: str = T.Unicode("HasOffsetsModel").tag(sync=True)
+
+    offset_x: float = _make_trait(
+        "the relative horizontal offset from the middle of the shape in ``px``",
+        numeric=True,
+    )
+    offset_y: float = _make_trait(
+        "the relative vertical offset from the middle of the shape in ``px``",
+        numeric=True,
+    )
+    offset_z: float = _make_trait(
+        "the relative elevation offset from the middle of the shape in ``px``",
+        numeric=True,
+    )
+
+    @T.validate("offset_x", "offset_y", "offset_z")
+    def _validate_offset_numerics(self, proposal: T.Bunch) -> Any:
+        return coerce(proposal, JSON_TYPES.number)
+
+
+class HasDimensions(HasFillAndStroke, HasOffsets):
     """A shape that has ``width``, ``height`` and ``depth``."""
 
     _model_name: str = T.Unicode("HasDimensionsModel").tag(sync=True)

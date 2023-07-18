@@ -14,7 +14,8 @@ lsb = LinkShapes(
 lsb.FEATURE = INPUT_TYPE("INITIAL_VALUE")
 
 gd = GraphData()
-fg = WIDGET_CLASS(    source=S.DataFrameSource(
+fg = WIDGET_CLASS(
+    source=S.DataFrameSource(
         nodes=[{"id": "hello"}, {"id": "world"}],
         links=[{
             "source": "hello",

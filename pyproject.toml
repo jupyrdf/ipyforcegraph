@@ -94,8 +94,14 @@ show_contexts = true
 
 [tool.coverage.paths]
 ipyforcegraph = [
-    "src/ipyforcegraph",
-    "*/src/ipyforcegraph"
+  "src/ipyforcegraph",
+  "*/src/ipyforcegraph"
+]
+
+[tool.coverage.report]
+exclude_lines = [
+  "pragma: no cover",
+  "if TYPE_CHECKING:",
 ]
 
 [tool.mypy]

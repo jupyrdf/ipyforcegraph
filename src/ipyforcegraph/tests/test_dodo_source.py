@@ -52,7 +52,7 @@ SHAPE_KWARGS = [
     (((6, 8), (6, 5)), {"show_files": False}),
 ]
 
-if not (WIN and THREE_EIGHT):
+if not (WIN and THREE_EIGHT):  # pragma: no cover
     # not sure what's failing here: probably windows paths too long in CI
     SHAPE_KWARGS += [(((6, 7), (6, 5)), {"show_directories": True})]
 

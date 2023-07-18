@@ -73,7 +73,7 @@ export class NodeShapeModel extends NodeShapeFacetsModel implements IBehave {
       anyThis.getNodeCanvasObject = this._getNodeCanvasObject;
       anyThis.getNodeThreeObject = this._getNodeThreeObject;
       this._updateRequested.emit(EUpdate.Behavior);
-    } else if (this.shapes.length && !anyThis.getNodeCanvasObject) {
+    } else if (!this.shapes.length && anyThis.getNodeCanvasObject) {
       delete anyThis.getNodeCanvasObject;
       delete anyThis.getNodeThreeObject;
       this._updateRequested.emit(EUpdate.Behavior);

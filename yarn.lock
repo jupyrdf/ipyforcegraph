@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"3d-force-graph@~1.71.4":
-  version "1.71.4"
-  resolved "https://registry.npmjs.org/3d-force-graph/-/3d-force-graph-1.71.4.tgz#841fcad13f09507014dbf874bd0ac41dd7a2698e"
-  integrity sha512-hgTxHFAzB7Vz45lU7NSMVWkCh6hl+06cMXzBV+xfocGkyLm7ut+Gm3No7pa+L8GxWK5CxeixuY476obVRqAYLw==
+"3d-force-graph@~1.71.5":
+  version "1.71.5"
+  resolved "https://registry.npmjs.org/3d-force-graph/-/3d-force-graph-1.71.5.tgz#c36607c242b00b33622dbd118b1512aac7d285db"
+  integrity sha512-h+iLJhvouZz8bmQRxYqoV1OXtG+aJ9LzcakLwR9VUkBJ8tmZx5HtbNm5pYAJ4c1kzZc9JljJzh2u0CCJUrmA4A==
   dependencies:
     accessor-fn "1"
     kapsule "1"
@@ -1214,7 +1214,7 @@
   resolved "https://registry.npmjs.org/@tsconfig/node16/-/node16-1.0.4.tgz#0b92dcc0cc1c81f6f306a381f28e31b1a56536e9"
   integrity sha512-vxhUy4J8lyeyinH7Azl1pdd43GJhZH/tP2weN8TntQblOY+A0XbT8DJk1/oCPuOOyg/Ja757rG0CgHcWC8OfMA==
 
-"@tweenjs/tween.js@18 - 20", "@tweenjs/tween.js@19":
+"@tweenjs/tween.js@18 - 20", "@tweenjs/tween.js@18 - 21":
   version "19.0.0"
   resolved "https://registry.npmjs.org/@tweenjs/tween.js/-/tween.js-19.0.0.tgz#93d3169f665ddc184c3b1b7a1910bf7df3dfb5da"
   integrity sha512-QVbvSlnP7FcjKr1edg460BbUlpdGzmIOfvpsvHCj3JPIVZ9S9KeQLk9mB24VlDzPIl/a/ehAZPE95xFsmqm+pQ==
@@ -2534,12 +2534,12 @@ for-each@^0.3.3:
   dependencies:
     is-callable "^1.1.3"
 
-force-graph@~1.43.1:
-  version "1.43.1"
-  resolved "https://registry.npmjs.org/force-graph/-/force-graph-1.43.1.tgz#40ab780f92e6be7567b82be300bd5c328b50f00d"
-  integrity sha512-JOrmhMYr3uF6zzCXTauEo0KIiSp9OB2fAYYXkOGs6z0GQNSLIpcjCY3lhod4kAbkQCOup+u8JE9mmw7ojQaxTQ==
+force-graph@~1.43.2:
+  version "1.43.2"
+  resolved "https://registry.npmjs.org/force-graph/-/force-graph-1.43.2.tgz#3ec2b13207753c5ff4b93fcd26dca4da4607f243"
+  integrity sha512-Yla3FMdxMTDUK0tJM3ip+NBfZQWQRtYCZSZppJANAyRbh3xCCCETpch1IYuKlYWFCeTnpIV6cGw5j8Y1Pekdgw==
   dependencies:
-    "@tweenjs/tween.js" "19"
+    "@tweenjs/tween.js" "18 - 21"
     accessor-fn "1"
     bezier-js "3 - 6"
     canvas-color-tracker "1"
