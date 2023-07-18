@@ -6,6 +6,7 @@
 
 - adds `LinkShapes.shapes` with support for the `Text` shape
 - adds `offset_x`, `offset_y`, and `offset_z` to all shapes
+- adds `Text.size_pixels` for fine-tuning performance/quality when rendering in 3D
 
 ### `@jupyrdf/jupyter-forcegraph 0.3.7`
 
