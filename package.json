@@ -1,6 +1,6 @@
 {
   "name": "@jupyrdf/jupyter-forcegraph",
-  "version": "0.3.7",
+  "version": "0.3.8",
   "description": "force-graph widget for Jupyter",
   "license": "BSD-3-Clause",
   "author": "ipyforcegraph contributors",

@@ -3,7 +3,7 @@
 #   - nodefaults
 # dependencies:
 #   - conda <22.11.1
-#   - conda-lock >=2.0.0,<2.1
+#   - conda-lock >=2.1.1,<2.2
 #   - doit-with-toml
 #   - mamba >=1.4.2,<1.5
 #   - python >=3.11,<3.12
@@ -128,4 +128,4 @@ https://conda.anaconda.org/conda-forge/linux-64/conda-22.9.0-py311h38be061_2.tar
 https://conda.anaconda.org/conda-forge/noarch/ensureconda-1.4.3-pyhd8ed1ab_0.tar.bz2#c99ae3abf501990769047b4b40a98f17
 https://conda.anaconda.org/conda-forge/noarch/cachecontrol-with-filecache-0.13.0-pyhd8ed1ab_0.conda#3fd3d55ea862cc0736ac1cce6f44c2d1
 https://conda.anaconda.org/conda-forge/linux-64/mamba-1.4.9-py311h3072747_0.conda#f089b0415d7c4b26cb2f95eef2cefff0
-https://conda.anaconda.org/conda-forge/noarch/conda-lock-2.0.0-pyhd8ed1ab_0.conda#b21d640094b5b8acb270334b5950cc74
+https://conda.anaconda.org/conda-forge/noarch/conda-lock-2.1.1-pyhd8ed1ab_0.conda#492afee8c1d4e0d1fd314925a2a8dc89
