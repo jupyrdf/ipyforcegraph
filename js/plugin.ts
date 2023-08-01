@@ -52,8 +52,8 @@ const plugin: IPlugin<Application<Widget>, void> = {
           ...(await import('./widgets')),
         };
 
-        const templateUtils = await import('./template-utils');
-        templateUtils.setThemeManager(themeManager);
+        const themeUtils = await import('./theme-utils');
+        themeUtils.setThemeManager(themeManager);
 
         widgetExports = exports;
         loadingWidgets.resolve(void 0);

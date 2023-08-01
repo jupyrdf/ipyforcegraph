@@ -22,7 +22,7 @@ import {
   WidgetView,
 } from '@jupyter-widgets/base';
 
-import { getThemeManager, replaceCssVars } from '../../template-utils';
+import { getThemeManager, replaceCssVars } from '../../theme-utils';
 import {
   CSS,
   DEBUG,
@@ -452,19 +452,8 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
     graph.resumeAnimation();
   }
 
-  wrapFunction = (fn: Function, replaceCss: boolean = false) => {
-    let newFn = (this._iframe.contentWindow as any).wrapFunction(fn);
-    if (!replaceCss) {
-      return newFn;
-    }
-    return this.wrapFunctionWithReplacement(fn);
-  };
-
-  wrapFunctionWithReplacement = (fn: Function) => {
-    return (...args: any) => {
-      const value = fn(...args);
-      return typeof value == 'string' ? replaceCssVars(value) : value;
-    };
+  wrapFunction = (fn: Function) => {
+    return (this._iframe.contentWindow as any).wrapFunction(fn);
   };
 
   onSourceChange(change?: any) {
@@ -550,12 +539,12 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
     // link
     graph.linkColor(
       _linkBehaviorsByMethod[ELinkBehaveMethod.getLinkColor].length
-        ? this.wrapFunction(this.getLinkColor, true)
-        : this.wrapFunction(() => defaultLinkColor, true)
+        ? this.wrapFunction(this.getLinkColor)
+        : this.wrapFunction(() => replaceCssVars(defaultLinkColor))
     );
     graph.linkWidth(
       _linkBehaviorsByMethod[ELinkBehaveMethod.getLinkWidth].length
-        ? this.wrapFunction(this.getLinkWidth, true)
+        ? this.wrapFunction(this.getLinkWidth)
         : this.wrapFunction(() => defaultLinkWidth)
     );
     graph.linkCurvature(
@@ -578,7 +567,7 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
 
     graph.linkDirectionalArrowColor(
       _linkBehaviorsByMethod[ELinkBehaveMethod.getLinkDirectionalArrowColor].length
-        ? this.wrapFunction(this.getLinkDirectionalArrowColor, true)
+        ? this.wrapFunction(this.getLinkDirectionalArrowColor)
         : null
     );
     graph.linkDirectionalArrowLength(
@@ -615,12 +604,12 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
     // node
     graph.nodeColor(
       _nodeBehaviorsByMethod[ENodeBehaveMethod.getNodeColor].length
-        ? this.wrapFunction(this.getNodeColor, true)
-        : this.wrapFunction(() => defaultNodeColor, true)
+        ? this.wrapFunction(this.getNodeColor)
+        : this.wrapFunction(() => replaceCssVars(defaultNodeColor))
     );
     graph.nodeVal(
       _nodeBehaviorsByMethod[ENodeBehaveMethod.getNodeSize].length
-        ? this.wrapFunction(this.getNodeSize, true)
+        ? this.wrapFunction(this.getNodeSize)
         : this.wrapFunction(() => defaultNodeSize)
     );
     graph.nodeLabel(
@@ -765,12 +754,13 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
 
   // link behaviors
   protected getLinkColor = (link: LinkObject): string => {
-    return this.getComposedLinkAttr(
+    const color = this.getComposedLinkAttr(
       link,
       ELinkBehaveMethod.getLinkColor,
       'getLinkColor',
       this.model.defaultLinkColor
     );
+    return color;
   };
   protected getLinkCurvature = (link: LinkObject): string => {
     return this.getComposedLinkAttr(
@@ -911,7 +901,7 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
       }
     }
 
-    return value != null ? value : defaultValue;
+    return replaceCssVars(value != null ? value : defaultValue);
   }
 
   protected getLinkCanvasObject = (
@@ -1015,7 +1005,7 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
       }
     }
 
-    return value != null ? value : defaultValue;
+    return replaceCssVars(value != null ? value : defaultValue);
   }
 
   protected onNodeClick = (node: NodeObject, event: MouseEvent) => {

@@ -9,7 +9,8 @@ import { ISignal, Signal } from '@lumino/signaling';
 
 import { IBackboneModelOptions, WidgetModel } from '@jupyter-widgets/base';
 
-import { newTemplate, replaceCssVars } from '../../template-utils';
+import { newTemplate } from '../../template-utils';
+import { replaceCssVars } from '../../theme-utils';
 import {
   DEBUG,
   DEFAULT_BEHAVIOR_RANK,
@@ -243,7 +244,7 @@ export class NunjucksModel extends DynamicModel {
 
     function handler(opts: any) {
       const value = coercer(tmpl.render(opts));
-      return typeof value == 'string' ? replaceCssVars(value) : value;
+      return replaceCssVars(value);
     }
 
     const tmpl = await newTemplate(this.value);
@@ -276,13 +277,11 @@ export class ColumnModel extends DynamicModel {
 
   async _buildHandlers(value: any, coercer: TCoercer): Promise<Function[]> {
     function _nodeHandler(options: any) {
-      const finalValue = coercer(options.node ? options.node[value] : null);
-      return typeof finalValue == 'string' ? replaceCssVars(finalValue) : value;
+      return replaceCssVars(coercer(options.node ? options.node[value] : null));
     }
 
     function _linkHandler(options: any) {
-      const finalValue = coercer(options.link ? options.link[value] : null);
-      return typeof finalValue == 'string' ? replaceCssVars(finalValue) : value;
+      return replaceCssVars(coercer(options.link ? options.link[value] : null));
     }
 
     return [_nodeHandler, _linkHandler];

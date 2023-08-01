@@ -5,7 +5,7 @@
 import { LinkObject } from 'force-graph/dist/force-graph';
 import type THREE from 'three';
 
-import { replaceCssVars } from '../../../template-utils';
+import { replaceCssVars } from '../../../theme-utils';
 import {
   EMOJI,
   EMark,
@@ -177,7 +177,7 @@ export class ShapeBaseModel extends FacetedModel {
       if (facets[facetName]) {
         try {
           const val = facets[facetName](options);
-          draw[facetName] = typeof val === 'string' ? replaceCssVars(val) : val;
+          draw[facetName] = replaceCssVars(val);
         } catch (err) {
           console.warn(`${EMOJI} encountered error for ${facetName}`, options, err);
         }
