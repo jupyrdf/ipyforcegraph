@@ -22,7 +22,7 @@ import {
   WidgetView,
 } from '@jupyter-widgets/base';
 
-import { replaceCssVars } from '../../template-utils';
+import { getThemeManager, replaceCssVars } from '../../template-utils';
 import {
   CSS,
   DEBUG,
@@ -95,6 +95,10 @@ export class ForceGraphModel extends DOMWidgetModel {
   initialize(attributes: ObjectHash, options: IBackboneModelOptions): void {
     super.initialize(attributes, options);
     this.on('change:behaviors', this.onBehaviorsChange, this);
+    const themeManager = getThemeManager();
+    if (themeManager) {
+      themeManager.themeChanged.connect(this.onBehaviorsChange, this);
+    }
     void this.onBehaviorsChange();
   }
 
