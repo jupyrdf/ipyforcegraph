@@ -8,7 +8,9 @@
 
 ### `@jupyrdf/jupyter-forcegraph 0.3.8`
 
-> TBD
+- adds support for CSS `var()` values in relevant behaviors and values (e.g. colors,
+  fonts)
+  - this does _not_ support `calc`
 
 ## `0.3.7`
 

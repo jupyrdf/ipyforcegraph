@@ -6,6 +6,10 @@ import { Environment, Template } from 'nunjucks';
 
 import { PromiseDelegate } from '@lumino/coreutils';
 
+import { IThemeManager } from '@jupyterlab/apputils';
+
+import { EMOJI } from './tokens';
+
 export const MATH_CONST = {
   E: Math.E,
   LN10: Math.LN10,
@@ -53,6 +57,53 @@ namespace Private {
   export let env: Environment | null = null;
   export let loading: PromiseDelegate<Environment> | null = null;
   export let TemplateClass: typeof Template | null = null;
+  export let themeManager: IThemeManager | null = null;
+  let _themeVars: Record<string, string> = {};
+  export function onThemeChanged() {
+    if (!themeManager) {
+      return;
+    }
+    _themeVars = {};
+  }
+  export function getCssVar(varName: string) {
+    if (_themeVars[varName] == null) {
+      _themeVars[varName] = window
+        .getComputedStyle(document.body)
+        .getPropertyValue(varName);
+    }
+    return _themeVars[varName];
+  }
+}
+
+export function getThemeManager(): IThemeManager | null {
+  return Private.themeManager;
+}
+
+export function setThemeManager(themeManager: IThemeManager) {
+  if (Private.themeManager) {
+    console.warn(`${EMOJI} theme manager already registered, ignoring`, themeManager);
+    return;
+  }
+  Private.themeManager = themeManager;
+  if (themeManager) {
+    themeManager.themeChanged.connect(Private.onThemeChanged);
+  }
+}
+
+export const CSS_VAR = new RegExp(/var\s*\(\s*(--[^\)]+)\s*\)/, 'g');
+
+export function cssVarReplacer(
+  searchValue: string | RegExp,
+  varName: string,
+  offset: number,
+  string: any,
+  groups: any
+): string {
+  return Private.getCssVar(varName);
+}
+
+export function replaceCssVars(text: string) {
+  return text.replaceAll(CSS_VAR, cssVarReplacer);
 }
 
 export async function newTemplate(src: string): Promise<Template> {
