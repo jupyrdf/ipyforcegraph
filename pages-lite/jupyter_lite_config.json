@@ -8,5 +8,10 @@
       "SHA256SUMS",
       "/jscov"
     ]
+  },
+  "PipliteAddon": {
+    "piplite_urls": [
+      "https://files.pythonhosted.org/packages/74/f3/b88d7e1dadf741550c56b70d7ce62673354fddb68e143d193ceb80224208/comm-0.1.3-py3-none-any.whl"
+    ]
   }
 }
