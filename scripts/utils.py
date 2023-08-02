@@ -10,6 +10,7 @@ import shutil
 import subprocess
 import tempfile
 import textwrap
+import typing
 from functools import lru_cache
 from hashlib import sha256
 from itertools import product
@@ -502,7 +503,7 @@ def hash_files(
         print(output)
 
 
-def gather_css_variables(out_txt: Path, css_src: list[Path]):
+def gather_css_variables(out_txt: Path, css_src: typing.List[Path]):
     all_vars = []
 
     if not css_src:
