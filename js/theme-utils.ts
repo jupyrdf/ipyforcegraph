@@ -30,6 +30,7 @@ export function getThemeManager(): IThemeManager | null {
 }
 
 export function setThemeManager(themeManager: IThemeManager) {
+  /* istanbul ignore next */
   if (Private.themeManager) {
     console.warn(`${EMOJI} theme manager already registered, ignoring`, themeManager);
     return;
