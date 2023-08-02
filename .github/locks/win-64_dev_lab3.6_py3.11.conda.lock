@@ -24,9 +24,9 @@
 #   - jupyterlab >=3.6.4,<3.7
 #   - jupyterlab-deck
 #   - jupyterlab-link-share
-#   - jupyterlite-core ==0.1.0
+#   - jupyterlite-core ==0.1.1
 #   - jupyterlite-core-with-libarchive
-#   - jupyterlite-pyodide-kernel ==0.0.8
+#   - jupyterlite-pyodide-kernel ==0.0.9
 #   - keyring
 #   - lxml
 #   - m2-dos2unix
@@ -98,7 +98,7 @@ https://conda.anaconda.org/conda-forge/win-64/libzlib-1.2.13-hcfcfb64_5.conda#5f
 https://conda.anaconda.org/conda-forge/win-64/lz4-c-1.9.4-hcfcfb64_0.conda#e34720eb20a33fc3bfb8451dd837ab7a
 https://conda.anaconda.org/conda-forge/win-64/lzo-2.10-he774522_1000.tar.bz2#d5cf4b7eaa52316f135eed9e8548ad57
 https://conda.anaconda.org/conda-forge/win-64/m2-libiconv-1.14-3.tar.bz2#059d5bccb119e0e239412c2f88273155
-https://conda.anaconda.org/conda-forge/win-64/openssl-3.1.1-hcfcfb64_1.conda#1d913a5de46c6b2f7e4cfbd26b106b8b
+https://conda.anaconda.org/conda-forge/win-64/openssl-3.1.2-hcfcfb64_0.conda#79b3f40f27cd80a265c276cea6714507
 https://conda.anaconda.org/conda-forge/win-64/pthreads-win32-2.9.1-hfa6e2cd_3.tar.bz2#e2da8758d7d51ff6aa78a14dfb9dbed4
 https://conda.anaconda.org/conda-forge/win-64/tk-8.6.12-h8ffe710_0.tar.bz2#c69a5047cc9291ae40afd4a1ad6f0c0f
 https://conda.anaconda.org/conda-forge/win-64/xz-5.2.6-h8d14728_0.tar.bz2#515d77642eaa3639413c6b1bc3f94219
@@ -328,7 +328,7 @@ https://conda.anaconda.org/conda-forge/noarch/ypy-websocket-0.8.2-pyhd8ed1ab_0.c
 https://conda.anaconda.org/conda-forge/noarch/flit-3.9.0-pyhd8ed1ab_0.conda#269513333bb3c273108404b7e618d827
 https://conda.anaconda.org/conda-forge/noarch/jsonschema-with-format-nongpl-4.18.4-pyhd8ed1ab_0.conda#219fd261913c5a00c1d58519dffd8fc9
 https://conda.anaconda.org/conda-forge/noarch/jupyter_client-8.3.0-pyhd8ed1ab_0.conda#1d018ee4ab13217e2544f795eb0a6798
-https://conda.anaconda.org/conda-forge/noarch/jupyterlite-core-0.1.0-pyhd8ed1ab_0.conda#c848221f9bd434fb89fa992214e5e64a
+https://conda.anaconda.org/conda-forge/noarch/jupyterlite-core-0.1.1-pyhd8ed1ab_0.conda#1f7d68cdd6272f88b8fc1d4daa8fe748
 https://conda.anaconda.org/conda-forge/win-64/libcblas-3.9.0-17_win64_mkl.conda#768b2c3be666ecf9e62f939ea919f819
 https://conda.anaconda.org/conda-forge/win-64/liblapack-3.9.0-17_win64_mkl.conda#278121fe8f0d65d496998aa290f36322
 https://conda.anaconda.org/conda-forge/noarch/nbformat-5.9.2-pyhd8ed1ab_0.conda#61ba076de6530d9301a0053b02f093d2
@@ -343,8 +343,8 @@ https://conda.anaconda.org/conda-forge/noarch/autodoc-traits-1.1.0-pyhd8ed1ab_0.
 https://conda.anaconda.org/conda-forge/noarch/ipython-8.14.0-pyh08f2357_0.conda#1fc684c1de5475383790ada5627c5430
 https://conda.anaconda.org/conda-forge/noarch/jake-3.0.1-pyhd8ed1ab_0.conda#f719c7a0825a40e8032d071d2a47d9aa
 https://conda.anaconda.org/conda-forge/noarch/jupyter_events-0.7.0-pyhd8ed1ab_0.conda#279fed93be42722de98e998ec80be8a1
-https://conda.anaconda.org/conda-forge/noarch/jupyterlite-core-with-libarchive-0.1.0-pyhd8ed1ab_0.conda#3f852a733a6553ff1ad52e82be0c2a95
-https://conda.anaconda.org/conda-forge/noarch/jupyterlite-pyodide-kernel-0.0.8-pyhd8ed1ab_0.conda#69de51ba70120084be1f6991020fa297
+https://conda.anaconda.org/conda-forge/noarch/jupyterlite-core-with-libarchive-0.1.1-pyhd8ed1ab_0.conda#d316965bcfba3b5d62de0094c2c9def8
+https://conda.anaconda.org/conda-forge/noarch/jupyterlite-pyodide-kernel-0.0.9-pyhd8ed1ab_0.conda#7758b515c5a5250ff28d7f487408c19f
 https://conda.anaconda.org/conda-forge/noarch/myst-parser-0.18.1-pyhd8ed1ab_0.tar.bz2#bcfdf5c7d8bf5c6f6be7b4c66fff2eca
 https://conda.anaconda.org/conda-forge/noarch/nbclient-0.7.4-pyhd8ed1ab_0.conda#f7aa15f77d29b11caa1df1eb15383c59
 https://conda.anaconda.org/conda-forge/noarch/nbstripout-0.6.1-pyhd8ed1ab_0.tar.bz2#53913d98739527409e0f3227ed7eef7d
