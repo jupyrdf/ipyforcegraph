@@ -218,7 +218,13 @@ EXAMPLE_PY = [*EXAMPLES.rglob("*.py")]
 EXAMPLE_INDEX = EXAMPLES / "_index.ipynb"
 EXAMPLE_REQS = EXAMPLES / "requirements.txt"
 BUILD_NBHTML = BUILD / "nbsmoke"
-LITE_LOGO = EXAMPLES / "datasets/logo.svg"
+EXAMPLE_DATASETS = EXAMPLES / "datasets"
+LITE_LOGO = EXAMPLE_DATASETS / "logo.svg"
+LAB_CSS_VARS = EXAMPLE_DATASETS / "jp_css_vars.txt"
+LAB_THEMES = "share/jupyter/lab/themes"
+LAB_EXTENSIONS = "share/jupyter/labextensions"
+LAB_THEME_CSS = f"{LAB_THEMES}/@jupyterlab/theme-light-extension/index.css"
+WIDGETS_STATIC = f"{LAB_EXTENSIONS}/@jupyter-widgets/jupyterlab-manager/static"
 
 # mostly linting
 ALL_PY_SRC = [*PY_SRC.rglob("*.py")]

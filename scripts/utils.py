@@ -500,3 +500,29 @@ def hash_files(
     hash_file.write_text(output, **P.UTF8)
     if not quiet:
         print(output)
+
+
+def gather_css_variables(out_txt: Path, css_src: list[Path]):
+    all_vars = []
+
+    if not css_src:
+        print("Can't extract CSS variables without source")
+        return False
+
+    print(f"    ... looking for CSS vars in {len(css_src)} paths")
+
+    re_var_def = r"""(--(jp|md)-[^:;`'"\s\(\)\{\}]+(?=\s*:))"""
+    re_var_ref = r"""(var\((--.*?)\))"""
+
+    for path in css_src:
+        raw = path.read_text(**P.UTF8)
+        path_vars = [m[0] for m in re.findall(re_var_def, raw, flags=re.M)]
+        path_vars += [m[1] for m in re.findall(re_var_ref, raw, flags=re.M)]
+        path_vars = sorted(set(path_vars))
+        if path_vars:
+            print(f"        ... {path} {len(path_vars)} vars")
+            all_vars = sorted(set([*all_vars, *path_vars]))
+
+    print(f"    ... wrote {len(all_vars)} vars to {out_txt}")
+
+    out_txt.write_text("\n".join([*all_vars, ""]), **P.UTF8)
