@@ -54,7 +54,7 @@ Shape Feature Works As Expected
 
 Update Shape Feature
     [Arguments]    ${widget_class}    ${shape_class}    ${feature}
-    Add And Run JupyterLab Code Cell    shape.${feature} = "rgba(255, 0, 0, 1.0)"
+    Add And Run JupyterLab Code Cell    shape.${feature} = "var(--jp-warn-color0)"
     IF    "${shape_class}" == "Rectangle"
         Add And Run JupyterLab Code Cell    shape.opacity = 1
     END

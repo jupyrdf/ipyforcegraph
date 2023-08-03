@@ -1,7 +1,7 @@
 {% set features = {
     "color": {
         "str": ["blue", "red"],
-        "Column": ["a_color", "other_color"], 
+        "Column": ["a_color", "other_color"],
         "Nunjucks": ["{{ link.a_color }}", "{{ link.other_color }}"],
     },
     "curvature": {
@@ -52,7 +52,7 @@ Shape Link Feature Works As Expected
     ${screens} =    Set Variable    ${SCREENS}${/}${widget_class.lower()}${/}${feature.lower()}${/}${input_type.lower()}${/}${idx}
     Maybe Skip A Test    widget_class=${widget_class}   feature=${feature}  input_type=${input_type}  value=${initial_value}
     Set Screenshot Directory    ${screens}
-    
+
     Set Up Link Shape Example    ${widget_class}  ${feature}  ${input_type}  ${initial_value}
 
     Maybe Skip A Test    widget_class=${widget_class}   feature=${feature}  input_type=${input_type}  value=${updated_value}
@@ -79,7 +79,7 @@ Link Shape Color As Expected
     Add And Run JupyterLab Code Cell   lsb.color = ${input_type}("${value}")
     ${color} =    Get Element Screenshot Size    ${frame}    ${screens}    03-color.png
     Should Be True Or Screenshot    ${color} > ${transparent}    03-color-bigger-than-transparent.png
-    Add And Run JupyterLab Code Cell   lb.color = "rgba(40, 120, 120, 1.0)"
+    Add And Run JupyterLab Code Cell   lb.color = "var(--jp-warn-color0)"
     Wait For All Cells To Run
     Sleep    1s
     Capture Page Screenshot    02-color-updated.png

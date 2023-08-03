@@ -6,6 +6,8 @@ import { Application, IPlugin } from '@lumino/application';
 import { PromiseDelegate } from '@lumino/coreutils';
 import { Widget } from '@lumino/widgets';
 
+import { IThemeManager } from '@jupyterlab/apputils';
+
 import { IJupyterWidgetRegistry } from '@jupyter-widgets/base';
 
 import '../style/index.css';
@@ -18,8 +20,13 @@ const EXTENSION_ID = `${NAME}:plugin`;
 const plugin: IPlugin<Application<Widget>, void> = {
   id: EXTENSION_ID,
   requires: [IJupyterWidgetRegistry],
+  optional: [IThemeManager],
   autoStart: true,
-  activate: (app: Application<Widget>, registry: IJupyterWidgetRegistry) => {
+  activate: (
+    app: Application<Widget>,
+    registry: IJupyterWidgetRegistry,
+    themeManager?: IThemeManager
+  ) => {
     DEBUG && console.warn(`${EMOJI} ${NAME}@${VERSION} loaded`);
 
     let widgetExports: typeof WidgetExports | null = null;
@@ -41,9 +48,14 @@ const plugin: IPlugin<Application<Widget>, void> = {
         await initializeZstd();
 
         DEBUG && console.warn(`${EMOJI} loading widgets`);
-        widgetExports = {
+        const exports = {
           ...(await import('./widgets')),
         };
+
+        const themeUtils = await import('./theme-utils');
+        themeUtils.setThemeManager(themeManager);
+
+        widgetExports = exports;
         loadingWidgets.resolve(void 0);
         DEBUG && console.warn(`${EMOJI} widgets loaded`, widgetExports);
         return widgetExports;

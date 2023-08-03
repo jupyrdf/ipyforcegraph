@@ -10,6 +10,7 @@ import shutil
 import subprocess
 import tempfile
 import textwrap
+import typing
 from functools import lru_cache
 from hashlib import sha256
 from itertools import product
@@ -215,15 +216,24 @@ class IndentDumper(yaml.SafeDumper):
         return super(IndentDumper, self).increase_indent(flow, False)
 
 
-def merge_envs(env_path: Optional[Path], stack: List[Path]) -> Optional[str]:
+def merge_envs(
+    env_path: Optional[Path],
+    stack: List[Path],
+    remove_specs: Optional[List[str]] = None,
+) -> Optional[str]:
     env = {"channels": [], "dependencies": []}
-
+    remove_specs = remove_specs or []
+    raw_deps = []
     for stack_yml in stack:
         stack_data = safe_load(stack_yml)
         env["channels"] = stack_data.get("channels") or env["channels"]
-        env["dependencies"] += stack_data["dependencies"]
+        raw_deps += stack_data["dependencies"]
 
-    env["dependencies"] = sorted(set(env["dependencies"]))
+    raw_deps = sorted(set(raw_deps))
+    for dep in raw_deps:
+        if any(re.search(pattern, dep) for pattern in remove_specs):
+            continue
+        env["dependencies"].append(dep)
 
     env_str = yaml.dump(env, Dumper=IndentDumper)
 
@@ -500,3 +510,29 @@ def hash_files(
     hash_file.write_text(output, **P.UTF8)
     if not quiet:
         print(output)
+
+
+def gather_css_variables(out_txt: Path, css_src: typing.List[Path]):
+    all_vars = []
+
+    if not css_src:
+        print("Can't extract CSS variables without source")
+        return False
+
+    print(f"    ... looking for CSS vars in {len(css_src)} paths")
+
+    re_var_def = r"""(--(jp|md)-[^:;`'"\s\(\)\{\}]+(?=\s*:))"""
+    re_var_ref = r"""(var\((--.*?)\))"""
+
+    for path in css_src:
+        raw = path.read_text(**P.UTF8)
+        path_vars = [m[0] for m in re.findall(re_var_def, raw, flags=re.M)]
+        path_vars += [m[1] for m in re.findall(re_var_ref, raw, flags=re.M)]
+        path_vars = sorted(set(path_vars))
+        if path_vars:
+            print(f"        ... {path} {len(path_vars)} vars")
+            all_vars = sorted(set([*all_vars, *path_vars]))
+
+    print(f"    ... wrote {len(all_vars)} vars to {out_txt}")
+
+    out_txt.write_text("\n".join([*all_vars, ""]), **P.UTF8)

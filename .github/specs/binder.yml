@@ -13,5 +13,7 @@ _inherit_from:
   - _run.yml
 
 _target: ../../.binder/environment.yml
+_remove_specs:
+  - python >.*
 
 dependencies: []

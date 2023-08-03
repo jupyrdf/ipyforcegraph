@@ -22,6 +22,7 @@ import {
   WidgetView,
 } from '@jupyter-widgets/base';
 
+import { getThemeManager, replaceCssVars } from '../../theme-utils';
 import {
   CSS,
   DEBUG,
@@ -94,6 +95,10 @@ export class ForceGraphModel extends DOMWidgetModel {
   initialize(attributes: ObjectHash, options: IBackboneModelOptions): void {
     super.initialize(attributes, options);
     this.on('change:behaviors', this.onBehaviorsChange, this);
+    const themeManager = getThemeManager();
+    if (themeManager) {
+      themeManager.themeChanged.connect(this.onBehaviorsChange, this);
+    }
     void this.onBehaviorsChange();
   }
 
@@ -529,13 +534,13 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
     } = this.model;
 
     // graph
-    graph.backgroundColor(backgroundColor);
+    graph.backgroundColor(replaceCssVars(backgroundColor));
 
     // link
     graph.linkColor(
       _linkBehaviorsByMethod[ELinkBehaveMethod.getLinkColor].length
         ? this.wrapFunction(this.getLinkColor)
-        : this.wrapFunction(() => defaultLinkColor)
+        : this.wrapFunction(() => replaceCssVars(defaultLinkColor))
     );
     graph.linkWidth(
       _linkBehaviorsByMethod[ELinkBehaveMethod.getLinkWidth].length
@@ -600,7 +605,7 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
     graph.nodeColor(
       _nodeBehaviorsByMethod[ENodeBehaveMethod.getNodeColor].length
         ? this.wrapFunction(this.getNodeColor)
-        : this.wrapFunction(() => defaultNodeColor)
+        : this.wrapFunction(() => replaceCssVars(defaultNodeColor))
     );
     graph.nodeVal(
       _nodeBehaviorsByMethod[ENodeBehaveMethod.getNodeSize].length
@@ -749,12 +754,13 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
 
   // link behaviors
   protected getLinkColor = (link: LinkObject): string => {
-    return this.getComposedLinkAttr(
+    const color = this.getComposedLinkAttr(
       link,
       ELinkBehaveMethod.getLinkColor,
       'getLinkColor',
       this.model.defaultLinkColor
     );
+    return color;
   };
   protected getLinkCurvature = (link: LinkObject): string => {
     return this.getComposedLinkAttr(
@@ -895,7 +901,7 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
       }
     }
 
-    return value != null ? value : defaultValue;
+    return replaceCssVars(value != null ? value : defaultValue);
   }
 
   protected getLinkCanvasObject = (
@@ -999,7 +1005,7 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
       }
     }
 
-    return value != null ? value : defaultValue;
+    return replaceCssVars(value != null ? value : defaultValue);
   }
 
   protected onNodeClick = (node: NodeObject, event: MouseEvent) => {
