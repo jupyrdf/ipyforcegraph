@@ -216,15 +216,24 @@ class IndentDumper(yaml.SafeDumper):
         return super(IndentDumper, self).increase_indent(flow, False)
 
 
-def merge_envs(env_path: Optional[Path], stack: List[Path]) -> Optional[str]:
+def merge_envs(
+    env_path: Optional[Path],
+    stack: List[Path],
+    remove_specs: Optional[List[str]] = None,
+) -> Optional[str]:
     env = {"channels": [], "dependencies": []}
-
+    remove_specs = remove_specs or []
+    raw_deps = []
     for stack_yml in stack:
         stack_data = safe_load(stack_yml)
         env["channels"] = stack_data.get("channels") or env["channels"]
-        env["dependencies"] += stack_data["dependencies"]
+        raw_deps += stack_data["dependencies"]
 
-    env["dependencies"] = sorted(set(env["dependencies"]))
+    raw_deps = sorted(set(raw_deps))
+    for dep in raw_deps:
+        if any(re.search(pattern, dep) for pattern in remove_specs):
+            continue
+        env["dependencies"].append(dep)
 
     env_str = yaml.dump(env, Dumper=IndentDumper)
 

@@ -198,7 +198,12 @@ def task_env():
                     target = spec_path.parent / yml_target
                     yield dict(
                         doc=f"build environment.yml for {target.parent.name}",
-                        actions=[(U.merge_envs, [target, stack])],
+                        actions=[
+                            (
+                                U.merge_envs,
+                                [target, stack, spec.get("_remove_specs", [])],
+                            )
+                        ],
                         name=f"yml:{spec_path.stem}",
                         targets=[target.resolve()],
                         **task,

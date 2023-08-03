@@ -29,8 +29,7 @@ dependencies:
   - pytest-html
   - pytest-json-report
   - pytest-xdist
-  - python >=3.11,<3.12
-  - python >=3.8,<3.12
+  - python =3.11
   - python-dotenv
   - scour
   - stringcase
