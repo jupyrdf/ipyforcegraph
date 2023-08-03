@@ -140,7 +140,7 @@ def task_preflight():
     yield _ok(
         dict(
             name="lab",
-            file_dep=[*file_dep, P.OK_LABEXT, P.HISTORY],
+            file_dep=[*file_dep, P.OK_LABEXT, P.HISTORY, P.LAB_CSS_VARS],
             actions=[[*P.IN_ENV, *P.PREFLIGHT, "lab"]],
         ),
         P.OK_PREFLIGHT_LAB,
@@ -198,7 +198,12 @@ def task_env():
                     target = spec_path.parent / yml_target
                     yield dict(
                         doc=f"build environment.yml for {target.parent.name}",
-                        actions=[(U.merge_envs, [target, stack])],
+                        actions=[
+                            (
+                                U.merge_envs,
+                                [target, stack, spec.get("_remove_specs", [])],
+                            )
+                        ],
                         name=f"yml:{spec_path.stem}",
                         targets=[target.resolve()],
                         **task,
@@ -763,6 +768,22 @@ def task_watch():
 
 def task_lite():
     """build the jupyterlite site"""
+
+    lab_css_src = P.ENV / P.LAB_THEME_CSS
+    widget_static = sorted((P.ENV / P.WIDGETS_STATIC).glob("*.js"))
+
+    if lab_css_src and widget_static:
+        yield dict(
+            name=f"data:{P.LAB_CSS_VARS.name}",
+            file_dep=[P.HISTORY, lab_css_src, *widget_static],
+            actions=[
+                (
+                    U.gather_css_variables,
+                    [P.LAB_CSS_VARS, [lab_css_src, *widget_static]],
+                )
+            ],
+            targets=[P.LAB_CSS_VARS],
+        )
 
     yield dict(
         name="logo",

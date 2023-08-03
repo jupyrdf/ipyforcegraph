@@ -6,7 +6,7 @@
     "esModuleInterop": true,
     "incremental": true,
     "jsx": "react",
-    "lib": ["ES2017", "DOM"],
+    "lib": ["ES2021", "DOM"],
     "module": "esnext",
     "moduleResolution": "node",
     "noEmitOnError": true,
