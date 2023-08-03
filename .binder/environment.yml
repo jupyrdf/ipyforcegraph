@@ -15,7 +15,7 @@ dependencies:
   - jupyterlab >=3.6.4,<3.7
   - jupyterlab-deck
   - jupyterlab-link-share
-  - jupyterlite-pyodide-kernel ==0.0.9
+  - jupyterlite-pyodide-kernel ==0.1.0
   - lxml
   - networkx
   - nodejs >=18,<19

@@ -5,9 +5,6 @@
     "output_dir": "../build/lite"
   },
   "PipliteAddon": {
-    "piplite_urls": [
-      "../dist",
-      "https://files.pythonhosted.org/packages/a3/af/9d5f256025100b578b11d7280e76fda349255666f752b618a613785cb58d/ipywidgets-8.0.7-py3-none-any.whl"
-    ]
+    "piplite_urls": ["../dist"]
   }
 }
