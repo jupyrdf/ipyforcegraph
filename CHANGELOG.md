@@ -6,7 +6,7 @@
 
 > TBD
 
-### `@jupyrdf/jupyter-forcegraph 0.3.8`
+### `@jupyrdf/jupyter-forcegraph 0.3.9`
 
 > TBD
 
