@@ -87,6 +87,7 @@ def atest(attempt, extra_args):
     if "--dryrun" in extra_args or PROCESSES == 1:
         run_robot = robot.run_cli
         fake_cmd = "robot"
+        args += ["--variable", "IN_PABOT:0"]
     else:
         run_robot = pabot.main
         fake_cmd = "pabot"
@@ -96,6 +97,7 @@ def atest(attempt, extra_args):
             *["--processes", PROCESSES],
             "--artifactsinsubfolders",
             *["--artifacts", "png,log,svg,json"],
+            *["--variable", "IN_PABOT:1"],
             *args,
         ]
 

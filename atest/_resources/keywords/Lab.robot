@@ -6,6 +6,10 @@ Resource    ../variables/Lab.robot
 Resource    ../variables/Browser.robot
 
 
+*** Variables ***
+${IN_PABOT}     0
+
+
 *** Keywords ***
 Try to Close All Tabs
     Wait Until Keyword Succeeds    5x    50ms    Close All Tabs
@@ -193,9 +197,8 @@ Restart and Run All
 
 Maybe Reset Application State
     [Documentation]    when running under pabot, it's not neccessary to reset, saves ~10s/test
-    ${in pabot} =    Get Variable Value    ${PABOT ID}    NOPE
     Try to Close All Tabs
-    IF    "${in pabot}" == "NOPE"    Reset Application State
+    IF    "${IN_PABOT}" == "0"    Reset Application State
 
 Reset Application State
     Try to Close All Tabs
