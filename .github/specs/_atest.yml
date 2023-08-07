@@ -6,4 +6,3 @@ dependencies:
   - robotframework-robocop
   - robotframework-tidy >=3.4.0
   - selenium <4.10.0
-
