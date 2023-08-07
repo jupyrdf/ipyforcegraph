@@ -58,6 +58,7 @@
 #   - robotframework-tidy >=3.4.0
 #   - ruff
 #   - scour
+#   - selenium <4.10.0
 #   - sphinx
 #   - sphinx-autobuild
 #   - sphinx-autodoc-typehints
@@ -335,7 +336,7 @@ https://conda.anaconda.org/conda-forge/noarch/prompt_toolkit-3.0.39-hd8ed1ab_0.c
 https://conda.anaconda.org/conda-forge/noarch/requests-cache-1.1.0-pyhd8ed1ab_0.conda#57b89064c125bb9d0e533e018c3eb17a
 https://conda.anaconda.org/conda-forge/noarch/requests-toolbelt-1.0.0-pyhd8ed1ab_0.conda#99c98318c8646b08cc764f90ce98906e
 https://conda.anaconda.org/conda-forge/noarch/robotframework-tidy-4.4.0-pyhd8ed1ab_0.conda#e27606b585fe4780ffc3827f83c26b57
-https://conda.anaconda.org/conda-forge/noarch/selenium-4.11.2-pyhd8ed1ab_0.conda#85af6a45258d2c51062ef88bd6e9cfda
+https://conda.anaconda.org/conda-forge/noarch/selenium-4.9.1-pyhd8ed1ab_0.conda#b3daee1b09922328cfa11b4761cf1adf
 https://conda.anaconda.org/conda-forge/noarch/sphinx-5.3.0-pyhd8ed1ab_0.tar.bz2#f9e1fcfe235d655900bfeb6aee426472
 https://conda.anaconda.org/conda-forge/noarch/autodoc-traits-1.1.0-pyhd8ed1ab_0.conda#66907045fcff46748e485201304cea80
 https://conda.anaconda.org/conda-forge/noarch/ipython-8.14.0-pyh08f2357_0.conda#1fc684c1de5475383790ada5627c5430

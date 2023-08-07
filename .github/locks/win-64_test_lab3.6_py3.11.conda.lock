@@ -31,6 +31,7 @@
 #   - robotframework-robocop
 #   - robotframework-tidy >=3.4.0
 #   - scour
+#   - selenium <4.10.0
 #   - tomli
 #   - traittypes
 
@@ -227,7 +228,7 @@ https://conda.anaconda.org/conda-forge/win-64/numcodecs-0.11.0-py311h12c1d0e_1.c
 https://conda.anaconda.org/conda-forge/win-64/pandas-2.0.3-py311hf63dbb6_1.conda#45c4a4b94dd2321f5d8188567263190d
 https://conda.anaconda.org/conda-forge/noarch/prompt_toolkit-3.0.39-hd8ed1ab_0.conda#4bbbe67d5df19db30f04b8e344dc9976
 https://conda.anaconda.org/conda-forge/noarch/robotframework-tidy-4.4.0-pyhd8ed1ab_0.conda#e27606b585fe4780ffc3827f83c26b57
-https://conda.anaconda.org/conda-forge/noarch/selenium-4.11.2-pyhd8ed1ab_0.conda#85af6a45258d2c51062ef88bd6e9cfda
+https://conda.anaconda.org/conda-forge/noarch/selenium-4.9.1-pyhd8ed1ab_0.conda#b3daee1b09922328cfa11b4761cf1adf
 https://conda.anaconda.org/conda-forge/noarch/ipython-8.14.0-pyh08f2357_0.conda#1fc684c1de5475383790ada5627c5430
 https://conda.anaconda.org/conda-forge/noarch/jupyter_events-0.7.0-pyhd8ed1ab_1.conda#2c552859aea15e7132f8d855c72a9801
 https://conda.anaconda.org/conda-forge/noarch/nbclient-0.8.0-pyhd8ed1ab_0.conda#e78da91cf428faaf05701ce8cc8f2f9b

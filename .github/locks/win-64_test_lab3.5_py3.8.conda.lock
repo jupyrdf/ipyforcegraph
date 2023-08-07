@@ -34,6 +34,7 @@
 #   - robotframework-robocop
 #   - robotframework-tidy >=3.4.0
 #   - scour
+#   - selenium <4.10.0
 #   - tomli
 #   - traittypes
 
@@ -65,7 +66,6 @@ https://conda.anaconda.org/conda-forge/win-64/libflang-5.0.0-h6538335_20180525.t
 https://conda.anaconda.org/conda-forge/win-64/libxml2-2.11.4-hc3477c8_0.conda#586627982a63815637f871a6360fe3f9
 https://conda.anaconda.org/conda-forge/win-64/python-3.8.17-h4de0772_0_cpython.conda#be2296eaf70eeb1cb83c4e95136e694a
 https://conda.anaconda.org/conda-forge/win-64/zeromq-4.3.4-h0e60522_1.tar.bz2#e1aff0583dda5fb917eb3d2c1025aa80
-https://conda.anaconda.org/conda-forge/noarch/async_generator-1.10-py_0.tar.bz2#d56c596e61b1c4952acf0a9920856c12
 https://conda.anaconda.org/conda-forge/noarch/attrs-23.1.0-pyh71513ae_1.conda#3edfead7cedd1ab4400a6c588f3e75f8
 https://conda.anaconda.org/conda-forge/noarch/backcall-0.2.0-pyh9f0ad1d_0.tar.bz2#6006a6d08a3fa99268a2681c7fb55213
 https://conda.anaconda.org/conda-forge/noarch/backports-1.0-pyhd8ed1ab_3.conda#54ca2e08b3220c148a1d8329c2678e02
@@ -142,7 +142,7 @@ https://conda.anaconda.org/conda-forge/noarch/wheel-0.41.1-pyhd8ed1ab_0.conda#8f
 https://conda.anaconda.org/conda-forge/noarch/widgetsnbextension-4.0.8-pyhd8ed1ab_0.conda#2e9ebddf0b93d0fb203d0906b8052c4f
 https://conda.anaconda.org/conda-forge/noarch/win_inet_pton-1.1.0-pyhd8ed1ab_6.tar.bz2#30878ecc4bd36e8deeea1e3c151b2e0b
 https://conda.anaconda.org/conda-forge/noarch/zipp-3.16.2-pyhd8ed1ab_0.conda#2da0451b54c4563c32490cb1b7cf68a1
-https://conda.anaconda.org/conda-forge/noarch/anyio-3.7.1-pyhd8ed1ab_0.conda#7b517e7a6f0790337906c055aa97ca49
+https://conda.anaconda.org/conda-forge/noarch/anyio-3.6.1-pyhd8ed1ab_1.tar.bz2#d65ef75084f8adbadb696dfd91148e79
 https://conda.anaconda.org/conda-forge/noarch/asttokens-2.2.1-pyhd8ed1ab_0.conda#bf7f54dd0f25c3f06ecb82a07341841a
 https://conda.anaconda.org/conda-forge/noarch/babel-2.12.1-pyhd8ed1ab_1.conda#ac432e732804a81ddcf29c92ead57cde
 https://conda.anaconda.org/conda-forge/noarch/backports.functools_lru_cache-1.6.5-pyhd8ed1ab_0.conda#6b1b907661838a75d067a22f87996b2e
@@ -198,7 +198,7 @@ https://conda.anaconda.org/conda-forge/noarch/python-dotenv-1.0.0-pyhd8ed1ab_0.c
 https://conda.anaconda.org/conda-forge/noarch/rich-13.5.1-pyhd8ed1ab_0.conda#38e7446efa3c8b8a770a0fff862935c0
 https://conda.anaconda.org/conda-forge/noarch/robotframework-pabot-2.16.0-pyhd8ed1ab_0.conda#d5cef1ba9df784f3d4633134a5e23b4e
 https://conda.anaconda.org/conda-forge/noarch/stack_data-0.6.2-pyhd8ed1ab_0.conda#e7df0fdd404616638df5ece6e69ba7af
-https://conda.anaconda.org/conda-forge/win-64/trio-0.21.0-py38haa244fe_0.tar.bz2#0fe81ab845eea9441bc9a025d47577be
+https://conda.anaconda.org/conda-forge/win-64/trio-0.22.2-py38haa244fe_0.conda#ecd8e34584cc495cc366d9025a9b7f2c
 https://conda.anaconda.org/conda-forge/noarch/urllib3-2.0.4-pyhd8ed1ab_0.conda#18badd8fa3648d1beb1fcc7f2e0f756e
 https://conda.anaconda.org/conda-forge/noarch/wcwidth-0.2.6-pyhd8ed1ab_0.conda#078979d33523cb477bd1916ce41aacc9
 https://conda.anaconda.org/conda-forge/noarch/wsproto-1.2.0-pyhd8ed1ab_0.tar.bz2#00ba804b54f451d102f6a7615f08470d
@@ -222,7 +222,7 @@ https://conda.anaconda.org/conda-forge/win-64/numcodecs-0.11.0-py38hd3f51b4_1.co
 https://conda.anaconda.org/conda-forge/win-64/pandas-1.5.3-py38h5846ac1_1.conda#3a7a1e5c4431a1020b6b7769edf1ccdc
 https://conda.anaconda.org/conda-forge/noarch/prompt_toolkit-3.0.39-hd8ed1ab_0.conda#4bbbe67d5df19db30f04b8e344dc9976
 https://conda.anaconda.org/conda-forge/noarch/robotframework-tidy-4.4.0-pyhd8ed1ab_0.conda#e27606b585fe4780ffc3827f83c26b57
-https://conda.anaconda.org/conda-forge/noarch/selenium-4.11.2-pyhd8ed1ab_0.conda#85af6a45258d2c51062ef88bd6e9cfda
+https://conda.anaconda.org/conda-forge/noarch/selenium-4.9.1-pyhd8ed1ab_0.conda#b3daee1b09922328cfa11b4761cf1adf
 https://conda.anaconda.org/conda-forge/noarch/ipython-8.12.2-pyh08f2357_0.conda#f289f9dc26526b8bd9f5845486f53a4d
 https://conda.anaconda.org/conda-forge/noarch/jupyter_events-0.7.0-pyhd8ed1ab_1.conda#2c552859aea15e7132f8d855c72a9801
 https://conda.anaconda.org/conda-forge/noarch/nbclient-0.8.0-pyhd8ed1ab_0.conda#e78da91cf428faaf05701ce8cc8f2f9b
