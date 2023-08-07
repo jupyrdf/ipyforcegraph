@@ -301,6 +301,7 @@ jobs:
         shell: cmd /C CALL {0}
         env:
           ATEST_PROCESSES: 2
+          UTEST_PROCESSES: 1
           WIN_CI: 1
         run: |
           doit -n4 preflight:lab || doit preflight:lab || exit 1
@@ -321,6 +322,7 @@ jobs:
         shell: cmd /C CALL {0}
         env:
           ATEST_PROCESSES: 2
+          UTEST_PROCESSES: 1
           WIN_CI: 1
         run: doit test || doit test || exit 1
 
