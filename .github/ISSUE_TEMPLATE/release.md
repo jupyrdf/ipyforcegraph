@@ -36,7 +36,8 @@ labels: maintenance
   - [ ] handle `conda-forge` [feedstock] tasks
     - [ ] _URL on `conda-forge/ipyforcegraph-feedstock` here_
     - [ ] _URL on `anaconda.org`_
-  - [ ] create postmortem PR from `dev` targeting `main`
+  - [ ] merge `dev` into `main`
+  - [ ] create postmortem PR from `main` targeting `dev`
     - [ ] _PR# here_
     - [ ] bump to next development version
     - [ ] bump the `CACHE_EPOCH`
