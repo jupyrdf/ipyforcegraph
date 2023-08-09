@@ -5,7 +5,6 @@ Library     String
 Library     Collections
 Resource    Lab.robot
 Resource    Browser.robot
-Resource    Meta.robot
 Resource    ../variables/Server.robot
 Resource    Coverage.robot
 

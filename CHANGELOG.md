@@ -1,5 +1,15 @@
 # Changelog
 
+## `0.3.9`
+
+### `ipyforcegraph 0.3.9`
+
+> TBD
+
+### `@jupyrdf/jupyter-forcegraph 0.3.9`
+
+> TBD
+
 ## `0.3.8`
 
 ### `ipyforcegraph 0.3.8`
