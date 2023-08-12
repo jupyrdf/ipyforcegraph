@@ -14,11 +14,11 @@ const noopHanlders = [noop, noop];
 export class ContinuousColorModel extends ColumnModel {
   initialize(attributes: Backbone.ObjectHash, options: IBackboneModelOptions) {
     super.initialize(attributes, options);
-    this.on('change:scheme change:domain', this.valueChanged, this);
+    this.on('change:scheme change:domain change:column_name', this.valueChanged, this);
   }
 
   async _buildHandlers(value: any, coercer: TCoercer): Promise<Function[]> {
-    let { scheme, domain } = this;
+    let { scheme, domain, columnName } = this;
 
     const min = domain[0];
     const max = domain.slice(-1)[0];
@@ -35,12 +35,20 @@ export class ContinuousColorModel extends ColumnModel {
 
     function _nodeHandler(options: any) {
       const v = coercer(options.node ? options.node[value] : null);
-      return v == null ? v : interpolate((v - min) / base);
+      const c = v == null ? null : interpolate((v - min) / base);
+      if (columnName != null && c != null) {
+        options.node[columnName] = c;
+      }
+      return c;
     }
 
     function _linkHandler(options: any) {
       const v = coercer(options.link ? options.link[value] : null);
-      return v == null ? v : interpolate((v - min) / base);
+      const c = v == null ? null : interpolate((v - min) / base);
+      if (columnName != null && c != null) {
+        options.link[columnName] = c;
+      }
+      return c;
     }
 
     return [_nodeHandler, _linkHandler];
@@ -53,20 +61,24 @@ export class ContinuousColorModel extends ColumnModel {
   get domain(): number[] {
     return this.get('domain') || [0, 1];
   }
+
+  get columnName(): string {
+    return this.get('column_name');
+  }
 }
 
 export class OrdinalColorModel extends ColumnModel {
   initialize(attributes: Backbone.ObjectHash, options: IBackboneModelOptions) {
     super.initialize(attributes, options);
     this.on(
-      'change:scheme change:domain change:range change:sub_scheme',
+      'change:scheme change:domain change:range change:sub_scheme change:column_name',
       this.valueChanged,
       this
     );
   }
 
   async _buildHandlers(value: any, coercer: TCoercer): Promise<Function[]> {
-    let { scheme, range, domain } = this;
+    let { scheme, range, domain, columnName } = this;
     const [d3sc, d3s] = await Promise.all([
       import('d3-scale-chromatic'),
       import('d3-scale'),
@@ -83,12 +95,20 @@ export class OrdinalColorModel extends ColumnModel {
 
     function _nodeHandler(options: any) {
       const v = coercer(options.node ? options.node[value] : null);
-      return v == null ? v : scale(v);
+      const c = v == null ? null : scale(v);
+      if (columnName != null && c != null) {
+        options.node[columnName] = c;
+      }
+      return c;
     }
 
     function _linkHandler(options: any) {
       const v = coercer(options.link ? options.link[value] : null);
-      return v == null ? v : scale(v);
+      const c = v == null ? null : scale(v);
+      if (columnName != null && c != null) {
+        options.link[columnName] = c;
+      }
+      return c;
     }
 
     return [_nodeHandler, _linkHandler];
@@ -104,5 +124,9 @@ export class OrdinalColorModel extends ColumnModel {
 
   get range(): string[] {
     return this.get('range') || [];
+  }
+
+  get columnName(): string {
+    return this.get('column_name');
   }
 }

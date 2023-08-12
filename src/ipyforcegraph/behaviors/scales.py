@@ -8,7 +8,7 @@ Some documentation provided by:
 # Distributed under the terms of the Modified BSD License.
 
 import enum
-from typing import Any, Tuple
+from typing import Any, Optional, Tuple
 
 import ipywidgets as W
 import traitlets as T
@@ -70,9 +70,16 @@ class ContinuousColor(Column):
         allow_none=True,
     ).tag(sync=True)
 
-    domain: Tuple[float, float] = W.TypedTuple(
-        (0.0, 1.0),
+    domain: Tuple[float, float] = T.Tuple(
+        T.Float(), T.Float(),
+        default_value=(0.0, 1.0),
         help=("the ``[min, max]`` to map to the scale's colors"),
+    ).tag(sync=True)
+
+    column_name: Optional[str] = T.Unicode(
+        None,
+        help="an optional name of a ``node``'s column to update when selected",
+        allow_none=True,
     ).tag(sync=True)
 
     @T.validate("scheme")
@@ -112,6 +119,12 @@ class OrdinalColor(Column):
 
     range: Tuple[str] = W.TypedTuple(
         T.Unicode(), help="the colors available in a scheme (overloaded by ``scheme``)"
+    ).tag(sync=True)
+
+    column_name: Optional[str] = T.Unicode(
+        None,
+        help="an optional name of a ``node``'s column to update when selected",
+        allow_none=True,
     ).tag(sync=True)
 
     @T.validate("scheme")
