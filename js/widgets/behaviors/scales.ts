@@ -18,7 +18,7 @@ export class ContinuousColorModel extends ColumnModel {
   }
 
   async _buildHandlers(value: any, coercer: TCoercer): Promise<Function[]> {
-    let { scheme, domain, columnName } = this;
+    let { scheme, domain } = this;
 
     const min = domain[0];
     const max = domain.slice(-1)[0];
@@ -33,7 +33,8 @@ export class ContinuousColorModel extends ColumnModel {
 
     const base = max - min;
 
-    function _nodeHandler(options: any) {
+    function _nodeHandler(this: ContinuousColorModel, options: any) {
+      let { columnName } = this;
       const v = coercer(options.node ? options.node[value] : null);
       const c = v == null ? null : interpolate((v - min) / base);
       if (columnName != null && c != null) {
@@ -42,7 +43,8 @@ export class ContinuousColorModel extends ColumnModel {
       return c;
     }
 
-    function _linkHandler(options: any) {
+    function _linkHandler(this: ContinuousColorModel, options: any) {
+      let { columnName } = this;
       const v = coercer(options.link ? options.link[value] : null);
       const c = v == null ? null : interpolate((v - min) / base);
       if (columnName != null && c != null) {
@@ -78,7 +80,7 @@ export class OrdinalColorModel extends ColumnModel {
   }
 
   async _buildHandlers(value: any, coercer: TCoercer): Promise<Function[]> {
-    let { scheme, range, domain, columnName } = this;
+    let { scheme, range, domain } = this;
     const [d3sc, d3s] = await Promise.all([
       import('d3-scale-chromatic'),
       import('d3-scale'),
@@ -93,7 +95,8 @@ export class OrdinalColorModel extends ColumnModel {
 
     const scale = d3s.scaleOrdinal(range).domain(domain);
 
-    function _nodeHandler(options: any) {
+    function _nodeHandler(this: ContinuousColorModel, options: any) {
+      let { columnName } = this;
       const v = coercer(options.node ? options.node[value] : null);
       const c = v == null ? null : scale(v);
       if (columnName != null && c != null) {
@@ -102,7 +105,8 @@ export class OrdinalColorModel extends ColumnModel {
       return c;
     }
 
-    function _linkHandler(options: any) {
+    function _linkHandler(this: ContinuousColorModel, options: any) {
+      let { columnName } = this;
       const v = coercer(options.link ? options.link[value] : null);
       const c = v == null ? null : scale(v);
       if (columnName != null && c != null) {

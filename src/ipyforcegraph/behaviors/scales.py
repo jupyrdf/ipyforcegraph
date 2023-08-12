@@ -71,7 +71,8 @@ class ContinuousColor(Column):
     ).tag(sync=True)
 
     domain: Tuple[float, float] = T.Tuple(
-        T.Float(), T.Float(),
+        T.Float(),
+        T.Float(),
         default_value=(0.0, 1.0),
         help=("the ``[min, max]`` to map to the scale's colors"),
     ).tag(sync=True)
