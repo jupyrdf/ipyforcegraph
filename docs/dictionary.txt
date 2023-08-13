@@ -18,6 +18,7 @@ cividis
 Cividis
 ClusterForce
 CollisionForce
+ColorByColumn
 composable
 conda
 ContinuousColor
