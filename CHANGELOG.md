@@ -4,7 +4,8 @@
 
 ### `ipyforcegraph 0.3.9`
 
-> TBD
+- adds optional `column_name` to `ContinuousScale` and `OrdinalScale`, to allow access
+  to the computed colors of `nodes` and `links`
 
 ### `@jupyrdf/jupyter-forcegraph 0.3.9`
 
@@ -13,8 +14,6 @@
 ## `0.3.8`
 
 ### `ipyforcegraph 0.3.8`
-
-> TBD
 
 ### `@jupyrdf/jupyter-forcegraph 0.3.8`
 
