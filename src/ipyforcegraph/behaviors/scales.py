@@ -32,7 +32,7 @@ class ColorByColumn(Column):
     def _validate_column_name(self, proposal: T.Bunch) -> Any:
         column_name = proposal.value
         if column_name == "__indexColor":
-            raise T.TraitError("column_name cannot be '__indexColor'")
+            raise T.TraitError("'column_name' cannot be '__indexColor'")
         return column_name
 
 

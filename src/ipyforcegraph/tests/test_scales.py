@@ -47,5 +47,5 @@ def test_bad_ordinal_scale(scheme: Any) -> None:
 def test_column_name_color(color_scale_class: Type[S.ColorByColumn]) -> None:
     """Verify that the color column name feature is respected."""
     scale = color_scale_class("value", column_name="_color")
-    with pytest.raises(T.TraitError, match="column_name cannot be"):
+    with pytest.raises(T.TraitError, match="'column_name' cannot be"):
         scale.column_name = "__indexColor"
