@@ -243,7 +243,7 @@ export class NunjucksModel extends DynamicModel {
     }
 
     function handler(opts: any) {
-      const value = coercer(tmpl.render(opts));
+      const value = coercer(tmpl.render(opts).trim());
       return replaceCssVars(value);
     }
 
