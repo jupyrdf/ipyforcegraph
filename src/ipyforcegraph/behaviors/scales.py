@@ -24,7 +24,7 @@ class ColorByColumn(Column):
 
     column_name: Optional[str] = T.Unicode(
         None,
-        help="an optional name of a ``node``'s column to update when selected",
+        help="an optional name of a column to store the color computed based on another column's value",
         allow_none=True,
     ).tag(sync=True)
 
