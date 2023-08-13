@@ -50,6 +50,12 @@ def strip_timestamps(*paths, slug="TIMESTAMP"):
             path.write_text(text, **P.UTF8)
 
 
+def fix_line_endings(filepath: Path):
+    """Convert any CRLF line endings to LF."""
+    print(f"... fixing line endings for {filepath.stem}")
+    filepath.write_bytes(filepath.read_bytes().replace(b"\r\n", b"\n"))
+
+
 def replace_between_patterns(src: Path, dest: Path, pattern: str):
     """replace the dest file between patterns"""
     print(src, dest)
@@ -59,12 +65,7 @@ def replace_between_patterns(src: Path, dest: Path, pattern: str):
         "".join([dest_chunks[0], pattern, src_chunks[1], pattern, dest_chunks[2]]),
         **P.UTF8,
     )
-
-
-def fix_line_endings(filepath: Path):
-    """Convert any CRLF line endings to LF."""
-    print(f"... fixing line endings for {filepath.stem}")
-    filepath.write_bytes(filepath.read_bytes().replace(b"\r\n", b"\n"))
+    fix_line_endings(dest)
 
 
 def template_one(src: Path, dest: Path, context=None):
@@ -536,3 +537,4 @@ def gather_css_variables(out_txt: Path, css_src: typing.List[Path]):
     print(f"    ... wrote {len(all_vars)} vars to {out_txt}")
 
     out_txt.write_text("\n".join([*all_vars, ""]), **P.UTF8)
+    fix_line_endings(out_txt)
