@@ -18,7 +18,18 @@ from ._base import Column
 
 
 class ColorByColumn(Column):
-    """An abstract class for setting a behavior's color facet based on a column."""
+    """An abstract class for setting a behavior's color facet based on a column.
+
+    .. code-block:: js+jinja
+        :caption: color `links` the same as their `source`/`target`'s computed color (under `._color`) if they have the same `.group`
+
+        {% if link.source.group == link.target.group %}
+            {{ link.source._color }}
+        {% else %}
+            gray
+        {% endif %}
+
+    """
 
     _model_name: str = T.Unicode("ColorByColumnModel").tag(sync=True)
 
