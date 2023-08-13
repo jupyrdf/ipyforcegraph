@@ -17,7 +17,26 @@ from ..trait_utils import validate_enum
 from ._base import Column
 
 
-class ContinuousColor(Column):
+class ColorByColumn(Column):
+    """An abstract class for setting a behavior's color facet based on a column."""
+
+    _model_name: str = T.Unicode("ColorByColumnModel").tag(sync=True)
+
+    column_name: Optional[str] = T.Unicode(
+        None,
+        help="an optional name of a ``node``'s column to update when selected",
+        allow_none=True,
+    ).tag(sync=True)
+
+    @T.validate("column_name")
+    def _validate_column_name(self, proposal: T.Bunch) -> Any:
+        column_name = proposal.value
+        if column_name == "__indexColor":
+            raise T.TraitError("column_name cannot be '__indexColor'")
+        return column_name
+
+
+class ContinuousColor(ColorByColumn):
     """A column which will interpolate a numeric column on a color scale."""
 
     class Scheme(enum.Enum):
@@ -77,18 +96,12 @@ class ContinuousColor(Column):
         help=("the ``[min, max]`` to map to the scale's colors"),
     ).tag(sync=True)
 
-    column_name: Optional[str] = T.Unicode(
-        None,
-        help="an optional name of a ``node``'s column to update when selected",
-        allow_none=True,
-    ).tag(sync=True)
-
     @T.validate("scheme")
     def _validate_scheme(self, proposal: T.Bunch) -> Any:
         return validate_enum(proposal, ContinuousColor.Scheme)
 
 
-class OrdinalColor(Column):
+class OrdinalColor(ColorByColumn):
     """A column which will encode a column on an discrete color scale."""
 
     class Scheme(enum.Enum):
@@ -120,12 +133,6 @@ class OrdinalColor(Column):
 
     range: Tuple[str] = W.TypedTuple(
         T.Unicode(), help="the colors available in a scheme (overloaded by ``scheme``)"
-    ).tag(sync=True)
-
-    column_name: Optional[str] = T.Unicode(
-        None,
-        help="an optional name of a ``node``'s column to update when selected",
-        allow_none=True,
     ).tag(sync=True)
 
     @T.validate("scheme")
