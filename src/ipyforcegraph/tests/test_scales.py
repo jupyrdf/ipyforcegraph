@@ -3,7 +3,7 @@
 # Copyright (c) 2023 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.
 
-from typing import Any
+from typing import Any, Type
 
 import pytest
 import traitlets as T
@@ -41,3 +41,11 @@ def test_bad_ordinal_scale(scheme: Any) -> None:
     scale = S.OrdinalColor("value")
     with pytest.raises(T.TraitError, match="expected any of"):
         scale.scheme = scheme
+
+
+@pytest.mark.parametrize("color_scale_class", [S.ContinuousColor, S.OrdinalColor])
+def test_column_name_color(color_scale_class: Type[S.ColorByColumn]) -> None:
+    """Verify that the color column name feature is respected."""
+    scale = color_scale_class("value", column_name="_color")
+    with pytest.raises(T.TraitError, match="column_name cannot be"):
+        scale.column_name = "__indexColor"
