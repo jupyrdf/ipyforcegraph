@@ -36,7 +36,7 @@ export class ContinuousColorModel extends ColumnModel {
     function _nodeHandler(options: any) {
       const v = coercer(options.node ? options.node[value] : null);
       const c = v == null ? null : interpolate((v - min) / base);
-      if (columnName != null && c != null) {
+      if (columnName != null) {
         options.node[columnName] = c;
       }
       return c;
@@ -45,7 +45,7 @@ export class ContinuousColorModel extends ColumnModel {
     function _linkHandler(options: any) {
       const v = coercer(options.link ? options.link[value] : null);
       const c = v == null ? null : interpolate((v - min) / base);
-      if (columnName != null && c != null) {
+      if (columnName != null) {
         options.link[columnName] = c;
       }
       return c;
@@ -96,7 +96,7 @@ export class OrdinalColorModel extends ColumnModel {
     function _nodeHandler(options: any) {
       const v = coercer(options.node ? options.node[value] : null);
       const c = v == null ? null : scale(v);
-      if (columnName != null && c != null) {
+      if (columnName != null) {
         options.node[columnName] = c;
       }
       return c;
@@ -105,7 +105,7 @@ export class OrdinalColorModel extends ColumnModel {
     function _linkHandler(options: any) {
       const v = coercer(options.link ? options.link[value] : null);
       const c = v == null ? null : scale(v);
-      if (columnName != null && c != null) {
+      if (columnName != null) {
         options.link[columnName] = c;
       }
       return c;
