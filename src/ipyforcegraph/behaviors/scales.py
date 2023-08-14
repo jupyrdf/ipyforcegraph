@@ -137,9 +137,7 @@ class OrdinalColor(ColorByColumn):
         allow_none=True,
     ).tag(sync=True)
 
-    domain: Tuple[float, float] = T.Tuple(
-        T.Float(),
-        T.Float(),
+    domain: Tuple[Any, ...] = T.Tuple(
         default_value=(0.0, 1.0),
         help=("values mapped to ordinal colors in the range"),
     ).tag(sync=True)
