@@ -9,9 +9,10 @@ import pytest
 import traitlets as T
 
 from ipyforcegraph.behaviors import Column, DynamicValue, GraphImage, Nunjucks
+from ipyforcegraph.behaviors.wrappers import WrapperBase
 from ipyforcegraph.sources import DataFrameSource
 
-SKIP_SUPERCLASSES = [DataFrameSource, Column, Nunjucks, GraphImage]
+SKIP_SUPERCLASSES = [DataFrameSource, Column, Nunjucks, GraphImage, WrapperBase]
 
 SKIP_WIDGETS = [DynamicValue]
 

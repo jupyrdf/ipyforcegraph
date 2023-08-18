@@ -901,7 +901,7 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
       }
     }
 
-    return replaceCssVars(value != null ? value : defaultValue);
+    return value != null ? value : defaultValue;
   }
 
   protected getLinkCanvasObject = (
@@ -1005,7 +1005,7 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
       }
     }
 
-    return replaceCssVars(value != null ? value : defaultValue);
+    return value != null ? value : defaultValue;
   }
 
   protected onNodeClick = (node: NodeObject, event: MouseEvent) => {

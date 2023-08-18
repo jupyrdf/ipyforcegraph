@@ -20,4 +20,19 @@ EXTENSION_SPEC_VERSION = (
     __version__.replace("a", "-alpha").replace("b", "-beta").replace("rc", "-rc")
 )
 
+#: columns used internally by ``force-graph`` which should not be overloaded
+RESERVED_COLUMNS = {
+    "x",
+    "y",
+    "z",
+    "vx",
+    "vy",
+    "vz",
+    "__indexColor",
+    "__controlPoints",
+    "source",
+    "target",
+    "id",
+}
+
 __all__ = ["__version__", "EXTENSION_NAME", "EXTENSION_SPEC_VERSION"]

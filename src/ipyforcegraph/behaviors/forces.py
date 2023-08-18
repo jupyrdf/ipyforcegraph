@@ -371,24 +371,28 @@ class Cluster(BaseD3Force):
         "the radius of a cluster. Context takes ``cluster``, ``node``, ``key``, and ``nodes``.",
         numeric=True,
         by_column=False,
+        by_wrapper=False,
     )
 
     x: TNumFeature = _make_trait(
         "the x-coordinate of a cluster. Context takes ``cluster``, ``node``, ``key``, and ``nodes``.",
         numeric=True,
         by_column=False,
+        by_wrapper=False,
     )
 
     y: TNumFeature = _make_trait(
         "the y-coordinate of a cluster. Context takes ``cluster``, ``node``, ``key``, and ``nodes``.",
         numeric=True,
         by_column=False,
+        by_wrapper=False,
     )
 
     z: TNumFeature = _make_trait(
         "the z-coordinate of a cluster. Context takes ``cluster``, ``node``, ``key``, and ``nodes``.",
         numeric=True,
         by_column=False,
+        by_wrapper=False,
     )
 
     def __init__(self, key: Optional[TFeature] = None, *args: Any, **kwargs: Any):
