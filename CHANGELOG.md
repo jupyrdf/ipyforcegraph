@@ -1,12 +1,20 @@
 # Changelog
 
-## `0.3.9`
+## `0.4.0`
 
-### `ipyforcegraph 0.3.9`
+### `ipyforcegraph 0.4.0`
 
-> TBD
+- adds `CaptureAs`, which can wrap a `Nunjucks` or `ContinuousColor` to store the
+  calculated property in a new column
+  - the captured value _might_ be available in other `Nunjucks` values, but there are
+    likely race conditions
 
-### `@jupyrdf/jupyter-forcegraph 0.3.9`
+**Breaking**
+
+- blanket `var(--...)` replacing, introduced in `0.3.8` is removed
+  - the `ReplaceCssVariables` wrapper can now be applied to any property
+
+### `@jupyrdf/jupyter-forcegraph 0.4.0`
 
 > TBD
 

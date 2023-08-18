@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"3d-force-graph@~1.71.5":
-  version "1.71.5"
-  resolved "https://registry.npmjs.org/3d-force-graph/-/3d-force-graph-1.71.5.tgz#c36607c242b00b33622dbd118b1512aac7d285db"
-  integrity sha512-h+iLJhvouZz8bmQRxYqoV1OXtG+aJ9LzcakLwR9VUkBJ8tmZx5HtbNm5pYAJ4c1kzZc9JljJzh2u0CCJUrmA4A==
+"3d-force-graph@~1.72.2":
+  version "1.72.2"
+  resolved "https://registry.npmjs.org/3d-force-graph/-/3d-force-graph-1.72.2.tgz#6d474774faaa4d16c45183c988520342e6655300"
+  integrity sha512-ImX6sLrIw2qBx4iMIlld7QdZ9a+kt2bQz/Rs8i2Ag6XPDELwzktrrvWBzDUdR0fPOVDchh2bTNoFSjSl3r8dTg==
   dependencies:
     accessor-fn "1"
     kapsule "1"
@@ -2534,10 +2534,10 @@ for-each@^0.3.3:
   dependencies:
     is-callable "^1.1.3"
 
-force-graph@~1.43.2:
-  version "1.43.2"
-  resolved "https://registry.npmjs.org/force-graph/-/force-graph-1.43.2.tgz#3ec2b13207753c5ff4b93fcd26dca4da4607f243"
-  integrity sha512-Yla3FMdxMTDUK0tJM3ip+NBfZQWQRtYCZSZppJANAyRbh3xCCCETpch1IYuKlYWFCeTnpIV6cGw5j8Y1Pekdgw==
+force-graph@~1.43.3:
+  version "1.43.3"
+  resolved "https://registry.npmjs.org/force-graph/-/force-graph-1.43.3.tgz#fd4718190b2b7e9bb3ca1c188220eccc6f020819"
+  integrity sha512-kXIKdgpCCMAqLEcr1Yua3D7TO0SBpq1krrcHF5zrhsucH3NAKU3GN2CtJrulq4IS5XAAwYx0ajsFrMeCEn0E5A==
   dependencies:
     "@tweenjs/tween.js" "18 - 21"
     accessor-fn "1"
