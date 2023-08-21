@@ -8,6 +8,7 @@ ${WIDGET_SOURCE}                WidgetSource
 ${DODO_SOURCE}                  DodoSource
 ${DODO_APP}                     DodoApp
 ${LINK_TEXT}                    LinkText
+${WRAPPERS}                     Wrappers
 
 ${IPYFORCEGRAPH GRAPH}          .jp-ForceGraph
 ${IPYFORCEGRAPH FRAME}          ${IPYFORCEGRAPH GRAPH} iframe
