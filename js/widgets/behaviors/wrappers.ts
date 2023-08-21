@@ -30,10 +30,12 @@ export class WrapperModel extends DynamicModel {
 
   protected wrappedChanged() {
     const { wrapped, previousWrapped } = this;
-    if (previousWrapped) {
+    if (previousWrapped && previousWrapped.updateRequested) {
       previousWrapped.updateRequested.disconnect(this.valueChanged, this);
     }
-    wrapped.updateRequested.connect(this.valueChanged, this);
+    if (wrapped && wrapped.updateRequested) {
+      wrapped.updateRequested.connect(this.valueChanged, this);
+    }
     this.valueChanged();
   }
 }
@@ -55,15 +57,25 @@ export class CaptureAsModel extends WrapperModel {
       return;
     }
     const { columnName, wrapped } = this;
-    await wrapped.ensureHandlers();
-    this._nodeHandler = (opts: any) => {
-      const value = (opts.node[columnName] = wrapped.nodeHandler(opts));
-      return value;
-    };
-    this._linkHandler = (opts: any) => {
-      const value = (opts.link[columnName] = wrapped.linkHandler(opts));
-      return value;
-    };
+
+    if (wrapped.ensureHandlers) {
+      await wrapped.ensureHandlers();
+      this._nodeHandler = (opts: any) => {
+        const value = (opts.node[columnName] = wrapped.nodeHandler(opts));
+        return value;
+      };
+      this._linkHandler = (opts: any) => {
+        const value = (opts.link[columnName] = wrapped.linkHandler(opts));
+        return value;
+      };
+    } else {
+      this._nodeHandler = (opts: any) => {
+        return (opts.node[columnName] = wrapped);
+      };
+      this._linkHandler = (opts: any) => {
+        return (opts.link[columnName] = wrapped);
+      };
+    }
   }
 }
 
@@ -75,8 +87,13 @@ export class ReplaceCssVariablesModel extends WrapperModel {
       return;
     }
     const { wrapped } = this;
-    await wrapped.ensureHandlers();
-    this._nodeHandler = (opts: any) => replaceCssVars(wrapped.nodeHandler(opts));
-    this._linkHandler = (opts: any) => replaceCssVars(wrapped.linkHandler(opts));
+    if (wrapped.ensureHandlers) {
+      await wrapped.ensureHandlers();
+      this._nodeHandler = (opts: any) => replaceCssVars(wrapped.nodeHandler(opts));
+      this._linkHandler = (opts: any) => replaceCssVars(wrapped.linkHandler(opts));
+    } else {
+      this._nodeHandler = (opts: any) => replaceCssVars(`${wrapped}`);
+      this._linkHandler = (opts: any) => replaceCssVars(`${wrapped}`);
+    }
   }
 }

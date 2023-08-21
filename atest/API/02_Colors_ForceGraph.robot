@@ -35,7 +35,7 @@ Color Feature Works As Expected
     Set Up Color Example    ${feature}    ${widget_class}
     ${frame} =    Set Variable    css:${IPYFORCEGRAPH FRAME}
     ${transparent} =    Get Element Screenshot Size    ${frame}    ${screens}    01-transparent.png
-    ${redden} =    Set Variable    fg.${feature} = "var(--jp-warn-color0)"
+    ${redden} =    Set Variable    fg.${feature} = "rgb(255,0,0)"
     Add And Run JupyterLab Code Cell    ${redden}
     Wait For All Cells To Run
     Sleep    0.5s

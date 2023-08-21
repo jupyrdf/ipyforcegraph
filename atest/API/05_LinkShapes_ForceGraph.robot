@@ -119,7 +119,7 @@ Link Shape Color As Expected
     Add And Run JupyterLab Code Cell    lsb.color = ${input_type}("${value}")
     ${color} =    Get Element Screenshot Size    ${frame}    ${screens}    03-color.png
     Should Be True Or Screenshot    ${color} > ${transparent}    03-color-bigger-than-transparent.png
-    Add And Run JupyterLab Code Cell    lb.color = "var(--jp-warn-color0)"
+    Add And Run JupyterLab Code Cell    lb.color = "rgb(255,0,0)"
     Wait For All Cells To Run
     Sleep    1s
     Capture Page Screenshot    02-color-updated.png

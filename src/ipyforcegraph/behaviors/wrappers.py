@@ -3,7 +3,7 @@
 # Copyright (c) 2023 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.
 
-from typing import Any
+from typing import Any, Union
 
 import ipywidgets as W
 import traitlets as T
@@ -12,18 +12,24 @@ from .._base import ForceBase
 from ..constants import RESERVED_COLUMNS
 from ._base import DynamicValue
 
+TAnyWrapped = Union[DynamicValue, "WrapperBase", str, bool, int, float]
+
 
 class WrapperBase(ForceBase):
     """A wrapper for other dynamic values"""
 
     _model_name: str = T.Unicode("WrapperBaseModel").tag(sync=True)
 
-    wrapped: DynamicValue = T.Union(
+    wrapped: TAnyWrapped = T.Union(
         [
             T.Instance(DynamicValue),
             T.Instance("ipyforcegraph.behaviors.wrappers.WrapperBase"),
+            T.Unicode(),
+            T.Float(),
+            T.Int(),
+            T.Bool(),
         ],
-        help="the ``DynamicValue`` (or other ``WrapperBase``) wrapped by this wrapper",
+        help="the ``DynamicValue``, ``WrapperBase``, or string wrapped by this wrapper",
     ).tag(sync=True, **W.widget_serialization)
 
 
@@ -36,7 +42,7 @@ class CaptureAs(WrapperBase):
         allow_none=False, help="name of a column to update with a derived value"
     ).tag(sync=True)
 
-    def __init__(self, column_name: str, wrapped: DynamicValue, **kwargs: Any):
+    def __init__(self, column_name: str, wrapped: TAnyWrapped, **kwargs: Any):
         super().__init__(column_name=column_name, wrapped=wrapped, **kwargs)
 
     @T.validate("column_name")
@@ -53,5 +59,5 @@ class ReplaceCssVariables(WrapperBase):
 
     _model_name: str = T.Unicode("ReplaceCssVariablesModel").tag(sync=True)
 
-    def __init__(self, wrapped: DynamicValue, **kwargs: Any):
+    def __init__(self, wrapped: TAnyWrapped, **kwargs: Any):
         super().__init__(wrapped=wrapped, **kwargs)
