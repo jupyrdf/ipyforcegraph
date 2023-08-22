@@ -5,7 +5,7 @@
 ### `ipyforcegraph 0.4.0`
 
 - adds `CaptureAs`, which can wrap any nearly any value (such as a `Nunjucks`, `Column`,
-  or subclassese like `ContinuousColor`) to store the calculated property in a new
+  or subclasses like `ContinuousColor`) to store the calculated property in a new
   column on the `node` or `link`
   - the captured value _might_ be available e.g. in other `Nunjucks` values, but there
     are likely race conditions
