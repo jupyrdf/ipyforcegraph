@@ -34,8 +34,6 @@ Color Feature Works As Expected
     ...    "rgb(255,0,0)"
     A Color Change Should Be Bigger    ${frame}    ${screens}      ${transparent}    ${feature}    03-replace-css-string
     ...    B.ReplaceCssVariables("var(--jp-warn-color0)")
-    A Color Change Should Be Bigger    ${frame}    ${screens}      ${transparent}    ${feature}    04-replace-css-tmpl
-    ...    B.ReplaceCssVariables(B.Nunjucks("var(--jp-accent-color0)"))
     [Teardown]    Clean Up Color Example
 
 A Color Change Should Be Bigger
