@@ -3,7 +3,7 @@ _inherit_from:
 
 dependencies:
   - conda-lock >=2.1.1,<2.2
-  - mamba >=1.4.2,<1.5
+  - mamba ==1.4.2
   - python >=3.11,<3.12
   - conda <22.11.1
   - doit-with-toml
