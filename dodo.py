@@ -647,7 +647,7 @@ def task_lint():
         yield _ok(
             dict(
                 name=f"nblint:{nb.name}".replace(" ", "_").replace(".ipynb", ""),
-                file_dep=[P.YARN_INTEGRITY, nb, P.HISTORY, P.OK_BLACK],
+                file_dep=[P.YARN_INTEGRITY, nb, P.HISTORY, P.OK_BLACK, P.PY_PROJ],
                 actions=[
                     [*P.IN_ENV, "nbstripout", nb],
                     (U.notebook_lint, [nb]),

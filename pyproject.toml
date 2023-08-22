@@ -54,6 +54,9 @@ select = [
 ignore = ["E501"]
 cache-dir = "build/.ruff_cache"
 
+[tool.ruff.isort]
+known-first-party = ["ipyforcegraph", "ipyforcegraph.*"]
+
 [tool.pytest.ini_options]
 junit_family = "xunit2"
 cache_dir = "build/.pytest_cache"
