@@ -3,13 +3,14 @@
 # Copyright (c) 2023 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.
 
-from typing import Tuple
+from typing import Any, Tuple
 
 import ipywidgets as W
 import traitlets as T
 
 from ._base import ForceBase
 from .behaviors import Behavior
+from .behaviors._base import _make_trait
 from .sources.dataframe import DataFrameSource
 
 
@@ -58,9 +59,13 @@ class ForceGraph(W.DOMWidget, ForceBase):
         help="a default ``link`` width, which can be overridden by :class:`~ipyforcegraph.behaviors.shapes.LinkShapes`",
     ).tag(sync=True)
 
-    background_color: str = T.Unicode(
-        "rgba(0, 0, 0, 0.0)", help="the graph background color"
-    ).tag(sync=True)
+    background_color: Any = _make_trait(
+        "the graph background color",
+        default_value="rgba(0, 0, 0, 0.0)",
+        boolish=False,
+        by_wrapper=True,
+        numeric=False,
+    )
 
     def reheat(self) -> None:
         """Send the reheat command to restart the force simulation"""

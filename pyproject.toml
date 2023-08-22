@@ -6,7 +6,7 @@ requires = [
 
 [project]
 name = "ipyforcegraph"
-version = "0.3.9"
+version = "0.4.0"
 description = "2D and 3D force-directed graph widgets for Jupyter"
 readme = "README.md"
 authors = [
@@ -53,6 +53,9 @@ select = [
 ]
 ignore = ["E501"]
 cache-dir = "build/.ruff_cache"
+
+[tool.ruff.isort]
+known-first-party = ["ipyforcegraph", "ipyforcegraph.*"]
 
 [tool.pytest.ini_options]
 junit_family = "xunit2"

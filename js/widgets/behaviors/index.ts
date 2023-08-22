@@ -18,3 +18,4 @@ export * from './node-shape';
 export * from './node-tooltip';
 export * from './scales';
 export * from './shapes';
+export * from './wrappers';

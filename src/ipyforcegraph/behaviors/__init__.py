@@ -10,15 +10,17 @@ from .recording import GraphCamera, GraphData, GraphDirector, GraphImage
 from .selection import LinkSelection, NodeSelection
 from .shapes import Ellipse, LinkArrows, LinkShapes, NodeShapes, Rectangle, Text
 from .tooltip import LinkTooltip, NodeTooltip
+from .wrappers import CaptureAs, ReplaceCssVariables
 
 __all__ = (
     "Behavior",
+    "CaptureAs",
     "Column",
     "DynamicValue",
     "Ellipse",
     "GraphCamera",
-    "GraphDirector",
     "GraphData",
+    "GraphDirector",
     "GraphForces",
     "GraphImage",
     "LinkArrows",
@@ -31,5 +33,6 @@ __all__ = (
     "NodeTooltip",
     "Nunjucks",
     "Rectangle",
+    "ReplaceCssVariables",
     "Text",
 )

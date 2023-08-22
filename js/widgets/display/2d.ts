@@ -22,7 +22,7 @@ import {
   WidgetView,
 } from '@jupyter-widgets/base';
 
-import { getThemeManager, replaceCssVars } from '../../theme-utils';
+import { getThemeManager } from '../../theme-utils';
 import {
   CSS,
   DEBUG,
@@ -57,7 +57,12 @@ import {
   WIDGET_DEFAULTS,
   emptyPreservedColumns,
 } from '../../tokens';
-import { DAGBehaviorModel, FacetedForceModel, GraphForcesModel } from '../behaviors';
+import {
+  DAGBehaviorModel,
+  FacetedForceModel,
+  GraphForcesModel,
+  WrapperModel,
+} from '../behaviors';
 import { widget_serialization } from '../serializers/widget';
 
 export class ForceGraphModel extends DOMWidgetModel {
@@ -66,6 +71,13 @@ export class ForceGraphModel extends DOMWidgetModel {
     ...DOMWidgetModel.serializers,
     source: widget_serialization,
     behaviors: widget_serialization,
+    background_color: widget_serialization,
+    default_link_color: widget_serialization,
+    default_link_curvature: widget_serialization,
+    default_link_line_dash: widget_serialization,
+    default_link_width: widget_serialization,
+    default_node_color: widget_serialization,
+    default_node_size: widget_serialization,
   };
 
   protected _nodeBehaviorsByMethod: IBehave[][];
@@ -224,7 +236,7 @@ export class ForceGraphModel extends DOMWidgetModel {
     return this.get('default_link_width') || DEFAULT_WIDTHS.link;
   }
 
-  get backgroundColor(): string {
+  get backgroundColor(): string | WrapperModel {
     return this.get('background_color') || DEFAULT_COLORS.background;
   }
 }
@@ -504,6 +516,14 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
     }
   }
 
+  protected async maybeEvaluate(facet: string | WrapperModel): Promise<string> {
+    if (facet instanceof WrapperModel) {
+      await facet.ensureHandlers();
+      return facet.nodeHandler();
+    }
+    return facet;
+  }
+
   protected async postUpdate(caller?: any, kind?: TUpdateKind): Promise<void> {
     await this.displayed;
     await this.rendered;
@@ -534,23 +554,26 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
     } = this.model;
 
     // graph
-    graph.backgroundColor(replaceCssVars(backgroundColor));
+    graph.backgroundColor(await this.maybeEvaluate(backgroundColor));
 
     // link
+    const finalDefaultLinkColor = await this.maybeEvaluate(defaultLinkColor);
     graph.linkColor(
       _linkBehaviorsByMethod[ELinkBehaveMethod.getLinkColor].length
         ? this.wrapFunction(this.getLinkColor)
-        : this.wrapFunction(() => replaceCssVars(defaultLinkColor))
+        : this.wrapFunction(() => finalDefaultLinkColor)
     );
+    const finalDefaulLinkWidth = await this.maybeEvaluate(defaultLinkWidth);
     graph.linkWidth(
       _linkBehaviorsByMethod[ELinkBehaveMethod.getLinkWidth].length
         ? this.wrapFunction(this.getLinkWidth)
-        : this.wrapFunction(() => defaultLinkWidth)
+        : this.wrapFunction(() => finalDefaulLinkWidth)
     );
+    const finalDefaultLinkCurvature = await this.maybeEvaluate(defaultLinkCurvature);
     graph.linkCurvature(
       _linkBehaviorsByMethod[ELinkBehaveMethod.getLinkCurvature].length
         ? this.wrapFunction(this.getLinkCurvature)
-        : this.wrapFunction(() => defaultLinkCurvature)
+        : this.wrapFunction(() => finalDefaultLinkCurvature)
     );
     if (typeof graph['linkLineDash'] === 'function') {
       graph.linkLineDash(
@@ -602,10 +625,11 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
     );
 
     // node
+    const finalDefaultNodeColor = await this.maybeEvaluate(defaultNodeColor);
     graph.nodeColor(
       _nodeBehaviorsByMethod[ENodeBehaveMethod.getNodeColor].length
         ? this.wrapFunction(this.getNodeColor)
-        : this.wrapFunction(() => replaceCssVars(defaultNodeColor))
+        : this.wrapFunction(() => finalDefaultNodeColor)
     );
     graph.nodeVal(
       _nodeBehaviorsByMethod[ENodeBehaveMethod.getNodeSize].length
@@ -901,7 +925,7 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
       }
     }
 
-    return replaceCssVars(value != null ? value : defaultValue);
+    return value != null ? value : defaultValue;
   }
 
   protected getLinkCanvasObject = (
@@ -1005,7 +1029,7 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
       }
     }
 
-    return replaceCssVars(value != null ? value : defaultValue);
+    return value != null ? value : defaultValue;
   }
 
   protected onNodeClick = (node: NodeObject, event: MouseEvent) => {

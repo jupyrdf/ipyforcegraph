@@ -1,4 +1,6 @@
 from ipyforcegraph.graphs import WIDGET_CLASS
+import ipyforcegraph.behaviors as B
+
 fg = WIDGET_CLASS()
 display(fg)
 fg.source.nodes = [{"id": "hello"}, {"id": "world"}]

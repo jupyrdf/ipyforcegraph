@@ -35,13 +35,20 @@ Color Feature Works As Expected
     Set Up Color Example    ${feature}    ${widget_class}
     ${frame} =    Set Variable    css:${IPYFORCEGRAPH FRAME}
     ${transparent} =    Get Element Screenshot Size    ${frame}    ${screens}    01-transparent.png
-    ${redden} =    Set Variable    fg.${feature} = "var(--jp-warn-color0)"
-    Add And Run JupyterLab Code Cell    ${redden}
+    A Color Change Should Be Bigger    ${frame}    ${screens}    ${transparent}    ${feature}    02-color-rgba
+    ...    "rgb(255,0,0)"
+    A Color Change Should Be Bigger    ${frame}    ${screens}    ${transparent}    ${feature}    03-replace-css-string
+    ...    B.ReplaceCssVariables("var(--jp-warn-color0)")
+    [Teardown]    Clean Up Color Example
+
+A Color Change Should Be Bigger
+    [Arguments]    ${frame}    ${screens}    ${baseline}    ${feature}    ${screen}    ${value}
+    ${code} =    Set Variable    fg.${feature} = ${value}
+    Add And Run JupyterLab Code Cell    ${code}
     Wait For All Cells To Run
     Sleep    0.5s
-    ${color} =    Get Element Screenshot Size    ${frame}    ${screens}    02-color.png
-    Should Be True Or Screenshot    ${color} > ${transparent}    03-color-bigger-than-transparent.png
-    [Teardown]    Clean Up Color Example
+    ${changed} =    Get Element Screenshot Size    ${frame}    ${screens}    ${screen}.png
+    Should Be True Or Screenshot    ${changed} > ${baseline}    ${screen}-is-bigger.png
 
 Set Up Color Example
     [Arguments]    ${feature}    ${widget_class}

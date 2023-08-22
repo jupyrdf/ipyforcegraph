@@ -1,7 +1,7 @@
 from ipyforcegraph.graphs import WIDGET_CLASS
 from ipyforcegraph import behaviors as B
 import asyncio
-g = B.GraphData(column_name="id")
+g = B.GraphData()
 fg = WIDGET_CLASS(behaviors=[g])
 display(fg)
 g.capturing = True

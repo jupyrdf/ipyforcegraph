@@ -151,6 +151,7 @@ def _make_trait(
     boolish: bool = False,
     by_column: bool = True,
     by_template: bool = True,
+    by_wrapper: bool = True,
     numeric: bool = False,
     stringy: bool = True,
 ) -> Any:
@@ -161,6 +162,11 @@ def _make_trait(
         + ([T.Int(), T.Float()] if numeric else [])
         + ([T.Instance(Column)] if by_column else [])
         + ([T.Instance(Nunjucks)] if by_template else [])
+        + (
+            [T.Instance("ipyforcegraph.behaviors.wrappers.WrapperBase")]
+            if by_wrapper
+            else []
+        )
     )
 
     return T.Union(

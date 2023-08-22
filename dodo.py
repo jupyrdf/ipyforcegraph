@@ -269,7 +269,14 @@ def task_setup():
         else:
             raise RuntimeError(f"Don't know how to install {P.INSTALL_ARTIFACT}")
     else:
-        _install += ["-e", ".", "--no-build-isolation", "--no-deps"]
+        _install += [
+            "-e",
+            ".",
+            "--no-build-isolation",
+            "--no-deps",
+            "--no-cache-dir",
+            "--ignore-installed",
+        ]
 
     file_dep = [
         P.HISTORY,
@@ -640,7 +647,7 @@ def task_lint():
         yield _ok(
             dict(
                 name=f"nblint:{nb.name}".replace(" ", "_").replace(".ipynb", ""),
-                file_dep=[P.YARN_INTEGRITY, nb, P.HISTORY, P.OK_BLACK],
+                file_dep=[P.YARN_INTEGRITY, nb, P.HISTORY, P.OK_BLACK, P.PY_PROJ],
                 actions=[
                     [*P.IN_ENV, "nbstripout", nb],
                     (U.notebook_lint, [nb]),

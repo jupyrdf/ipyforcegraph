@@ -37,14 +37,28 @@ Shape Feature Works As Expected
     Set Up Shape Example    ${widget_class}  ${shape_class}  ${feature}
     ${frame} =   Set Variable   css:${IPYFORCEGRAPH FRAME}
     ${transparent} =    Get Element Screenshot Size    ${frame}  ${screens}    01-transparent.png
-    Update Shape Feature   ${widget_class}   ${shape_class}  ${feature}
-    ${color} =   Get Element Screenshot Size    ${frame}    ${screens}    02-color.png
-    Should Be True Or Screenshot    ${color} > ${transparent}  03-color-bigger-than-transparent.png
+
+    # ${color} =   Get Element Screenshot Size    ${frame}    ${screens}    02-color.png
+    # Should Be True Or Screenshot    ${color} > ${transparent}  03-color-bigger-than-transparent.png
+    A Color Change Should Be Bigger   ${widget_class}  ${shape_class}  ${frame}    ${screens}  ${transparent}    ${feature}    02-color-rgba
+    ...    "rgb(255,0,0)"
+    A Color Change Should Be Bigger   ${widget_class}   ${shape_class}   ${frame}    ${screens}      ${transparent}    ${feature}    03-replace-css-string
+    ...    B.ReplaceCssVariables("var(--jp-warn-color0)")
+    A Color Change Should Be Bigger   ${widget_class}  ${shape_class}  ${frame}    ${screens}      ${transparent}    ${feature}    04-replace-css-tmpl
+    ...    B.ReplaceCssVariables(B.Nunjucks("var(--jp-brand-color0)"))
     [Teardown]    Clean Up Shape Example
 
+
+A Color Change Should Be Bigger
+    [Arguments]    ${widget_class}  ${shape_class}  ${frame}    ${screens}   ${baseline}    ${feature}    ${screen}    ${value}
+    Update Shape Feature   ${widget_class}   ${shape_class}  ${feature}  ${value}
+    ${changed} =    Get Element Screenshot Size    ${frame}    ${screens}    ${screen}.png
+    Should Be True Or Screenshot    ${changed} > ${baseline}    ${screen}-is-bigger.png
+
+
 Update Shape Feature
-    [Arguments]  ${widget_class}   ${shape_class}  ${feature}
-    Add And Run JupyterLab Code Cell   shape.${feature} = "var(--jp-warn-color0)"
+    [Arguments]  ${widget_class}   ${shape_class}  ${feature}   ${value}
+    Add And Run JupyterLab Code Cell   shape.${feature} = ${value}
     IF   "${shape_class}" == "Rectangle"
         Add And Run JupyterLab Code Cell  shape.opacity = 1
     END
