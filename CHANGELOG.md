@@ -4,10 +4,15 @@
 
 ### `ipyforcegraph 0.4.0`
 
-- adds `CaptureAs`, which can wrap a `Nunjucks` or `ContinuousColor` to store the
-  calculated property in a new column
-  - the captured value _might_ be available in other `Nunjucks` values, but there are
-    likely race conditions
+- adds `CaptureAs`, which can wrap any nearly any value (such as a `Nunjucks`, `Column`,
+  or subclassese like `ContinuousColor`) to store the calculated property in a new
+  column on the `node` or `link`
+  - the captured value _might_ be available e.g. in other `Nunjucks` values, but there
+    are likely race conditions
+  - care should be taken to avoid conflicting column names, either with the original
+    `source` data or those configured by other behaviors and facets
+    - selecting a `column_name` known to be used by `force-graph` (such as `x` or `y`)
+      will raise a trait error
 
 **Breaking**
 
