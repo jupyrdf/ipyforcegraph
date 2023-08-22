@@ -2,7 +2,7 @@ dependencies:
   - ansi2html
   - autodoc-traits
   - docutils >=0.19
-  - jupyterlite-core ==0.1.1
+  - jupyterlite-core ==0.1.2
   - jupyterlite-core-with-libarchive
   - myst-nb
   - mdit-py-plugins <0.4.0
