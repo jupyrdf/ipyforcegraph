@@ -42,6 +42,10 @@ jobs:
       - name: git checkout
         uses: actions/checkout@v3
 
+      - name: git info
+        run: |-
+          env | grep -iE "(_REF_|_SHA$)"
+
       - name: base env (conda)
         uses: conda-incubator/setup-miniconda@v2
         with:
