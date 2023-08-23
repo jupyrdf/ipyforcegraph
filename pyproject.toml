@@ -146,6 +146,16 @@ subtasks = true
 
 [tool.flit.sdist]
 include = ["src/_d"]
+exclude = [
+  ".binder/",
+  ".github/",
+  "atest/",
+  "docs/",
+  "dodo.py",
+  "examples/",
+  "lite/",
+  "pages-lite/",
+]
 
 [tool.flit.external-data]
 directory = "src/_d"
