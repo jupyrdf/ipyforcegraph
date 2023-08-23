@@ -405,7 +405,9 @@ def task_build():
         targets=[P.NPM_TGZ],
     )
 
-    buildinfo = dict(SOURCE_DATE_EPOCH=P.SOURCE_DATE_EPOCH, COMMIT=P.COMMIT)
+    buildinfo = dict(
+        SOURCE_DATE_EPOCH=P.SOURCE_DATE_EPOCH, COMMIT=P.COMMIT, HEAD=P.HEAD
+    )
 
     yield dict(
         name="py",
