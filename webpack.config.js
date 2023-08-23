@@ -1,3 +1,5 @@
+const SyncModuleIdsPlugin = require('webpack/lib/ids/SyncModuleIdsPlugin');
+
 module.exports = {
   output: {
     clean: true,
@@ -8,6 +10,9 @@ module.exports = {
       buffer: require.resolve('buffer/'),
     },
   },
+  plugins: [
+    new SyncModuleIdsPlugin({path: 'webpack.module.ids.lock'})
+  ],
   module: {
     rules: [
       {

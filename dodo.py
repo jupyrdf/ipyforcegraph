@@ -391,7 +391,7 @@ def task_build():
         name="ext",
         uptodate=[config_changed({"TOTAL_COVERAGE": P.TOTAL_COVERAGE})],
         actions=[[*P.IN_ENV, *P.JLPM, "build:ext"]],
-        file_dep=[P.TSBUILDINFO, P.JS_LIB_INDEX_JS, *P.ALL_CSS],
+        file_dep=[P.TSBUILDINFO, P.JS_LIB_INDEX_JS, *P.ALL_CSS, P.WEBPACK_CONFIG],
         targets=[P.PY_PACKAGE_JSON],
     )
 

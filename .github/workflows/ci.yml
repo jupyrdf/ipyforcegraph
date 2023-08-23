@@ -35,6 +35,10 @@ jobs:
         os: [ubuntu]
         py: ['3.11']
     steps:
+      - name: configure line endings
+        run: |
+          git config --global core.autocrlf false
+
       - name: git checkout
         uses: actions/checkout@v3
 

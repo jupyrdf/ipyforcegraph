@@ -198,6 +198,7 @@ ALL_TSCONFIG = [
     ROOT / "tsconfig.json",
     TS_SRC / "tsconfig.json",
 ]
+WEBPACK_CONFIG = ROOT / "webpack.config.js"
 
 # tests
 EXAMPLES = ROOT / "examples"
@@ -243,7 +244,7 @@ ALL_MD = [*ROOT.glob("*.md"), *ALL_DOCS_MD, *GH.rglob("*.md")]
 ALL_TS = [*TS_SRC.rglob("*.ts")]
 ALL_CSS = [*STYLE.rglob("*.css")]
 PRETTIER_IGNORE = ROOT / ".prettierignore"
-ALL_PRETTIER = [*ALL_YML, *ALL_JSON, *ALL_MD, *ALL_TS, *ALL_CSS]
+ALL_PRETTIER = [*ALL_YML, *ALL_JSON, *ALL_MD, *ALL_TS, *ALL_CSS, WEBPACK_CONFIG]
 ALL_DOS2UNIX = [*ALL_YML, *EXAMPLE_IPYNB, *ALL_PRETTIER]
 
 # built files
