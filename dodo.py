@@ -406,7 +406,10 @@ def task_build():
     )
 
     buildinfo = dict(
-        SOURCE_DATE_EPOCH=P.SOURCE_DATE_EPOCH, COMMIT=P.COMMIT, HEAD=P.HEAD
+        SOURCE_DATE_EPOCH=P.SOURCE_DATE_EPOCH,
+        COMMIT=P.COMMIT,
+        HEAD=P.HEAD,
+        GITHUB_REF=P.GITHUB_REF,
     )
 
     yield dict(

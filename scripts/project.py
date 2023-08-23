@@ -73,7 +73,13 @@ SCRIPTS = Path(__file__).parent.resolve()
 ROOT = SCRIPTS.parent
 
 # git
-HEAD = os.environ.get("GITHUB_HEAD_REF") or os.environ.get("GITHUB_REF") or "HEAD"
+GITHUB_REF = os.environ.get("GITHUB_REF")
+
+HEAD = "HEAD"
+
+if GITHUB_REF and GITHUB_REF.endswith("/merge"):
+    HEAD = "HEAD^"
+
 COMMIT = subprocess.check_output(["git", "rev-parse", HEAD], **UTF8).strip()
 SOURCE_DATE_EPOCH = (
     subprocess.check_output(["git", "log", "-1", "--format=%ct", COMMIT])
