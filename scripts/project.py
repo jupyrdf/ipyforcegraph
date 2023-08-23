@@ -9,6 +9,7 @@ this should not import anything not in py36+ stdlib, or any local paths
 import json
 import os
 import platform
+import re
 import shutil
 import subprocess
 import sys
@@ -75,12 +76,16 @@ ROOT = SCRIPTS.parent
 # git
 GITHUB_REF = os.environ.get("GITHUB_REF")
 
-HEAD = "HEAD"
-
 if GITHUB_REF and GITHUB_REF.endswith("/merge"):
-    HEAD = "HEAD^"
+    COMMIT = re.findall(
+        r"Merge (.*?) into .*?",
+        subprocess.check_output(
+            ["git", "log", "--format=%B", "-n", "1"], **UTF8
+        ).strip(),
+    )[0]
+else:
+    COMMIT = subprocess.check_output(["git", "rev-parse", "HEAD"], **UTF8).strip()
 
-COMMIT = subprocess.check_output(["git", "rev-parse", HEAD], **UTF8).strip()
 SOURCE_DATE_EPOCH = (
     subprocess.check_output(["git", "log", "-1", "--format=%ct", COMMIT])
     .decode("utf-8")
