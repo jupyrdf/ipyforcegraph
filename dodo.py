@@ -114,7 +114,6 @@ def task_preflight():
 
     yield _ok(
         dict(
-            uptodate=[config_changed({"commit": P.COMMIT})],
             name="conda",
             doc="ensure the conda envs have a chance of working",
             file_dep=file_dep,
@@ -439,7 +438,7 @@ def task_pytest():
     yield dict(
         name="utest",
         doc="run unit tests with pytest",
-        uptodate=[config_changed(dict(COMMIT=P.COMMIT, args=P.PYTEST_ARGS))],
+        uptodate=[config_changed(dict(args=P.PYTEST_ARGS))],
         file_dep=[*P.ALL_PY_SRC, P.PY_PROJ, P.OK_PIP_INSTALL],
         targets=[
             P.UTEST_COV_INDEX,
@@ -452,9 +451,6 @@ def task_pytest():
             (U.clean_some, [P.UTEST_COV]),
             (create_folder, [P.UTEST_COV]),
             utest_args,
-            lambda: U.strip_timestamps(
-                *P.UTEST_COV_INDEX.rglob("*.html"), P.PYTEST_HTML, slug=P.COMMIT
-            ),
         ],
     )
 

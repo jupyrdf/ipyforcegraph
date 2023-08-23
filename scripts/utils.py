@@ -33,23 +33,6 @@ XP_JUPYTER_STDERR = """//*[@data-mime-type="application/vnd.jupyter.stderr"]"""
 XP_BAD_XREF = """//code[contains(@class, "xref")][not(parent::a)]"""
 
 
-def strip_timestamps(*paths, slug="TIMESTAMP"):
-    """replace timestamps with a less churn-y value"""
-    for path in paths:
-        if not path.exists():
-            continue
-
-        text = original_text = path.read_text(**P.UTF8)
-
-        for pattern in PATTERNS:
-            if not re.findall(pattern, text):
-                continue
-            text = re.sub(pattern, slug, text)
-
-        if text != original_text:
-            path.write_text(text, **P.UTF8)
-
-
 def replace_between_patterns(src: Path, dest: Path, pattern: str):
     """replace the dest file between patterns"""
     print(src, dest)

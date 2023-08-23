@@ -73,9 +73,12 @@ SCRIPTS = Path(__file__).parent.resolve()
 ROOT = SCRIPTS.parent
 
 # git
-COMMIT = subprocess.check_output(["git", "rev-parse", "HEAD"]).decode("utf-8").strip()
+COMMIT = (
+    os.environ.get("GITHUB_SHA")
+    or subprocess.check_output(["git", "rev-parse", "HEAD"], **UTF8).strip()
+)
 SOURCE_DATE_EPOCH = (
-    subprocess.check_output(["git", "log", "-1", "--format=%ct"])
+    subprocess.check_output(["git", "log", "-1", "--format=%ct", COMMIT])
     .decode("utf-8")
     .strip()
 )
