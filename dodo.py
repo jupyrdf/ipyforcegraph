@@ -11,6 +11,7 @@
 # Distributed under the terms of the Modified BSD License.
 
 import os
+import pprint
 import subprocess
 
 from doit import create_after
@@ -404,11 +405,16 @@ def task_build():
         targets=[P.NPM_TGZ],
     )
 
+    buildinfo = dict(SOURCE_DATE_EPOCH=P.SOURCE_DATE_EPOCH, COMMIT=P.COMMIT)
+
     yield dict(
         name="py",
-        uptodate=[config_changed(dict(SOURCE_DATE_EPOCH=P.SOURCE_DATE_EPOCH))],
+        uptodate=[config_changed(buildinfo)],
         file_dep=py_dep,
-        actions=[[*P.IN_ENV, "flit", "--debug", "build"]],
+        actions=[
+            lambda: [pprint.pprint(buildinfo), None][-1],
+            [*P.IN_ENV, "flit", "--debug", "build"],
+        ],
         targets=[P.WHEEL, P.SDIST],
     )
 
