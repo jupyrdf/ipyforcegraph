@@ -52,7 +52,6 @@ def _get_boolish(name, default="false"):
 CI = _get_boolish("CI")
 WIN_CI = _get_boolish("WIN_CI")
 TESTING_IN_CI = _get_boolish("TESTING_IN_CI")
-BUILDING_IN_CI = _get_boolish("BUILDING_IN_CI")
 IN_BINDER = _get_boolish("IN_BINDER")
 IN_RTD = _get_boolish("READTHEDOCS")
 PYTEST_ARGS = json.loads(os.environ.get("PYTEST_ARGS", "[]"))
@@ -129,7 +128,6 @@ SUBDIR_LOCK_SPECS = sorted(ENV_SPECS.glob("subdir-lock/*.yml"))
 
 EXPLICIT = "@EXPLICIT"
 LOCKS = GH / "locks"
-PIP_BUILD_ENV = GH / "requirements-build.txt"
 LOCKFILE = (
     LOCKS / f"{THIS_SUBDIR}_dev_{IPYFORCEGRAPH_LAB}_{IPYFORCEGRAPH_PY}.conda.lock"
 )
@@ -146,14 +144,10 @@ CONDA = shutil.which("conda") or shutil.which("conda.exe")
 CONDA_RUN = [CONDA, "run", "--live-stream", "--prefix"]
 MAMBA_CREATE = ["mamba", "create", "-y", "--prefix"]
 
-if BUILDING_IN_CI:
-    IN_ENV = []
-    HISTORY = PIP_BUILD_ENV
-else:
-    IN_ENV = [*CONDA_RUN, ENV]
-    IN_LOCK_ENV = [*CONDA_RUN, LOCK_ENV]
-    HISTORY = ENV / "conda-meta/history"
-    LOCK_HISTORY = LOCK_ENV / "conda-meta/history"
+IN_ENV = [*CONDA_RUN, ENV]
+IN_LOCK_ENV = [*CONDA_RUN, LOCK_ENV]
+HISTORY = ENV / "conda-meta/history"
+LOCK_HISTORY = LOCK_ENV / "conda-meta/history"
 
 # tools
 PY = ["python"]
