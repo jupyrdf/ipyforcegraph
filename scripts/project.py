@@ -197,6 +197,7 @@ JS_LIB = ROOT / "lib"
 TSBUILDINFO = BUILD / ".src.tsbuildinfo"
 JS_LIB_INDEX_JS = JS_LIB / "index.js"
 TS_SRC = ROOT / "js"
+TS_TOKENS = TS_SRC / "tokens.ts"
 STYLE = ROOT / "style"
 ALL_TSCONFIG = [
     ROOT / "tsconfigbase.json",
