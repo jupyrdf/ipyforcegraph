@@ -116,6 +116,9 @@ LITE_CONFIG = LITE / "jupyter_lite_config.json"
 IGNORED_VULNERABILITIES = ROOT / "ignored-vulnerabilities.json"
 PAGES_LITE = ROOT / "pages-lite"
 
+CACHE = BUILD / ".cache"
+BLACK_CACHE = CACHE / "black"
+PRETTIER_CACHE = CACHE / "prettier"
 
 # envs
 ALL_PLATFORMS = ["linux-64", "osx-64", "win-64"]
@@ -168,7 +171,14 @@ PREFLIGHT = [*PYM, "scripts.preflight"]
 LAB_EXT = ["jupyter", "labextension"]
 CONDA_BUILD = ["conda-build"]
 LAB = ["jupyter", "lab"]
-PRETTIER = [*JLPM, "--silent", "prettier"]
+PRETTIER = [
+    *JLPM,
+    "--silent",
+    "prettier",
+    "--cache",
+    "--cache-location",
+    PRETTIER_CACHE,
+]
 JUPYTERLAB_EXE = [*IN_ENV, "jupyter-lab", "--no-browser", "--debug"]
 
 # python stuff

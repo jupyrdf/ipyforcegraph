@@ -28,7 +28,7 @@ from scripts import reporter
 from scripts import utils as U
 
 os.environ.update(
-    BLACK_CACHE_DIR=str(P.BUILD / ".black"),
+    BLACK_CACHE_DIR=str(P.BLACK_CACHE),
     JUPYTER_PLATFORM_DIRS="1",
     MAMBA_NO_BANNER="1",
     NODE_OPTS="--max-old-space-size=4096",

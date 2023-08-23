@@ -52,14 +52,14 @@ select = [
   "W",
 ]
 ignore = ["E501"]
-cache-dir = "build/.ruff_cache"
+cache-dir = "build/.cache/ruff"
 
 [tool.ruff.isort]
 known-first-party = ["ipyforcegraph", "ipyforcegraph.*"]
 
 [tool.pytest.ini_options]
 junit_family = "xunit2"
-cache_dir = "build/.pytest_cache"
+cache_dir = "build/.cache/pytest"
 addopts = [
   "--pyargs",
   "ipyforcegraph",
@@ -108,7 +108,7 @@ exclude_lines = [
 ]
 
 [tool.mypy]
-cache_dir = "build/.mypy_cache"
+cache_dir = "build/.cache/mypy"
 sqlite_cache = true
 python_version = "3.8"
 # settings
