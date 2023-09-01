@@ -21,7 +21,7 @@ env:
   CONDA_EXE: mamba
   # our stuff
   SKIP_CONDA_PREFLIGHT: 1
-  CACHE_EPOCH: 16
+  CACHE_EPOCH: 17
   ATEST_RETRIES: 2
 
 jobs:
@@ -35,61 +35,31 @@ jobs:
         os: [ubuntu]
         py: ['3.11']
     steps:
+      - name: configure line endings
+        run: |
+          git config --global core.autocrlf false
+
       - name: git checkout
         uses: actions/checkout@v3
-
-      - name: setup (python)
-        uses: actions/setup-python@v4
         with:
-          python-version: ${{ matrix.py }}
-          architecture: x64
+          fetch-depth: 10
 
-      - name: setup (node)
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
+      - name: git info
+        run: |-
+          env | grep -iE "_(REF|SHA)"
 
-      - name: cache (pip)
-        uses: actions/cache@v3
+      - name: base env (conda)
+        uses: conda-incubator/setup-miniconda@v2
         with:
-          path: ~/.cache/pip
-          key: |
-            ${{ env.CACHE_EPOCH }}-${{ runner.os }}-pip-build-${{ hashFiles('.github/requirements-build.txt') }}
-          restore-keys: |
-            ${{ env.CACHE_EPOCH }}-${{ runner.os }}-pip-build-
-
-      - name: cache (node)
-        uses: actions/cache@v3
-        id: cache-node-modules
-        with:
-          path: '**/node_modules'
-          key: |
-            ${{ env.CACHE_EPOCH }}-${{ runner.os }}-node-build-${{ hashFiles('yarn.lock') }}
+          environment-file: .github/locks/linux-64_dev_lab3.6_py3.11.conda.lock
+          miniforge-variant: Mambaforge
+          use-mamba: true
 
       - name: cache (yarn)
         uses: actions/cache@v3
-        if: steps.cache-node-modules.outputs.cache-hit != 'true'
-        id: cache-yarn-packages
         with:
-          path: build/.yarn-packages
-          key: |
-            ${{ env.CACHE_EPOCH }}-yarn-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
-          restore-keys: |
-            ${{ env.CACHE_EPOCH }}-yarn-${{ runner.os }}-
-            ${{ env.CACHE_EPOCH }}-yarn-
-
-      - name: setup (pip)
-        run: pip install -U pip wheel setuptools
-
-      - name: setup (pip build)
-        run: pip install -U -v -r .github/requirements-build.txt
-
-      - name: check (pip)
-        run: |
-          set -eux
-          mkdir -p build/pip
-          pip freeze | tee build/pip/dist.pip.freeze
-          pip check
+          path: node_modules/
+          key: yarn-${{ runner.os }}-${{ hashFiles('yarn.lock', '.yarnrc') }}
 
       - name: build
         shell: bash -l {0}
@@ -106,6 +76,10 @@ jobs:
         with:
           name: ipyforcegraph-${{ github.run_number }}-dist
           path: ./dist
+
+      - name: Rename uncached conda packages
+        shell: bash
+        run: mv "${CONDA_PKGS_DIR}" "${CONDA_PKGS_DIR}_do_not_cache"
 
   lint:
     runs-on: ${{ matrix.os }}-latest
@@ -141,6 +115,8 @@ jobs:
 
       - name: git checkout
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 10
 
       - name: cache (yarn)
         uses: actions/cache@v3
@@ -272,6 +248,8 @@ jobs:
 
       - name: git checkout
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 10
 
       - name: env (conda)
         uses: conda-incubator/setup-miniconda@v2

@@ -6,7 +6,7 @@ requires = [
 
 [project]
 name = "ipyforcegraph"
-version = "0.4.0"
+version = "0.4.1"
 description = "2D and 3D force-directed graph widgets for Jupyter"
 readme = "README.md"
 authors = [
@@ -52,14 +52,14 @@ select = [
   "W",
 ]
 ignore = ["E501"]
-cache-dir = "build/.ruff_cache"
+cache-dir = "build/.cache/ruff"
 
 [tool.ruff.isort]
 known-first-party = ["ipyforcegraph", "ipyforcegraph.*"]
 
 [tool.pytest.ini_options]
 junit_family = "xunit2"
-cache_dir = "build/.pytest_cache"
+cache_dir = "build/.cache/pytest"
 addopts = [
   "--pyargs",
   "ipyforcegraph",
@@ -108,7 +108,7 @@ exclude_lines = [
 ]
 
 [tool.mypy]
-cache_dir = "build/.mypy_cache"
+cache_dir = "build/.cache/mypy"
 sqlite_cache = true
 python_version = "3.8"
 # settings
@@ -146,6 +146,16 @@ subtasks = true
 
 [tool.flit.sdist]
 include = ["src/_d"]
+exclude = [
+  ".binder/",
+  ".github/",
+  "atest/",
+  "docs/",
+  "dodo.py",
+  "examples/",
+  "lite/",
+  "pages-lite/",
+]
 
 [tool.flit.external-data]
 directory = "src/_d"
