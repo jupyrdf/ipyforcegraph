@@ -772,10 +772,13 @@ def task_watch():
     if P.TESTING_IN_CI:
         return
 
+    env = dict(os.environ)
+    env["IGNORE_MODULE_IDS"] = "1"
+
     return dict(
         uptodate=[lambda: False],
         file_dep=[P.OK_PREFLIGHT_LAB],
-        actions=[[*P.IN_ENV, "jlpm", "watch"]],
+        actions=[CmdAction([*P.IN_ENV, "jlpm", "watch"], shell=False, env=env)],
     )
 
 
