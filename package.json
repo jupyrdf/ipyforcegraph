@@ -21,13 +21,13 @@
   "scripts": {
     "bootstrap": "jlpm --prefer-offline --ignore-optional --ignore-scripts && jlpm clean && jlpm lint && jlpm build",
     "build": "jlpm build:ts && jlpm build:ext",
-    "build:ext": "jupyter labextension build --debug .",
+    "build:ext": "jupyter labextension build --debug . && prettier --write webpack.module.ids.json",
     "build:ts": "tsc -b js",
     "build:ts:cov": "tsc -b js/tsconfig.cov.json",
     "clean": "rimraf ./lib ./src/ipyforcegraph/_d",
     "deduplicate": "yarn-deduplicate -s fewer --fail",
     "lint": "jlpm lint:prettier",
-    "lint:prettier": "prettier-package-json --write package.json && prettier --cache --cache-location build/.cache/prettier --write --list-different \"*.{json,yml,md}\" \"{js,style,lite,src,.github,examples,docs,.binder}/**/*.{ts,tsx,js,jsx,css,json,md,yml,yaml}\"",
+    "lint:prettier": "prettier-package-json --write package.json && prettier --cache --cache-location build/.cache/prettier --write --list-different \"*.{json,yml,md,js}\" \"{js,style,lite,src,.github,examples,docs,.binder}/**/*.{ts,tsx,js,jsx,css,json,md,yml,yaml}\"",
     "watch": "run-p watch:lib watch:ext",
     "watch:ext": "jupyter labextension watch --debug .",
     "watch:lib": "jlpm build:ts --watch --preserveWatchOutput"
@@ -104,21 +104,6 @@
       "@jupyter-widgets/controls": {
         "bundled": false,
         "singleton": true
-      },
-      "d3-scale": {
-        "bundled": true
-      },
-      "d3-color": {
-        "bundled": true
-      },
-      "d3-scale-chromatic": {
-        "bundled": true
-      },
-      "buffer": {
-        "bundled": true
-      },
-      "nunjucks": {
-        "bundled": true
       }
     }
   },

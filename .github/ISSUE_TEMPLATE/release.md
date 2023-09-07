@@ -42,7 +42,7 @@ labels: maintenance
     - [ ] bump to next development version
     - [ ] bump the `CACHE_EPOCH`
     - [ ] rebuild nodejs locks
-      - [ ] `rm yarn.lock webpack.module.ids.lock`
+      - [ ] `rm yarn.lock webpack.module.ids.json`
       - [ ] `doit build || doit build`
       - [ ] commit the new locks
     - [ ] rebuild `.github/locks`
