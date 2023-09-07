@@ -66,7 +66,7 @@ jobs:
         run: |
           doit build || doit build
 
-      - name: build
+      - name: preflight release
         shell: bash -l {0}
         run: |
           doit preflight:release

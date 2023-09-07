@@ -43,7 +43,7 @@ https://conda.anaconda.org/conda-forge/linux-64/yaml-cpp-0.7.0-h27087fc_2.tar.bz
 https://conda.anaconda.org/conda-forge/linux-64/expat-2.5.0-hcb278e6_1.conda#8b9b5aca60558d02ddaa09d599e55920
 https://conda.anaconda.org/conda-forge/linux-64/libedit-3.1.20191231-he28a2e2_2.tar.bz2#4d331e44109e3f0e19b4cb8f9b82f3e1
 https://conda.anaconda.org/conda-forge/linux-64/libnghttp2-1.52.0-h61bc06f_0.conda#613955a50485812985c059e7b269f42e
-https://conda.anaconda.org/conda-forge/linux-64/libsolv-0.7.24-hfc55251_3.conda#702feab0e98333ef3eac0d948c605c2d
+https://conda.anaconda.org/conda-forge/linux-64/libsolv-0.7.24-hfc55251_4.conda#fa38466ceac33e6cc5341adf41b21847
 https://conda.anaconda.org/conda-forge/linux-64/libsqlite-3.43.0-h2797004_0.conda#903fa782a9067d5934210df6d79220f6
 https://conda.anaconda.org/conda-forge/linux-64/libssh2-1.11.0-h0841786_0.conda#1f5a58e686b13bcfde88b93f547d23fe
 https://conda.anaconda.org/conda-forge/linux-64/libxml2-2.11.5-h232c23b_1.conda#f3858448893839820d4bcfb14ad3ecdf
@@ -106,7 +106,7 @@ https://conda.anaconda.org/conda-forge/noarch/annotated-types-0.5.0-pyhd8ed1ab_0
 https://conda.anaconda.org/conda-forge/linux-64/brotlipy-0.7.0-py311hd4cff14_1005.tar.bz2#9bdac7084ecfc08338bae1b976535724
 https://conda.anaconda.org/conda-forge/linux-64/cryptography-41.0.3-py311h63ff55d_0.conda#cc8ad641cab65dfe59caddbc23a1aeca
 https://conda.anaconda.org/conda-forge/noarch/doit-0.36.0-pyhd8ed1ab_0.tar.bz2#fc5e53d070f1ee7bb38c2ece282dcb82
-https://conda.anaconda.org/conda-forge/noarch/gitpython-3.1.33-pyhd8ed1ab_0.conda#2ac4baf2f8c74a8a45a29e54138301af
+https://conda.anaconda.org/conda-forge/noarch/gitpython-3.1.35-pyhd8ed1ab_0.conda#e434463858a6060d5424d95fbd5fa2b8
 https://conda.anaconda.org/conda-forge/noarch/importlib_metadata-6.8.0-hd8ed1ab_0.conda#b279b07ce18058034e5b3606ba103a8b
 https://conda.anaconda.org/conda-forge/linux-64/libmambapy-1.4.2-py311h1f88262_0.conda#178d22489c16ff3eefe33330ec9ccec9
 https://conda.anaconda.org/conda-forge/noarch/platformdirs-3.10.0-pyhd8ed1ab_0.conda#0809187ef9b89a3d94a5c24d13936236
