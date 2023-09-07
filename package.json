@@ -67,6 +67,7 @@
     "@jupyterlab/theme-dark-extension": "3",
     "@jupyterlab/theme-light-extension": "3",
     "@trivago/prettier-plugin-sort-imports": "^4.0.0",
+    "@types/d3-color": "^3.1.0",
     "@types/d3-force": "^3.0.4",
     "@types/d3-scale": "^4.0.3",
     "@types/d3-scale-chromatic": "^3.0.0",
@@ -102,6 +103,15 @@
       "@jupyter-widgets/controls": {
         "bundled": false,
         "singleton": true
+      },
+      "d3-scale": {
+        "bundled": true
+      },
+      "d3-color": {
+        "bundled": true
+      },
+      "d3-scale-chromatic": {
+        "bundled": true
       },
       "buffer": {
         "bundled": true

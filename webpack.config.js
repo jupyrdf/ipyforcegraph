@@ -1,5 +1,13 @@
 const SyncModuleIdsPlugin = require('webpack/lib/ids/SyncModuleIdsPlugin');
 
+let plugins = [];
+
+if(!process.env.IGNORE_MODULE_IDS) {
+  plugins.push(
+    new SyncModuleIdsPlugin({path: 'webpack.module.ids.lock'})
+  )
+}
+
 module.exports = {
   output: {
     clean: true,
@@ -10,9 +18,6 @@ module.exports = {
       buffer: require.resolve('buffer/'),
     },
   },
-  plugins: [
-    new SyncModuleIdsPlugin({path: 'webpack.module.ids.lock'})
-  ],
   module: {
     rules: [
       {
@@ -28,4 +33,5 @@ module.exports = {
     ],
   },
   ignoreWarnings: [/Failed to parse source map/],
+  plugins
 };

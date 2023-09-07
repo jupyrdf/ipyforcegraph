@@ -75,6 +75,8 @@ class ContinuousColor(Column):
         help=("the ``[min, max]`` to map to the scale's colors"),
     ).tag(sync=True)
 
+    tint: float = T.Float(0).tag(sync=True)
+
     @T.validate("scheme")
     def _validate_scheme(self, proposal: T.Bunch) -> Any:
         return validate_enum(proposal, ContinuousColor.Scheme)
@@ -113,6 +115,8 @@ class OrdinalColor(Column):
     range: Tuple[str] = W.TypedTuple(
         T.Unicode(), help="the colors available in a scheme (overloaded by ``scheme``)"
     ).tag(sync=True)
+
+    tint: float = T.Float(0).tag(sync=True)
 
     @T.validate("scheme")
     def _validate_scheme(self, proposal: T.Bunch) -> Any:
