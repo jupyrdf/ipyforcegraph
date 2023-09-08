@@ -22,6 +22,7 @@
 #   - pip
 #   - pytest-asyncio
 #   - pytest-cov
+#   - pytest-github-actions-annotate-failures
 #   - pytest-html
 #   - pytest-json-report
 #   - pytest-xdist
@@ -177,7 +178,7 @@ https://conda.anaconda.org/conda-forge/noarch/overrides-7.4.0-pyhd8ed1ab_0.conda
 https://conda.anaconda.org/conda-forge/noarch/pexpect-4.8.0-pyh1a96a4e_2.tar.bz2#330448ce4403cc74990ac07c555942a1
 https://conda.anaconda.org/conda-forge/noarch/pip-23.2.1-pyhd8ed1ab_0.conda#e2783aa3f9235225eec92f9081c5b801
 https://conda.anaconda.org/conda-forge/noarch/py2vega-0.6.1-pyhd8ed1ab_0.tar.bz2#07594783f950301f5943e6d080ffb4eb
-https://conda.anaconda.org/conda-forge/noarch/pytest-7.4.1-pyhd8ed1ab_0.conda#003aaefc025d902eec9ed8118e76ace7
+https://conda.anaconda.org/conda-forge/noarch/pytest-7.4.2-pyhd8ed1ab_0.conda#6dd662ff5ac9a783e5c940ce9f3fe649
 https://conda.anaconda.org/conda-forge/noarch/python-dateutil-2.8.2-pyhd8ed1ab_0.tar.bz2#dd999d1cc9f79e67dbb855c8924c7984
 https://conda.anaconda.org/conda-forge/noarch/referencing-0.30.2-pyhd8ed1ab_0.conda#a33161b983172ba6ef69d5fc850650cd
 https://conda.anaconda.org/conda-forge/noarch/rfc3339-validator-0.1.4-pyhd8ed1ab_0.tar.bz2#fed45fc5ea0813240707998abe49f520
@@ -199,6 +200,7 @@ https://conda.anaconda.org/conda-forge/linux-64/pandas-1.5.3-py38hdc8b05c_1.cond
 https://conda.anaconda.org/conda-forge/noarch/platformdirs-3.8.1-pyhd8ed1ab_0.conda#e76070baecfaca6ecdb5fbd5af7c9309
 https://conda.anaconda.org/conda-forge/noarch/pytest-asyncio-0.21.1-pyhd8ed1ab_0.conda#c8fd31da9b1059c4440f31f6ab4d620c
 https://conda.anaconda.org/conda-forge/noarch/pytest-cov-4.1.0-pyhd8ed1ab_0.conda#06eb685a3a0b146347a58dda979485da
+https://conda.anaconda.org/conda-forge/noarch/pytest-github-actions-annotate-failures-0.2.0-pyhd8ed1ab_0.conda#6b2301fcbe775f2406e74724066e0690
 https://conda.anaconda.org/conda-forge/noarch/pytest-metadata-3.0.0-pyhd8ed1ab_1.conda#8bdcc0f401561213821bf67513abeeff
 https://conda.anaconda.org/conda-forge/noarch/pytest-xdist-3.3.1-pyhd8ed1ab_0.conda#816073bb54ef59f33f0f26c14f88311b
 https://conda.anaconda.org/conda-forge/noarch/requests-2.31.0-pyhd8ed1ab_0.conda#a30144e4156cdbb236f99ebb49828f8b
@@ -240,7 +242,7 @@ https://conda.anaconda.org/conda-forge/noarch/ipylab-1.0.0-pyhd8ed1ab_0.conda#44
 https://conda.anaconda.org/conda-forge/noarch/jupyterlab_server-2.24.0-pyhd8ed1ab_0.conda#327bfe1c99154f02259d29810bd70afc
 https://conda.anaconda.org/conda-forge/noarch/nbconvert-7.8.0-pyhd8ed1ab_0.conda#43bce95e8c474dd21d7ed5de8b4806f7
 https://conda.anaconda.org/conda-forge/noarch/notebook-shim-0.2.3-pyhd8ed1ab_0.conda#67e0fe74c156267d9159e9133df7fd37
-https://conda.anaconda.org/conda-forge/noarch/ipydatagrid-1.1.16-pyhd8ed1ab_0.conda#0fbc366d2693efe3d34c76b484064549
+https://conda.anaconda.org/conda-forge/noarch/ipydatagrid-1.2.0-pyhd8ed1ab_0.conda#392f422078302f2e754ef2b33dc1db07
 https://conda.anaconda.org/conda-forge/noarch/nbclassic-1.0.0-pyhb4ecaf3_1.conda#a0be31e9bd84d6eae87cdbf74c56b90b
 https://conda.anaconda.org/conda-forge/noarch/notebook-6.5.5-pyha770c72_0.conda#8d16cafe40b210e554a83cdc2304360d
 https://conda.anaconda.org/conda-forge/noarch/jupyterlab-3.5.3-pyhd8ed1ab_0.conda#69f71bc3d176b3ad3d9564a32bd049b8

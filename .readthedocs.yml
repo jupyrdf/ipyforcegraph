@@ -9,7 +9,7 @@ build:
       - doit list
       - doit setup
       - doit list
-      - doit build
+      - doit build || doit build || cat /tmp/jupyterlab-*.log && exit 1
       - doit list
       - doit lite
       - doit list

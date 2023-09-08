@@ -33,6 +33,7 @@ dependencies:
   - pydata-sphinx-theme
   - pytest-asyncio
   - pytest-cov
+  - pytest-github-actions-annotate-failures
   - pytest-html
   - pytest-json-report
   - pytest-xdist
