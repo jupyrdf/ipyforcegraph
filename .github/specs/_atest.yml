@@ -1,6 +1,7 @@
 dependencies:
   - firefox =115
   - geckodriver
+  - pillow
   - robotframework-jupyterlibrary >=0.5.0
   - robotframework-pabot
   - robotframework-robocop
