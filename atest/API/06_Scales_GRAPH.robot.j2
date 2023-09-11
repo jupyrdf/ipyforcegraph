@@ -30,13 +30,21 @@ Scale Works As Expected
     Set Up Scale Example    ${widget_class}    ${scale_class}    ${scheme}
     ${frame} =   Set Variable   css:${IPYFORCEGRAPH FRAME}
     ${transparent} =    Get Element Screenshot Size    ${frame}  ${screens}    01-transparent.png
-    Add And Run JupyterLab Code Cell
-    ...    ns.color = scale
-    Wait For All Cells To Run
-    Sleep    1s
-    ${color} =   Get Element Screenshot Size    ${frame}    ${screens}    02-scale.png
-    Should Be True Or Screenshot    ${color} > ${transparent}  03-scale-bigger-than-transparent.png
+    Adjust Scale   ${frame}   ${screens}   ${transparent}   02-scale
+    ...   ns.color = scale
+    Adjust Scale   ${frame}   ${screens}   ${transparent}   03-colorize
+    ...   ns.color = colorize
+    Adjust Scale   ${frame}   ${screens}   ${transparent}   04-tint
+    ...   ns.color = tint
     [Teardown]    Clean Up Scale Example
+
+Adjust Scale
+    [Arguments]  ${frame}   ${screens}   ${transparent}   ${screen_name}     ${code}
+    Add And Run JupyterLab Code Cell   ${code}
+    Wait For All Cells To Run
+    Sleep    2s
+    ${screen} =   Get Element Screenshot Size    ${frame}    ${screens}    ${screen_name}.png
+    Should Be True Or Screenshot    ${screen} > ${transparent}  ${screen_name}-bigger-than-transparent.png
 
 Set Up Scale Example
     [Arguments]    ${widget_class}    ${scale_class}    ${scheme}
