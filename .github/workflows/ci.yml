@@ -178,10 +178,20 @@ jobs:
         run: |
           xvfb-run --auto-servernum doit -n4 test || xvfb-run --auto-servernum doit test || exit 1
 
-      - name: report (coverage)
+      - name: report (atest JS coverage)
         shell: bash -l {0}
         run: |
-          doit -n8 coverage && doit -n8 coverage
+          doit coverage:atest:js || doit coverage:atest:js
+
+      - name: report (atest Python coverage)
+        shell: bash -l {0}
+        run: |
+          doit coverage:atest:py || doit coverage:atest:py
+
+      - name: report (all Python coverage)
+        shell: bash -l {0}
+        run: |
+          doit coverage:all || doit coverage:all
 
       - name: upload (coverage)
         if: always()

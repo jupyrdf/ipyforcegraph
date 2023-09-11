@@ -51,6 +51,7 @@ def _get_boolish(name, default="false"):
 
 
 CI = _get_boolish("CI")
+GITHUB_STEP_SUMMARY = os.environ.get("GITHUB_STEP_SUMMARY")
 WIN_CI = _get_boolish("WIN_CI")
 TESTING_IN_CI = _get_boolish("TESTING_IN_CI")
 IN_BINDER = _get_boolish("IN_BINDER")
