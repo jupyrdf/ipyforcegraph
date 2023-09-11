@@ -5,6 +5,7 @@
 
 import difflib
 import json
+import os
 import re
 import shutil
 import subprocess
@@ -390,18 +391,35 @@ def atest_cov_js():
     with tempfile.TemporaryDirectory() as td:
         for js_cov in all_js_cov:
             shutil.copy2(js_cov, Path(td) / js_cov.name)
+
+        report_args = [
+            "jlpm",
+            "--silent",
+            "nyc",
+            "report",
+            f"--temp-dir={td}",
+        ]
+
+        GITHUB_STEP_SUMMARY = os.environ.get("GITHUB_STEP_SUMMARY")
+
+        if GITHUB_STEP_SUMMARY:
+            summary = Path(GITHUB_STEP_SUMMARY)
+            if not summary.parent.exists():
+                summary.parent.mkdir(exist_ok=True)
+            out = subprocess.check_output([*report_args, "--reporter=text"], **P.UTF8)
+            summary.write_text("\n".join(out.strip().splitlines()[1:-1]))
+            print(f"Wrote JS coverage summary to {GITHUB_STEP_SUMMARY}")
+
         rc = subprocess.call(
             [
-                "jlpm",
-                "nyc",
-                "report",
+                *report_args,
                 f"--report-dir={P.ATEST_COV_JS}",
-                f"--temp-dir={td}",
                 "--check-coverage",
                 f"--lines={P.JS_COV_LINE_THRESHOLD}",
                 f"--branches={P.JS_COV_BRANCH_THRESHOLD}",
             ]
         )
+
     return rc == 0
 
 
