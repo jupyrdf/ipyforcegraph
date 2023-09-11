@@ -109,17 +109,18 @@ const SPACES = {
   cubehelix: ['h', 's', 'l', 'opacity'],
 };
 
-const OPT_KEYS = ['space', 'r', 'g', 'b', 'l', 'a', 'b', 'h', 's', 'l', 'opacity'];
+const OPT_KEYS = ['space', 'r', 'g', 'b', 'a', 'h', 's', 'l', 'c', 'opacity'];
 
 interface ISpaceOptions {
   space: keyof typeof SPACES;
+  a: number | null;
+  b: number | null;
+  c: number | null;
+  g: number | null;
   h: number | null;
-  s: number | null;
   l: number | null;
   r: number | null;
-  b: number | null;
-  g: number | null;
-  a: number | null;
+  s: number | null;
   opacity: number | null;
 }
 

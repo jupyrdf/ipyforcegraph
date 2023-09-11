@@ -95,13 +95,14 @@ class Colorize(WrapperBase):
         help="name of a ``d3-color`` color space",
     ).tag(sync=True)
 
+    a: float = _make_color_channel("a*")
+    b: float = _make_color_channel("blue (or ``b*``)")
+    c: float = _make_color_channel("chroma")
+    g: float = _make_color_channel("green")
     h: float = _make_color_channel("hue")
-    s: float = _make_color_channel("saturation")
     l: float = _make_color_channel("luminance (or lightness)")  # noqa: E741
     r: float = _make_color_channel("red")
-    b: float = _make_color_channel("blue (or ``b*``)")
-    g: float = _make_color_channel("green")
-    a: float = _make_color_channel("a*")
+    s: float = _make_color_channel("saturation")
     opacity: float = _make_color_channel("opacity")
 
     @T.validate("space")
