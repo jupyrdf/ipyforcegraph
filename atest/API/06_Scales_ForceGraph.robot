@@ -7,6 +7,7 @@ Resource        ../_resources/keywords/Screenshots.robot
 Library         Collections
 Library         JupyterLibrary
 Library         OperatingSystem
+Library         ../_libraries/Colors.py
 
 Force Tags      suite:scales
 
@@ -26,27 +27,32 @@ OrdinalColor Can Update ForceGraph Nodes
 *** Keywords ***
 Scale Works As Expected
     [Arguments]    ${widget_class}    ${scale_class}    ${scheme}
-    ${screens} =    Set Variable    ${SCREENS}${/}${widget_class.lower()}_${scale_class}
+    ${screens} =    Set Variable    ${SCREENS}${/}${widget_class.lower()}_${scale_class.lower()}
     Maybe Skip A Test    widget_class=${widget_class}    feature=${scale_class}
     Set Screenshot Directory    ${screens}
     Set Up Scale Example    ${widget_class}    ${scale_class}    ${scheme}
     ${frame} =    Set Variable    css:${IPYFORCEGRAPH FRAME}
     ${transparent} =    Get Element Screenshot Size    ${frame}    ${screens}    01-transparent.png
-    Adjust Scale    ${frame}    ${screens}    ${transparent}    02-scale
+    Adjust Scale    ${frame}    ${screens}    ${transparent}    ${EMPTY}    02-scale
     ...    ns.color = scale
-    Adjust Scale    ${frame}    ${screens}    ${transparent}    03-colorize
+    Adjust Scale    ${frame}    ${screens}    ${transparent}    02-scale    03-colorize
     ...    ns.color = colorize
-    Adjust Scale    ${frame}    ${screens}    ${transparent}    04-tint
+    Adjust Scale    ${frame}    ${screens}    ${transparent}    03-colorize    04-tint
     ...    ns.color = tint
     [Teardown]    Clean Up Scale Example
 
 Adjust Scale
-    [Arguments]    ${frame}    ${screens}    ${transparent}    ${screen_name}    ${code}
+    [Arguments]    ${frame}    ${screens}    ${transparent}    ${old_colors}    ${screen_name}    ${code}
     Add And Run JupyterLab Code Cell    ${code}
     Wait For All Cells To Run
     Sleep    2s
-    ${screen} =    Get Element Screenshot Size    ${frame}    ${screens}    ${screen_name}.png
-    Should Be True Or Screenshot    ${screen} > ${transparent}    ${screen_name}-bigger-than-transparent.png
+    ${screen_size} =    Get Element Screenshot Size    ${frame}    ${screens}    ${screen_name}.png
+    Should Be True Or Screenshot    ${screen_size} > ${transparent}    ${screen_name}-bigger-than-transparent.png
+    IF    "${old_colors}"
+        Color Palettes Should Be_Different
+        ...    ${screens}${/}${old_colors}.png
+        ...    ${screens}${/}${screen_name}.png
+    END
 
 Set Up Scale Example
     [Arguments]    ${widget_class}    ${scale_class}    ${scheme}
