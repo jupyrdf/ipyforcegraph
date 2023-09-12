@@ -1,4 +1,5 @@
 dependencies:
+  - hypothesis
   - importnb
   - ipydatagrid
   - ipylab >=0.7.0
