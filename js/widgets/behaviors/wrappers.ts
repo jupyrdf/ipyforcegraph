@@ -23,7 +23,7 @@ export class WrapperModel extends DynamicModel {
     this.wrappedChanged();
   }
 
-  get wrapped(): DynamicModel {
+  get wrapped(): DynamicModel | WrapperModel {
     return this.get('wrapped');
   }
 

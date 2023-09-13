@@ -4,9 +4,15 @@
 
 ### `ipyforcegraph 0.4.1`
 
-- adds `Tint` and `Colorize` wrappers to fine-tune color channels (and opactiy)
+- adds `Tint` and `Colorize` wrappers to fine-tune color channels (and opacity)
+- all wrappers have a convenience `root` property (_not_ trait), which returns the final
+  feature which would change a graph (e.g. `NodeShapes`)
+  - care should be taken to avoid cycles of `.wrapped` wrappers: these will crash the
+    renderer
 
 ### `@jupyrdf/jupyter-forcegraph 0.4.1`
+
+- updated to `force-graph 1.43.3` and `3d-force-graph 1.72.3`
 
 ## `0.4.0`
 

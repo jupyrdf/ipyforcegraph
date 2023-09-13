@@ -22,17 +22,19 @@ EXTENSION_SPEC_VERSION = (
 
 #: columns used internally by ``force-graph`` which should not be overloaded
 RESERVED_COLUMNS = {
-    "x",
-    "y",
-    "z",
+    "__controlPoints",
+    "__indexColor",
+    "fx",
+    "fy",
+    "id",
+    "source",
+    "target",
     "vx",
     "vy",
     "vz",
-    "__indexColor",
-    "__controlPoints",
-    "source",
-    "target",
-    "id",
+    "x",
+    "y",
+    "z",
 }
 
 __all__ = ["__version__", "EXTENSION_NAME", "EXTENSION_SPEC_VERSION"]
