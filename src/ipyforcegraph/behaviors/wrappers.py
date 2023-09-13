@@ -38,12 +38,39 @@ class WrapperBase(ForceBase):
             T.Int(),
             T.Bool(),
         ],
-        help="the ``DynamicValue``, ``WrapperBase``, or string wrapped by this wrapper",
+        help="the ``DynamicValue``, ``WrapperBase``, or static value wrapped by this wrapper",
     ).tag(sync=True, **W.widget_serialization)
 
     def __init__(self, wrapped: TAnyWrapped, **kwargs: Any):
         kwargs["wrapped"] = wrapped
         super().__init__(**kwargs)
+
+    @T.validate("wrapped")
+    def _validate_wrapped(self, proposal: T.Bunch) -> TAnyWrapped:
+        """Ensure a wrapper does not contain a trivial cycle."""
+        candidate: TAnyWrapped = proposal.value
+        if candidate == self:
+            raise T.TraitError(f"{self.__class__.__name__} cannot wrap itself")
+        return candidate
+
+    @property
+    def root(self) -> TAnyWrapped:
+        """Get the final value wrapped by this wrapper and all its wrapped values."""
+        root = self.wrapped
+        seen = [root]
+        while isinstance(root, WrapperBase):
+            if root.wrapped in seen:
+                msg = f"Cycle in wrappers {root.wrapped} in {seen}"
+                raise ValueError(msg)
+            root = root.wrapped
+            seen += [root]
+        return root
+
+    def __repr__(self) -> str:
+        wrapped_id = (
+            self.wrapped.comm.comm_id if hasattr(self.wrapped, "comm") else self.wrapped
+        )
+        return f"{self.__class__.__name__}({self.comm.comm_id[5:]}, wrapped={wrapped_id[5:]})"
 
 
 class CaptureAs(WrapperBase):
