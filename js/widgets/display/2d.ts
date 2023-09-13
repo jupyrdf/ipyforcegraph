@@ -165,8 +165,8 @@ export class ForceGraphModel extends DOMWidgetModel {
 
     let forceBehaviors: GraphForcesModel[] = [];
     for (const behavior of behaviors) {
-      if (behavior instanceof GraphForcesModel) {
-        forceBehaviors.push(behavior);
+      if ((behavior as any)?.forces) {
+        forceBehaviors.push(behavior as GraphForcesModel);
       }
     }
     this._forceBehaviors = forceBehaviors.sort(this.compareRank);
@@ -486,7 +486,7 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
 
     for (const behavior of this.model.behaviors) {
       // TOOD: remove the any
-      if ((behavior as any).ensureFacets) {
+      if ((behavior as any)?.ensureFacets) {
         facetPromises.push((behavior as any).ensureFacets());
       }
     }
@@ -517,11 +517,11 @@ export class ForceGraphView<T = ForceGraphGenericInstance<ForceGraphInstance>>
   }
 
   protected async maybeEvaluate(facet: string | WrapperModel): Promise<string> {
-    if (facet instanceof WrapperModel) {
-      await facet.ensureHandlers();
-      return facet.nodeHandler();
+    if ((facet as any)?.ensureHandlers) {
+      await (facet as WrapperModel).ensureHandlers();
+      return (facet as WrapperModel).nodeHandler();
     }
-    return facet;
+    return facet as string;
   }
 
   protected async postUpdate(caller?: any, kind?: TUpdateKind): Promise<void> {

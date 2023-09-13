@@ -33,23 +33,6 @@ XP_JUPYTER_STDERR = """//*[@data-mime-type="application/vnd.jupyter.stderr"]"""
 XP_BAD_XREF = """//code[contains(@class, "xref")][not(parent::a)]"""
 
 
-def strip_timestamps(*paths, slug="TIMESTAMP"):
-    """replace timestamps with a less churn-y value"""
-    for path in paths:
-        if not path.exists():
-            continue
-
-        text = original_text = path.read_text(**P.UTF8)
-
-        for pattern in PATTERNS:
-            if not re.findall(pattern, text):
-                continue
-            text = re.sub(pattern, slug, text)
-
-        if text != original_text:
-            path.write_text(text, **P.UTF8)
-
-
 def replace_between_patterns(src: Path, dest: Path, pattern: str):
     """replace the dest file between patterns"""
     print(src, dest)
@@ -397,6 +380,14 @@ def pip_check():
     return not error_lines
 
 
+def write_github_summary(summary_text: str) -> None:
+    summary = Path(P.GITHUB_STEP_SUMMARY)
+    if not summary.parent.exists():
+        summary.parent.mkdir(exist_ok=True)
+    summary.write_text(summary_text, **P.UTF8)
+    print(f"... wrote to {P.GITHUB_STEP_SUMMARY}")
+
+
 def atest_cov_js():
     all_js_cov = sorted(P.ATEST_OUT.glob("*/jscov/*.json"))
 
@@ -407,18 +398,47 @@ def atest_cov_js():
     with tempfile.TemporaryDirectory() as td:
         for js_cov in all_js_cov:
             shutil.copy2(js_cov, Path(td) / js_cov.name)
+
+        report_args = [
+            "jlpm",
+            "--silent",
+            "nyc",
+            "report",
+            f"--temp-dir={td}",
+        ]
+
+        if P.GITHUB_STEP_SUMMARY:
+            out = subprocess.check_output([*report_args, "--reporter=text"], **P.UTF8)
+            trimmed = "\n".join(out.strip().splitlines()[1:-1]).replace("-|", "-:|")
+            summary_text = trimmed
+            out = subprocess.check_output(
+                [*report_args, "--reporter=text-summary"], **P.UTF8
+            )
+            summary_text += "\n\n"
+            summary_text += "Metric | Percent | Covered | Total |\n-:|-:|-:|-:|\n"
+            for line in out.splitlines():
+                if ":" in line:
+                    summary_text += (
+                        line.replace(":", "|")
+                        .replace("(", "|")
+                        .replace(")", "")
+                        .replace("%", "")
+                        .replace("/", " | ")
+                        + "\n"
+                    )
+
+            write_github_summary(summary_text)
+
         rc = subprocess.call(
             [
-                "jlpm",
-                "nyc",
-                "report",
+                *report_args,
                 f"--report-dir={P.ATEST_COV_JS}",
-                f"--temp-dir={td}",
                 "--check-coverage",
                 f"--lines={P.JS_COV_LINE_THRESHOLD}",
                 f"--branches={P.JS_COV_BRANCH_THRESHOLD}",
             ]
         )
+
     return rc == 0
 
 
@@ -474,16 +494,22 @@ def all_cov():
             ],
             cwd=td,
         )
+        report_args = [
+            "coverage",
+            "report",
+            "--show-missing",
+            "--skip-covered",
+        ]
+
         rc = subprocess.call(
-            [
-                "coverage",
-                "report",
-                "--show-missing",
-                "--skip-covered",
-                f"--fail-under={P.ALL_PY_COV_THRESHOLD}",
-            ],
+            [*report_args, f"--fail-under={P.ALL_PY_COV_THRESHOLD}"],
             cwd=td,
         )
+
+        if P.GITHUB_STEP_SUMMARY:
+            out = subprocess.check_output([*report_args, "--format=markdown"], **P.UTF8)
+            write_github_summary(out.strip())
+
     return rc == 0
 
 

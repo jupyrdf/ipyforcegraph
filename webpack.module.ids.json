@@ -1,0 +1,8 @@
+{
+  "./lib/plugin.js": 8709,
+  "./lib/template-utils.js": 3295,
+  "./lib/theme-utils.js": 4784,
+  "./lib/tokens.js": 9187,
+  "./lib/widgets/serializers/dataframe.js": 132,
+  "./lib/widgets/serializers/widget.js": 22
+}

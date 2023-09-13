@@ -7,6 +7,8 @@
 # maybe remove after https://github.com/ipython/comm/pull/13
 import ipykernel.ipkernel  # noqa
 
+import os
+
 import platform
 import sys
 
@@ -37,7 +39,9 @@ else:
 
 WIN = platform.system() == "Windows"
 THREE_EIGHT = sys.version_info < (3, 9)
-
+MAX_HYPOTHESIS_EXAMPLES = os.environ.get("MAX_HYPOTHESIS_EXAMPLES")
+if MAX_HYPOTHESIS_EXAMPLES is not None:
+    MAX_HYPOTHESIS_EXAMPLES = int(MAX_HYPOTHESIS_EXAMPLES)
 
 TSubclassSet = Set[Type[W.Widget]]
 TSubclassData = Dict[Type[W.Widget], str]

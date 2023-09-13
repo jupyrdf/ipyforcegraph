@@ -11,6 +11,7 @@
 # Distributed under the terms of the Modified BSD License.
 
 import os
+import pprint
 import subprocess
 
 from doit import create_after
@@ -27,7 +28,7 @@ from scripts import reporter
 from scripts import utils as U
 
 os.environ.update(
-    BLACK_CACHE_DIR=str(P.BUILD / ".black"),
+    BLACK_CACHE_DIR=str(P.BLACK_CACHE),
     JUPYTER_PLATFORM_DIRS="1",
     MAMBA_NO_BANNER="1",
     NODE_OPTS="--max-old-space-size=4096",
@@ -114,7 +115,6 @@ def task_preflight():
 
     yield _ok(
         dict(
-            uptodate=[config_changed({"commit": P.COMMIT})],
             name="conda",
             doc="ensure the conda envs have a chance of working",
             file_dep=file_dep,
@@ -391,7 +391,7 @@ def task_build():
         name="ext",
         uptodate=[config_changed({"TOTAL_COVERAGE": P.TOTAL_COVERAGE})],
         actions=[[*P.IN_ENV, *P.JLPM, "build:ext"]],
-        file_dep=[P.TSBUILDINFO, P.JS_LIB_INDEX_JS, *P.ALL_CSS],
+        file_dep=[P.TSBUILDINFO, P.JS_LIB_INDEX_JS, *P.ALL_CSS, P.WEBPACK_CONFIG],
         targets=[P.PY_PACKAGE_JSON],
     )
 
@@ -405,11 +405,20 @@ def task_build():
         targets=[P.NPM_TGZ],
     )
 
+    buildinfo = dict(
+        SOURCE_DATE_EPOCH=P.SOURCE_DATE_EPOCH,
+        COMMIT=P.COMMIT,
+        GITHUB_REF=P.GITHUB_REF,
+    )
+
     yield dict(
         name="py",
-        uptodate=[config_changed(dict(SOURCE_DATE_EPOCH=P.SOURCE_DATE_EPOCH))],
+        uptodate=[config_changed(buildinfo)],
         file_dep=py_dep,
-        actions=[[*P.IN_ENV, "flit", "--debug", "build"]],
+        actions=[
+            lambda: [pprint.pprint(buildinfo), None][-1],
+            [*P.IN_ENV, "flit", "--debug", "build"],
+        ],
         targets=[P.WHEEL, P.SDIST],
     )
 
@@ -428,6 +437,8 @@ def task_pytest():
         "pytest",
         f"--cov-fail-under={P.PYTEST_COV_THRESHOLD}",
         f"--json-report-file={P.PYTEST_JSON}",
+        "--hypothesis-show-statistics",
+        "--hypothesis-explain",
     ]
 
     if P.UTEST_PROCESSES:
@@ -439,7 +450,7 @@ def task_pytest():
     yield dict(
         name="utest",
         doc="run unit tests with pytest",
-        uptodate=[config_changed(dict(COMMIT=P.COMMIT, args=P.PYTEST_ARGS))],
+        uptodate=[config_changed(dict(args=P.PYTEST_ARGS))],
         file_dep=[*P.ALL_PY_SRC, P.PY_PROJ, P.OK_PIP_INSTALL],
         targets=[
             P.UTEST_COV_INDEX,
@@ -452,9 +463,6 @@ def task_pytest():
             (U.clean_some, [P.UTEST_COV]),
             (create_folder, [P.UTEST_COV]),
             utest_args,
-            lambda: U.strip_timestamps(
-                *P.UTEST_COV_INDEX.rglob("*.html"), P.PYTEST_HTML, slug=P.COMMIT
-            ),
         ],
     )
 
@@ -766,10 +774,13 @@ def task_watch():
     if P.TESTING_IN_CI:
         return
 
+    env = dict(os.environ)
+    env["IGNORE_MODULE_IDS"] = "1"
+
     return dict(
         uptodate=[lambda: False],
         file_dep=[P.OK_PREFLIGHT_LAB],
-        actions=[[*P.IN_ENV, "jlpm", "watch"]],
+        actions=[CmdAction([*P.IN_ENV, "jlpm", "watch"], shell=False, env=env)],
     )
 
 

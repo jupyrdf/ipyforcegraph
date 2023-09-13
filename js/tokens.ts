@@ -16,12 +16,13 @@ import type { ISignal } from '@lumino/signaling';
 
 import type { DOMWidgetView, WidgetModel } from '@jupyter-widgets/base';
 
-import PKG from '../package.json';
-
 import type { ForceGraphModel } from './widgets';
 
-export const NAME = PKG.name;
-export const VERSION = PKG.version;
+// previously these were sourced from `package.json`, but this creates
+// unreproducible webpack outputs
+export const NAME = '@jupyrdf/jupyter-forcegraph';
+export const VERSION = '0.4.1';
+
 export const EMOJI = '🕸️';
 export const DEBUG = window.location.href.includes('FORCEGRAPH_DEBUG');
 
