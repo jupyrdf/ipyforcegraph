@@ -73,7 +73,6 @@ addopts = [
   "--cov-context=test",
   # coverage
   "--cov=ipyforcegraph",
-  "--no-cov-on-fail",
   # for robots
   "--junitxml=build/reports/pytest.xunit.xml",
   "--json-report",

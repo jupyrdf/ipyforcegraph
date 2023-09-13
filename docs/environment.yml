@@ -9,6 +9,7 @@ dependencies:
   - doit-with-toml
   - flit >=3.9.0,<4
   - git
+  - hypothesis
   - importnb
   - ipydatagrid
   - ipylab >=0.7.0

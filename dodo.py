@@ -437,6 +437,8 @@ def task_pytest():
         "pytest",
         f"--cov-fail-under={P.PYTEST_COV_THRESHOLD}",
         f"--json-report-file={P.PYTEST_JSON}",
+        "--hypothesis-show-statistics",
+        "--hypothesis-explain",
     ]
 
     if P.UTEST_PROCESSES:
