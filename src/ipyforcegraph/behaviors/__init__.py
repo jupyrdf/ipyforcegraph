@@ -10,7 +10,7 @@ from .recording import GraphCamera, GraphData, GraphDirector, GraphImage
 from .selection import LinkSelection, NodeSelection
 from .shapes import Ellipse, LinkArrows, LinkShapes, NodeShapes, Rectangle, Text
 from .tooltip import LinkTooltip, NodeTooltip
-from .wrappers import CaptureAs, ReplaceCssVariables
+from .wrappers import CaptureAs, Colorize, ReplaceCssVariables, Tint
 
 __all__ = (
     "Behavior",
@@ -35,4 +35,6 @@ __all__ = (
     "Rectangle",
     "ReplaceCssVariables",
     "Text",
+    "Colorize",
+    "Tint",
 )

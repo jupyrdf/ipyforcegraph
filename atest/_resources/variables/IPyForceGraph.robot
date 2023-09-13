@@ -9,6 +9,7 @@ ${DODO_SOURCE}                  DodoSource
 ${DODO_APP}                     DodoApp
 ${LINK_TEXT}                    LinkText
 ${WRAPPERS}                     Wrappers
+${SCALES}                       Scales
 
 ${IPYFORCEGRAPH GRAPH}          .jp-ForceGraph
 ${IPYFORCEGRAPH FRAME}          ${IPYFORCEGRAPH GRAPH} iframe

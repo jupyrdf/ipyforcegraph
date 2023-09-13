@@ -21,15 +21,15 @@
   "scripts": {
     "bootstrap": "jlpm --prefer-offline --ignore-optional --ignore-scripts && jlpm clean && jlpm lint && jlpm build",
     "build": "jlpm build:ts && jlpm build:ext",
-    "build:ext": "jupyter labextension build .",
+    "build:ext": "jupyter labextension build --debug . && prettier --write webpack.module.ids.json",
     "build:ts": "tsc -b js",
     "build:ts:cov": "tsc -b js/tsconfig.cov.json",
     "clean": "rimraf ./lib ./src/ipyforcegraph/_d",
     "deduplicate": "yarn-deduplicate -s fewer --fail",
     "lint": "jlpm lint:prettier",
-    "lint:prettier": "prettier-package-json --write package.json && prettier --cache --cache-location build/.cache/prettier --write --list-different \"*.{json,yml,md}\" \"{js,style,lite,src,.github,examples,docs,.binder}/**/*.{ts,tsx,js,jsx,css,json,md,yml,yaml}\"",
+    "lint:prettier": "prettier-package-json --write package.json && prettier --cache --cache-location build/.cache/prettier --write --list-different \"*.{json,yml,md,js}\" \"{js,style,lite,src,.github,examples,docs,.binder}/**/*.{ts,tsx,js,jsx,css,json,md,yml,yaml}\"",
     "watch": "run-p watch:lib watch:ext",
-    "watch:ext": "jupyter labextension watch .",
+    "watch:ext": "jupyter labextension watch --debug .",
     "watch:lib": "jlpm build:ts --watch --preserveWatchOutput"
   },
   "sideEffects": [
@@ -51,6 +51,7 @@
     "@jupyter-widgets/jupyterlab-manager": "^5.0.5",
     "3d-force-graph": "~1.72.2",
     "buffer": "^6.0.3",
+    "d3-color": "^3.1.0",
     "d3-force-3d": "~3.0.5",
     "d3-force-cluster-3d": "~1.1.1",
     "d3-scale": "^4.0.2",
@@ -67,6 +68,7 @@
     "@jupyterlab/theme-dark-extension": "3",
     "@jupyterlab/theme-light-extension": "3",
     "@trivago/prettier-plugin-sort-imports": "^4.0.0",
+    "@types/d3-color": "^3.1.0",
     "@types/d3-force": "^3.0.4",
     "@types/d3-scale": "^4.0.3",
     "@types/d3-scale-chromatic": "^3.0.0",
@@ -102,12 +104,6 @@
       "@jupyter-widgets/controls": {
         "bundled": false,
         "singleton": true
-      },
-      "buffer": {
-        "bundled": true
-      },
-      "nunjucks": {
-        "bundled": true
       }
     }
   },

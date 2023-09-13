@@ -33,7 +33,7 @@ https://conda.anaconda.org/conda-forge/win-64/xz-5.2.6-h8d14728_0.tar.bz2#515d77
 https://conda.anaconda.org/conda-forge/win-64/yaml-0.2.5-h8ffe710_2.tar.bz2#adbfb9f45d1004a26763652246a33764
 https://conda.anaconda.org/conda-forge/win-64/yaml-cpp-0.7.0-h63175ca_2.tar.bz2#27c8a78ba0cd18268cfc7b04c5512162
 https://conda.anaconda.org/conda-forge/win-64/krb5-1.21.2-heb0366b_0.conda#6e8b0f22b4eef3b3cb3849bb4c3d47f9
-https://conda.anaconda.org/conda-forge/win-64/libsolv-0.7.24-h12be248_3.conda#109ae5f8d821bb11afd355848fb6c30a
+https://conda.anaconda.org/conda-forge/win-64/libsolv-0.7.24-h12be248_4.conda#5201c3284520f33842d54d4a787ad9db
 https://conda.anaconda.org/conda-forge/win-64/libssh2-1.11.0-h7dfc565_0.conda#dc262d03aae04fe26825062879141a41
 https://conda.anaconda.org/conda-forge/win-64/libxml2-2.11.5-hc3477c8_1.conda#27974f880a010b1441093d9f737a949f
 https://conda.anaconda.org/conda-forge/win-64/python-3.11.5-h2628c8c_0_cpython.conda#28e01783b6a42f295fe07c7790aa75a1
@@ -92,7 +92,7 @@ https://conda.anaconda.org/conda-forge/win-64/brotlipy-0.7.0-py311ha68e1ae_1005.
 https://conda.anaconda.org/conda-forge/noarch/click-default-group-1.2.4-pyhd8ed1ab_0.conda#7c2b6931f9b3548ed78478332095c3e9
 https://conda.anaconda.org/conda-forge/win-64/cryptography-41.0.3-py311h28e9c30_0.conda#267e5ea201734119ecd2c4301800efbc
 https://conda.anaconda.org/conda-forge/noarch/doit-0.36.0-pyhd8ed1ab_0.tar.bz2#fc5e53d070f1ee7bb38c2ece282dcb82
-https://conda.anaconda.org/conda-forge/noarch/gitpython-3.1.33-pyhd8ed1ab_0.conda#2ac4baf2f8c74a8a45a29e54138301af
+https://conda.anaconda.org/conda-forge/noarch/gitpython-3.1.35-pyhd8ed1ab_0.conda#e434463858a6060d5424d95fbd5fa2b8
 https://conda.anaconda.org/conda-forge/noarch/importlib_metadata-6.8.0-hd8ed1ab_0.conda#b279b07ce18058034e5b3606ba103a8b
 https://conda.anaconda.org/conda-forge/win-64/libmambapy-1.4.2-py311h29ee5fe_0.conda#1d07b16b07e0b3fa5d2e145b221e4f1d
 https://conda.anaconda.org/conda-forge/noarch/platformdirs-3.10.0-pyhd8ed1ab_0.conda#0809187ef9b89a3d94a5c24d13936236
