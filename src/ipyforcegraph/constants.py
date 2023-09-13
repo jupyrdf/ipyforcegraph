@@ -26,6 +26,7 @@ RESERVED_COLUMNS = {
     "__indexColor",
     "fx",
     "fy",
+    "fz",
     "id",
     "source",
     "target",
