@@ -4,11 +4,9 @@
 
 ### `ipyforcegraph 0.4.1`
 
-> TBD
+- adds `Tint` and `Colorize` wrappers to fine-tune color channels (and opactiy)
 
 ### `@jupyrdf/jupyter-forcegraph 0.4.1`
-
-> TBD
 
 ## `0.4.0`
 
