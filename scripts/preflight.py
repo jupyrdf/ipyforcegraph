@@ -170,6 +170,17 @@ def preflight_release():
     problems = []
     changelog = P.CHANGELOG.read_text(encoding="utf-8")
 
+    print("Checking py/js version parity...", flush=True)
+    if P.PY_VERSION != P.JS_VERSION.replace("a", "-alpha").replace(
+        "b", "-beta"
+    ).replace("rc", "-rc"):
+        problems += [f" - {P.JS_VERSION} does not match {P.PY_VERSION}"]
+
+    print("Checking duplicated versions...", flush=True)
+    token_pattern = f"VERSION = '{P.JS_VERSION}'"
+    if token_pattern not in P.TS_TOKENS.read_text(**P.UTF8):
+        problems += [f" - {P.TS_TOKENS} does not contain {P.JS_VERSION}"]
+
     print("Checking CHANGELOG...", flush=True)
     changelog_versions = [
         f"### `{P.PY_PKG} {P.PY_VERSION}`",

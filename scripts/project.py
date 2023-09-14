@@ -9,6 +9,7 @@ this should not import anything not in py36+ stdlib, or any local paths
 import json
 import os
 import platform
+import re
 import shutil
 import subprocess
 import sys
@@ -50,9 +51,9 @@ def _get_boolish(name, default="false"):
 
 
 CI = _get_boolish("CI")
+GITHUB_STEP_SUMMARY = os.environ.get("GITHUB_STEP_SUMMARY")
 WIN_CI = _get_boolish("WIN_CI")
 TESTING_IN_CI = _get_boolish("TESTING_IN_CI")
-BUILDING_IN_CI = _get_boolish("BUILDING_IN_CI")
 IN_BINDER = _get_boolish("IN_BINDER")
 IN_RTD = _get_boolish("READTHEDOCS")
 PYTEST_ARGS = json.loads(os.environ.get("PYTEST_ARGS", "[]"))
@@ -74,9 +75,20 @@ SCRIPTS = Path(__file__).parent.resolve()
 ROOT = SCRIPTS.parent
 
 # git
-COMMIT = subprocess.check_output(["git", "rev-parse", "HEAD"]).decode("utf-8").strip()
+GITHUB_REF = os.environ.get("GITHUB_REF")
+
+if GITHUB_REF and GITHUB_REF.endswith("/merge"):
+    COMMIT = re.findall(
+        r"Merge (.*?) into .*?",
+        subprocess.check_output(
+            ["git", "log", "--format=%B", "-n", "1"], **UTF8
+        ).strip(),
+    )[0]
+else:
+    COMMIT = subprocess.check_output(["git", "rev-parse", "HEAD"], **UTF8).strip()
+
 SOURCE_DATE_EPOCH = (
-    subprocess.check_output(["git", "log", "-1", "--format=%ct"])
+    subprocess.check_output(["git", "log", "-1", "--format=%ct", COMMIT])
     .decode("utf-8")
     .strip()
 )
@@ -114,6 +126,9 @@ LITE_CONFIG = LITE / "jupyter_lite_config.json"
 IGNORED_VULNERABILITIES = ROOT / "ignored-vulnerabilities.json"
 PAGES_LITE = ROOT / "pages-lite"
 
+CACHE = BUILD / ".cache"
+BLACK_CACHE = CACHE / "black"
+PRETTIER_CACHE = CACHE / "prettier"
 
 # envs
 ALL_PLATFORMS = ["linux-64", "osx-64", "win-64"]
@@ -129,7 +144,6 @@ SUBDIR_LOCK_SPECS = sorted(ENV_SPECS.glob("subdir-lock/*.yml"))
 
 EXPLICIT = "@EXPLICIT"
 LOCKS = GH / "locks"
-PIP_BUILD_ENV = GH / "requirements-build.txt"
 LOCKFILE = (
     LOCKS / f"{THIS_SUBDIR}_dev_{IPYFORCEGRAPH_LAB}_{IPYFORCEGRAPH_PY}.conda.lock"
 )
@@ -146,14 +160,10 @@ CONDA = shutil.which("conda") or shutil.which("conda.exe")
 CONDA_RUN = [CONDA, "run", "--live-stream", "--prefix"]
 MAMBA_CREATE = ["mamba", "create", "-y", "--prefix"]
 
-if BUILDING_IN_CI:
-    IN_ENV = []
-    HISTORY = PIP_BUILD_ENV
-else:
-    IN_ENV = [*CONDA_RUN, ENV]
-    IN_LOCK_ENV = [*CONDA_RUN, LOCK_ENV]
-    HISTORY = ENV / "conda-meta/history"
-    LOCK_HISTORY = LOCK_ENV / "conda-meta/history"
+IN_ENV = [*CONDA_RUN, ENV]
+IN_LOCK_ENV = [*CONDA_RUN, LOCK_ENV]
+HISTORY = ENV / "conda-meta/history"
+LOCK_HISTORY = LOCK_ENV / "conda-meta/history"
 
 # tools
 PY = ["python"]
@@ -171,7 +181,14 @@ PREFLIGHT = [*PYM, "scripts.preflight"]
 LAB_EXT = ["jupyter", "labextension"]
 CONDA_BUILD = ["conda-build"]
 LAB = ["jupyter", "lab"]
-PRETTIER = [*JLPM, "--silent", "prettier"]
+PRETTIER = [
+    *JLPM,
+    "--silent",
+    "prettier",
+    "--cache",
+    "--cache-location",
+    PRETTIER_CACHE,
+]
 JUPYTERLAB_EXE = [*IN_ENV, "jupyter-lab", "--no-browser", "--debug"]
 
 # python stuff
@@ -197,12 +214,14 @@ JS_LIB = ROOT / "lib"
 TSBUILDINFO = BUILD / ".src.tsbuildinfo"
 JS_LIB_INDEX_JS = JS_LIB / "index.js"
 TS_SRC = ROOT / "js"
+TS_TOKENS = TS_SRC / "tokens.ts"
 STYLE = ROOT / "style"
 ALL_TSCONFIG = [
     ROOT / "tsconfigbase.json",
     ROOT / "tsconfig.json",
     TS_SRC / "tsconfig.json",
 ]
+WEBPACK_CONFIG = ROOT / "webpack.config.js"
 
 # tests
 EXAMPLES = ROOT / "examples"
@@ -246,9 +265,18 @@ ALL_JSON = [
 ALL_DOCS_MD = [*DOCS.rglob("*.md")]
 ALL_MD = [*ROOT.glob("*.md"), *ALL_DOCS_MD, *GH.rglob("*.md")]
 ALL_TS = [*TS_SRC.rglob("*.ts")]
+ALL_JS = [*ROOT.glob("*.js")]
 ALL_CSS = [*STYLE.rglob("*.css")]
 PRETTIER_IGNORE = ROOT / ".prettierignore"
-ALL_PRETTIER = [*ALL_YML, *ALL_JSON, *ALL_MD, *ALL_TS, *ALL_CSS]
+ALL_PRETTIER = [
+    *ALL_YML,
+    *ALL_JSON,
+    *ALL_MD,
+    *ALL_TS,
+    *ALL_CSS,
+    WEBPACK_CONFIG,
+    *ALL_JS,
+]
 ALL_DOS2UNIX = [*ALL_YML, *EXAMPLE_IPYNB, *ALL_PRETTIER]
 
 # built files

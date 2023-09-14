@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"3d-force-graph@~1.72.2":
-  version "1.72.2"
-  resolved "https://registry.npmjs.org/3d-force-graph/-/3d-force-graph-1.72.2.tgz#6d474774faaa4d16c45183c988520342e6655300"
-  integrity sha512-ImX6sLrIw2qBx4iMIlld7QdZ9a+kt2bQz/Rs8i2Ag6XPDELwzktrrvWBzDUdR0fPOVDchh2bTNoFSjSl3r8dTg==
+"3d-force-graph@~1.72.3":
+  version "1.72.3"
+  resolved "https://registry.npmjs.org/3d-force-graph/-/3d-force-graph-1.72.3.tgz#cdc300cc45463a8cdd27d6af3cd844c63408ae62"
+  integrity sha512-yyY5fg5DzEJqnHoxIkRM5U6dnBg3dI02CIu9vON/73wUESEC4AJLySrhIquGxjlj57uhkm/LzMgh2QdL2IWbVw==
   dependencies:
     accessor-fn "1"
     kapsule "1"
@@ -1227,6 +1227,11 @@
     "@types/jquery" "*"
     "@types/underscore" "*"
 
+"@types/d3-color@^3.1.0":
+  version "3.1.0"
+  resolved "https://registry.npmjs.org/@types/d3-color/-/d3-color-3.1.0.tgz#6594da178ded6c7c3842f3cc0ac84b156f12f2d4"
+  integrity sha512-HKuicPHJuvPgCD+np6Se9MQvS6OCbJmOjGvylzMJRlDwUXjKTTXs6Pwgk79O09Vj/ho3u1ofXnhFOaEWWPrlwA==
+
 "@types/d3-force@^3.0.4":
   version "3.0.4"
   resolved "https://registry.npmjs.org/@types/d3-force/-/d3-force-3.0.4.tgz#2d50bd2b695f709797e1745644f6bc123e6e5f5a"
@@ -2038,7 +2043,7 @@ d3-binarytree@1:
   resolved "https://registry.npmjs.org/d3-binarytree/-/d3-binarytree-1.0.2.tgz#ed43ebc13c70fbabfdd62df17480bc5a425753cc"
   integrity sha512-cElUNH+sHu95L04m92pG73t2MEJXKu+GeKUN1TJkFsu93E5W8E9Sc3kHEGJKgenGvj19m6upSn2EunvMgMD2Yw==
 
-"d3-color@1 - 3", d3-color@^3.0.1:
+"d3-color@1 - 3", d3-color@^3.0.1, d3-color@^3.1.0:
   version "3.1.0"
   resolved "https://registry.npmjs.org/d3-color/-/d3-color-3.1.0.tgz#395b2833dfac71507f12ac2f7af23bf819de24e2"
   integrity sha512-zg/chbXyeBtMQ1LbD/WSoW2DpC3I0mpmPdW+ynRTj/x2DAWYrIY7qeZIHidozwV24m4iavr15lNwIwLxRmOxhA==
@@ -2534,10 +2539,10 @@ for-each@^0.3.3:
   dependencies:
     is-callable "^1.1.3"
 
-force-graph@~1.43.3:
-  version "1.43.3"
-  resolved "https://registry.npmjs.org/force-graph/-/force-graph-1.43.3.tgz#fd4718190b2b7e9bb3ca1c188220eccc6f020819"
-  integrity sha512-kXIKdgpCCMAqLEcr1Yua3D7TO0SBpq1krrcHF5zrhsucH3NAKU3GN2CtJrulq4IS5XAAwYx0ajsFrMeCEn0E5A==
+force-graph@~1.43.4:
+  version "1.43.4"
+  resolved "https://registry.npmjs.org/force-graph/-/force-graph-1.43.4.tgz#4cbf7948d67b536bc4e42957ad71168c60fc1fb1"
+  integrity sha512-xIKcxTpUN12tq8+2ptbWUV68qbCufprNyJEkONzR6R2rmD8E7GljLa5zWqgavXcSQ+GxQOJ21rV8SDQMBB3uGg==
   dependencies:
     "@tweenjs/tween.js" "18 - 21"
     accessor-fn "1"

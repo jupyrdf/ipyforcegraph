@@ -95,7 +95,7 @@ export class GraphForcesModel extends BehaviorModel {
   protected async onForceUpdated(change?: any): Promise<void> {
     const facetPromises: Promise<void>[] = [];
     for (const force of Object.values(this.forces)) {
-      if (force instanceof FacetedModel) {
+      if (force?.ensureFacets) {
         facetPromises.push(force.ensureFacets());
       }
     }

@@ -1,10 +1,12 @@
 from ipyforcegraph.graphs import WIDGET_CLASS
 from ipyforcegraph.behaviors.scales import SCALE_CLASS
-from ipyforcegraph.behaviors import NodeShapes
+import ipyforcegraph.behaviors as B
 
-ns = NodeShapes()
+ns = B.NodeShapes()
 fg = WIDGET_CLASS(behaviors=[ns])
 scale = SCALE_CLASS("id", scheme=SCALE_CLASS.Scheme.SCHEME)
+colorize = B.Colorize(scale, opacity=-0.5)
+tint = B.Tint(scale, value=0.5)
 display(fg)
 fg.source.nodes = [{"id": 0}, {"id": 1}]
 fg.source.links = [{"source": 0, "target": 1}]

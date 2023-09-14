@@ -16,7 +16,7 @@ env:
   CONDA_EXE: mamba
   # our stuff
   SKIP_CONDA_PREFLIGHT: 1
-  CACHE_EPOCH: 16
+  CACHE_EPOCH: 19
   ATEST_RETRIES: 2
 
 jobs:
@@ -53,7 +53,9 @@ jobs:
             xvfb
 
       - name: git checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 10
 
       - name: cache (yarn)
         uses: actions/cache@v3

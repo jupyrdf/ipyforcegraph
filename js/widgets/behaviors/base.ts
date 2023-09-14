@@ -124,7 +124,7 @@ export class FacetedModel extends BehaviorModel {
     const linkFacets: Record<string, Function> = {};
     for (const facetName of this.facetNames) {
       let facet = this.get(facetName);
-      if (facet instanceof DynamicModel) {
+      if (facet?.ensureHandlers) {
         await facet.ensureHandlers();
         nodeFacets[facetName] = facet.nodeHandler;
         linkFacets[facetName] = facet.linkHandler;
