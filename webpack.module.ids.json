@@ -4,5 +4,6 @@
   "./lib/theme-utils.js": 4784,
   "./lib/tokens.js": 9187,
   "./lib/widgets/serializers/dataframe.js": 132,
-  "./lib/widgets/serializers/widget.js": 22
+  "./lib/widgets/serializers/widget.js": 22,
+  "./style/index.css": 7549
 }

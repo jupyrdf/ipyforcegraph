@@ -21,7 +21,7 @@ import type { ForceGraphModel } from './widgets';
 // previously these were sourced from `package.json`, but this creates
 // unreproducible webpack outputs
 export const NAME = '@jupyrdf/jupyter-forcegraph';
-export const VERSION = '0.4.1';
+export const VERSION = '0.4.2';
 
 export const EMOJI = '🕸️';
 export const DEBUG = window.location.href.includes('FORCEGRAPH_DEBUG');

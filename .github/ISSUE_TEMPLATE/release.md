@@ -18,6 +18,7 @@ labels: maintenance
   - [ ] _URL of build_
 - [ ] download the `dist` archive and unpack somewhere
 - [ ] create a new release through the GitHub UI
+  - [ ] create the tag `v{version}` from `dev`
   - [ ] pick a new [release] name to go with the version of real (or imaginary) [force]
     - [ ] _name here_
   - [ ] paste in the relevant `CHANGELOG.md` entries
@@ -40,6 +41,10 @@ labels: maintenance
   - [ ] create postmortem PR from `main` targeting `dev`
     - [ ] _PR# here_
     - [ ] bump to next development version
+      - [ ] `pyproject.toml`
+      - [ ] `CHANGELOG.md`
+      - [ ] `tokens.ts`
+      - [ ] `package.json`
     - [ ] bump the `CACHE_EPOCH`
     - [ ] rebuild nodejs locks
       - [ ] `rm yarn.lock webpack.module.ids.json`
