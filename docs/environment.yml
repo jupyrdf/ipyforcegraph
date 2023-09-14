@@ -46,4 +46,5 @@ dependencies:
   - sphinx-autodoc-typehints
   - sphinx-copybutton
   - tomli
+  - traitlets <5.10.0
   - traittypes

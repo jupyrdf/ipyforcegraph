@@ -4,7 +4,8 @@
 
 ### `ipyforcegraph 0.4.2`
 
-> TBD
+- pins to `traitlets <5.10` for the time being until a compatible `traittypes` is
+  available
 
 ### `@jupyrdf/jupyter-forcegraph 0.4.2`
 
