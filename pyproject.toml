@@ -83,7 +83,8 @@ addopts = [
 ]
 filterwarnings = [
     "error",
-    "ignore::DeprecationWarning:traittypes",
+    "ignore:^\n?.*Sentinel:DeprecationWarning:traittypes",
+    "ignore:^\n?.*Sentinel:DeprecationWarning:traitlets",
     "ignore:.metadata:DeprecationWarning:ipywidgets",
 ]
 
