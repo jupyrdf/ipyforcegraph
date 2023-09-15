@@ -254,7 +254,12 @@ ALL_PY = [
     DOCS_CONF,
     DODO,
 ]
-ALL_YML = [*ROOT.glob("*.yml"), *GH.rglob("*.yml"), *DOCS.glob("*.yml")]
+ALL_YML = [
+    *ROOT.glob("*.yml"),
+    *GH.rglob("*.yml"),
+    *DOCS.glob("*.yml"),
+    *BINDER.glob("*.yml"),
+]
 ALL_JSON = [
     *ROOT.glob("*.json"),
     *EXAMPLE_JSON,

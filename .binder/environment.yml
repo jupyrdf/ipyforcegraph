@@ -14,7 +14,7 @@ dependencies:
   - jupyterlab >=3,<4
   - jupyterlab >=3.6.4,<3.7
   - jupyterlab-deck
-  - jupyterlite-pyodide-kernel ==0.1.1
+  - jupyterlite-pyodide-kernel ==0.1.2
   - lxml
   - networkx
   - nodejs >=18,<19
@@ -34,5 +34,4 @@ dependencies:
   - scour
   - stringcase
   - tomli
-  - traitlets <5.10.0
   - traittypes

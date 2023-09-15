@@ -4,5 +4,4 @@ dependencies:
   - pandas
   - python >=3.8,<3.12
   - tomli
-  - traitlets <5.10.0
   - traittypes

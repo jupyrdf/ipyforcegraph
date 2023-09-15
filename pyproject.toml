@@ -32,7 +32,6 @@ dependencies = [
   "ipywidgets<9,>=8.0.4",
   "numcodecs",
   "pandas",
-  "traitlets<5.10.0",
   "traittypes",
 ]
 [project.urls]
