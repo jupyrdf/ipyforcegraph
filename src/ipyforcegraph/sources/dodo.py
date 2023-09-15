@@ -8,6 +8,8 @@ a ``dodo.py`` and its `tasks <https://pydoit.org/tasks.html>`_.
 
     Using this source requires installing `doit <pypi.org/project/doit>`_.
 """
+from __future__ import annotations
+
 import sys
 from copy import deepcopy
 from importlib.util import module_from_spec, spec_from_file_location

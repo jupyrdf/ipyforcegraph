@@ -2,6 +2,7 @@
 
 # Copyright (c) 2023 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.
+from __future__ import annotations
 
 try:  # pragma: no cover
     from importlib.metadata import version

@@ -2,16 +2,18 @@
 
 # Copyright (c) 2023 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.
+from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any, Optional
 
 import ipywidgets as W
 import traitlets as T
 
-from ._base import Behavior, TFeature, _make_trait
+from ._base import Behavior, _make_trait
 
 if TYPE_CHECKING:
     from .. import _types as _t
+    from ._base import TFeature
 
 
 @W.register

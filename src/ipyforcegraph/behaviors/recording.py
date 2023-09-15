@@ -2,6 +2,7 @@
 
 # Copyright (c) 2023 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.
+from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any, Optional, Tuple
 
@@ -10,10 +11,11 @@ import traitlets as T
 
 from ..sources.dataframe import DataFrameSource
 from ..trait_utils import JSON_TYPES, coerce
-from ._base import Behavior, TFeature, _make_trait
+from ._base import Behavior, _make_trait
 
 if TYPE_CHECKING:
     from .. import _types as _t
+    from ._base import TFeature
 
 
 @W.register
@@ -141,7 +143,7 @@ class GraphDirector(Behavior):
         False, help="whether to zoom the viewport before panning"
     ).tag(sync=True)
 
-    visible: TFeature = _make_trait(
+    visible: "TFeature" = _make_trait(
         "fit nodes in viewport for which this column/template is truthy",
         by_template=True,
         by_column=True,

@@ -8,6 +8,7 @@ Using documentation from:
 
 # Copyright (c) 2023 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.
+from __future__ import annotations
 
 import enum
 from typing import TYPE_CHECKING, Any, Dict, Optional
@@ -19,14 +20,16 @@ from ..trait_utils import JSON_TYPES, coerce, validate_enum
 from ._base import (
     BaseD3Force,
     Behavior,
-    TBoolFeature,
-    TFeature,
-    TNumFeature,
     _make_trait,
 )
 
 if TYPE_CHECKING:
     from .. import _types as _t
+    from ._base import (
+        TBoolFeature,
+        TFeature,
+        TNumFeature,
+    )
 
     TForceDict = Dict[str, BaseD3Force]
 
@@ -92,10 +95,10 @@ class Link(BaseD3Force):
 
     _model_name: "_t.Tstr" = T.Unicode("LinkForceModel").tag(sync=True)
 
-    distance: TNumFeature = _make_trait(
+    distance: "TNumFeature" = _make_trait(
         "the 'desired' distance of a link. Context takes ``link``", numeric=True
     )
-    strength: TNumFeature = _make_trait(
+    strength: "TNumFeature" = _make_trait(
         "the strength of a link in reaching its desired length. Context takes "
         "``link``",
         numeric=True,
@@ -146,13 +149,13 @@ class X(BaseD3Force):
 
     _model_name: "_t.Tstr" = T.Unicode("XForceModel").tag(sync=True)
 
-    x: TNumFeature = _make_trait(
+    x: "TNumFeature" = _make_trait(
         "the x-coordinate of the centering position to the specified number. "
         "Context takes ``node``.",
         numeric=True,
     )
 
-    strength: TNumFeature = _make_trait(
+    strength: "TNumFeature" = _make_trait(
         "the strength of the force. Context takes ``node``",
         numeric=True,
         default_value=0,
@@ -174,12 +177,12 @@ class Y(BaseD3Force):
 
     _model_name: "_t.Tstr" = T.Unicode("YForceModel").tag(sync=True)
 
-    y: TNumFeature = _make_trait(
+    y: "TNumFeature" = _make_trait(
         "the y-coordinate of the centering position. " "Context takes ``node``.",
         numeric=True,
     )
 
-    strength: TNumFeature = _make_trait(
+    strength: "TNumFeature" = _make_trait(
         "the strength of the force. Context takes ``node``",
         numeric=True,
         default_value=0,
@@ -204,12 +207,12 @@ class Z(BaseD3Force):
 
     _model_name: "_t.Tstr" = T.Unicode("ZForceModel").tag(sync=True)
 
-    z: TNumFeature = _make_trait(
+    z: "TNumFeature" = _make_trait(
         "the z-coordinate of the centering position. Context takes ``node``.",
         numeric=True,
     )
 
-    strength: TNumFeature = _make_trait(
+    strength: "TNumFeature" = _make_trait(
         "the strength of the force. Context takes ``node``",
         numeric=True,
         default_value=0,
@@ -235,7 +238,7 @@ class ManyBody(BaseD3Force):
 
     _model_name: "_t.Tstr" = T.Unicode("ManyBodyForceModel").tag(sync=True)
 
-    strength: TNumFeature = _make_trait(
+    strength: "TNumFeature" = _make_trait(
         "a nunjucks template to use to calculate strength. Context takes ``node``",
         numeric=True,
         default_value=0,
@@ -275,12 +278,12 @@ class Radial(BaseD3Force):
 
     _model_name: "_t.Tstr" = T.Unicode("RadialForceModel").tag(sync=True)
 
-    radius: TNumFeature = _make_trait(
+    radius: "TNumFeature" = _make_trait(
         "radius of the force. Context takes ``node``",
         numeric=True,
     )
 
-    strength: TNumFeature = _make_trait(
+    strength: "TNumFeature" = _make_trait(
         "the strength of the force. Context takes ``node``",
         numeric=True,
         default_value=0,
@@ -320,7 +323,7 @@ class Collision(BaseD3Force):
 
     _model_name: "_t.Tstr" = T.Unicode("CollisionForceModel").tag(sync=True)
 
-    radius: TNumFeature = _make_trait(
+    radius: "TNumFeature" = _make_trait(
         "The radius of collision by node. Context takes ``node``",
         numeric=True,
     )
@@ -367,40 +370,40 @@ class Cluster(BaseD3Force):
     ).tag(sync=True)
 
     # node context
-    key: TFeature = _make_trait(
+    key: "TFeature" = _make_trait(
         "a cluster key to which a node belongs. Context takes ``node``.",
     )
 
     # cluster context
-    radius: TNumFeature = _make_trait(
+    radius: "TNumFeature" = _make_trait(
         "the radius of a cluster. Context takes ``cluster``, ``node``, ``key``, and ``nodes``.",
         numeric=True,
         by_column=False,
         by_wrapper=False,
     )
 
-    x: TNumFeature = _make_trait(
+    x: "TNumFeature" = _make_trait(
         "the x-coordinate of a cluster. Context takes ``cluster``, ``node``, ``key``, and ``nodes``.",
         numeric=True,
         by_column=False,
         by_wrapper=False,
     )
 
-    y: TNumFeature = _make_trait(
+    y: "TNumFeature" = _make_trait(
         "the y-coordinate of a cluster. Context takes ``cluster``, ``node``, ``key``, and ``nodes``.",
         numeric=True,
         by_column=False,
         by_wrapper=False,
     )
 
-    z: TNumFeature = _make_trait(
+    z: "TNumFeature" = _make_trait(
         "the z-coordinate of a cluster. Context takes ``cluster``, ``node``, ``key``, and ``nodes``.",
         numeric=True,
         by_column=False,
         by_wrapper=False,
     )
 
-    def __init__(self, key: Optional[TFeature] = None, *args: Any, **kwargs: Any):
+    def __init__(self, key: "Optional[TFeature]" = None, *args: Any, **kwargs: Any):
         kwargs["key"] = key
         super().__init__(*args, **kwargs)
 
@@ -443,7 +446,7 @@ class DAG(BaseD3Force):
         allow_none=True,
     ).tag(sync=True)
 
-    node_filter: TBoolFeature = _make_trait(
+    node_filter: "TBoolFeature" = _make_trait(
         "whether node is part of the DAG layout",
         default_value=True,
         boolish=True,

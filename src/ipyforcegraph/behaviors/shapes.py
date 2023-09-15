@@ -2,6 +2,7 @@
 
 # Copyright (c) 2023 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.
+from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any, Optional, Sequence, Tuple, Union
 
@@ -16,13 +17,14 @@ from ._base import (
     HasFillAndStroke,
     HasOffsets,
     ShapeBase,
-    TFeature,
-    TNumFeature,
     _make_trait,
 )
 
 if TYPE_CHECKING:
     from .. import _types as _t
+
+    # imports needed for docs
+    from ._base import Column, Nunjucks, TFeature, TNumFeature  # noqa
 
 
 @W.register
@@ -34,20 +36,20 @@ class Text(HasFillAndStroke, HasOffsets):
 
     _model_name: "_t.Tstr" = T.Unicode("TextShapeModel").tag(sync=True)
 
-    text: TFeature = _make_trait("the text of a shape")
-    font: TFeature = _make_trait("the font face of a shape")
-    size: TNumFeature = _make_trait(
+    text: "TFeature" = _make_trait("the text of a shape")
+    font: "TFeature" = _make_trait("the font face of a shape")
+    size: "TNumFeature" = _make_trait(
         "the visible font size of text in ``px``", numeric=True
     )
-    size_pixels: TNumFeature = _make_trait(
+    size_pixels: "TNumFeature" = _make_trait(
         "the rendered size of text in ``px``. 3D only.", numeric=True
     )
-    background: TFeature = _make_trait("the background fill color of a shape")
-    padding: TNumFeature = _make_trait(
+    background: "TFeature" = _make_trait("the background fill color of a shape")
+    padding: "TNumFeature" = _make_trait(
         "the padding around the shape in ``px``", numeric=True
     )
 
-    def __init__(self, text: Optional[TFeature] = None, **kwargs: Any):
+    def __init__(self, text: "Optional[TFeature]" = None, **kwargs: Any):
         if text is not None:
             kwargs["text"] = text
         super().__init__(**kwargs)
@@ -91,8 +93,8 @@ class NodeShapes(Behavior):
 
     _model_name: "_t.Tstr" = T.Unicode("NodeShapeModel").tag(sync=True)
 
-    size: TFeature = _make_trait("the size of the default circle shape", numeric=True)
-    color: TFeature = _make_trait("the color of the default circle shape")
+    size: "TFeature" = _make_trait("the size of the default circle shape", numeric=True)
+    color: "TFeature" = _make_trait("the color of the default circle shape")
     shapes: Tuple[ShapeBase] = W.TypedTuple(
         T.Instance(ShapeBase),
         help="the shapes to draw for each ``node``",
@@ -127,16 +129,16 @@ class LinkShapes(Behavior):
 
     _model_name: "_t.Tstr" = T.Unicode("LinkShapeModel").tag(sync=True)
 
-    color: TFeature = _make_trait("the color of the link")
-    curvature: TNumFeature = _make_trait(
+    color: "TFeature" = _make_trait("the color of the link")
+    curvature: "TNumFeature" = _make_trait(
         "the curvature of the link, 0: straight, 1: circular", numeric=True
     )
-    line_dash: TFeature = _make_trait(
+    line_dash: "TFeature" = _make_trait(
         "the dash line pattern of the link, e.g., [2, 1] for ``-- -- --``",
         stringy=False,
         by_column=False,
     )
-    width: TNumFeature = _make_trait("the width of the link", numeric=True)
+    width: "TNumFeature" = _make_trait("the width of the link", numeric=True)
 
     shapes: Tuple[ShapeBase] = W.TypedTuple(
         T.Instance(ShapeBase),
@@ -168,9 +170,9 @@ class LinkArrows(Behavior):
 
     _model_name: "_t.Tstr" = T.Unicode("LinkArrowModel").tag(sync=True)
 
-    color: TFeature = _make_trait("the color of the arrow")
-    length: TNumFeature = _make_trait("the length of the arrow", numeric=True)
-    relative_position: TNumFeature = _make_trait(
+    color: "TFeature" = _make_trait("the color of the arrow")
+    length: "TNumFeature" = _make_trait("the length of the arrow", numeric=True)
+    relative_position: "TNumFeature" = _make_trait(
         "the relative position of the arrow along the link, 0.0: ``source`` end, 1.0: ``target`` end",
         numeric=True,
     )

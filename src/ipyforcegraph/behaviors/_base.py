@@ -2,6 +2,7 @@
 
 # Copyright (c) 2023 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.
+from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any, Optional, Union
 
@@ -14,9 +15,9 @@ from ..trait_utils import JSON_TYPES, coerce
 if TYPE_CHECKING:
     from .. import _types as _t
 
-TFeature = Optional[Union["Column", "Nunjucks", str]]
-TNumFeature = Optional[Union["Column", "Nunjucks", str, int, float]]
-TBoolFeature = Optional[Union["Column", "Nunjucks", str, bool]]
+    TFeature = Optional[Union["Column", "Nunjucks", str]]
+    TNumFeature = Optional[Union["Column", "Nunjucks", str, int, float]]
+    TBoolFeature = Optional[Union["Column", "Nunjucks", str, bool]]
 
 
 class DEFAULT_RANK:
@@ -182,7 +183,7 @@ class HasScale(ShapeBase):
 
     _model_name: "_t.Tstr" = T.Unicode("HasScaleModel").tag(sync=True)
 
-    scale_on_zoom: TBoolFeature = _make_trait(
+    scale_on_zoom: "TBoolFeature" = _make_trait(
         "whether font size/stroke respects the global scale. Has no impact on `link` shapes.",
         boolish=True,
     )
@@ -196,10 +197,12 @@ class HasFillAndStroke(HasScale):
     """A shape that has ``fill`` and ``stroke``."""
 
     _model_name: "_t.Tstr" = T.Unicode("HasFillModel").tag(sync=True)
-    fill: TFeature = _make_trait("the fill color of a shape")
-    stroke: TFeature = _make_trait("the stroke color of a shape")
-    stroke_width: TNumFeature = _make_trait("the stroke width of a shape", numeric=True)
-    line_dash: TFeature = _make_trait(
+    fill: "TFeature" = _make_trait("the fill color of a shape")
+    stroke: "TFeature" = _make_trait("the stroke color of a shape")
+    stroke_width: "TNumFeature" = _make_trait(
+        "the stroke width of a shape", numeric=True
+    )
+    line_dash: "TFeature" = _make_trait(
         "the dash line pattern of the stroke, e.g., [2, 1] for ``-- -- --``",
         stringy=False,
         by_column=False,
@@ -242,10 +245,10 @@ class HasDimensions(HasFillAndStroke, HasOffsets):
 
     _model_name: "_t.Tstr" = T.Unicode("HasDimensionsModel").tag(sync=True)
 
-    width: TNumFeature = _make_trait("the width of a shape in ``px``", numeric=True)
-    height: TNumFeature = _make_trait("the height of a shape in ``px``", numeric=True)
-    depth: TNumFeature = _make_trait("the depth of a shape in ``px``", numeric=True)
-    opacity: TNumFeature = _make_trait("the opacity of a shape", numeric=True)
+    width: "TNumFeature" = _make_trait("the width of a shape in ``px``", numeric=True)
+    height: "TNumFeature" = _make_trait("the height of a shape in ``px``", numeric=True)
+    depth: "TNumFeature" = _make_trait("the depth of a shape in ``px``", numeric=True)
+    opacity: "TNumFeature" = _make_trait("the opacity of a shape", numeric=True)
 
     @T.validate("width", "height", "depth", "opacity")
     def _validate_dimension_numerics(self, proposal: T.Bunch) -> Any:

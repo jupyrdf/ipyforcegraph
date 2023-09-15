@@ -6,6 +6,7 @@ Some documentation provided by:
 
 # Copyright (c) 2023 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.
+from __future__ import annotations
 
 import enum
 from typing import TYPE_CHECKING, Any, Tuple

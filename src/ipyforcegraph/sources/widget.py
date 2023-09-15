@@ -1,5 +1,6 @@
 # Copyright (c) 2023 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.
+from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any, Dict, Optional, Tuple, Type
 
