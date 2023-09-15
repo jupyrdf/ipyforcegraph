@@ -1,7 +1,7 @@
 # Copyright (c) 2023 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.
 
-from typing import Tuple
+from typing import TYPE_CHECKING, Tuple
 
 import ipywidgets as W
 import numpy as N
@@ -9,22 +9,24 @@ import pandas as P
 import traitlets as T
 import traittypes as TT
 
-from .. import _types as _t
 from .._base import ForceBase
 from ..serializers import dataframe_serialization
+
+if TYPE_CHECKING:
+    from .. import _types as _t
 
 
 @W.register
 class DataFrameSource(ForceBase):
     """A Graph Source that stores the ``nodes`` and ``links`` as :class:`~pandas.DataFrame` instances."""
 
-    _model_name: _t.Tstr = T.Unicode("DataFrameSourceModel").tag(sync=True)
+    _model_name: "_t.Tstr" = T.Unicode("DataFrameSourceModel").tag(sync=True)
 
     nodes: P.DataFrame = TT.PandasType(
         klass=P.DataFrame, help="the :class:`~pandas.DataFrame` of node data"
     ).tag(sync=True, **dataframe_serialization)
 
-    node_id_column: _t.Tstr = T.Unicode(
+    node_id_column: "_t.Tstr" = T.Unicode(
         "id",
         help="the name of the column for a node's identifier, or 0-based position in the column if `None`",
     ).tag(sync=True)
@@ -33,7 +35,7 @@ class DataFrameSource(ForceBase):
         T.Unicode(), help="columns to preserve when updating ``nodes``"
     ).tag(sync=True)
 
-    link_id_column: _t.Tstr = T.Unicode(
+    link_id_column: "_t.Tstr" = T.Unicode(
         "id",
         help="the name of the column for a links's identifier, or 0-based position in the column if `None`",
     ).tag(sync=True)
@@ -46,12 +48,12 @@ class DataFrameSource(ForceBase):
         klass=P.DataFrame, help="the :class:`~pandas.DataFrame` of link data"
     ).tag(sync=True, **dataframe_serialization)
 
-    link_source_column: _t.Tstr = T.Unicode(
+    link_source_column: "_t.Tstr" = T.Unicode(
         "source",
         help="the name of the column for a link's source, defaulting to ``source``",
     ).tag(sync=True)
 
-    link_target_column: _t.Tstr = T.Unicode(
+    link_target_column: "_t.Tstr" = T.Unicode(
         "target",
         help="the name of the column for a link's target, defaulting to ``target``",
     ).tag(sync=True)

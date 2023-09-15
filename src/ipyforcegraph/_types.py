@@ -19,3 +19,5 @@ Tfloat_maybe = T.Float[Optional[int], Union[int, float, None]]
 Tbool = T.Bool[bool, Union[bool, int]]
 
 Tdict_any = T.Instance[Dict[Any, Any]]
+
+Tenum_str_str = T.Enum[str, str]

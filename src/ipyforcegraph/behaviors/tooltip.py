@@ -3,13 +3,15 @@
 # Copyright (c) 2023 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.
 
-from typing import Any, Optional
+from typing import TYPE_CHECKING, Any, Optional
 
 import ipywidgets as W
 import traitlets as T
 
-from .. import _types as _t
 from ._base import Behavior, TFeature, _make_trait
+
+if TYPE_CHECKING:
+    from .. import _types as _t
 
 
 @W.register
@@ -19,7 +21,7 @@ class NodeTooltip(Behavior):
     These may be strings or full HTML.
     """
 
-    _model_name: _t.Tstr = T.Unicode("NodeTooltipModel").tag(sync=True)
+    _model_name: "_t.Tstr" = T.Unicode("NodeTooltipModel").tag(sync=True)
 
     label: TFeature = _make_trait(
         "the label to display when hovering over the ``node``, can be ``Column`` or ``Nunjucks`` template",
@@ -38,7 +40,7 @@ class LinkTooltip(Behavior):
     These may be strings or full HTML.
     """
 
-    _model_name: _t.Tstr = T.Unicode("LinkTooltipModel").tag(sync=True)
+    _model_name: "_t.Tstr" = T.Unicode("LinkTooltipModel").tag(sync=True)
 
     label: TFeature = _make_trait(
         "the label to display when hovering over the ``link``, can be ``Column`` or ``Nunjucks`` template",

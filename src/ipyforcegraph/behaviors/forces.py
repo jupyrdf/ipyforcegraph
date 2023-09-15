@@ -10,12 +10,11 @@ Using documentation from:
 # Distributed under the terms of the Modified BSD License.
 
 import enum
-from typing import Any, Dict, Optional
+from typing import TYPE_CHECKING, Any, Dict, Optional
 
 import ipywidgets as W
 import traitlets as T
 
-from .. import _types as _t
 from ..trait_utils import JSON_TYPES, coerce, validate_enum
 from ._base import (
     BaseD3Force,
@@ -26,8 +25,10 @@ from ._base import (
     _make_trait,
 )
 
-TForceDict = Dict[str, BaseD3Force]
-TForceDictDesc = T.TraitType[Dict[str, BaseD3Force], Dict[str, BaseD3Force]]
+if TYPE_CHECKING:
+    from .. import _types as _t
+
+    TForceDict = Dict[str, BaseD3Force]
 
 
 @W.register
@@ -39,43 +40,45 @@ class GraphForces(Behavior):
     For more, see the frontend documentation on https://github.com/vasturiano/force-graph#force-engine-d3-force-configuration
     """
 
-    _model_name: _t.Tstr = T.Unicode("GraphForcesModel").tag(sync=True)
+    _model_name: "_t.Tstr" = T.Unicode("GraphForcesModel").tag(sync=True)
 
-    forces: TForceDictDesc = T.Dict(
+    forces: "T.TraitType[Dict[str, BaseD3Force], Dict[str, BaseD3Force]]" = T.Dict(
         value_trait=T.Instance(BaseD3Force, allow_none=True),
         help="named forces. Set a name `None` to remove a force: By default, ForceGraph has `link`, `charge`, and `center`",
     ).tag(sync=True, **W.widget_serialization)
 
-    warmup_ticks: _t.Tint = T.Int(
+    warmup_ticks: "_t.Tint" = T.Int(
         0,
         min=0,
         help="layout engine cycles to dry-run at ignition before starting to render",
     ).tag(sync=True)
 
-    cooldown_ticks: _t.Tint = T.Int(
+    cooldown_ticks: "_t.Tint" = T.Int(
         -1,
         help="frames to render before stopping and freezing the layout engine. Values less than zero will be translated to `Infinity`",
     ).tag(sync=True)
 
-    alpha_min: _t.Tfloat = T.Float(
+    alpha_min: "_t.Tfloat" = T.Float(
         0.0, min=0.0, max=1.0, help="simulation alpha min parameter"
     ).tag(sync=True)
 
-    alpha_decay: _t.Tfloat = T.Float(
+    alpha_decay: "_t.Tfloat" = T.Float(
         0.0228,
         min=0.0,
         max=1.0,
         help="simulation intensity decay parameter",
     ).tag(sync=True)
 
-    velocity_decay: _t.Tfloat = T.Float(
+    velocity_decay: "_t.Tfloat" = T.Float(
         0.4,
         min=0.0,
         max=1.0,
         help="nodes' velocity decay that simulates the medium resistance",
     ).tag(sync=True)
 
-    def __init__(self, forces: Optional[TForceDict] = None, *args: Any, **kwargs: Any):
+    def __init__(
+        self, forces: "Optional[TForceDict]" = None, *args: Any, **kwargs: Any
+    ):
         kwargs["forces"] = forces or {}
         super().__init__(*args, **kwargs)
 
@@ -87,7 +90,7 @@ class Link(BaseD3Force):
     https://github.com/d3/d3-force#links
     """
 
-    _model_name: _t.Tstr = T.Unicode("LinkForceModel").tag(sync=True)
+    _model_name: "_t.Tstr" = T.Unicode("LinkForceModel").tag(sync=True)
 
     distance: TNumFeature = _make_trait(
         "the 'desired' distance of a link. Context takes ``link``", numeric=True
@@ -112,21 +115,21 @@ class Center(BaseD3Force):
     https://github.com/d3/d3-force#centering
     """
 
-    _model_name: _t.Tstr = T.Unicode("CenterForceModel").tag(sync=True)
+    _model_name: "_t.Tstr" = T.Unicode("CenterForceModel").tag(sync=True)
 
-    x: _t.Tfloat_maybe = T.Float(
+    x: "_t.Tfloat_maybe" = T.Float(
         None,
         allow_none=True,
         help="the x-coordinate of the position to center the nodes on",
     ).tag(sync=True)
 
-    y: _t.Tfloat_maybe = T.Float(
+    y: "_t.Tfloat_maybe" = T.Float(
         None,
         allow_none=True,
         help="the y-coordinate of the position to center the nodes on",
     ).tag(sync=True)
 
-    z: _t.Tfloat_maybe = T.Float(
+    z: "_t.Tfloat_maybe" = T.Float(
         None,
         allow_none=True,
         help="the z-coordinate of the position to center the nodes on (only applies to ``ForceGraph3D``)",
@@ -141,7 +144,7 @@ class X(BaseD3Force):
     https://github.com/d3/d3-force#positioning
     """
 
-    _model_name: _t.Tstr = T.Unicode("XForceModel").tag(sync=True)
+    _model_name: "_t.Tstr" = T.Unicode("XForceModel").tag(sync=True)
 
     x: TNumFeature = _make_trait(
         "the x-coordinate of the centering position to the specified number. "
@@ -169,7 +172,7 @@ class Y(BaseD3Force):
     https://github.com/d3/d3-force#positioning
     """
 
-    _model_name: _t.Tstr = T.Unicode("YForceModel").tag(sync=True)
+    _model_name: "_t.Tstr" = T.Unicode("YForceModel").tag(sync=True)
 
     y: TNumFeature = _make_trait(
         "the y-coordinate of the centering position. " "Context takes ``node``.",
@@ -199,7 +202,7 @@ class Z(BaseD3Force):
     https://github.com/d3/d3-force#positioning
     """
 
-    _model_name: _t.Tstr = T.Unicode("ZForceModel").tag(sync=True)
+    _model_name: "_t.Tstr" = T.Unicode("ZForceModel").tag(sync=True)
 
     z: TNumFeature = _make_trait(
         "the z-coordinate of the centering position. Context takes ``node``.",
@@ -230,7 +233,7 @@ class ManyBody(BaseD3Force):
     https://github.com/d3/d3-force#many-body
     """
 
-    _model_name: _t.Tstr = T.Unicode("ManyBodyForceModel").tag(sync=True)
+    _model_name: "_t.Tstr" = T.Unicode("ManyBodyForceModel").tag(sync=True)
 
     strength: TNumFeature = _make_trait(
         "a nunjucks template to use to calculate strength. Context takes ``node``",
@@ -239,19 +242,19 @@ class ManyBody(BaseD3Force):
         allow_none=False,
     )
 
-    theta: _t.Tfloat_maybe = T.Float(
+    theta: "_t.Tfloat_maybe" = T.Float(
         None,
         allow_none=True,
         help="the Barnes-Hut approximation criterion",
     ).tag(sync=True)
 
-    distance_min: _t.Tfloat_maybe = T.Float(
+    distance_min: "_t.Tfloat_maybe" = T.Float(
         None,
         allow_none=True,
         help="the minimum distance between nodes over which this force is considered",
     ).tag(sync=True)
 
-    distance_max: _t.Tfloat_maybe = T.Float(
+    distance_max: "_t.Tfloat_maybe" = T.Float(
         None,
         allow_none=True,
         help="the maximum distance between nodes over which this force is considered",
@@ -270,7 +273,7 @@ class Radial(BaseD3Force):
     https://github.com/d3/d3-force#forceRadial
     """
 
-    _model_name: _t.Tstr = T.Unicode("RadialForceModel").tag(sync=True)
+    _model_name: "_t.Tstr" = T.Unicode("RadialForceModel").tag(sync=True)
 
     radius: TNumFeature = _make_trait(
         "radius of the force. Context takes ``node``",
@@ -284,19 +287,19 @@ class Radial(BaseD3Force):
         allow_none=False,
     )
 
-    x: _t.Tfloat_maybe = T.Float(
+    x: "_t.Tfloat_maybe" = T.Float(
         None,
         allow_none=True,
         help="the x-coordinate of the centering position",
     ).tag(sync=True)
 
-    y: _t.Tfloat_maybe = T.Float(
+    y: "_t.Tfloat_maybe" = T.Float(
         None,
         allow_none=True,
         help="the y-coordinate of the centering position",
     ).tag(sync=True)
 
-    z: _t.Tfloat_maybe = T.Float(
+    z: "_t.Tfloat_maybe" = T.Float(
         None,
         allow_none=True,
         help="the z-coordinate of the centering position",
@@ -315,14 +318,14 @@ class Collision(BaseD3Force):
     https://github.com/d3/d3-force#collision
     """
 
-    _model_name: _t.Tstr = T.Unicode("CollisionForceModel").tag(sync=True)
+    _model_name: "_t.Tstr" = T.Unicode("CollisionForceModel").tag(sync=True)
 
     radius: TNumFeature = _make_trait(
         "The radius of collision by node. Context takes ``node``",
         numeric=True,
     )
 
-    strength: _t.Tfloat_maybe = T.Float(
+    strength: "_t.Tfloat_maybe" = T.Float(
         None,
         allow_none=True,
         min=0.0,
@@ -342,9 +345,9 @@ class Cluster(BaseD3Force):
     https://github.com/vasturiano/d3-force-cluster-3d
     """
 
-    _model_name: _t.Tstr = T.Unicode("ClusterForceModel").tag(sync=True)
+    _model_name: "_t.Tstr" = T.Unicode("ClusterForceModel").tag(sync=True)
 
-    strength: _t.Tfloat_maybe = T.Float(
+    strength: "_t.Tfloat_maybe" = T.Float(
         None,
         allow_none=True,
         min=0.0,
@@ -352,7 +355,7 @@ class Cluster(BaseD3Force):
         help="the strength of the force",
     ).tag(sync=True)
 
-    inertia: _t.Tfloat_maybe = T.Float(
+    inertia: "_t.Tfloat_maybe" = T.Float(
         None,
         allow_none=True,
         min=0.0,
@@ -425,16 +428,16 @@ class DAG(BaseD3Force):
         radial_out = "radialout"
         radial_in = "radialin"
 
-    _model_name: _t.Tstr = T.Unicode("DAGBehaviorModel").tag(sync=True)
+    _model_name: "_t.Tstr" = T.Unicode("DAGBehaviorModel").tag(sync=True)
 
-    mode: T.Enum[str, str] = T.Enum(
+    mode: "_t.Tenum_str_str" = T.Enum(
         values=[*[m.value for m in Mode], *Mode],
         help="DAG constraint layout mode/direction",
         default_value=None,
         allow_none=True,
     ).tag(sync=True)
 
-    level_distance: _t.Tfloat_maybe = T.Float(
+    level_distance: "_t.Tfloat_maybe" = T.Float(
         default_value=None,
         help="distance between DAG levels",
         allow_none=True,

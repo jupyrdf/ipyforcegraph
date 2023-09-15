@@ -8,14 +8,16 @@ Some documentation provided by:
 # Distributed under the terms of the Modified BSD License.
 
 import enum
-from typing import Any, Tuple
+from typing import TYPE_CHECKING, Any, Tuple
 
 import ipywidgets as W
 import traitlets as T
 
-from .. import _types as _t
 from ..trait_utils import validate_enum
 from ._base import Column
+
+if TYPE_CHECKING:
+    from .. import _types as _t
 
 
 class ContinuousColor(Column):
@@ -63,15 +65,15 @@ class ContinuousColor(Column):
         ylorbr = "YlOrBr"
         ylorrd = "YlOrRd"
 
-    _model_name: _t.Tstr = T.Unicode("ContinuousColorModel").tag(sync=True)
+    _model_name: "_t.Tstr" = T.Unicode("ContinuousColorModel").tag(sync=True)
 
-    scheme: T.Enum[str, str] = T.Enum(
+    scheme: "_t.Tenum_str_str" = T.Enum(
         values=[*[m.value for m in Scheme], *Scheme],
         help="name of a continuous ``d3-scale-chromatic`` scheme",
         allow_none=True,
     ).tag(sync=True)
 
-    domain: Tuple[float, float] = W.TypedTuple(
+    domain: "Tuple[float, float]" = W.TypedTuple(
         (0.0, 1.0),
         help=("the ``[min, max]`` to map to the scale's colors"),
     ).tag(sync=True)
@@ -98,15 +100,15 @@ class OrdinalColor(Column):
         set3 = "Set3"
         tableau10 = "Tableau10"
 
-    _model_name: _t.Tstr = T.Unicode("OrdinalColorModel").tag(sync=True)
+    _model_name: "_t.Tstr" = T.Unicode("OrdinalColorModel").tag(sync=True)
 
-    scheme: T.Enum[str, str] = T.Enum(
+    scheme: "_t.Tenum_str_str" = T.Enum(
         values=[*[m.value for m in Scheme], *Scheme],
         help="name of an ordinal ``d3-scale-chromatic`` scheme",
         allow_none=True,
     ).tag(sync=True)
 
-    domain: T.Container[Tuple[Any, ...]] = T.Tuple(
+    domain: "T.Container[Tuple[Any, ...]]" = T.Tuple(
         (0.0, 1.0),
         help=("values mapped to ordinal colors in the range"),
     ).tag(sync=True)

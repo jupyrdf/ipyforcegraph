@@ -3,13 +3,15 @@
 # Copyright (c) 2023 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.
 
-from typing import Optional, Tuple, Union
+from typing import TYPE_CHECKING, Optional, Tuple, Union
 
 import ipywidgets as W
 import traitlets as T
 
-from .. import _types as _t
 from ._base import DEFAULT_RANK, Behavior
+
+if TYPE_CHECKING:
+    from .. import _types as _t
 
 
 @W.register
@@ -17,7 +19,7 @@ class NodeSelection(Behavior):
     """Enable node selection with synced row `indices` (not ``id``) of selected
     ``nodes``."""
 
-    _model_name: _t.Tstr = T.Unicode("NodeSelectionModel").tag(sync=True)
+    _model_name: "_t.Tstr" = T.Unicode("NodeSelectionModel").tag(sync=True)
 
     selected: Tuple[Union[int, str], ...] = W.TypedTuple(
         T.Union((T.Int(), T.Unicode())),
@@ -25,17 +27,17 @@ class NodeSelection(Behavior):
         help="the row indices of any selected nodes",
     ).tag(sync=True)
 
-    column_name: _t.Tstr_maybe = T.Unicode(
+    column_name: "_t.Tstr_maybe" = T.Unicode(
         None,
         help="an optional name of a ``node``'s column to update when selected",
         allow_none=True,
     ).tag(sync=True)
 
-    multiple: _t.Tbool = T.Bool(
+    multiple: "_t.Tbool" = T.Bool(
         True, help="if ``False``, only one ``node`` can be selected at a time"
     ).tag(sync=True)
 
-    selected_color: _t.Tstr = T.Unicode(
+    selected_color: "_t.Tstr" = T.Unicode(
         "rgba(179, 163, 105, 1.0)",
         help="the color of selected nodes",
     ).tag(sync=True)
@@ -49,7 +51,7 @@ class NodeSelection(Behavior):
 class LinkSelection(Behavior):
     """Enable link selection with synced ids of selected links."""
 
-    _model_name: _t.Tstr = T.Unicode("LinkSelectionModel").tag(sync=True)
+    _model_name: "_t.Tstr" = T.Unicode("LinkSelectionModel").tag(sync=True)
 
     selected: Tuple[Union[int, str], ...] = W.TypedTuple(
         T.Union((T.Int(), T.Unicode())),
@@ -57,21 +59,21 @@ class LinkSelection(Behavior):
         help="the 0-based indices of any selected links",
     ).tag(sync=True)
 
-    column_name: _t.Tstr_maybe = T.Unicode(
+    column_name: "_t.Tstr_maybe" = T.Unicode(
         None,
         help="an optional name of ``node``'s column to update when selected",
         allow_none=True,
     ).tag(sync=True)
 
-    multiple: _t.Tbool = T.Bool(
+    multiple: "_t.Tbool" = T.Bool(
         True, help="if ``False``, only one ``link`` can be selected at a time"
     ).tag(sync=True)
 
-    selected_color: _t.Tstr = T.Unicode(
+    selected_color: "_t.Tstr" = T.Unicode(
         "rgba(31, 120, 179, 1.0)", help="the color of selected links"
     ).tag(sync=True)
 
-    selected_curvature: _t.Tfloat_maybe = T.Float(
+    selected_curvature: "_t.Tfloat_maybe" = T.Float(
         None,
         allow_none=True,
         help="the curvature of selected links, default: ``None`` preserves unselected ``curvature``.",
@@ -84,7 +86,7 @@ class LinkSelection(Behavior):
         help="the line-dash of selected links, default: ``None`` preserves unselected ``line_dash``",
     ).tag(sync=True)
 
-    selected_width: _t.Tfloat = T.Float(2, help="the width of selected links").tag(
+    selected_width: "_t.Tfloat" = T.Float(2, help="the width of selected links").tag(
         sync=True
     )
 

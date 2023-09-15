@@ -12,7 +12,7 @@ import sys
 from copy import deepcopy
 from importlib.util import module_from_spec, spec_from_file_location
 from pathlib import Path
-from typing import Any, Dict, List, Union
+from typing import TYPE_CHECKING, Any, Dict, List, Union
 from uuid import uuid4
 
 import pandas as P
@@ -22,44 +22,47 @@ from doit.cmd_list import List as ListCmd
 from doit.dependency import Dependency, JsonDB, SqliteDB
 from doit.task import Task
 
-from .. import _types as _t
 from .dataframe import DataFrameSource
 
 TAnyDict = Dict[str, Any]
 Tasks = List[Task]
 
 
+if TYPE_CHECKING:
+    from .. import _types as _t
+
+
 class DodoSource(DataFrameSource):
     """A source that displays the files, tasks, and dependencies of a ``dodo.py``."""
 
-    graph_data: _t.Tdict_any = T.Dict(
+    graph_data: "_t.Tdict_any" = T.Dict(
         help="an internal collection of observed Data"
     ).tag(sync=False)
 
-    project_root: T.TraitType[Path, Union[str, Path]] = T.Union(
+    project_root: "T.TraitType[Path, Union[str, Path]]" = T.Union(
         [T.Unicode(), T.Instance(Path)],
         help="a path to a folder that contains a ``dodo.py``",
     ).tag(sync=False)
 
-    backend: _t.Tstr = T.Unicode(
+    backend: "_t.Tstr" = T.Unicode(
         "sqlite3", help="the backend for ``doit``'s dependency state"
     ).tag(sync=False)
 
-    dep_file: _t.Tstr = T.Unicode(
+    dep_file: "_t.Tstr" = T.Unicode(
         ".doit.db",
         help="the path to ``doit``'s ``dep_file``, relative to the ``project_root``",
     ).tag(sync=False)
 
-    dodo_file: _t.Tstr = T.Unicode(
+    dodo_file: "_t.Tstr" = T.Unicode(
         "dodo.py",
         help="the path to a ``dodo.py``, relative to the ``project_root``",
     ).tag(sync=True)
 
-    show_files: _t.Tbool = T.Bool(
+    show_files: "_t.Tbool" = T.Bool(
         True, help="create a node for each file, or collapse to dep groups"
     ).tag(sync=False)
 
-    show_directories: _t.Tbool = T.Bool(
+    show_directories: "_t.Tbool" = T.Bool(
         False, help="create nodes for directories, and links for containment"
     ).tag(sync=False)
 

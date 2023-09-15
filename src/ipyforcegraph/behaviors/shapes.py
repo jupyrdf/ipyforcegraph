@@ -3,12 +3,11 @@
 # Copyright (c) 2023 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.
 
-from typing import Any, Optional, Sequence, Tuple, Union
+from typing import TYPE_CHECKING, Any, Optional, Sequence, Tuple, Union
 
 import ipywidgets as W
 import traitlets as T
 
-from .. import _types as _t
 from ..trait_utils import JSON_TYPES, coerce
 from ._base import (
     DEFAULT_RANK,
@@ -22,6 +21,9 @@ from ._base import (
     _make_trait,
 )
 
+if TYPE_CHECKING:
+    from .. import _types as _t
+
 
 @W.register
 class Text(HasFillAndStroke, HasOffsets):
@@ -30,7 +32,7 @@ class Text(HasFillAndStroke, HasOffsets):
     If the ``text`` trait is (or evaluates to) ``0`` or ``None``, no shape will be drawn.
     """
 
-    _model_name: _t.Tstr = T.Unicode("TextShapeModel").tag(sync=True)
+    _model_name: "_t.Tstr" = T.Unicode("TextShapeModel").tag(sync=True)
 
     text: TFeature = _make_trait("the text of a shape")
     font: TFeature = _make_trait("the font face of a shape")
@@ -62,7 +64,7 @@ class Ellipse(HasDimensions):
     If the ``width`` trait is (or evaluates to) ``0`` or ``None``, no shape will be drawn.
     """
 
-    _model_name: _t.Tstr = T.Unicode("EllipseShapeModel").tag(sync=True)
+    _model_name: "_t.Tstr" = T.Unicode("EllipseShapeModel").tag(sync=True)
 
 
 @W.register
@@ -72,7 +74,7 @@ class Rectangle(HasDimensions):
     If the ``width`` trait is (or evaluates to) ``0`` or ``None``, no shape will be drawn.
     """
 
-    _model_name: _t.Tstr = T.Unicode("RectangleShapeModel").tag(sync=True)
+    _model_name: "_t.Tstr" = T.Unicode("RectangleShapeModel").tag(sync=True)
 
 
 @W.register
@@ -87,7 +89,7 @@ class NodeShapes(Behavior):
     user selection.
     """
 
-    _model_name: _t.Tstr = T.Unicode("NodeShapeModel").tag(sync=True)
+    _model_name: "_t.Tstr" = T.Unicode("NodeShapeModel").tag(sync=True)
 
     size: TFeature = _make_trait("the size of the default circle shape", numeric=True)
     color: TFeature = _make_trait("the color of the default circle shape")
@@ -123,7 +125,7 @@ class LinkShapes(Behavior):
         ``line_dash`` is not displayed in :class:`~ipyforcegraph.graphs.ForceGraph3D`.
     """
 
-    _model_name: _t.Tstr = T.Unicode("LinkShapeModel").tag(sync=True)
+    _model_name: "_t.Tstr" = T.Unicode("LinkShapeModel").tag(sync=True)
 
     color: TFeature = _make_trait("the color of the link")
     curvature: TNumFeature = _make_trait(
@@ -164,7 +166,7 @@ class LinkShapes(Behavior):
 class LinkArrows(Behavior):
     """Customize the size, position, and color of arrows on ``links``."""
 
-    _model_name: _t.Tstr = T.Unicode("LinkArrowModel").tag(sync=True)
+    _model_name: "_t.Tstr" = T.Unicode("LinkArrowModel").tag(sync=True)
 
     color: TFeature = _make_trait("the color of the arrow")
     length: TNumFeature = _make_trait("the length of the arrow", numeric=True)
