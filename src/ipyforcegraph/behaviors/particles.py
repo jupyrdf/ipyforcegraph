@@ -8,6 +8,7 @@ from typing import Any
 import ipywidgets as W
 import traitlets as T
 
+from .. import _types as _t
 from ..trait_utils import JSON_TYPES, coerce
 from ._base import Behavior, TFeature, TNumFeature, _make_trait
 
@@ -21,7 +22,7 @@ class LinkParticles(Behavior):
        or they will exceed the frame rate of the animation.
     """
 
-    _model_name: str = T.Unicode("LinkParticleModel").tag(sync=True)
+    _model_name: _t.Tstr = T.Unicode("LinkParticleModel").tag(sync=True)
 
     color: TFeature = _make_trait("the color of the particles")
     density: TNumFeature = _make_trait(

@@ -246,8 +246,11 @@ def lock_one(platform: str, lockfile: Path, stack: Paths) -> None:
 
     lock_args = ["conda-lock", "--kind=explicit"]
     comment = lock_comment(stack)
+    patches = []
     for env_file in stack:
         lock_args += ["--file", env_file]
+        env_data = safe_load(env_file)
+        patches += env_data.get("_patches", [])
     lock_args += ["--platform", platform]
 
     if P.LOCK_HISTORY.exists():
@@ -267,6 +270,15 @@ def lock_one(platform: str, lockfile: Path, stack: Paths) -> None:
         print(">>>", " ".join(str_args), "\n")
         subprocess.check_call(str_args, cwd=td)
         raw = tmp_lock.read_text(**P.UTF8).split(P.EXPLICIT)[1].strip()
+
+    if patches:
+        print(f"   ... applying {len(patches)} patches")
+        lines = raw.splitlines()
+        for patch in patches:
+            print(f"""   ... looking to patch {patch["old"]}...""")
+            index = lines.index(patch["old"])
+            lines[index] = patch["new"]
+        raw = "\n".join(lines)
 
     lockfile.parent.mkdir(exist_ok=True, parents=True)
     lockfile.write_text("\n".join([comment, P.EXPLICIT, raw, ""]), **P.UTF8)

@@ -8,6 +8,7 @@ import ipywidgets as W
 import pandas as P
 import traitlets as T
 
+from .. import _types as _t
 from .dataframe import DataFrameSource
 
 TAnyDict = Dict[str, Any]
@@ -25,9 +26,9 @@ class WidgetSource(DataFrameSource):
         T.Instance(T.HasTraits), help="the traitleted from which to discover data"
     )
 
-    graph_data: TAnyDict = T.Dict(help="an internal collection of observed Data").tag(
-        sync=False
-    )
+    graph_data: _t.Tdict_any = T.Dict(
+        help="an internal collection of observed Data"
+    ).tag(sync=False)
 
     ignore_classes: Tuple[Type, ...] = W.TypedTuple(
         T.Instance(type), help="widget classes that should never be collected"

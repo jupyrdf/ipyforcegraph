@@ -13,6 +13,7 @@ from typing import Any, Tuple
 import ipywidgets as W
 import traitlets as T
 
+from .. import _types as _t
 from ..trait_utils import validate_enum
 from ._base import Column
 
@@ -62,9 +63,9 @@ class ContinuousColor(Column):
         ylorbr = "YlOrBr"
         ylorrd = "YlOrRd"
 
-    _model_name: str = T.Unicode("ContinuousColorModel").tag(sync=True)
+    _model_name: _t.Tstr = T.Unicode("ContinuousColorModel").tag(sync=True)
 
-    scheme: str = T.Enum(
+    scheme: T.Enum[str, str] = T.Enum(
         values=[*[m.value for m in Scheme], *Scheme],
         help="name of a continuous ``d3-scale-chromatic`` scheme",
         allow_none=True,
@@ -97,20 +98,20 @@ class OrdinalColor(Column):
         set3 = "Set3"
         tableau10 = "Tableau10"
 
-    _model_name: str = T.Unicode("OrdinalColorModel").tag(sync=True)
+    _model_name: _t.Tstr = T.Unicode("OrdinalColorModel").tag(sync=True)
 
-    scheme: str = T.Enum(
+    scheme: T.Enum[str, str] = T.Enum(
         values=[*[m.value for m in Scheme], *Scheme],
         help="name of an ordinal ``d3-scale-chromatic`` scheme",
         allow_none=True,
     ).tag(sync=True)
 
-    domain: Tuple[Any] = T.Tuple(
+    domain: T.Container[Tuple[Any, ...]] = T.Tuple(
         (0.0, 1.0),
         help=("values mapped to ordinal colors in the range"),
     ).tag(sync=True)
 
-    range: Tuple[str] = W.TypedTuple(
+    range: Tuple[str, ...] = W.TypedTuple(
         T.Unicode(), help="the colors available in a scheme (overloaded by ``scheme``)"
     ).tag(sync=True)
 

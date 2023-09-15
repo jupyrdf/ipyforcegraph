@@ -1,4 +1,9 @@
+_patches:
+  - old: https://conda.anaconda.org/conda-forge/noarch/traitlets-5.9.0-pyhd8ed1ab_0.conda#d0b4f5c87cd35ac3fb3d47b223263a64
+    new: https://conda.anaconda.org/conda-forge/noarch/traitlets-5.10.0-pyhd8ed1ab_0.conda#efd3f63a93621367d4fa6e274c511696
+
 dependencies:
   - jupyter_server >=2.2.1
   - jupyterlab >=3.6.4,<3.7
   - orjson
+  # - traitlets >=5.10

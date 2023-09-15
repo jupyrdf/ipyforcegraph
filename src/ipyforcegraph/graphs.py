@@ -8,6 +8,7 @@ from typing import Any, Tuple
 import ipywidgets as W
 import traitlets as T
 
+from . import _types as _t
 from ._base import ForceBase
 from .behaviors import Behavior
 from .behaviors._base import _make_trait
@@ -18,10 +19,10 @@ from .sources.dataframe import DataFrameSource
 class ForceGraph(W.DOMWidget, ForceBase):
     """Base force-directed graph widget."""
 
-    _model_name: str = T.Unicode("ForceGraphModel").tag(sync=True)
-    _view_name: str = T.Unicode("ForceGraphView").tag(sync=True)
+    _model_name: _t.Tstr = T.Unicode("ForceGraphModel").tag(sync=True)
+    _view_name: _t.Tstr = T.Unicode("ForceGraphView").tag(sync=True)
 
-    source: DataFrameSource = T.Instance(
+    source: T.Instance[DataFrameSource] = T.Instance(
         DataFrameSource, kw={}, help="the source of ``node`` and ``link`` data"
     ).tag(sync=True, **W.widget_serialization)
 
@@ -39,22 +40,22 @@ class ForceGraph(W.DOMWidget, ForceBase):
         ),
     ).tag(sync=True, **W.widget_serialization)
 
-    default_node_color: str = T.Unicode(
+    default_node_color: _t.Tstr = T.Unicode(
         "rgba(31, 120, 179, 1.0)",
         help="a default ``node`` color, which can be overridden by :class:`~ipyforcegraph.behaviors.shapes.NodeShapes`",
     ).tag(sync=True)
 
-    default_node_size: float = T.Float(
+    default_node_size: _t.Tfloat = T.Float(
         1,
         help="a default ``node`` size, which can be overridden by :class:`~ipyforcegraph.behaviors.shapes.NodeShapes`",
     ).tag(sync=True)
 
-    default_link_color: str = T.Unicode(
+    default_link_color: _t.Tstr = T.Unicode(
         "rgba(66, 66, 66, 0.5)",
         help="a default ``link`` color, which can be overridden by :class:`~ipyforcegraph.behaviors.shapes.LinkShapes`",
     ).tag(sync=True)
 
-    default_link_width: str = T.Float(
+    default_link_width: _t.Tfloat = T.Float(
         1.0,
         help="a default ``link`` width, which can be overridden by :class:`~ipyforcegraph.behaviors.shapes.LinkShapes`",
     ).tag(sync=True)
@@ -76,5 +77,5 @@ class ForceGraph(W.DOMWidget, ForceBase):
 class ForceGraph3D(ForceGraph):
     """3D force-directed graph widget."""
 
-    _model_name: str = T.Unicode("ForceGraph3DModel").tag(sync=True)
-    _view_name: str = T.Unicode("ForceGraph3DView").tag(sync=True)
+    _model_name: _t.Tstr = T.Unicode("ForceGraph3DModel").tag(sync=True)
+    _view_name: _t.Tstr = T.Unicode("ForceGraph3DView").tag(sync=True)

@@ -83,7 +83,9 @@ addopts = [
 ]
 filterwarnings = [
     "error",
+    # for traitlets <=5.9
     "ignore:^\n?.*Sentinel:DeprecationWarning:traittypes",
+    # traitlets >=5.10
     "ignore:^\n?.*Sentinel:DeprecationWarning:traitlets",
     "ignore:.metadata:DeprecationWarning:ipywidgets",
 ]

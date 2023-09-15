@@ -8,6 +8,7 @@ from typing import Any, Optional, Union
 import ipywidgets as W
 import traitlets as T
 
+from .. import _types as _t
 from .._base import ForceBase
 from ..trait_utils import JSON_TYPES, coerce
 
@@ -35,9 +36,9 @@ class DEFAULT_RANK:
 class Behavior(ForceBase):
     """The base class for all IPyForceGraph graph behaviors."""
 
-    _model_name: str = T.Unicode("BehaviorModel").tag(sync=True)
+    _model_name: _t.Tstr = T.Unicode("BehaviorModel").tag(sync=True)
 
-    rank: int = T.Int(
+    rank: _t.Tint = T.Int(
         DEFAULT_RANK.behavior,
         help=("order in which behaviors are applied: lower numbers are applied first."),
     ).tag(sync=True)
@@ -46,8 +47,8 @@ class Behavior(ForceBase):
 class BaseD3Force(Behavior):
     """A base for all ``d3-force-3d`` force wrappers."""
 
-    _model_name: str = T.Unicode("BaseD3ForceModel").tag(sync=True)
-    active: bool = T.Bool(True, help="whether the force is currently active").tag(
+    _model_name: _t.Tstr = T.Unicode("BaseD3ForceModel").tag(sync=True)
+    active: _t.Tbool = T.Bool(True, help="whether the force is currently active").tag(
         sync=True
     )
 
@@ -55,21 +56,21 @@ class BaseD3Force(Behavior):
 class ShapeBase(ForceBase):
     """A base class from which all :mod:`~ipyforcegraph.behaviors.shapes` inherit."""
 
-    _model_name: str = T.Unicode("ShapeBaseModel").tag(sync=True)
+    _model_name: _t.Tstr = T.Unicode("ShapeBaseModel").tag(sync=True)
 
 
 class DynamicValue(ForceBase):
     """An abstract class to describe what a Dynamic Widget Trait is and does."""
 
-    _model_name: str = T.Unicode("DynamicModel").tag(sync=True)
+    _model_name = T.Unicode("DynamicModel").tag(sync=True)
 
     JSON_DATA_TYPES = JSON_TYPES.get_supported_types()
 
-    value: str = T.Unicode(
+    value: _t.Tstr = T.Unicode(
         "", help="the source used to compute the value for the trait"
     ).tag(sync=True)
 
-    coerce: str = T.Unicode(
+    coerce: _t.Tstr_maybe = T.Unicode(
         help="name of a JSON Schema ``type`` into which to coerce the final value",
         allow_none=True,
     ).tag(sync=True)
@@ -97,7 +98,7 @@ class DynamicValue(ForceBase):
 class Column(DynamicValue):
     """A column from a :class:`~ipyforcegraph.sources.dataframe.DataFrameSource`."""
 
-    _model_name: str = T.Unicode("ColumnModel").tag(sync=True)
+    _model_name: _t.Tstr = T.Unicode("ColumnModel").tag(sync=True)
 
 
 class Nunjucks(DynamicValue):
@@ -140,7 +141,7 @@ class Nunjucks(DynamicValue):
         rgb({{ c }},0,0)
     """
 
-    _model_name: str = T.Unicode("NunjucksModel").tag(sync=True)
+    _model_name: _t.Tstr = T.Unicode("NunjucksModel").tag(sync=True)
 
 
 def _make_trait(
@@ -177,7 +178,7 @@ def _make_trait(
 class HasScale(ShapeBase):
     """A shape that has ``scale_on_zoom``."""
 
-    _model_name: str = T.Unicode("HasScaleModel").tag(sync=True)
+    _model_name: _t.Tstr = T.Unicode("HasScaleModel").tag(sync=True)
 
     scale_on_zoom: TBoolFeature = _make_trait(
         "whether font size/stroke respects the global scale. Has no impact on `link` shapes.",
@@ -192,7 +193,7 @@ class HasScale(ShapeBase):
 class HasFillAndStroke(HasScale):
     """A shape that has ``fill`` and ``stroke``."""
 
-    _model_name: str = T.Unicode("HasFillModel").tag(sync=True)
+    _model_name: _t.Tstr = T.Unicode("HasFillModel").tag(sync=True)
     fill: TFeature = _make_trait("the fill color of a shape")
     stroke: TFeature = _make_trait("the stroke color of a shape")
     stroke_width: TNumFeature = _make_trait("the stroke width of a shape", numeric=True)
@@ -214,7 +215,7 @@ class HasFillAndStroke(HasScale):
 class HasOffsets(ShapeBase):
     """A shape that can be offset in the horizontal, vertical, or elevation dimensions."""
 
-    _model_name: str = T.Unicode("HasOffsetsModel").tag(sync=True)
+    _model_name: _t.Tstr = T.Unicode("HasOffsetsModel").tag(sync=True)
 
     offset_x: float = _make_trait(
         "the relative horizontal offset from the middle of the shape in ``px``",
@@ -237,7 +238,7 @@ class HasOffsets(ShapeBase):
 class HasDimensions(HasFillAndStroke, HasOffsets):
     """A shape that has ``width``, ``height`` and ``depth``."""
 
-    _model_name: str = T.Unicode("HasDimensionsModel").tag(sync=True)
+    _model_name: _t.Tstr = T.Unicode("HasDimensionsModel").tag(sync=True)
 
     width: TNumFeature = _make_trait("the width of a shape in ``px``", numeric=True)
     height: TNumFeature = _make_trait("the height of a shape in ``px``", numeric=True)
