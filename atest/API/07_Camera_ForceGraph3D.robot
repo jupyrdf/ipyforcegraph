@@ -23,9 +23,11 @@ Camera Can Observe ForceGraph3D Nodes
 *** Keywords ***
 Camera Works As Expected
     [Arguments]    ${widget_class}
-    ${screens} =    Set Variable    ${SCREENS}${/}${widget_class.lower()}_camera
+    ${context} =    Set Variable    ${widget_class.lower()}_camera
+    ${screens} =    Set Variable    ${SCREENS}${/}${context}
     Maybe Skip A Test    widget_class=${widget_class}    feature=camera
     Set Screenshot Directory    ${screens}
+    Initialize Coverage Kernel    ${FAKE_HOME}    api-camera-${context}
     Set Up Camera Example    ${widget_class}
     ${frame} =    Set Variable    css:${IPYFORCEGRAPH FRAME}
     ${on_camera} =    Get Element Screenshot Size    ${frame}    ${screens}    01-on-camera.png

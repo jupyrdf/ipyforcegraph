@@ -454,6 +454,21 @@ def atest_cov_js():
     return rc == 0
 
 
+def configure_tmp_coverage(td: str) -> None:
+    tdp = Path(td)
+    td_ppt = tdp / "pyproject.toml"
+    td_ppt.write_text(
+        """
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "if TYPE_CHECKING:",
+]
+        """,
+        **P.UTF8,
+    )
+
+
 def atest_cov_py():
     all_py_cov = sorted(P.ATEST_OUT.glob("*/pabot_results/*/pycov/.coverage*"))
 
@@ -461,18 +476,7 @@ def atest_cov_py():
         print("No Python coverage from atest")
         return False
     with tempfile.TemporaryDirectory() as td:
-        tdp = Path(td)
-        td_ppt = tdp / "pyproject.toml"
-        td_ppt.write_text(
-            """
-[tool.coverage.report]
-exclude_lines = [
-    "pragma: no cover",
-    "if TYPE_CHECKING:",
-]
-            """,
-            **P.UTF8,
-        )
+        configure_tmp_coverage(td)
         subprocess.call(["coverage", "combine", "--keep", *all_py_cov], cwd=td)
         subprocess.call(
             [
@@ -507,6 +511,7 @@ def all_cov():
         *sorted(P.ATEST_OUT.glob("*/pabot_results/*/pycov/.coverage*")),
     ]
     with tempfile.TemporaryDirectory() as td:
+        configure_tmp_coverage(td)
         subprocess.call(["coverage", "combine", "--keep", *all_py_cov], cwd=td)
         subprocess.call(
             [

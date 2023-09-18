@@ -24,9 +24,11 @@ ${SCREENS}      ${SCREENS ROOT}${/}api
 *** Keywords ***
 Color Feature Works As Expected
     [Arguments]    ${widget_class}    ${feature}
-    ${screens} =    Set Variable    ${SCREENS}${/}${widget_class.lower()}_${feature}
+    ${context} =   Set Variable   ${widget_class.lower()}_${feature}
+    ${screens} =    Set Variable    ${SCREENS}${/}${context}
     Maybe Skip A Test    widget_class=${widget_class}   feature=${feature}
     Set Screenshot Directory    ${screens}
+    Initialize Coverage Kernel   ${FAKE_HOME}   api-colors-${context}
     Set Up Color Example    ${feature}    ${widget_class}
     ${frame} =   Set Variable   css:${IPYFORCEGRAPH FRAME}
     ${transparent} =    Get Element Screenshot Size    ${frame}  ${screens}    01-transparent.png

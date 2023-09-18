@@ -3,6 +3,7 @@ Library     Collections
 Library     XML    WITH NAME    XML
 Library     OperatingSystem
 Resource    ../variables/IPyForceGraph.robot
+Resource    ./Server.robot
 
 
 *** Keywords ***
@@ -55,6 +56,7 @@ Copy Support Files
 
 Example Should Restart-and-Run-All
     [Arguments]    ${example}
+    Initialize Coverage Kernel    ${FAKE_HOME}    example-${example.lower()}
     Set Screenshot Directory    ${SCREENS}${/}${example.lower()}
     Execute JupyterLab Command    Show Log Console
     Open IPyForceGraph Notebook    ${example}

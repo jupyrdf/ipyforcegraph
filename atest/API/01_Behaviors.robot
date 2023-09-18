@@ -67,7 +67,9 @@ Set Up Behavior Example
     [Arguments]    ${behavior}    ${widget_class}
     Maybe Skip A Test    widget_class=${widget_class}
     Set Tags    behavior:${behavior.lower()}    widget:${widget_class.lower()}
-    Set Screenshot Directory    ${SCREENS}${/}${widget_class.lower()}_${behavior.lower()}
+    ${context} =    Set Variable    ${widget_class.lower()}_${behavior.lower()}
+    Initialize Coverage Kernel    ${FAKE_HOME}    behaviors-${context}
+    Set Screenshot Directory    ${SCREENS}${/}${context}
     ${text} =    Get File    ${IPYFORCEGRAPH_FIXTURES}${/}api${/}${behavior}.py
     ${text} =    Set Variable    ${text.replace("WIDGET_CLASS", "${widget_class}")}
     Launch A New JupyterLab Document

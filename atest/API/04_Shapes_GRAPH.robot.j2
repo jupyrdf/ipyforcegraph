@@ -31,8 +31,10 @@ ${SCREENS}      ${SCREENS ROOT}${/}api${/}shapes
 *** Keywords ***
 Shape Feature Works As Expected
     [Arguments]    ${widget_class}  ${shape_class}  ${feature}
-    ${screens} =    Set Variable    ${SCREENS}${/}${widget_class.lower()}${/}${shape_class.lower()}${/}${feature}
+    ${context} =  Set Variable  ${widget_class.lower()}_${shape_class.lower()}_${feature.lower()}
+    ${screens} =    Set Variable    ${SCREENS}${/}${context}
     Maybe Skip A Test    widget_class=${widget_class}   feature=${feature}  shape_class=${shape_class}
+    Initialize Coverage Kernel   ${FAKE_HOME}   api-shapes-${context}
     Set Screenshot Directory    ${screens}
     Set Up Shape Example    ${widget_class}  ${shape_class}  ${feature}
     ${frame} =   Set Variable   css:${IPYFORCEGRAPH FRAME}
