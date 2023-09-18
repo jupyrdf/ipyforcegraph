@@ -200,6 +200,8 @@ jobs:
           name: ipyforcegraph-${{ github.run_number }}-coverage
           path: |
             ./build/reports
+            !./build/reports/robot/*/pabot_results
+            !./build/reports/robot/*/jscov
 
       - name: Rename uncached conda packages
         shell: bash
@@ -321,6 +323,8 @@ jobs:
             ipyforcegraph-${{ github.run_number }}-${{ job.status }}-reports-${{ matrix.os }}-${{ matrix.py }}-${{ matrix.lab }}
           path: |
             ./build/reports
+            !./build/reports/robot/*/pabot_results
+            !./build/reports/robot/*/jscov
         if: always()
 
       - name: Rename uncached conda packages

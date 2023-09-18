@@ -461,6 +461,18 @@ def atest_cov_py():
         print("No Python coverage from atest")
         return False
     with tempfile.TemporaryDirectory() as td:
+        tdp = Path(td)
+        td_ppt = tdp / "pyproject.toml"
+        td_ppt.write_text(
+            """
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "if TYPE_CHECKING:",
+]
+            """,
+            **P.UTF8,
+        )
         subprocess.call(["coverage", "combine", "--keep", *all_py_cov], cwd=td)
         subprocess.call(
             [

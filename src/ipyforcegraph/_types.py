@@ -4,21 +4,22 @@
 # Distributed under the terms of the Modified BSD License.
 from __future__ import annotations
 
-from typing import Any, Dict, Optional, Union
+from typing import TYPE_CHECKING, Any, Dict, Optional, Union
 
 import traitlets as T
 
-Tstr = T.Unicode[str, Union[str, bytes]]
-Tstr_maybe = T.Unicode[Optional[str], Union[str, bytes, None]]
+if TYPE_CHECKING:
+    Tstr = T.Unicode[str, Union[str, bytes]]
+    Tstr_maybe = T.Unicode[Optional[str], Union[str, bytes, None]]
 
-Tint = T.Int[int, int]
-Tint_maybe = Optional[int]
+    Tint = T.Int[int, int]
+    Tint_maybe = Optional[int]
 
-Tfloat = T.Float[float, float]
-Tfloat_maybe = T.Float[Optional[int], Union[int, float, None]]
+    Tfloat = T.Float[float, float]
+    Tfloat_maybe = T.Float[Optional[int], Union[int, float, None]]
 
-Tbool = T.Bool[bool, Union[bool, int]]
+    Tbool = T.Bool[bool, Union[bool, int]]
 
-Tdict_any = T.Instance[Dict[Any, Any]]
+    Tdict_any = T.Instance[Dict[Any, Any]]
 
-Tenum_str_str = T.Enum[str, str]
+    Tenum_str_str = T.Enum[str, str]
