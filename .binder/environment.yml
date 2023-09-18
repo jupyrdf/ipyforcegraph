@@ -34,4 +34,5 @@ dependencies:
   - scour
   - stringcase
   - tomli
+  - traitlets >=5.10
   - traittypes
