@@ -71,7 +71,7 @@ https://conda.anaconda.org/conda-forge/noarch/smmap-3.0.5-pyh44b312d_0.tar.bz2#3
 https://conda.anaconda.org/conda-forge/noarch/tomli-2.0.1-pyhd8ed1ab_0.tar.bz2#5844808ffab9ebdb694585b50ba02a96
 https://conda.anaconda.org/conda-forge/noarch/tomlkit-0.12.1-pyha770c72_0.conda#62f5b331c53d73e2f6c4c130b53518a0
 https://conda.anaconda.org/conda-forge/noarch/toolz-0.12.0-pyhd8ed1ab_0.tar.bz2#92facfec94bc02d6ccf42e7173831a36
-https://conda.anaconda.org/conda-forge/noarch/typing_extensions-4.7.1-pyha770c72_0.conda#c39d6a09fe819de4951c2642629d9115
+https://conda.anaconda.org/conda-forge/noarch/typing_extensions-4.8.0-pyha770c72_0.conda#5b1be40a26d10a06f6d4f1f9e19fa0c7
 https://conda.anaconda.org/conda-forge/noarch/webencodings-0.5.1-pyhd8ed1ab_2.conda#daf5160ff9cde3a468556965329085b9
 https://conda.anaconda.org/conda-forge/noarch/win_inet_pton-1.1.0-pyhd8ed1ab_6.tar.bz2#30878ecc4bd36e8deeea1e3c151b2e0b
 https://conda.anaconda.org/conda-forge/noarch/zipp-3.16.2-pyhd8ed1ab_0.conda#2da0451b54c4563c32490cb1b7cf68a1
@@ -86,7 +86,7 @@ https://conda.anaconda.org/conda-forge/noarch/jinja2-3.1.2-pyhd8ed1ab_1.tar.bz2#
 https://conda.anaconda.org/conda-forge/win-64/libmamba-1.4.2-h8a7d157_0.conda#beac6b9e25bbaf8d22b13df786891192
 https://conda.anaconda.org/conda-forge/noarch/pysocks-1.7.1-pyh0701188_6.tar.bz2#56cd9fe388baac0e90c7149cfac95b60
 https://conda.anaconda.org/conda-forge/win-64/ruamel.yaml-0.17.32-py311ha68e1ae_0.conda#1a51f29331338bfde51127db204d7757
-https://conda.anaconda.org/conda-forge/noarch/typing-extensions-4.7.1-hd8ed1ab_0.conda#f96688577f1faa58096d06a45136afa2
+https://conda.anaconda.org/conda-forge/noarch/typing-extensions-4.8.0-hd8ed1ab_0.conda#384462e63262a527bda564fa2d9126c0
 https://conda.anaconda.org/conda-forge/noarch/annotated-types-0.5.0-pyhd8ed1ab_0.conda#578ae086f225bc2380c79f3b551ff2f7
 https://conda.anaconda.org/conda-forge/win-64/brotlipy-0.7.0-py311ha68e1ae_1005.tar.bz2#dd9604ece454103e7210110c6d343e37
 https://conda.anaconda.org/conda-forge/noarch/click-default-group-1.2.4-pyhd8ed1ab_0.conda#7c2b6931f9b3548ed78478332095c3e9
@@ -97,7 +97,7 @@ https://conda.anaconda.org/conda-forge/noarch/importlib_metadata-6.8.0-hd8ed1ab_
 https://conda.anaconda.org/conda-forge/win-64/libmambapy-1.4.2-py311h29ee5fe_0.conda#1d07b16b07e0b3fa5d2e145b221e4f1d
 https://conda.anaconda.org/conda-forge/noarch/platformdirs-3.10.0-pyhd8ed1ab_0.conda#0809187ef9b89a3d94a5c24d13936236
 https://conda.anaconda.org/conda-forge/win-64/pydantic-core-2.6.3-py311hc37eb10_0.conda#7152dbe52f4587458f34db240dad99f5
-https://conda.anaconda.org/conda-forge/win-64/zstandard-0.19.0-py311ha68e1ae_0.tar.bz2#94114ffe0cad9e1e704e2c0015c8aa87
+https://conda.anaconda.org/conda-forge/win-64/zstandard-0.21.0-py311he5d195f_0.conda#d78d7c9dd798d283f8be0ce6c8e7f7cf
 https://conda.anaconda.org/conda-forge/noarch/conda-package-streaming-0.9.0-pyhd8ed1ab_0.conda#38253361efb303deead3eab39ae9269b
 https://conda.anaconda.org/conda-forge/noarch/doit-with-toml-0.36.0-pyhd8ed1ab_0.tar.bz2#593faaa546937cfa071928c9127fcb12
 https://conda.anaconda.org/conda-forge/win-64/keyring-24.2.0-py311h1ea47a8_0.conda#6a5239529cb5af3437bdd24c1082c2eb
