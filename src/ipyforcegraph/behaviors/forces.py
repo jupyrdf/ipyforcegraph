@@ -8,9 +8,10 @@ Using documentation from:
 
 # Copyright (c) 2023 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.
+from __future__ import annotations
 
 import enum
-from typing import Any, Dict, Optional
+from typing import TYPE_CHECKING, Any, Dict, Optional
 
 import ipywidgets as W
 import traitlets as T
@@ -19,13 +20,18 @@ from ..trait_utils import JSON_TYPES, coerce, validate_enum
 from ._base import (
     BaseD3Force,
     Behavior,
-    TBoolFeature,
-    TFeature,
-    TNumFeature,
     _make_trait,
 )
 
-TForceDict = Dict[str, BaseD3Force]
+if TYPE_CHECKING:
+    from .. import _types as _t
+    from ._base import (
+        TBoolFeature,
+        TFeature,
+        TNumFeature,
+    )
+
+    TForceDict = Dict[str, BaseD3Force]
 
 
 @W.register
@@ -37,43 +43,45 @@ class GraphForces(Behavior):
     For more, see the frontend documentation on https://github.com/vasturiano/force-graph#force-engine-d3-force-configuration
     """
 
-    _model_name: str = T.Unicode("GraphForcesModel").tag(sync=True)
+    _model_name: "_t.Tstr" = T.Unicode("GraphForcesModel").tag(sync=True)
 
-    forces: TForceDict = T.Dict(
+    forces: "T.TraitType[Dict[str, BaseD3Force], Dict[str, BaseD3Force]]" = T.Dict(
         value_trait=T.Instance(BaseD3Force, allow_none=True),
         help="named forces. Set a name `None` to remove a force: By default, ForceGraph has `link`, `charge`, and `center`",
     ).tag(sync=True, **W.widget_serialization)
 
-    warmup_ticks: Optional[int] = T.Int(
+    warmup_ticks: "_t.Tint" = T.Int(
         0,
         min=0,
         help="layout engine cycles to dry-run at ignition before starting to render",
     ).tag(sync=True)
 
-    cooldown_ticks: Optional[int] = T.Int(
+    cooldown_ticks: "_t.Tint" = T.Int(
         -1,
         help="frames to render before stopping and freezing the layout engine. Values less than zero will be translated to `Infinity`",
     ).tag(sync=True)
 
-    alpha_min: Optional[float] = T.Float(
+    alpha_min: "_t.Tfloat" = T.Float(
         0.0, min=0.0, max=1.0, help="simulation alpha min parameter"
     ).tag(sync=True)
 
-    alpha_decay: Optional[float] = T.Float(
+    alpha_decay: "_t.Tfloat" = T.Float(
         0.0228,
         min=0.0,
         max=1.0,
         help="simulation intensity decay parameter",
     ).tag(sync=True)
 
-    velocity_decay: Optional[float] = T.Float(
+    velocity_decay: "_t.Tfloat" = T.Float(
         0.4,
         min=0.0,
         max=1.0,
         help="nodes' velocity decay that simulates the medium resistance",
     ).tag(sync=True)
 
-    def __init__(self, forces: Optional[TForceDict] = None, *args: Any, **kwargs: Any):
+    def __init__(
+        self, forces: "Optional[TForceDict]" = None, *args: Any, **kwargs: Any
+    ):
         kwargs["forces"] = forces or {}
         super().__init__(*args, **kwargs)
 
@@ -85,12 +93,12 @@ class Link(BaseD3Force):
     https://github.com/d3/d3-force#links
     """
 
-    _model_name: str = T.Unicode("LinkForceModel").tag(sync=True)
+    _model_name: "_t.Tstr" = T.Unicode("LinkForceModel").tag(sync=True)
 
-    distance: TNumFeature = _make_trait(
+    distance: "TNumFeature" = _make_trait(
         "the 'desired' distance of a link. Context takes ``link``", numeric=True
     )
-    strength: TNumFeature = _make_trait(
+    strength: "TNumFeature" = _make_trait(
         "the strength of a link in reaching its desired length. Context takes "
         "``link``",
         numeric=True,
@@ -110,21 +118,21 @@ class Center(BaseD3Force):
     https://github.com/d3/d3-force#centering
     """
 
-    _model_name: str = T.Unicode("CenterForceModel").tag(sync=True)
+    _model_name: "_t.Tstr" = T.Unicode("CenterForceModel").tag(sync=True)
 
-    x: Optional[float] = T.Float(
+    x: "_t.Tfloat_maybe" = T.Float(
         None,
         allow_none=True,
         help="the x-coordinate of the position to center the nodes on",
     ).tag(sync=True)
 
-    y: Optional[float] = T.Float(
+    y: "_t.Tfloat_maybe" = T.Float(
         None,
         allow_none=True,
         help="the y-coordinate of the position to center the nodes on",
     ).tag(sync=True)
 
-    z: Optional[float] = T.Float(
+    z: "_t.Tfloat_maybe" = T.Float(
         None,
         allow_none=True,
         help="the z-coordinate of the position to center the nodes on (only applies to ``ForceGraph3D``)",
@@ -139,15 +147,15 @@ class X(BaseD3Force):
     https://github.com/d3/d3-force#positioning
     """
 
-    _model_name: str = T.Unicode("XForceModel").tag(sync=True)
+    _model_name: "_t.Tstr" = T.Unicode("XForceModel").tag(sync=True)
 
-    x: TNumFeature = _make_trait(
+    x: "TNumFeature" = _make_trait(
         "the x-coordinate of the centering position to the specified number. "
         "Context takes ``node``.",
         numeric=True,
     )
 
-    strength: TNumFeature = _make_trait(
+    strength: "TNumFeature" = _make_trait(
         "the strength of the force. Context takes ``node``",
         numeric=True,
         default_value=0,
@@ -167,14 +175,14 @@ class Y(BaseD3Force):
     https://github.com/d3/d3-force#positioning
     """
 
-    _model_name: str = T.Unicode("YForceModel").tag(sync=True)
+    _model_name: "_t.Tstr" = T.Unicode("YForceModel").tag(sync=True)
 
-    y: TNumFeature = _make_trait(
+    y: "TNumFeature" = _make_trait(
         "the y-coordinate of the centering position. " "Context takes ``node``.",
         numeric=True,
     )
 
-    strength: TNumFeature = _make_trait(
+    strength: "TNumFeature" = _make_trait(
         "the strength of the force. Context takes ``node``",
         numeric=True,
         default_value=0,
@@ -197,14 +205,14 @@ class Z(BaseD3Force):
     https://github.com/d3/d3-force#positioning
     """
 
-    _model_name: str = T.Unicode("ZForceModel").tag(sync=True)
+    _model_name: "_t.Tstr" = T.Unicode("ZForceModel").tag(sync=True)
 
-    z: TNumFeature = _make_trait(
+    z: "TNumFeature" = _make_trait(
         "the z-coordinate of the centering position. Context takes ``node``.",
         numeric=True,
     )
 
-    strength: TNumFeature = _make_trait(
+    strength: "TNumFeature" = _make_trait(
         "the strength of the force. Context takes ``node``",
         numeric=True,
         default_value=0,
@@ -228,28 +236,28 @@ class ManyBody(BaseD3Force):
     https://github.com/d3/d3-force#many-body
     """
 
-    _model_name: str = T.Unicode("ManyBodyForceModel").tag(sync=True)
+    _model_name: "_t.Tstr" = T.Unicode("ManyBodyForceModel").tag(sync=True)
 
-    strength: TNumFeature = _make_trait(
+    strength: "TNumFeature" = _make_trait(
         "a nunjucks template to use to calculate strength. Context takes ``node``",
         numeric=True,
         default_value=0,
         allow_none=False,
     )
 
-    theta: Optional[float] = T.Float(
+    theta: "_t.Tfloat_maybe" = T.Float(
         None,
         allow_none=True,
         help="the Barnes-Hut approximation criterion",
     ).tag(sync=True)
 
-    distance_min: Optional[float] = T.Float(
+    distance_min: "_t.Tfloat_maybe" = T.Float(
         None,
         allow_none=True,
         help="the minimum distance between nodes over which this force is considered",
     ).tag(sync=True)
 
-    distance_max: Optional[float] = T.Float(
+    distance_max: "_t.Tfloat_maybe" = T.Float(
         None,
         allow_none=True,
         help="the maximum distance between nodes over which this force is considered",
@@ -268,33 +276,33 @@ class Radial(BaseD3Force):
     https://github.com/d3/d3-force#forceRadial
     """
 
-    _model_name: str = T.Unicode("RadialForceModel").tag(sync=True)
+    _model_name: "_t.Tstr" = T.Unicode("RadialForceModel").tag(sync=True)
 
-    radius: TNumFeature = _make_trait(
+    radius: "TNumFeature" = _make_trait(
         "radius of the force. Context takes ``node``",
         numeric=True,
     )
 
-    strength: TNumFeature = _make_trait(
+    strength: "TNumFeature" = _make_trait(
         "the strength of the force. Context takes ``node``",
         numeric=True,
         default_value=0,
         allow_none=False,
     )
 
-    x: Optional[float] = T.Float(
+    x: "_t.Tfloat_maybe" = T.Float(
         None,
         allow_none=True,
         help="the x-coordinate of the centering position",
     ).tag(sync=True)
 
-    y: Optional[float] = T.Float(
+    y: "_t.Tfloat_maybe" = T.Float(
         None,
         allow_none=True,
         help="the y-coordinate of the centering position",
     ).tag(sync=True)
 
-    z: Optional[float] = T.Float(
+    z: "_t.Tfloat_maybe" = T.Float(
         None,
         allow_none=True,
         help="the z-coordinate of the centering position",
@@ -313,14 +321,14 @@ class Collision(BaseD3Force):
     https://github.com/d3/d3-force#collision
     """
 
-    _model_name: str = T.Unicode("CollisionForceModel").tag(sync=True)
+    _model_name: "_t.Tstr" = T.Unicode("CollisionForceModel").tag(sync=True)
 
-    radius: TNumFeature = _make_trait(
+    radius: "TNumFeature" = _make_trait(
         "The radius of collision by node. Context takes ``node``",
         numeric=True,
     )
 
-    strength: Optional[float] = T.Float(
+    strength: "_t.Tfloat_maybe" = T.Float(
         None,
         allow_none=True,
         min=0.0,
@@ -340,9 +348,9 @@ class Cluster(BaseD3Force):
     https://github.com/vasturiano/d3-force-cluster-3d
     """
 
-    _model_name: str = T.Unicode("ClusterForceModel").tag(sync=True)
+    _model_name: "_t.Tstr" = T.Unicode("ClusterForceModel").tag(sync=True)
 
-    strength: Optional[float] = T.Float(
+    strength: "_t.Tfloat_maybe" = T.Float(
         None,
         allow_none=True,
         min=0.0,
@@ -350,7 +358,7 @@ class Cluster(BaseD3Force):
         help="the strength of the force",
     ).tag(sync=True)
 
-    inertia: Optional[float] = T.Float(
+    inertia: "_t.Tfloat_maybe" = T.Float(
         None,
         allow_none=True,
         min=0.0,
@@ -362,40 +370,40 @@ class Cluster(BaseD3Force):
     ).tag(sync=True)
 
     # node context
-    key: TFeature = _make_trait(
+    key: "TFeature" = _make_trait(
         "a cluster key to which a node belongs. Context takes ``node``.",
     )
 
     # cluster context
-    radius: TNumFeature = _make_trait(
+    radius: "TNumFeature" = _make_trait(
         "the radius of a cluster. Context takes ``cluster``, ``node``, ``key``, and ``nodes``.",
         numeric=True,
         by_column=False,
         by_wrapper=False,
     )
 
-    x: TNumFeature = _make_trait(
+    x: "TNumFeature" = _make_trait(
         "the x-coordinate of a cluster. Context takes ``cluster``, ``node``, ``key``, and ``nodes``.",
         numeric=True,
         by_column=False,
         by_wrapper=False,
     )
 
-    y: TNumFeature = _make_trait(
+    y: "TNumFeature" = _make_trait(
         "the y-coordinate of a cluster. Context takes ``cluster``, ``node``, ``key``, and ``nodes``.",
         numeric=True,
         by_column=False,
         by_wrapper=False,
     )
 
-    z: TNumFeature = _make_trait(
+    z: "TNumFeature" = _make_trait(
         "the z-coordinate of a cluster. Context takes ``cluster``, ``node``, ``key``, and ``nodes``.",
         numeric=True,
         by_column=False,
         by_wrapper=False,
     )
 
-    def __init__(self, key: Optional[TFeature] = None, *args: Any, **kwargs: Any):
+    def __init__(self, key: "Optional[TFeature]" = None, *args: Any, **kwargs: Any):
         kwargs["key"] = key
         super().__init__(*args, **kwargs)
 
@@ -423,22 +431,22 @@ class DAG(BaseD3Force):
         radial_out = "radialout"
         radial_in = "radialin"
 
-    _model_name: str = T.Unicode("DAGBehaviorModel").tag(sync=True)
+    _model_name: "_t.Tstr" = T.Unicode("DAGBehaviorModel").tag(sync=True)
 
-    mode: Optional[str] = T.Enum(
+    mode: "_t.Tenum_str_str" = T.Enum(
         values=[*[m.value for m in Mode], *Mode],
         help="DAG constraint layout mode/direction",
         default_value=None,
         allow_none=True,
     ).tag(sync=True)
 
-    level_distance: Optional[float] = T.Float(
+    level_distance: "_t.Tfloat_maybe" = T.Float(
         default_value=None,
         help="distance between DAG levels",
         allow_none=True,
     ).tag(sync=True)
 
-    node_filter: TBoolFeature = _make_trait(
+    node_filter: "TBoolFeature" = _make_trait(
         "whether node is part of the DAG layout",
         default_value=True,
         boolish=True,

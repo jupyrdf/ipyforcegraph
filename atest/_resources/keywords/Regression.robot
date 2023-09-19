@@ -11,6 +11,7 @@ Prepare Regression Test
     [Arguments]    ${gh_issue}
     ${screens} =    Set Variable    ${SCREENS ROOT}${/}regression${/}${gh_issue}
     Set Screenshot Directory    ${screens}
+    Initialize Coverage Kernel    ${FAKE_HOME}    regression-${gh_issue}
     ${text} =    Get File    ${IPYFORCEGRAPH_FIXTURES}${/}regression${/}${gh_issue}.py
     ${files} =    Get All IPyForceGraph Data Paths
     Copy Support Files    ${files}    ${/}datasets${/}

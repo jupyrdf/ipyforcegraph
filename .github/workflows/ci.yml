@@ -21,7 +21,7 @@ env:
   CONDA_EXE: mamba
   # our stuff
   SKIP_CONDA_PREFLIGHT: 1
-  CACHE_EPOCH: 19
+  CACHE_EPOCH: 20
   ATEST_RETRIES: 2
 
 jobs:
@@ -200,6 +200,8 @@ jobs:
           name: ipyforcegraph-${{ github.run_number }}-coverage
           path: |
             ./build/reports
+            !./build/reports/robot/*/pabot_results
+            !./build/reports/robot/*/jscov
 
       - name: Rename uncached conda packages
         shell: bash
@@ -321,6 +323,8 @@ jobs:
             ipyforcegraph-${{ github.run_number }}-${{ job.status }}-reports-${{ matrix.os }}-${{ matrix.py }}-${{ matrix.lab }}
           path: |
             ./build/reports
+            !./build/reports/robot/*/pabot_results
+            !./build/reports/robot/*/jscov
         if: always()
 
       - name: Rename uncached conda packages

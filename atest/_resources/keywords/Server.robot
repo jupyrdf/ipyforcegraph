@@ -42,6 +42,7 @@ Tear Down Everything
 Initialize Fake Home
     ${home_dir} =    Set Variable    ${OUTPUT_DIR}${/}.home
     Create Directory    ${home_dir}
+    Set Suite Variable    ${FAKE_HOME}    ${home_dir}    children=${TRUE}
     RETURN    ${home_dir}
 
 Initialize Jupyter Paths
@@ -54,14 +55,16 @@ Initialize Jupyter Paths
     Create Directory    ${etc_dir}
     Copy File    ${IPYFORCEGRAPH_FIXTURES}${/}${NBSERVER CONF}    ${etc_dir}${/}${NBSERVER CONF}
     Copy File    ${IPYFORCEGRAPH_FIXTURES}${/}${SETTINGS_DEFAULTS}    ${etc_dir}${/}labconfig${/}${SETTINGS_DEFAULTS}
-    IF    ${TOTAL_COVERAGE}    Initialize Coverage Kernel    ${home_dir}
+    Initialize Coverage Kernel    ${home_dir}
 
 Initialize Coverage Kernel
     [Documentation]    Copy and patch the env kernel to run under coverage.
-    [Arguments]    ${home_dir}
+    [Arguments]    ${home_dir}    ${context}=atest-${PABOTQUEUEINDEX}-${PABOTEXECUTIONPOOLID}-${CALLER_ID}
+    IF    not ${TOTAL_COVERAGE}    RETURN    ${NONE}
     ${kernels_dir} =    Set Variable    ${home_dir}${/}${KERNELS_PATH}
-    Create Directory    ${kernels_dir}
     ${spec_dir} =    Set Variable    ${kernels_dir}${/}python3
+    Remove Directory    ${kernels_dir}    recursive=${TRUE}
+    Create Directory    ${kernels_dir}
     Copy Directory    %{CONDA_PREFIX}${/}share${/}jupyter${/}kernels${/}python3    ${spec_dir}
     ${spec_path} =    Set Variable    ${spec_dir}${/}kernel.json
     ${spec_text} =    Get File    ${spec_path}
@@ -76,7 +79,7 @@ Initialize Coverage Kernel
     ...    --parallel-mode
     ...    --branch
     ...    --source    ipyforcegraph
-    ...    --context    atest-${PABOTQUEUEINDEX}-${PABOTEXECUTIONPOOLID}-${CALLER_ID}
+    ...    --context    ${context}-${OS.lower()}
     ...    --concurrency    thread
     ...    --data-file    ${cov_path}${/}.coverage
     ...    @{rest}

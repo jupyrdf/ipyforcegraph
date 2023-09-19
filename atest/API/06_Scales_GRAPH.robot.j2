@@ -25,9 +25,11 @@ ${SCREENS}      ${SCREENS ROOT}${/}api
 *** Keywords ***
 Scale Works As Expected
     [Arguments]    ${widget_class}    ${scale_class}    ${scheme}
-    ${screens} =    Set Variable    ${SCREENS}${/}${widget_class.lower()}_${scale_class.lower()}
+    ${context} =   Set Variable   ${widget_class.lower()}_${scale_class.lower()}
+    ${screens} =    Set Variable    ${SCREENS}${/}${context}
     Maybe Skip A Test    widget_class=${widget_class}   feature=${scale_class}
     Set Screenshot Directory    ${screens}
+    Initialize Coverage Kernel   ${FAKE_HOME}   api-scales-${context}
     Set Up Scale Example    ${widget_class}    ${scale_class}    ${scheme}
     ${frame} =   Set Variable   css:${IPYFORCEGRAPH FRAME}
     ${transparent} =    Get Element Screenshot Size    ${frame}  ${screens}    01-transparent.png

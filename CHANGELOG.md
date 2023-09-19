@@ -1,5 +1,17 @@
 # Changelog
 
+## `0.4.2`
+
+### `ipyforcegraph 0.4.2`
+
+- adds python type hints compatible with `traitlets 5.10.0`
+  - while still runtime compatible with `traitlets <=5.9`, use of type checkers such as
+    `mypy` will be unreliable
+
+### `@jupyrdf/jupyter-forcegraph 0.4.2`
+
+> TBD
+
 ## `0.4.1`
 
 ### `ipyforcegraph 0.4.1`

@@ -29,9 +29,11 @@ ForceGraph3D Can Update Text Stroke
 *** Keywords ***
 Link Shape Feature Works As Expected
     [Arguments]    ${widget_class}    ${shape_class}    ${feature}
-    ${screens} =    Set Variable    ${SCREENS}${/}${widget_class.lower()}${/}${shape_class.lower()}${/}${feature}
+    ${context} =    Set Variable    ${widget_class.lower()}_${shape_class.lower()}_${feature}
+    ${screens} =    Set Variable    ${SCREENS}${/}${context}
     Maybe Skip A Test    widget_class=${widget_class}    feature=${feature}    shape_class=${shape_class}
     Set Screenshot Directory    ${screens}
+    Initialize Coverage Kernel    ${FAKE_HOME}    api-link-shapes2-${context}
     Set Up Link Shape Example    ${widget_class}    ${shape_class}    ${feature}
     ${frame} =    Set Variable    css:${IPYFORCEGRAPH FRAME}
     ${transparent} =    Get Element Screenshot Size    ${frame}    ${screens}    01-transparent.png

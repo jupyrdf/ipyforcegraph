@@ -2,14 +2,19 @@
 
 # Copyright (c) 2023 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.
+from __future__ import annotations
 
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import ipywidgets as W
 import traitlets as T
 
 from ..trait_utils import JSON_TYPES, coerce
-from ._base import Behavior, TFeature, TNumFeature, _make_trait
+from ._base import Behavior, _make_trait
+
+if TYPE_CHECKING:
+    from .. import _types as _t
+    from ._base import TFeature, TNumFeature
 
 
 @W.register
@@ -21,16 +26,16 @@ class LinkParticles(Behavior):
        or they will exceed the frame rate of the animation.
     """
 
-    _model_name: str = T.Unicode("LinkParticleModel").tag(sync=True)
+    _model_name: "_t.Tstr" = T.Unicode("LinkParticleModel").tag(sync=True)
 
-    color: TFeature = _make_trait("the color of the particles")
-    density: TNumFeature = _make_trait(
+    color: "TFeature" = _make_trait("the color of the particles")
+    density: "TNumFeature" = _make_trait(
         "the number of particles, ideally 0.0 < ``value``", numeric=True
     )
-    speed: TNumFeature = _make_trait(
+    speed: "TNumFeature" = _make_trait(
         "the speed of the particles, ideally 0.0 < ``value`` < ~0.1", numeric=True
     )
-    width: TNumFeature = _make_trait(
+    width: "TNumFeature" = _make_trait(
         "the size of the particles, ideally 0.0 < ``value`` < ~5", numeric=True
     )
 

@@ -2,9 +2,10 @@
 
 # Copyright (c) 2023 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.
+from __future__ import annotations
 
 import enum
-from typing import Any, Union
+from typing import TYPE_CHECKING, Any, Union
 
 import ipywidgets as W
 import traitlets as T
@@ -17,6 +18,10 @@ from ._base import DynamicValue
 TAnyWrapped = Union[DynamicValue, "WrapperBase", str, bool, int, float]
 
 
+if TYPE_CHECKING:
+    from .. import _types as _t
+
+
 def _make_color_channel(name: str) -> Any:
     """Create a color channel"""
     return T.Float(
@@ -27,9 +32,9 @@ def _make_color_channel(name: str) -> Any:
 class WrapperBase(ForceBase):
     """A wrapper for other dynamic values"""
 
-    _model_name: str = T.Unicode("WrapperBaseModel").tag(sync=True)
+    _model_name: "_t.Tstr" = T.Unicode("WrapperBaseModel").tag(sync=True)
 
-    wrapped: TAnyWrapped = T.Union(
+    wrapped: "T.TraitType[TAnyWrapped, TAnyWrapped]" = T.Union(
         [
             T.Instance(DynamicValue),
             T.Instance("ipyforcegraph.behaviors.wrappers.WrapperBase"),
@@ -76,9 +81,9 @@ class WrapperBase(ForceBase):
 class CaptureAs(WrapperBase):
     """A wrapper that stores dynamically-computed values in the underlying ``node`` or ``link`."""
 
-    _model_name: str = T.Unicode("CaptureAsModel").tag(sync=True)
+    _model_name: "_t.Tstr" = T.Unicode("CaptureAsModel").tag(sync=True)
 
-    column_name: str = T.Unicode(
+    column_name: "_t.Tstr" = T.Unicode(
         allow_none=False, help="name of a column to update with a derived value"
     ).tag(sync=True)
 
@@ -97,7 +102,7 @@ class CaptureAs(WrapperBase):
 class ReplaceCssVariables(WrapperBase):
     """A wrapper that replaces all CSS ``var(--)`` values in the wrapped value."""
 
-    _model_name: str = T.Unicode("ReplaceCssVariablesModel").tag(sync=True)
+    _model_name: "_t.Tstr" = T.Unicode("ReplaceCssVariablesModel").tag(sync=True)
 
 
 class Colorize(WrapperBase):
@@ -114,22 +119,22 @@ class Colorize(WrapperBase):
         hcl = "hcl"
         cubehelix = "cubehelix"
 
-    _model_name: str = T.Unicode("ColorizeModel").tag(sync=True)
+    _model_name: "_t.Tstr" = T.Unicode("ColorizeModel").tag(sync=True)
 
-    space: str = T.Enum(
+    space: "_t.Tenum_str_str" = T.Enum(
         default_value=Space.hsl.value,
         values=[*[m.value for m in Space], *Space],
         help="name of a ``d3-color`` color space",
     ).tag(sync=True)
 
-    a: float = _make_color_channel("a*")
-    b: float = _make_color_channel("blue (or ``b*``)")
-    c: float = _make_color_channel("chroma")
-    g: float = _make_color_channel("green")
-    h: float = _make_color_channel("hue")
-    l: float = _make_color_channel("luminance (or lightness)")  # noqa: E741
-    r: float = _make_color_channel("red")
-    s: float = _make_color_channel("saturation")
+    a: "_t.Tfloat_maybe" = _make_color_channel("a*")
+    b: "_t.Tfloat_maybe" = _make_color_channel("blue (or ``b*``)")
+    c: "_t.Tfloat_maybe" = _make_color_channel("chroma")
+    g: "_t.Tfloat_maybe" = _make_color_channel("green")
+    h: "_t.Tfloat_maybe" = _make_color_channel("hue")
+    l: "_t.Tfloat_maybe" = _make_color_channel("luminance (or lightness)")  # noqa: E741
+    r: "_t.Tfloat_maybe" = _make_color_channel("red")
+    s: "_t.Tfloat_maybe" = _make_color_channel("saturation")
     opacity: float = _make_color_channel("opacity")
 
     @T.validate("space")
@@ -140,6 +145,6 @@ class Colorize(WrapperBase):
 class Tint(WrapperBase):
     """Apply a uniform lighten/darken amount to a color."""
 
-    _model_name: str = T.Unicode("TintModel").tag(sync=True)
+    _model_name: "_t.Tstr" = T.Unicode("TintModel").tag(sync=True)
 
     value: float = _make_color_channel("tint")

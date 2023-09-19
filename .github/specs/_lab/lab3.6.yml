@@ -2,3 +2,4 @@ dependencies:
   - jupyter_server >=2.2.1
   - jupyterlab >=3.6.4,<3.7
   - orjson
+  - traitlets >=5.10

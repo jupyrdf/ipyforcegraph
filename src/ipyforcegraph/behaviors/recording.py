@@ -2,22 +2,27 @@
 
 # Copyright (c) 2023 ipyforcegraph contributors.
 # Distributed under the terms of the Modified BSD License.
+from __future__ import annotations
 
-from typing import Any, Optional, Tuple
+from typing import TYPE_CHECKING, Any, Optional, Tuple
 
 import ipywidgets as W
 import traitlets as T
 
 from ..sources.dataframe import DataFrameSource
 from ..trait_utils import JSON_TYPES, coerce
-from ._base import Behavior, TFeature, _make_trait
+from ._base import Behavior, _make_trait
+
+if TYPE_CHECKING:
+    from .. import _types as _t
+    from ._base import TFeature
 
 
 @W.register
 class GraphImage(Behavior):
     """Captures multiple subsequent frames of a canvas, each as an :class:`~ipywidgets.widgets.widget_media.Image`."""
 
-    _model_name: str = T.Unicode("GraphImageModel").tag(sync=True)
+    _model_name: "_t.Tstr" = T.Unicode("GraphImageModel").tag(sync=True)
 
     capturing = T.Bool(False, help="whether the frame capture is currently active").tag(
         sync=True
@@ -55,9 +60,9 @@ class GraphImage(Behavior):
 class GraphData(Behavior):
     """Captures multiple subsequent ticks of a graph simulation, each as a :class:`~pandas.DataFrame`."""
 
-    _model_name: str = T.Unicode("GraphDataModel").tag(sync=True)
+    _model_name: "_t.Tstr" = T.Unicode("GraphDataModel").tag(sync=True)
 
-    capturing: bool = T.Bool(
+    capturing: "_t.Tbool" = T.Bool(
         False, help="whether the dataframe capture is currently active"
     ).tag(sync=True)
 
@@ -91,9 +96,9 @@ class GraphData(Behavior):
 class GraphCamera(Behavior):
     """Captures the current center and zoom of the graph viewport."""
 
-    _model_name: str = T.Unicode("GraphCameraModel").tag(sync=True)
+    _model_name: "_t.Tstr" = T.Unicode("GraphCameraModel").tag(sync=True)
 
-    zoom: float = T.Float(
+    zoom: "_t.Tfloat_maybe" = T.Float(
         None, allow_none=True, help="the current 2D zoom level of the viewport"
     ).tag(sync=True)
 
@@ -109,7 +114,7 @@ class GraphCamera(Behavior):
         T.Int(), help="the indices of all visible nodes"
     ).tag(sync=True)
 
-    capturing: bool = T.Bool(
+    capturing: "_t.Tbool" = T.Bool(
         False, help="whether visible nodes should be captured as ``visible``"
     ).tag(sync=True)
 
@@ -118,9 +123,9 @@ class GraphCamera(Behavior):
 class GraphDirector(Behavior):
     """Set a desired center and zoom of the graph viewport."""
 
-    _model_name: str = T.Unicode("GraphDirectorModel").tag(sync=True)
+    _model_name: "_t.Tstr" = T.Unicode("GraphDirectorModel").tag(sync=True)
 
-    zoom: Optional[float] = T.Float(
+    zoom: "_t.Tfloat_maybe" = T.Float(
         None, allow_none=True, help="the desired 2D zoom level of the viewport"
     ).tag(sync=True)
 
@@ -130,27 +135,33 @@ class GraphDirector(Behavior):
         help="the desired center of the viewport as `[x, y, z?]`",
     ).tag(sync=True)
 
-    look_at: Tuple[float, ...] = W.TypedTuple(
+    look_at: "_t.Tfloat_maybe" = W.TypedTuple(
         T.Float(), allow_none=True, help="the direction of a 3d camera as `[x, y, z]`"
     ).tag(sync=True)
 
-    zoom_first: bool = T.Bool(
+    zoom_first: "_t.Tbool" = T.Bool(
         False, help="whether to zoom the viewport before panning"
     ).tag(sync=True)
 
-    visible: TFeature = _make_trait(
+    visible: "TFeature" = _make_trait(
         "fit nodes in viewport for which this column/template is truthy",
         by_template=True,
         by_column=True,
     )
 
-    zoom_duration: float = T.Float(0.2, help="seconds to animate a zoom").tag(sync=True)
+    zoom_duration: "_t.Tfloat" = T.Float(0.2, help="seconds to animate a zoom").tag(
+        sync=True
+    )
 
-    pan_duration: float = T.Float(0.2, help="seconds to animate a pan").tag(sync=True)
+    pan_duration: "_t.Tfloat" = T.Float(0.2, help="seconds to animate a pan").tag(
+        sync=True
+    )
 
-    fit_duration: float = T.Float(0.2, help="seconds to animate a fit").tag(sync=True)
+    fit_duration: "_t.Tfloat" = T.Float(0.2, help="seconds to animate a fit").tag(
+        sync=True
+    )
 
-    fit_padding: float = T.Float(
+    fit_padding: "_t.Tfloat" = T.Float(
         10, help="pixels of padding between visible nodes and viewport"
     ).tag(sync=True)
 

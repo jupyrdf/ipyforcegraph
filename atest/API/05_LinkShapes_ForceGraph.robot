@@ -80,8 +80,8 @@ ForceGraph Can Set Link width using Nunjucks inputs
 *** Keywords ***
 Shape Link Feature Works As Expected
     [Arguments]    ${widget_class}    ${feature}    ${input_type}    ${initial_value}    ${updated_value}    ${idx}
-    ${screens} =    Set Variable
-    ...    ${SCREENS}${/}${widget_class.lower()}${/}${feature.lower()}${/}${input_type.lower()}${/}${idx}
+    ${context} =    Set Variable    ${widget_class.lower()}_${feature.lower()}_${input_type.lower()}_${idx}
+    ${screens} =    Set Variable    ${SCREENS}${/}${context}
     Maybe Skip A Test
     ...    widget_class=${widget_class}
     ...    feature=${feature}
@@ -96,6 +96,7 @@ Shape Link Feature Works As Expected
     ...    feature=${feature}
     ...    input_type=${input_type}
     ...    value=${updated_value}
+    Initialize Coverage Kernel    ${FAKE_HOME}    api-link-shapes-${context}
 
     Add And Run JupyterLab Code Cell    lsb.${feature} = ${input_type}("${updated_value}")
     Capture Page Screenshot    01-updated-value.png
